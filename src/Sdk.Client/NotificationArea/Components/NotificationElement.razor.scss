@@ -1,0 +1,43 @@
+﻿@use "../../Styles/colors-staged";
+
+.notification-element {
+    display: grid;
+
+    &.notification-element--active {
+        background-color: colors-staged.$color-content-dark;
+    }
+
+    button {
+        position: relative;
+
+        &:hover {
+            background-color: colors-staged.$color-content-dark-hover;
+        }
+
+        &:focus,
+        &.active {
+            background-color: colors-staged.$color-content-dark;
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .badge-container {
+            position: absolute;
+            top: 5px;
+            right: 0;
+        }
+    }
+
+    .flyout-container {
+        position: absolute; // ensures that flyout does not participate in the outer grids
+    }
+}
+
+

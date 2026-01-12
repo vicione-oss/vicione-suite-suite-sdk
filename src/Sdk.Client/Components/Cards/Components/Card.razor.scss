@@ -1,0 +1,84 @@
+﻿@use "../../../Styles/design/colors";
+@use "../../../Styles/typography";
+@use 'sass:color';
+
+.image-container {
+    width: 252px;
+    height: 80px;
+    margin-left: -16px;
+    margin-top: -8px;
+    position: relative;
+    background: var(--img-source);
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%);
+}
+
+.card-container {
+    background-image: linear-gradient(180deg, color.change(colors.$color-theme, $alpha: 0.15) 0%, color.change(colors.$color-theme, $alpha: 0.05) 100%);
+    border-radius: 3px;
+    display: grid;
+    grid-template-rows: 80px 32px auto min-content;
+    grid-template-columns: 220px;
+    margin-bottom: 24px;
+    padding: 8px 16px 16px 16px;
+
+    &:hover {
+        box-shadow: 0 2px 4px 0 color.change(colors.$color-theme, $alpha: 0.25);
+
+        .image-container {
+            filter: revert;
+
+            .close {
+                background-color: color.change(colors.$color-theme, $alpha: 0.4);
+                border-radius: 3px;
+            }
+        }
+
+        .close {
+            display: revert;
+        }
+    }
+}
+
+.text-only {
+    grid-template-rows: 32px auto min-content;
+    position: relative;
+}
+
+.close {
+    width: 24px;
+    height: 24px;
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    margin-right: 6px;
+    margin-top: 6px;
+    padding: 0px;
+    display: none;
+
+    > img {
+        width: inherit;
+        height: inherit;
+    }
+}
+
+.title {
+    font-size: 14px;
+    color: colors.$color-font-light;
+    font-weight: typography.$font-weight-regular;
+    letter-spacing: 0.2px;
+    text-align: left;
+    line-height: 20px;
+    padding-top: 6px;
+}
+
+.text {
+    font-size: 12px;
+    color: colors.$color-font-light;
+    font-weight: typography.$font-weight-light;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    letter-spacing: 0.4px;
+    grid-column: 1;
+}

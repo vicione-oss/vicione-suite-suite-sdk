@@ -1,0 +1,8 @@
+﻿@{
+    var activeControlPanelPage = ActiveControlPanelPageProvider.GetActiveControlPanelPage(ControlPanelRegistryItem);
+    if (activeControlPanelPage == this)
+    {
+        @ChildContent
+    }
+}
+

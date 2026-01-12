@@ -1,0 +1,54 @@
+﻿@use "../../Styles/nav-tiles/mixins";
+@use "../../Styles/nav-tiles/variables";
+
+.nav-tile-standard-content {
+    @include mixins.content();
+
+    display: grid;
+    grid-template-rows: min-content auto 1fr 0px;
+    grid-template-areas:
+        "headline"
+        "subline"
+        "spacer"
+        "icon";
+
+    h5 {
+        grid-area: headline;
+        @include mixins.headline();
+        @include mixins.multi-line-text-ellipsis($maximum-line-count: 2);
+    }
+
+    p {
+        grid-area: subline;
+        @include mixins.subline();
+
+        word-break: break-word; // ensures that words like "communication" having a width larger than the flow area won't break the layout
+
+        --maximum-line-count: 4;
+
+        @include mixins.multi-line-text-ellipsis($maximum-line-count: var(--maximum-line-count));
+
+        --vertical-offset-to-icon: 0px;
+
+        // inject element that mocks "img" to ensure visual text flows around "img"
+        &::before {
+            width: variables.$standard-content-icon-size;
+            height: variables.$standard-content-icon-size;
+            content: "";
+            float: right;
+            shape-outside: border-box;
+            margin-top: var(--vertical-offset-to-icon);
+        }
+    }
+
+    img {
+        grid-area: icon;
+        justify-self: end;
+        align-self: end;
+        height: variables.$standard-content-icon-size;
+    }
+
+    &.hidden {
+        visibility: hidden;
+    }
+}

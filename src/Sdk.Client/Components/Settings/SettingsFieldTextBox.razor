@@ -1,0 +1,18 @@
+﻿@using ViciOne.Ui.Blazor.Components.TextBox
+
+<div class="settings-field-text-box">
+    <TextBox Placeholder="@Placeholder"
+             ReadOnly="@ReadOnly"
+             Enabled="@Enabled"
+             CssClass="@CssClass"
+             Password="@Password"
+             @bind-Value:get="@Value"
+             @bind-Value:set="@TextBoxValueChanged" />
+
+    @if (!string.IsNullOrWhiteSpace(Subline))
+    {
+        <div class="subline">
+            @Subline
+        </div>
+    }
+</div>

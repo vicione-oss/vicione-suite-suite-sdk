@@ -1,0 +1,42 @@
+﻿@typeparam TState
+@typeparam TIcon
+
+@inherits NotificationElementBase<TState>
+
+@if (State.Visible)
+{
+    var cssClass = new List<string> { "notification-element" };
+
+    if (State.IsActive)
+        cssClass.Add("notification-element--active");
+
+    <div class="@string.Join(" ", cssClass)">
+        <button title="@GetTitle()"
+                @onclick="@OnClick">
+
+            <div class="icon-container">
+                <CascadingValue Value="State">
+                    <DynamicComponent Type="@_iconComponentType" />
+                </CascadingValue>
+            </div>
+
+            @if (_badgeComponentType is not null)
+            {
+                <div class="badge-container">
+                    <CascadingValue Value="State">
+                        <DynamicComponent Type="@_badgeComponentType" />
+                    </CascadingValue>
+                </div>
+            }
+        </button>
+
+        @if (_flyoutComponentType is not null)
+        {
+            <div class="flyout-container">
+                <CascadingValue Value="State">
+                    <DynamicComponent Type="@_flyoutComponentType" />
+                </CascadingValue>
+            </div>
+        }
+    </div>
+}

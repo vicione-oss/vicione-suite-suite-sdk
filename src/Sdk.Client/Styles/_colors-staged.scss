@@ -1,0 +1,54 @@
+﻿@use 'sass:color';
+
+//
+// ### primary content colors ###
+//
+$color-background-modal: rgb(58, 58, 58);
+$color-background-dark: rgb(28, 28, 28);
+$color-foreground: rgb(176, 176, 176);
+$color-foreground-dark: rgb(105, 105, 105);
+$color-foreground-light: rgb(200, 200, 200);
+$color-foreground-light-dark: rgb(42, 42, 42);
+
+$color-content: #555555;
+$color-content-hover: #666666;
+$color-content-dark: rgb(64, 64, 64);
+$color-content-dark-hover: color.adjust($color-content-dark, $lightness: +10%);
+$color-content-dark-disabled: #595959;
+
+$color-disabled: rgb(166, 166, 166);
+$color-disabled-dark: color.adjust($color-disabled, $lightness: -10%);
+
+//
+// ### accent colors ###
+//
+$color-accent-dark: #db8400;
+$color-accent-background: #ffbd59;
+
+//
+// ### status colors ###
+//
+$color-add: #2b8c68;
+$color-info: #7295c2;
+$color-warning: rgb(255, 206, 0);
+
+//
+// ### font colors ###
+//
+$color-font-inverted: rgb(60, 60, 60);
+$color-font-disabled: #8c8c8c;
+
+//
+// ### standard colors ###
+//
+$color-green: #5fde95;
+$color-light-green: #beec79;
+$color-blue: #7295c2;
+$color-orange: #ff9600;
+$color-ifm-orange: #ff6e00;
+$color-red: #e34b35;
+
+//
+// ### notification element flyout colors ###
+//
+$notification-element-flyout-border-left-color: #5c5c5c;

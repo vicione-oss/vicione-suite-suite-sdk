@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using ViciOne.Ui.Localization.Resources
+@implements IAsyncDisposable
+
+<div class="file-drop-zone"
+     @ref="_dropZoneElement">
+
+    <label @ref="_inputLabel"
+           class="input-label"
+           for="item-upload"
+           title="@Localization.FileDropComponent.NoFileSelected">
+        @string.Format(UserActions.SelectSomething, CommonVocabulary.File)
+    </label>
+
+    <label @ref="_descriptionLabel"
+           class="description"
+           title="@Localization.FileDropComponent.NoFileSelected">
+        @Localization.FileDropComponent.NoFileSelected
+    </label>
+
+    <InputFile id="item-upload"
+               @ref="_inputFile" 
+               OnChange="(async args => await OnChange.InvokeAsync(args))" />
+</div>

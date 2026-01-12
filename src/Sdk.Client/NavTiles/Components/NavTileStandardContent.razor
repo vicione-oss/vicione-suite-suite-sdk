@@ -1,0 +1,18 @@
+﻿@{
+    var cssClasses = new List<string> { "nav-tile-standard-content" };
+
+    var hasSubline = HasSubline();
+    if (hasSubline && !_sublineInitialized)
+        cssClasses.Add("hidden"); // hide initially to avoid layout shift caused by ongoing subline initialization
+}
+
+<section class="@string.Join(" ", cssClasses)" @ref="_contentElementReference">
+    <h5 @ref="_headlineElementReference">@Headline</h5>
+
+    @if (hasSubline)
+    {
+        <p @ref="_sublineElementReference">@Subline</p>
+    }
+        
+    <img src="@IconSrc" alt="@IconAlt" @ref="_iconElementReference">
+</section>

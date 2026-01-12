@@ -1,0 +1,10 @@
+﻿{
+    "Arguments": "--no-source-map --style=compressed",
+    "ScopedCssFolders": [
+        "Components",
+        "NavTiles/Components",
+        "NotificationArea/Components",
+        "NotificationArea/Components/Layout",
+        "ControlPanels/Components"
+    ]
+}

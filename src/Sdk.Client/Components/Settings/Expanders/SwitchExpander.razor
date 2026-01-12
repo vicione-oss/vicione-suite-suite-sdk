@@ -1,0 +1,25 @@
+﻿@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication
+@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
+@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Switch.Enums
+
+<div class="switch-expander">
+    @{
+        string? switchCssClass = null;
+
+        if (IsLoading)
+        {
+            switchCssClass = "switch--loading";
+
+            <ContentLoadingIndication Visible="@IsLoading" Kind="@LoadingIndicationKind.SpinnerRight">
+                <div class="content-loading-indication__content"></div>
+            </ContentLoadingIndication>
+        }
+    }
+
+    <Switch CssClass="@switchCssClass"
+            Size="SwitchSize.Medium"
+            Enabled="@Enabled"
+            @bind-Value:get="Value"
+            @bind-Value:set="SwitchValueChanged" />
+</div>

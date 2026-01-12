@@ -1,0 +1,12 @@
+﻿@use "../variables" as commonVariables;
+
+$container-margin: commonVariables.$tile-margin;
+
+$container-width-no-span: commonVariables.$tile-width;
+$container-height-no-span: commonVariables.$tile-height;
+
+$link-padding: 16px;
+
+$subline-margin-top: 8px;
+
+$standard-content-icon-size: commonVariables.$tile-icon-size;

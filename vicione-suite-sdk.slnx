@@ -1,0 +1,39 @@
+<Solution>
+  <Folder Name="/samples/">
+    <File Path="samples/.editorconfig" />
+    <Project Path="samples/Sdk.Client.Samples.Server/Sdk.Client.Samples.Server.csproj" />
+    <Project Path="samples/Sdk.Client.Samples.Shared/Sdk.Client.Samples.Shared.csproj" />
+    <Project Path="samples/Sdk.Client.Samples/Sdk.Client.Samples.csproj" />
+  </Folder>
+  <Folder Name="/SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".gitlab-ci.yml" />
+    <File Path=".globalconfig" />
+    <File Path="CHANGELOG.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="eslint.config.mjs" />
+    <File Path="package.json" />
+    <File Path="README.md" />
+    <File Path="tests.runsettings" />
+    <File Path="VERSION" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/.editorconfig" />
+    <Project Path="src/Sdk.Backend/Sdk.Backend.csproj" />
+    <Project Path="src/Sdk.Client/Sdk.Client.csproj" />
+    <Project Path="src/Sdk.Deployment/Sdk.Deployment.csproj" />
+    <Project Path="src/Sdk.Testing/Sdk.Testing.csproj" />
+    <Project Path="src/Sdk/Sdk.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <File Path="tests/.editorconfig" />
+    <Project Path="tests/Sdk.Backend.Tests/Sdk.Backend.Tests.csproj" />
+    <Project Path="tests/Sdk.Client.Tests/Sdk.Client.Tests.csproj" />
+    <Project Path="tests/Sdk.Testing.Tests/Sdk.Testing.Tests.csproj" />
+    <Project Path="tests/Sdk.Tests/Sdk.Tests.csproj" />
+    <Project Path="tests/TestModule.Backend/TestModule.Backend.csproj" />
+    <Project Path="tests/TestModule.Client/TestModule.Client.csproj" />
+  </Folder>
+</Solution>

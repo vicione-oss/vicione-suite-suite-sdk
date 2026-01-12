@@ -1,0 +1,55 @@
+﻿@use "../../Styles/design/colors";
+@use 'sass:color';
+
+.mini-chart {
+    letter-spacing: 0.4px;
+    text-align: right;
+    display: flex;
+    gap: 4px;
+    padding: 0px 8px;
+
+    &.horizontal {
+        flex-direction: column;
+
+        width: 100%;
+
+        --mini-chart-value-grid-gap: 0px;
+        --mini-chart-value-grid-template-columns: 1fr auto;
+        --mini-chart-value-grid-template-rows: auto 4px;
+        --mini-chart-value-grid-template-areas:
+            "label percentage"
+            "figure figure";
+
+        --mini-chart-value-width: 100%;
+        --mini-chart-value-height: 18px;
+
+        --mini-chart-value__label-justify-self: start;
+        --mini-chart-value__percentage-justify-self: start;
+
+        --mini-chart-value__figure-flex-direction: row-reverse;
+        --mini-chart-value__figure-background-color: color.change(colors.$color-theme-inverted, $alpha: 0.3);
+    }
+
+    &.vertical {
+        flex-direction: row;
+
+        height: 100%;
+
+        --mini-chart-value-grid-gap: 4px;
+        --mini-chart-value-grid-template-columns: 30px;
+        --mini-chart-value-grid-template-rows: auto 1fr min-content;
+        --mini-chart-value-grid-template-areas:
+            "percentage"
+            "figure"
+            "label";
+
+        --mini-chart-value-width: unset;
+        --mini-chart-value-height: 100%;
+
+        --mini-chart-value__label-justify-self: center;
+        --mini-chart-value__percentage-justify-self: end;
+
+        --mini-chart-value__figure-flex-direction: column;
+        --mini-chart-value__figure-background-color: transparent;
+    }
+}

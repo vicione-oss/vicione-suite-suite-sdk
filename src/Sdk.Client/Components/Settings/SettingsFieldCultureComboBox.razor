@@ -1,0 +1,7 @@
+﻿<SettingsFieldComboBox Enabled="@Enabled" 
+                       Items="@Items"
+                       ReadOnly="@ReadOnly"
+                       @bind-Value="_selectedCultureName"
+                       @bind-Value:after="ComboBoxValueChanged"
+                       ValueSelector="@(item => item.Name)"
+                       TextSelector="@(item => item.DisplayName)" />

@@ -1,0 +1,35 @@
+﻿@use 'sass:color';
+
+@warn "This file and variables defined therein is deprecated and will be removed in a future release. Please use colors module from ViciOne.Ui.Design instead.";
+
+//
+// ### theme colors ###
+//
+$color-theme: #000000;
+$color-theme-inverted: #ffffff;
+
+//
+// ### primary content colors ###
+//
+$color-background: rgb(42, 42, 42);
+$color-background-hover: color.adjust($color-background, $lightness: +10%);
+$color-background-light: rgb(68, 68, 68);
+
+$color-border: rgb(77, 77, 77);
+
+//
+// ### accent colors ###
+//
+$color-accent: #ff9600;
+$color-accent-hover: color.adjust($color-accent, $lightness: +10%);
+
+//
+// ### status colors ###
+//
+$color-error: #e34b35;
+
+//
+// ### font colors ###
+//
+$color-font: rgb(222, 222, 222);
+$color-font-light: rgb(255, 255, 255);

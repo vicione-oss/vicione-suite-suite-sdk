@@ -1,0 +1,32 @@
+﻿@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var cssClasses = new List<string> { "link-button", "link-button--small" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var additionalAttributes = new Dictionary<string, object>();
+
+    if (!string.IsNullOrWhiteSpace(Title))
+        additionalAttributes.Add("title", Title);
+
+    if (!string.IsNullOrWhiteSpace(Id))
+        additionalAttributes.Add("id", Id);
+
+    if (!Enabled)
+        additionalAttributes.Add("disabled", "disabled");
+}
+
+<button class="@string.Join(" ", cssClasses)"
+        @onclick="@ButtonClickAsync"
+        @attributes="@additionalAttributes">
+
+    <MonochromeIcon Name="@IconName" Size="MonochromeIconSize.Small" CssClass="icon" />
+
+    @if (!string.IsNullOrWhiteSpace(Text))
+    {
+        <div class="text">@Text</div>
+    }
+</button>

@@ -1,0 +1,6 @@
+﻿@mixin multi-line-text-ellipsis($maximum-line-count: 2) {
+    display: -webkit-inline-box;
+    -webkit-line-clamp: $maximum-line-count;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

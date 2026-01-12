@@ -1,0 +1,12 @@
+﻿@using Sdk.Client.Colors
+@using Sdk.Client.Extensions
+
+@{
+    var currentPercent = Maximum <= 0 ? 0 : (Current - Minimum) * 100 / Maximum;
+    var progressSpinnerColor = ProgressSpinnerColor ?? StandardHtmlColor.From(StandardColor.Green);
+}
+
+<div class="circular-progress-bar">
+    <div class="circular-progress-bar__progress-spinner" style="--current-percent: @currentPercent.ToAttributeValue("%"); --color: @progressSpinnerColor;"></div>
+    <div class="circular-progress-bar__middle-circle">@currentPercent.ToFixedPointValue(0)%</div>
+</div>

@@ -1,0 +1,7 @@
+﻿@using Sdk.Client.Extensions
+
+<div class="mini-chart @Orientation.ToString().ToHyphenSeparated()">
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</div>

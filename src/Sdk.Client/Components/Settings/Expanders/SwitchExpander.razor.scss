@@ -1,0 +1,19 @@
+@use "../../../Styles/animations";
+
+@include animations.opacity-to-point-five-keyframes();
+
+.switch-expander {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+
+    .content-loading-indication__content {
+        width: 100px;
+    }
+
+    ::deep .switch--loading {
+        pointer-events: none;
+
+        @include animations.opacity-to-point-five-declarations();
+    }
+}

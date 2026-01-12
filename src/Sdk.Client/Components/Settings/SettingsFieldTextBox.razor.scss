@@ -1,0 +1,17 @@
+﻿@use "../../Styles/settings/mixins";
+
+.settings-field-text-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > ::deep input {
+        text-align: right;
+    }
+
+    .subline {
+        justify-content: flex-start;
+
+        @include mixins.subline();
+    }
+}

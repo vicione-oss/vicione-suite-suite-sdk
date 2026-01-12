@@ -1,0 +1,15 @@
+﻿using Sdk.Messaging;
+using Sdk.SystemConfiguration.Contracts.Service;
+
+namespace Sdk.SystemConfiguration;
+
+/// <summary>
+/// Represents the result of a service control management operation.
+/// </summary>
+public record ControlServiceManagementResult(string ServiceName, ServiceState State, ErrorInfo? Error = null)
+{
+    /// <summary>
+    /// Gets a value indicating whether the operation was successful.
+    /// </summary>
+    public bool Success => Error is null;
+}

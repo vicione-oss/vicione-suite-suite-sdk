@@ -1,0 +1,47 @@
+﻿using System.Linq.Expressions;
+using Microsoft.AspNetCore.Components;
+using ViciOne.Ui.Blazor.Components.ComboBox;
+
+namespace Sdk.Client.Components.Settings;
+
+/// <summary>
+/// A settings component that renders a combo box for selecting a value from a list of items.
+/// </summary>
+[CascadingTypeParameter(nameof(TItem))]
+[CascadingTypeParameter(nameof(TValue))]
+public sealed partial class SettingsFieldComboBox<TItem, TValue> : ComponentBase
+{
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.Enabled"/>
+    [Parameter]
+    public bool Enabled { get; set; } = true;
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.Items"/>
+    [Parameter, EditorRequired]
+    public IEnumerable<TItem> Items { get; set; }
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.ReadOnly"/>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.Value"/>
+    [Parameter, EditorRequired]
+    public TValue Value { get; set; }
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.ValueChanged"/>
+    [Parameter]
+    public EventCallback<TValue> ValueChanged { get; set; }
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.ValueSelector"/>
+    [Parameter]
+    public Expression<Func<TItem, TValue>>? ValueSelector { get; set; }
+
+    /// <inheritdoc cref="ComboBox{TItem, TValue}.TextSelector"/>
+    [Parameter]
+    public Expression<Func<TItem, string>>? TextSelector { get; set; }
+
+    private async Task ComboBoxValueChanged(TValue value)
+    {
+        if (ValueChanged.HasDelegate)
+            await ValueChanged.InvokeAsync(value);
+    }
+}

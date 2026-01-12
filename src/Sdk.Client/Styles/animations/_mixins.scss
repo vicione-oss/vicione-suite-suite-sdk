@@ -1,0 +1,9 @@
+﻿@use "variables";
+
+@mixin color() {
+    transition: color variables.$duration variables.$effect;
+}
+
+@mixin border-color() {
+    transition: border-color variables.$duration variables.$effect;
+}

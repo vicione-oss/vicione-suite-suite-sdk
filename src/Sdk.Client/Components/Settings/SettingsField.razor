@@ -1,0 +1,33 @@
+﻿@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication
+@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
+
+<div class="settings-field">
+    @if (!string.IsNullOrWhiteSpace(Title))
+    {
+        <div class="title">
+            <span>@Title</span>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <div class="label">
+            <span>@Label</span>
+        </div>
+    }
+
+    <div class="content-container">
+        @{
+            var contentLoadingIndicationKind = LoadingIndication switch
+            {
+                SettingsFieldLoadingIndication.Opacity => LoadingIndicationKind.Opacity,
+                SettingsFieldLoadingIndication.Spinner => LoadingIndicationKind.SpinnerRight,
+                _ => LoadingIndicationKind.SpinnerRight
+            };
+        }
+
+        <ContentLoadingIndication Visible="@IsLoading" Kind="@contentLoadingIndicationKind">
+            @ChildContent
+        </ContentLoadingIndication>
+    </div>
+</div>

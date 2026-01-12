@@ -1,0 +1,24 @@
+﻿@typeparam TState
+@typeparam TContent
+
+@if (NotificationElementState.IsActive)
+{
+    <div class="notification-element-flyout">
+        <div class="notification-element-flyout-bg" />
+
+        @{
+            var heading = GetHeading();
+
+            if (heading is not null)
+            {
+                <div class="heading-container">
+                    <span class="heading">@heading</span>
+                </div>
+            }
+        }
+
+        <div class="content">
+            <DynamicComponent Type="_contentComponentType" />
+        </div>
+    </div>
+}

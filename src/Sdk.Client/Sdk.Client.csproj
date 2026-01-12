@@ -1,0 +1,144 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <AssemblyName>ViciOne.Suite.Sdk.Client</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160 -->
+    <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+    <PackageReference Include="Microsoft.Extensions.Localization" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" />
+    <!-- if you add a ui library here ensure the resulting @import in modules .bundle.css will be handled within Sdk.Deployment and Directory.Package.Props -->
+    <PackageReference Include="ViciOne.Ui.Blazor.Components" />
+    <PackageReference Include="ViciOne.Ui.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.Localization" />
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
+      <PrivateAssets>all</PrivateAssets>
+      <!-- avoids include of CSS isolation bundle -->
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <!-- don't depend on assembly at runtime -->
+    </PackageReference>
+    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sdk\Sdk.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components/Wallpaper/Targets/Unpack.targets" PackagePath="build/ViciOne.Suite.Sdk.Client.Components.Wallpaper.Unpack.targets" />
+    <Content Include="Targets/CssBundle.targets" PackagePath="build/ViciOne.Suite.Sdk.Client.CssBundle.targets" />
+    <Content Include="Targets/TypeScript.targets" PackagePath="build/ViciOne.Suite.Sdk.Client.TypeScript.targets" />
+    <Content Include="Targets/Unpack.targets" PackagePath="build/ViciOne.Suite.Sdk.Client.Unpack.targets" />
+    <Content Include="Targets/ViciOne.Suite.Sdk.Client.targets" PackagePath="build" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Styles/_colors.scss" Pack="true" PackagePath="scss/colors.scss" />
+    <Content Include="Styles/_colors-deprecated.scss" Pack="true" PackagePath="scss/" />
+    <Content Include="Styles/_colors-staged.scss" Pack="true" PackagePath="scss/" />
+    <Content Include="Styles/variables.scss" Pack="true" PackagePath="scss/" />
+    <Content Include="Styles/_typography.scss" Pack="true" PackagePath="scss/" />
+    <Content Include="Styles/_overflow.scss" Pack="true" PackagePath="scss/" />
+    <Content Include="Styles/_mixins.scss" Pack="true" PackagePath="scss/" />
+
+    <!-- no use of **/*.scss for the following copied items as otherwise these items will be missing in nuget package -->
+    <Content Include="Styles/design/colors/_index.scss" Pack="true" PackagePath="scss/design/colors" />
+    <Content Include="Styles/design/colors/_variables.scss" Pack="true" PackagePath="scss/design/colors" />
+
+    <!-- these are referenced by suite directly -->
+    <Content Include="Styles/animations/**/*.scss" Pack="true" PackagePath="scss/animations" />
+    <Content Include="Styles/badges/*.scss" Pack="true" PackagePath="scss/badges" />
+    <Content Include="Styles/nav-tiles/*.scss" Pack="true" PackagePath="scss/nav-tiles" />
+  </ItemGroup>
+
+  <!-- Prevent Microsoft.NET.Sdk.Razor from copying unnecessary file -->
+  <ItemGroup>
+    <Content Update="sasscompiler.json" CopyToPublishDirectory="Never" Pack="False" />
+    <Content Update="tsconfig.json" CopyToPublishDirectory="Never" Pack="False" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Components\Cards\Localization\Card.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Card.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Components\CircularGauge\Localization\CircularGauge.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CircularGauge.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Components\FileDrop\Localization\FileDropComponent.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FileDropComponent.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Components\Cards\Localization\Card.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Card.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Components\CircularGauge\Localization\CircularGauge.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CircularGauge.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Components\FileDrop\Localization\FileDropComponent.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FileDropComponent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
+    <ItemGroup>
+      <MonochromeIcon Include="expander-light-down" Size="32" />
+      <MonochromeIcon Include="expander-light-top" Size="32" />
+      <MonochromeIcon Include="external-link" Size="16" />
+      <MonochromeIcon Include="minus-slim" Size="24" />
+      <MonochromeIcon Include="plus-slim" Size="24" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <MonochromeIconSvgOutputFolder>$(MSBuildProjectDirectory)/wwwroot/assets/monochrome-icons</MonochromeIconSvgOutputFolder>
+      <MonochromeIconScssOutputFolder>$(MSBuildProjectDirectory)/Styles/icons/monochrome-icons</MonochromeIconScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
+    <PropertyGroup>
+      <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
+      <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ViciOne.Suite.Sdk.Client.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <Import Project="Targets/CssBundle.targets" />
+  <Import Project="Targets/TypeScript.targets" />
+</Project>

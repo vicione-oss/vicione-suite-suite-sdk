@@ -1,0 +1,84 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/typography";
+
+.strip-row {
+    --color: transparent;
+    display: flex;
+    height: 40px;
+    margin-bottom: 16px;
+
+    .strip-icon-side-container {
+        position: relative;
+        display: flex;
+        width: 40px;
+        justify-content: center;
+        align-items: center;
+        margin-right: 1px;
+
+        .strip-icon-side-bg {
+            position: absolute;
+            border-radius: 2px 0 0 2px;
+            border: 0 none var(--color);
+            background-color: var(--color);
+            color: white;
+            opacity: 0.7;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+
+    .strip-notice-side-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: center;
+        padding-left: 8px;
+        font-size: 12px;
+        color: colors.$color-font-light;
+        font-weight: typography.$font-weight-regular;
+        letter-spacing: .4px;
+
+        .strip-notice-side-bg {
+            position: absolute;
+            border-radius: 0 2px 2px 0;
+            border: 0 none var(--color);
+            background-color: var(--color);
+            opacity: 0.4;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .strip-notice-side-content {
+            position: absolute;
+
+            .subline {
+                color: colors.$color-font;
+                font-weight: typography.$font-weight-light;
+            }
+        }
+    }
+
+    &.clickable:hover, &:focus {
+
+        .strip-icon-side-bg {
+            opacity: 1;
+        }
+
+        .strip-notice-side-bg {
+            opacity: 0.7;
+        }
+    }
+
+    &.clickable:hover {
+        cursor: pointer;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

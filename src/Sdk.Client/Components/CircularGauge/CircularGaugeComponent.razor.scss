@@ -1,0 +1,171 @@
+﻿@use "../../Styles/design/colors";
+@use "../../Styles/typography";
+
+.container-gauge {
+    padding-top: 5px;
+    --gauge-size: 53px;
+    width: var(--gauge-size);
+    height: var(--gauge-size);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .circular-progress-bar {
+        top: 0px;
+        background-color: transparent;
+        --diameter: 44px;
+        --spinner-thickness: 2.5px;
+        width: var(--diameter);
+        height: var(--diameter);
+        position: relative;
+
+        .progress-spinner {
+            position: absolute;
+            --radian-value: 0;
+            --color-value: colors.$color-font-light;
+            width: var(--diameter);
+            height: var(--diameter);
+            --mask-circle-size: calc(var(--diameter) / 2 - var(--spinner-thickness));
+            -webkit-mask-image: radial-gradient(circle var(--mask-circle-size) at center, transparent 97%, black 100%);
+            background: conic-gradient(from -125deg, var(--color-value), var(--color-value) var(--radian-value), #6D6D6DFF var(--radian-value), #6D6D6DFF 250deg, #00000000 250deg, #00000000 360deg);
+            border-radius: 60%;
+        }
+
+        .triangle-pos {
+
+            svg {
+                position: absolute;
+                --value-in-deg: 0deg;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(var(--value-in-deg)) translateY(25.5px);
+            }
+        }
+
+        .middle-circle {
+            width: var(--diameter);
+            height: var(--diameter);
+            display: flex;
+            flex-direction: column;
+            border-radius: 50%;
+            color: colors.$color-font;
+
+            .middle-circle-name {
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                margin-top: 14px;
+                font-size: 10px;
+                font-weight: typography.$font-weight-semibold;
+                letter-spacing: .4px;
+            }
+
+            .middle-circle-uom {
+                display: flex;
+                justify-content: center;
+                margin-top: 7px;
+                font-size: 6px;
+                font-weight: typography.$font-weight-regular;
+                letter-spacing: .4px;
+            }
+        }
+
+        .tooltip-info {
+            display: none;
+            position: absolute;
+            top: var(--gauge-size);
+            z-index: 102;
+            box-shadow: #333333 0px 3px 5px;
+
+            .tooltip-info-tab {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 137px;
+                height: min-content;
+                background-color: #333333;
+                color: colors.$color-font-light;
+                border-radius: 3px;
+                font-size: 8px;
+                font-weight: typography.$font-weight-regular;
+                letter-spacing: 0.4px;
+
+                .tooltip-info-row {
+                    display: flex;
+                    padding-bottom: 8px;
+
+                    div {
+                        height: 11px;
+                    }
+
+                    > div:first-child {
+                        padding-left: 8px;
+                        width: 65px;
+                        color: colors.$color-font;
+                    }
+                }
+
+                > div:first-child {
+                    padding-top: 8px;
+                }
+            }
+        }
+
+        .top-left::after {
+            content: '';
+            height: 7px;
+            width: 14px;
+            position: absolute;
+            background-color: #333333;
+            top: -2px;
+            left: 16px;
+            transform: rotate(45deg);
+        }
+
+        .top-right::after {
+            content: '';
+            height: 7px;
+            width: 14px;
+            position: absolute;
+            background-color: #333333;
+            top: -2px;
+            right: 16px;
+            transform: rotate(45deg);
+        }
+    }
+
+    .circular-progress-bar:hover {
+        .tooltip-info {
+            display: block;
+        }
+
+        .middle-circle {
+            color: colors.$color-font-light;
+        }
+    }
+
+    .scale {
+        position: relative;
+        width: var(--gauge-size);
+        display: flex;
+        flex: 1;
+        top: -5px;
+        font-size: 8px;
+        font-weight: typography.$font-weight-regular;
+        line-height: 13px;
+        color: colors.$color-font;
+
+        .scale-start {
+            width: 32%;
+            text-align: center;
+        }
+
+        .scale-gap {
+            width: 36%;
+        }
+
+        .scale-end {
+            width: 32%;
+        }
+    }
+}

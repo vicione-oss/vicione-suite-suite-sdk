@@ -1,0 +1,42 @@
+﻿@using Microsoft.Extensions.Hosting
+@using Sdk.Client.Samples.Shared
+
+@inject IHostEnvironment Env
+@inject RenderModeProvider Provider
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>
+        Blazor Components - Blazor @(Provider.UseWebassembly ? "Webassembly" : "Server")
+    </title>
+    <base href="/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="Sdk.Client.Samples.styles.css" rel="stylesheet" />
+    <HeadOutlet @rendermode="Provider.HeaderRenderMode" />
+</head>
+<body>
+    <Routes @rendermode="Provider.ContentRenderMode" />
+
+    <div id="blazor-error-ui">
+        @if (Env.IsDevelopment())
+        {
+            <text>
+                An unhandled exception has occurred. See browser dev tools for details.
+            </text>
+        }
+        else
+        {
+            <text>
+                An error has occurred. This app may no longer respond until reloaded.
+            </text>
+        }
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.web.js"></script>
+</body>
+</html>

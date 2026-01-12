@@ -1,0 +1,25 @@
+﻿@use "../../Styles/badges";
+
+.number-badge {
+    @include badges.badge-typography();
+    @include badges.badge-round();
+
+    width: badges.$badge-height;
+    height: badges.$badge-height;
+
+    background-color: badges.$badge-background-color;
+    color: badges.$badge-font-color;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.number-badge--minus::before {
+    content: "-";
+}
+
+.number-badge--plus::after {
+    content: "+";
+}

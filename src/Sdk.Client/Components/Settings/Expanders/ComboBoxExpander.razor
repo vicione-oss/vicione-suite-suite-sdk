@@ -1,0 +1,16 @@
+﻿@using ViciOne.Ui.Blazor.Components.ComboBox
+
+@typeparam TItem
+@typeparam TValue
+
+<div class="combo-box-expander">
+    <ComboBox TItem="TItem"
+              TValue="TValue"
+              Enabled="@Enabled"
+              Items="@Items"
+              ReadOnly="@ReadOnly"
+              Value="@Value"
+              ValueChanged="@ComboBoxValueChanged"
+              ValueSelector="@ValueSelector"
+              TextSelector="@TextSelector" />
+</div>

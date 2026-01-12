@@ -1,0 +1,8 @@
+﻿@use "./colors-staged";
+
+.overflow-area {
+    height: 25px;       // Workaround: wrong rendering at 24px
+    position: sticky;
+    bottom: 0px;
+    background: linear-gradient(to bottom, rgba(colors-staged.$color-content-dark,0), rgba(colors-staged.$color-content-dark,1));
+}

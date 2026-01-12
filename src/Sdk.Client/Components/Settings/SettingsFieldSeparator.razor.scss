@@ -1,0 +1,14 @@
+﻿@use "../../Styles/settings/mixins";
+
+.settings-field-separator {
+    grid-column: 1 / 3;
+
+    height: 20px;
+
+    @include mixins.background-layer();
+}
+
+.settings-group--collapsed .settings-field-separator {
+    @include mixins.collapsed-styles();
+}
+
