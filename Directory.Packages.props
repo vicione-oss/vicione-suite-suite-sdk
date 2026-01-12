@@ -1,0 +1,58 @@
+﻿<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <ViciOneCodeAnalysisVersion>1.2.1</ViciOneCodeAnalysisVersion>
+  </PropertyGroup>
+
+  <!-- Make ViciOne.CodeAnalysis ... -->
+  <ItemGroup Condition="'$(MSBuildProjectFile)' == 'Sdk.csproj'">
+    <!-- ... a normal dependency of Sdk to enable our analyzers in consumer projects -->
+    <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase" Version="$(ViciOneCodeAnalysisVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectFile)' != 'Sdk.csproj'">
+    <!-- ... and for other projects we make it a development harness -->
+    <GlobalPackageReference Include="ViciOne.CodeAnalysis" Version="$(ViciOneCodeAnalysisVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.89.2" />
+    <PackageVersion Include="MassTransit.Abstractions" Version="8.5.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.8.3" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageVersion Include="System.IO.Abstractions" Version="22.0.15" />
+    <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="3.8.7" />
+    <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="3.6.0" />
+    <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="3.6.0" />
+    <PackageVersion Include="ViciOne.Ui.Localization" Version="2.31.0" />
+    <!--Used for tests only:-->
+    <PackageVersion Include="AwesomeAssertions" Version="9.1.0" />
+    <PackageVersion Include="bunit" Version="1.40.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Extensions.Logging.NSubstitute" Version="1.0.0" />
+    <PackageVersion Include="JunitXml.TestLogger" Version="6.1.0" />
+    <PackageVersion Include="MassTransit.TestFramework" Version="8.5.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
+    <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="22.0.15" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
+    <PackageVersion Include="xunit.analyzers" Version="1.23.0" />
+    <PackageVersion Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.2" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ViciOne.Suite.Sdk.Client.Components.Wallpaper.Unpack.targets" />
+
+  <ItemGroup>
+    <AssetFiles Include="$(MSBuildThisFileDirectory)../scss/**/*.scss" />
+  </ItemGroup>
+
+  <Target Name="CopyStyleAssets" BeforeTargets="Compile Sass;CoreBuild">
+    <Copy SourceFiles="@(AssetFiles)"
+          DestinationFolder="$(MSBuildProjectDirectory)../../../shared/styles/%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

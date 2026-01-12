@@ -1,0 +1,133 @@
+default:
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+
+stages:
+  - build
+  - test
+  - devrelease
+  - release
+
+include:
+  - project: 'acx/tooling/templates'
+    file: '/CI-Templates/v2/dotnet.yml'
+
+#################### Rules
+
+.install_nodejs: &install_nodejs
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  - apt update && apt install -y nodejs
+
+.install_npm_packages: &install_npm_packages
+  - npm install
+  
+.run_eslint: &run_eslint
+  - npx eslint .
+
+#################### Global
+
+before_script:
+  - *install_nodejs
+  - *install_npm_packages
+  - *run_eslint
+
+#################### Build stage
+
+Build:
+  extends: .dotnet-build
+
+####################  Test stage
+
+xUnit x64:
+  variables:
+    ARCH: 'x64'
+  extends: .dotnet-test-xunit
+  artifacts:
+    reports:
+      junit: artifacts/tests/*-test-report.xml
+
+xUnit arm64:
+  variables:
+    ARCH: 'arm64'
+  extends: .dotnet-test-xunit
+  artifacts:
+    reports:
+      junit: artifacts/tests/*-test-report.xml
+  tags:
+    - linux
+    - docker
+    - arm64
+
+#################### Development stage
+
+Sdk dev release:
+  extends: .dotnet-deploy-nuget
+  stage: devrelease
+  variables:
+    PROJECT: 'src/Sdk/Sdk.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Backend dev release:
+  extends: .dotnet-deploy-nuget
+  stage: devrelease
+  variables:
+    PROJECT: 'src/Sdk.Backend/Sdk.Backend.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Client dev release:
+  extends: .dotnet-deploy-nuget
+  stage: devrelease
+  variables:
+    PROJECT: 'src/Sdk.Client/Sdk.Client.csproj'
+    REPO: 'JFrogViciOne'
+
+Sdk.Deployment dev release:
+  extends: .dotnet-deploy-nuget
+  stage: devrelease
+  variables:
+    PROJECT: 'src/Sdk.Deployment/Sdk.Deployment.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Testing dev release:
+  extends: .dotnet-deploy-nuget
+  stage: devrelease
+  variables:
+    PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
+    REPO: 'JFrogViciOne'
+    
+#################### Release stage
+
+Sdk:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/Sdk/Sdk.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Backend:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/Sdk.Backend/Sdk.Backend.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Client:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/Sdk.Client/Sdk.Client.csproj'
+    REPO: 'JFrogViciOne'
+
+Sdk.Deployment:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/Sdk.Deployment/Sdk.Deployment.csproj'
+    REPO: 'JFrogViciOne'
+  before_script: []
+
+Sdk.Testing:
+  extends: .dotnet-release-nuget
+  variables:
+    PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
+    REPO: 'JFrogViciOne'

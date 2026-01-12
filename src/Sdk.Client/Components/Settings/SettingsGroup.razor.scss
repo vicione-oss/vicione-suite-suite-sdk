@@ -1,0 +1,178 @@
+﻿@use "../../Styles/settings/mixins";
+@use "../../Styles/settings/settings-group/variables";
+@use "../../Styles/colors";
+@use "../../Styles/animations/mixins" as animations;
+
+@use "../../Styles/icons/monochrome-icons" with (
+    $svg-base-url: "./assets/monochrome-icons",
+    $base-selector: ".settings-group ::deep"
+);
+
+$border-radius: 3px;
+
+// general settings group styles
+.settings-group {
+    display: contents;
+
+    .header {
+        display: grid;
+        grid-template-areas:
+            "title before-expander expander-container" "subline subline subline";
+        grid-template-columns: 1fr auto auto;
+        align-items: start;
+
+        @include mixins.background-layer();
+
+        .title {
+            grid-area: title;
+            font-size: 14px;
+            padding-right: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            @include mixins.bring-to-front();
+        }
+
+        .before-expander {
+            grid-area: before-expander;
+            font-size: 12px;
+            padding-right: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            @include mixins.bring-to-front();
+        }
+
+        .expander-container {
+            grid-area: expander-container;
+
+            @include mixins.bring-to-front();
+            max-height: 20px;
+
+            .default-expander {
+                padding: 0;
+                margin-top: -6px;
+                height: 32px;
+                margin-right: -6px;
+                color: colors.$color-font-light;
+                @include animations.color();
+
+                &:hover {
+                    color: colors.$color-accent-hover;
+                }
+
+                &:focus {
+                    outline: none;
+                    color: colors.$color-accent;
+                }
+            }
+        }
+
+        .subline {
+            grid-area: subline;
+
+            @include mixins.subline();
+            @include mixins.bring-to-front();
+        }
+    }
+}
+
+// first level settings group
+.settings-group:not(.settings-group--nested) {
+    &:not(:first-child) {
+        &::before {
+            margin-top: 16px;
+        }
+    }
+
+    &::before {
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+    }
+
+    & > .header {
+        grid-column: 1 / 3;
+
+        padding-bottom: 20px;
+
+        .title {
+            padding-left: variables.$padding;
+        }
+
+        .expander-container {
+            margin-right: variables.$padding;
+        }
+
+        .subline {
+            padding-left: variables.$padding;
+        }
+    }
+    
+    &::after {
+        content: "";
+        grid-column: 1 / 3;
+        height: variables.$padding;
+
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+
+        @include mixins.background-styles();
+    }
+}
+
+// nested level settings group
+.settings-group.settings-group--nested {
+    & > .spacer {
+        grid-column: 1;
+        align-self: stretch;
+
+        @include mixins.background-styles();
+    }
+
+    & > .header {
+        grid-column: 2 / 3;
+
+        padding-bottom: 4px;
+
+        .expander-container {
+            margin-right: 122px + variables.$padding;
+        }
+
+        .subline {
+            padding-right: 122px + variables.$padding;
+        }
+    }
+}
+
+// styling specific to expand / collapse state
+.settings-group:not(.settings-group--nested),
+.settings-group:not(.settings-group--collapsed) ::deep .settings-group--nested {
+    &::before {
+        content: "";
+        grid-column: 1 / 3;
+        height: variables.$padding;
+
+        @include mixins.background-styles();
+    }
+}
+
+.settings-group.settings-group--collapsed {
+    & > .header {
+        padding-bottom: 0;
+    }
+
+    ::deep .settings-group--nested {
+        .title, .expander-container, .subline {
+            @include mixins.collapsed-styles();
+        }
+    }
+}
+
+// styling specific to missing child content
+.settings-group.settings-group--without-child-content {
+    & > .header {
+        padding-bottom: 0;
+    }
+}

@@ -1,0 +1,17 @@
+﻿@use "../variables";
+
+@mixin keyframes() {
+    @keyframes opacity-to-zero {
+      to {
+          opacity: 0;
+      }
+    }
+}
+
+@mixin declarations() {
+    animation-name: opacity-to-zero;
+    animation-duration: variables.$duration;
+    animation-direction: normal;
+    animation-timing-function: variables.$effect;
+    animation-fill-mode: forwards;
+}

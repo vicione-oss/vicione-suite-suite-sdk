@@ -1,0 +1,49 @@
+﻿<div class="settings-field">
+    @if (!string.IsNullOrWhiteSpace(Title))
+    {
+        <div class="title">
+            <span>@Title</span>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <div class="label">
+            <span>@Label</span>
+        </div>
+    }
+
+    <div class="content-container">
+        <div class="content">
+            @if (IsLoading)
+            {
+                var contentWrapperCssClasses = new List<string>
+                {
+                    "content-wrapper"
+                };
+
+                contentWrapperCssClasses.Add("loading");
+
+                if (LoadingIndication == SettingsFieldLoadingIndication.Spinner)
+                    contentWrapperCssClasses.Add("hidden");
+                else if (LoadingIndication == SettingsFieldLoadingIndication.Opacity)
+                    contentWrapperCssClasses.Add("half-opacity");
+
+                <div class="@string.Join(" ", contentWrapperCssClasses)">
+                    @ChildContent
+                </div>
+            }
+            else
+            {
+                @ChildContent
+            }
+
+            @if (IsLoading && LoadingIndication == SettingsFieldLoadingIndication.Spinner)
+            {
+                <div class="loading-spinner">
+                    <div class="dot-flashing"></div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

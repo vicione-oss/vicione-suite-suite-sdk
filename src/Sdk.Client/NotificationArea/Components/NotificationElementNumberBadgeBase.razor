@@ -1,0 +1,25 @@
+﻿@{
+    var number = @GetNumber();
+    if (number is not null)
+    {
+        var cssClasses = new List<string> { "number-badge" };
+
+        if (number < -9)
+        {
+            cssClasses.Add("number-badge--minus");
+
+            number = 9;
+        }
+
+        if (number > 9)
+        {
+            cssClasses.Add("number-badge--plus");
+
+            number = 9;
+        }
+
+        <div class="@string.Join(" ", cssClasses)">
+            @number
+        </div>
+    }
+}

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="GetAbsolutePathsOfGeneratedJavaScriptFiles" AfterTargets="CompileTypeScriptWithTSConfig">
+    <!--
+      Get the absolute path of the generated JavaScript files from target 'CompileTypeScriptWithTSConfig'.
+
+      This also ensures that the include and exclude fields of the tsconfig file are handled
+    -->
+    <ConvertToAbsolutePath Paths="@(GeneratedJavascript -> '%(DestinationRelativePath)')">
+      <Output TaskParameter="AbsolutePaths" ItemName="GeneratedJavascriptAbsolutePath"/>
+    </ConvertToAbsolutePath>
+
+    <ItemGroup>
+      <FileToMove Include="@(GeneratedJavascriptAbsolutePath)">
+        <!--
+          https://regex101.com/r/1xMYrs/1
+
+          Converts from 'CustomTypeScriptCode.razor.js' to 'custom-type-script-code.js'
+        -->
+        <DestinationPath>wwwroot\js\$([System.Text.RegularExpressions.Regex]::Replace(%(Filename)%(Extension), '(?&lt;!^)([A-Z])(?![A-Z])', '-$1').ToLower().Replace('.razor', '').Replace('.cs', ''))</DestinationPath>
+      </FileToMove>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="MoveGeneratedJavaScriptFiles" BeforeTargets="GetTypeScriptOutputForPublishing">
+    <!--
+      Move generated static web asset to destination file in the content root.
+
+      This also ensures that the source file is not included in any pack / publish process because source file
+      does not exist anymore after the operation.
+    -->
+    <Move SourceFiles="%(FileToMove.Identity)" DestinationFiles="%(FileToMove.DestinationPath)" />
+  </Target>
+
+  <PropertyGroup>
+    <ResolveStaticWebAssetsInputsDependsOn>IncludeGeneratedJavaScriptFile;$(ResolveStaticWebAssetsInputsDependsOn)</ResolveStaticWebAssetsInputsDependsOn>
+  </PropertyGroup>
+
+  <Target Name="IncludeGeneratedJavaScriptFile" Outputs="%(FileToMove.DestinationPath)" AfterTargets="MoveGeneratedJavaScriptFiles" Condition="'@(FileToMove)' != ''">
+    <!-- Skeleton adopted from https://github.com/dotnet/aspnetcore/blob/61e60dcf9436709a63e61da35417e2c4d30466ed/src/Components/CustomElements/src/Microsoft.AspNetCore.Components.CustomElements.csproj#L21 -->
+
+    <ItemGroup>
+      <_CandidateAsset Include="$(MSBuildProjectDirectory)\%(FileToMove.DestinationPath)" />
+      <_CandidateAsset>
+        <RelativePath>js\%(Filename)%(Extension)</RelativePath>
+      </_CandidateAsset>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_CandidateAssetIdentity>%(_CandidateAsset.Identity)</_CandidateAssetIdentity>
+    </PropertyGroup>
+
+    <DefineStaticWebAssets
+      SourceType="Computed"
+      SourceId="$(PackageId)"
+      ContentRoot="$(MSBuildProjectDirectory)\wwwroot\"
+      BasePath="$(StaticWebAssetBasePath)"
+      CandidateAssets="@(_CandidateAsset)">
+
+      <Output TaskParameter="Assets" ItemName="_DefinedGeneratedJavaScriptFile" />
+    </DefineStaticWebAssets>
+
+    <DefineStaticWebAssetEndpoints
+      CandidateAssets="@(_DefinedGeneratedJavaScriptFile)"
+      ExistingEndpoints="@()"
+      ContentTypeMappings="@(StaticWebAssetContentTypeMapping)">
+
+      <Output TaskParameter="Endpoints" ItemName="_DefinedGeneratedJavaScriptFileEndpoint" />
+    </DefineStaticWebAssetEndpoints>
+
+    <ItemGroup>
+      <StaticWebAsset Include="@(_DefinedGeneratedJavaScriptFile)" Condition="!@(StaticWebAsset-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+      <StaticWebAssetEndpoint Include="@(_DefinedGeneratedJavaScriptFileEndpoint)" Condition="!@(StaticWebAssetEndpoint-&gt;AnyHaveMetadataValue('Identity', $(_CandidateAssetIdentity)))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="RemoveMovedJsContents" AfterTargets="GetTypeScriptOutputForPublishing">
+    <!--
+      Removes generated scripts from 'Content', these where added in target 'GetTypeScriptOutputForPublishing'
+      and got moved by target 'MoveGeneratedJavaScriptFiles', so that these generated files are not included
+      in NuGet-package and staticwebassets.
+    -->
+    <ItemGroup>
+      <Content Remove="%(GeneratedJavascript.Identity)" />
+    </ItemGroup>
+  </Target>
+</Project>

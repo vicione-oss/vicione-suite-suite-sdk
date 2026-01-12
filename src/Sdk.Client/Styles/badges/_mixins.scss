@@ -1,0 +1,12 @@
+﻿@mixin badge-typography()
+{
+    font-size: xx-small;
+    font-family: Segoe UI;
+    font-style: normal;
+}
+
+@mixin badge-round()
+{
+    border-radius: 50%;
+}
+

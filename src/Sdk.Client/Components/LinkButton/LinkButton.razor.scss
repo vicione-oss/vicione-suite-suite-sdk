@@ -1,0 +1,59 @@
+﻿@use "../../Styles/typography";
+@use "../../Styles/colors";
+@use 'sass:color';
+
+.link-button {
+    // general resets
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: none;
+
+    background-color: inherit;
+    color: color.change(colors.$color-font-light, $alpha: 0.8);
+
+    font-family: inherit;
+    font-weight: typography.$font-weight-light;
+    letter-spacing: 0.4px;
+
+    display: inline-grid;
+    grid-template-areas: "icon text";
+    grid-template-columns: auto minmax(10px, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+    align-items: center;
+    justify-items: start;
+
+    ::deep .icon {
+        grid-area: icon;
+    }
+
+    .text {
+        grid-area: text;
+    }
+
+    // size
+    &.link-button--small {
+        height: 17px;
+
+        font-size: 12px;
+
+        ::deep .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: colors.$color-accent;
+        }
+    }
+
+    // interaction
+    &:disabled {
+        opacity: 0.4;
+    }
+
+    &:not(:disabled) {
+        cursor: pointer;
+ 
+        &:hover {
+            color: colors.$color-font-light;
+        }
+    }
+}

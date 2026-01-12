@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Configuration defaults -->
+  <PropertyGroup>
+    <!-- Specifies a folder to enable unpacking of wallpaper images -->
+    <WallpaperImagesOutputFolder />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <WallpaperImage Include="$(MSBuildThisFileDirectory)../staticwebassets/wallpapers/*.svg" />
+  </ItemGroup>
+
+  <Target Name="BeforeWallpaperTargets" BeforeTargets="PreBuildEvent" />
+
+  <Target Name="UnpackWallpaperImages" Outputs="%(WallpaperImage.Identity)" BeforeTargets="PreBuildEvent" DependsOnTargets="BeforeWallpaperTargets" Condition="'$(WallpaperImagesOutputFolder)' != ''">
+    <PropertyGroup>
+      <DestinationFile>$([MSBuild]::MakeRelative($(MSBuildProjectDirectory), '$(WallpaperImagesOutputFolder)/%(WallpaperImage.Filename)%(WallpaperImage.Extension)'))</DestinationFile>
+    </PropertyGroup>
+
+    <Copy SourceFiles="%(WallpaperImage.Identity)" DestinationFiles="$(DestinationFile)" SkipUnchangedFiles="true" />
+
+    <ItemGroup>
+      <!--
+        @(Content) is passed to DiscoverStaticWebAssets task in an early stage of the build, way before our copy steps will execute.
+        This results in the build system / targets / tasks not knowing about the file copied.
+        We fix this by adding a content item for the file copied.
+        
+        Also important: $(DestinationFile) must be relative path, so that DiscoverStaticWebAssets does not discard it.
+      -->
+      <Content Include="$(DestinationFile)" Condition="!@(Content->AnyHaveMetadataValue('Identity', $(DestinationFile)))" />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -1,0 +1,54 @@
+/**
+ * ==============================================
+ * Dot Flashing
+ * ==============================================
+ */
+
+@use './variables';
+@use './mixins';
+
+.dot-flashing {
+  position: relative;
+
+  @include mixins.dot;
+
+  animation: dot-flashing 1s infinite linear alternate;
+  animation-delay: .5s;
+
+  &::before,
+  &::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+
+  &::before {
+    left: - variables.$dot-spacing;
+
+    @include mixins.dot($bg-color: variables.$dot-before-color);
+
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 0s;
+  }
+
+  &::after {
+    left: variables.$dot-spacing;
+
+    @include mixins.dot($bg-color: variables.$dot-after-color);
+
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 1s;
+  }
+}
+
+@keyframes dot-flashing {
+  0% {
+    background-color: rgba(variables.$dot-color, 1);
+  }
+
+  50%,
+  100% {
+    background-color: rgba(variables.$dot-color, .2);
+  }
+}

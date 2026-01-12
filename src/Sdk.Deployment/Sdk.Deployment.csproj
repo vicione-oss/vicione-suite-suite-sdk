@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ViciOne.Suite.Sdk.Deployment</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup Label="FilesToCopy">
+    <Content Include="Scripts\**\*">
+      <Pack>true</Pack>
+      <PackagePath>build\scripts</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ViciOne.Suite.Sdk.Deployment.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    Provide some msbuild targets for the comsumer project, https://stackoverflow.com/a/56738870/3936440
+
+    Important: stating PackagePath is absolutely necessary otherwise targets are not executed, attribute is taken from https://stackoverflow.com/a/55378636/3936440
+  -->
+    <Content Include="ViciOne.Suite.Sdk.Deployment.targets" PackagePath="build" />
+  </ItemGroup>
+
+</Project>

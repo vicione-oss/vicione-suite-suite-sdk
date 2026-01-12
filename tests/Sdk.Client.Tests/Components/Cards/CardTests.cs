@@ -1,0 +1,102 @@
+﻿using Bunit;
+using AwesomeAssertions;
+using Sdk.Client.Components.Cards.Contracts;
+using Sdk.Testing.Client;
+using Xunit;
+
+namespace Sdk.Client.Tests.Components.Cards;
+
+public class CardTests
+{
+    public class OnCloseButtonClick
+    {
+        [Fact]
+        public void Invokes_event()
+        {
+            using var ctx = new TestContext();
+            var card = new Card()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                TeaserText = "Teaser",
+            };
+            var invoked = false;
+            ctx.SetupSuiteServices();
+
+            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            {
+                b.Add(p => p.CardModel, card);
+                b.Add(p => p.OnCloseClick, () => invoked = true);
+            });
+
+            component.Find(".close").Click();
+
+            invoked.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Invokes_event_when_card_has_image()
+        {
+            using var ctx = new TestContext();
+            var card = new Card()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                TeaserText = "Teaser",
+                TeaserImagePath = "TeaserImagePath"
+            };
+            var invoked = false;
+            ctx.SetupSuiteServices();
+
+            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            {
+                b.Add(p => p.CardModel, card);
+                b.Add(p => p.OnCloseClick, () => invoked = true);
+            });
+
+            component.Find(".close").Click();
+
+            invoked.Should().BeTrue();
+        }
+    }
+
+    public class OnLinkClick
+    {
+        [Fact]
+        public void Invokes_event()
+        {
+            using var ctx = new TestContext();
+            var card = new Card()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                TeaserText = "Teaser",
+                Text = "Text"
+            };
+            var invoked = false;
+
+            ctx.SetupSuiteServices();
+
+            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            {
+                b.Add(p => p.CardModel, card);
+                b.Add(p => p.OnLinkClick, () => invoked = true);
+            });
+
+            var divElementText = component.Find(".text");
+            var buttonElement = divElementText.NextElementSibling;   // next elemeent is the 'LinkButton'
+            buttonElement?.Click();
+
+            invoked.Should().BeTrue();
+        }
+    }
+
+    private sealed class Card : ICardModel
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string TeaserText { get; set; } = string.Empty;
+        public string TeaserImagePath { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
+    }
+}

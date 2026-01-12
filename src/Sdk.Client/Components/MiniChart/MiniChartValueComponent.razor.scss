@@ -1,0 +1,47 @@
+﻿@use "../../Styles/colors";
+@use 'sass:color';
+
+.mini-chart-value {
+    display: grid;
+    gap: var(--mini-chart-value-grid-gap);
+    grid-template-columns: var(--mini-chart-value-grid-template-columns);
+    grid-template-rows: var(--mini-chart-value-grid-template-rows);
+    grid-template-areas: var(--mini-chart-value-grid-template-areas);
+    width: var(--mini-chart-value-width);
+    height: var(--mini-chart-value-height);
+    font-size: 10px;
+    letter-spacing: 0.4px;
+    text-align: right;
+    font-weight: 300;
+    color: color.adjust(colors.$color-font-light, $alpha: -0.2);
+
+    .mini-chart-value__label {
+        grid-area: label;
+        justify-self: var(--mini-chart-value__label-justify-self);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mini-chart-value__percentage {
+        grid-area: percentage;
+        justify-self: var(--mini-chart-value__percentage-justify-self);
+    }
+
+    .mini-chart-value__figure {
+        grid-area: figure;
+        background-color: var(--mini-chart-value__figure-background-color);
+        display: flex;
+        flex-direction: var(--mini-chart-value__figure-flex-direction);
+
+        &:before {
+            content: "";
+            flex-grow: calc(100 - var(--current-percent));
+        }
+
+        .fill {
+            flex-grow: var(--current-percent);
+            background-color: var(--color);
+        }
+    }
+}

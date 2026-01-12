@@ -1,0 +1,16 @@
+﻿@using Sdk.Client.Extensions;
+
+@{
+    var currentPercent = Maximum <= 0 ? 0 : (Current - Minimum) * 100 / Maximum;
+}
+
+<div class="mini-chart-value" style="--current-percent: @currentPercent.ToAttributeValue()">
+    <div class="mini-chart-value__label">@Label</div>
+    @if (IsPercentageVisible())
+    {
+        <div class="mini-chart-value__percentage">@currentPercent.ToFixedPointValue(0) %</div>
+    }
+    <div class="mini-chart-value__figure">
+        <div class="fill" style="--color: @FillColor"></div>
+    </div>
+</div>

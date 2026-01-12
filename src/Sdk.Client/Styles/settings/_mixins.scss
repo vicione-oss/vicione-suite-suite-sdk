@@ -1,0 +1,53 @@
+﻿@use "../colors";
+@use 'sass:color';
+
+@mixin background-styles() {
+    background-color: #414141;
+    opacity: 0.3;
+}
+
+@mixin background-layer() {
+    position: relative;
+
+    &::before {
+        content: "";
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        @include background-styles();
+    }
+}
+
+@mixin bring-to-front() {
+    position: inherit;
+}
+
+@mixin collapsed-styles() {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+@mixin no-margin-top-bottom() {
+    & > ::deep * {
+        &:first-of-type {
+            margin-top: 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@mixin subline() {
+    padding-top: 6px;
+    font-size: 10px;
+    letter-spacing: 0.4px;
+    color: color.adjust(colors.$color-font-light, $alpha: -0.2);
+}

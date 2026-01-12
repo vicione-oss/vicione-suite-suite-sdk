@@ -1,0 +1,68 @@
+﻿@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var cssClasses = new List<string> { "settings-group" };
+
+    var isNested = ParentSettingsGroup is not null;
+    if (isNested)
+        cssClasses.Add("settings-group--nested");
+
+    if (Expanded.HasValue && !Expanded.Value)
+        cssClasses.Add("settings-group--collapsed");
+
+    var hasChildContent = ChildContent is not null;
+    if (!hasChildContent)
+        cssClasses.Add("settings-group--without-child-content");
+}
+
+<div class="@string.Join(" ", cssClasses)">
+    @if (isNested)
+    {
+        <div class="spacer"></div>
+    }
+
+    <div class="header">
+        <div class="title">
+            @Title
+        </div>
+
+        @if (BeforeExpander is not null)
+        {
+            <div class="before-expander">
+                @BeforeExpander
+            </div>
+        }
+
+        @if (Expander is not null)
+        {
+            <div class="expander-container">
+                @Expander
+            </div>
+        }
+        else if (Expanded.HasValue)
+        {
+            var monochromeIconName = Expanded.Value ? MonochromeIconName.ExpanderLightTop : MonochromeIconName.ExpanderLightDown;
+
+            <div class="expander-container">
+                <button class="default-expander" @onclick="@(_ => ExpanderButtonClick(!Expanded.Value))">
+                    <MonochromeIcon Name="@monochromeIconName"></MonochromeIcon>
+                </button>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Subline))
+        {
+            <div class="subline">
+                @Subline
+            </div>
+        }
+    </div>
+
+    @if (hasChildContent)
+    {
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    }
+</div>

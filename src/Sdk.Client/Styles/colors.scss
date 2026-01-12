@@ -1,0 +1,63 @@
+﻿@use 'sass:color';
+
+//
+// ### theme colors ###
+//
+$color-theme: #000000;
+$color-theme-inverted: #ffffff;
+//
+// ### primary content colors ###
+//
+$color-background: rgb(42, 42, 42);
+$color-background-hover: color.adjust($color-background, $lightness: +10%);
+$color-background-modal: rgb(58, 58, 58);
+$color-background-dark: rgb(28, 28, 28);
+$color-background-light: rgb(68, 68, 68);
+$color-foreground: rgb(176, 176, 176);
+$color-foreground-dark: rgb(105, 105, 105);
+$color-foreground-light: rgb(200, 200, 200);
+$color-foreground-light-dark: rgb(42, 42, 42);
+
+$color-border: rgb(77, 77, 77);
+$color-content: #555555;
+$color-content-hover: #666666;
+$color-content-dark: rgb(64, 64, 64);
+$color-content-dark-hover: color.adjust($color-content-dark, $lightness: +10%);
+$color-content-dark-disabled: #595959;
+
+$color-disabled: rgb(166, 166, 166);
+$color-disabled-dark: color.adjust($color-disabled, $lightness: -10%);
+//
+// ### accent colors ###
+//
+$color-accent: #ff9600;
+$color-accent-hover: color.adjust($color-accent, $lightness: +10%);
+$color-accent-dark: #db8400;
+$color-accent-background: #ffbd59;
+//
+// ### status colors ###
+//
+$color-add: #2b8c68;
+$color-info: #7295c2;
+$color-warning: rgb(255, 206, 0);
+$color-error: #e34b35;
+//
+// ### font colors ###
+//
+$color-font: rgb(222, 222, 222);
+$color-font-light: rgb(255, 255, 255);
+$color-font-inverted: rgb(60, 60, 60);
+$color-font-disabled: #8c8c8c;
+//
+// ### standard colors ###
+//
+$color-green: #5fde95;
+$color-light-green: #beec79;
+$color-blue: #7295c2;
+$color-orange: #ff9600;
+$color-ifm-orange: #ff6e00;
+$color-red: #e34b35;
+//
+// ### notification element flyout colors ###
+//
+$notification-element-flyout-border-left-color: #5c5c5c;

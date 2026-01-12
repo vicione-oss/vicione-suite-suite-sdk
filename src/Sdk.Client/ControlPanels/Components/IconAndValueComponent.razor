@@ -1,0 +1,28 @@
+﻿@using Sdk.Client.Colors
+
+@typeparam T
+
+@{
+    var valueStr = string.Empty;
+    if (Value is not null)
+    {
+        valueStr = ValueFormatter is not null ? ValueFormatter(Value) : Value.ToString();
+    }
+
+    var valueColor = ValueColor ?? StandardHtmlColor.From(StandardColor.Green);
+}
+
+<div class="icon-and-value-component">
+    <div class="icon-and-value-component__icon">
+        <img src="@IconSrc" alt="@IconAlt" />
+    </div>
+
+    <div class="icon-and-value-component__value" style="--color: @valueColor">
+        @valueStr
+
+        @if (!string.IsNullOrWhiteSpace(MeasurementUnit))
+        {
+            <span class="measurement-unit">@MeasurementUnit</span>
+        }
+    </div>
+</div>

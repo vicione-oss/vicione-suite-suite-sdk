@@ -1,0 +1,9 @@
+// ------------------------------
+// Three-Dots
+//
+// https://github.com/nzbin/three-dots
+// ------------------------------
+@forward 'variables';
+@forward 'mixins';
+// Basic
+@forward 'dot-flashing' as flashing-*;

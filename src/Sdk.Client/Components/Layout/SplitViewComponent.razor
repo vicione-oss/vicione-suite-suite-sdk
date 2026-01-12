@@ -1,0 +1,35 @@
+﻿<div class="split-view-container"
+     style="--left-side-content-width: @(_leftSideContentWidth)px; --splitter-width: @(SplitterWidth)px;">
+
+    <!-- ### left side content of splitter -->
+    <div class="left-side-content">
+        @LeftSideContent
+    </div>
+
+    <!-- ### visible splitter line ### -->
+    <div class="visible-splitter">
+        <div></div>
+    </div>
+
+    <!-- ### right side content of splitter ### -->
+    <div class="right-side-content">
+        @RightSideContent
+    </div>
+
+    <!-- ### splitter ghost to show predetermined drag target ### -->
+    @if (!IsLive && _lastRegisteredPosition.HasValue)
+    {
+        <div class="splitter-ghost"
+             style="--left-side-ghost-content-width: @(_leftSideGhostContentWidth)px">
+
+            <div></div>
+        </div>
+    }
+
+    <!-- ### invisible splitter dragging overlay ### -->
+    <div @onmousedown="@OnMouseDown"
+         @onmousemove="@OnMouseMove"
+         @onmouseup="@OnMouseUp"
+         class="splitter-dragging-overlay @(_lastRegisteredPosition.HasValue ? "active" : "")">
+    </div>
+</div>

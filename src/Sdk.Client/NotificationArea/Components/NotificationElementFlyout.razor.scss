@@ -1,0 +1,53 @@
+﻿@use "../../Styles/colors";
+@use "../../Styles/variables";
+@use "../../Styles/typography";
+
+.notification-element-flyout {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    background-color: colors.$color-content-dark;
+    bottom: 0;
+    position: fixed;
+    top: variables.$top-bar-height;
+    right: 0;
+    width: 300px;
+    z-index: 101; /* web-dashboard popup has 1501, be sure to top that. modal dialog too now !? */
+    box-shadow: -2px 4px 4px 0 rgba(0, 0, 0, 0.2);
+
+    .notification-element-flyout-bg {
+        position: absolute;
+        border-left: variables.$flyout-border-width solid colors.$color-font-light;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        opacity: .15;
+    }
+
+    .heading-container {
+        display: flex;
+        padding-left: variables.$flyout-border-width;
+        justify-content: space-between;
+
+        .heading {
+            position: relative;
+            margin-top: 24px;
+            margin-bottom: 32px;
+            width: 100%;
+            padding-left: 24px;
+            font-size: 24px;
+            font-weight: typography.$font-weight-light;
+            letter-spacing: 0.5px;
+            color: colors.$color-font;
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+        padding-left: variables.$flyout-border-width;
+    }
+}

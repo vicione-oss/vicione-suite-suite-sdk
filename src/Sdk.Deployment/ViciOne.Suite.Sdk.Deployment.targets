@@ -1,0 +1,10 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <DeployScriptFiles Include="$(MSBuildThisFileDirectory)\..\build\scripts\**\*" />
+  </ItemGroup>
+  <Target Name="CopyDeployAssets" BeforeTargets="PreBuildEvent">
+    <Copy SourceFiles="@(DeployScriptFiles)"
+          DestinationFolder="$(MSBuildProjectDirectory)../../../shared/deploy/"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

@@ -1,0 +1,7 @@
+﻿.settings-layout {
+    display: grid;
+    grid-template-columns: auto minmax(10px, 1fr); // minmax() to https://css-tricks.com/preventing-a-grid-blowout
+    grid-auto-flow: row; // place items without defined spots for the defined template columns in its own row
+
+    align-items: baseline; // align settings field labels vertically on the same base line as settings field inputs
+}

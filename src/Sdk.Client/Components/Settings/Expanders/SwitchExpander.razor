@@ -1,0 +1,24 @@
+﻿@using ViciOne.Ui.Blazor.Components.Switch
+@using ViciOne.Ui.Blazor.Components.Switch.Enums
+
+@{
+    var switchCssClasses = new List<string>();
+
+    if (IsLoading)
+        switchCssClasses.Add("switch--loading");
+}
+
+<div class="switch-expander">
+    @if (IsLoading)
+    {
+        <div class="loading-spinner">
+            <div class="dot-flashing"></div>
+        </div>
+    }
+
+    <Switch CssClass="@string.Join(" ", switchCssClasses)"
+            Size="SwitchSize.Medium"
+            Enabled="@Enabled"
+            @bind-Value:get="Value"
+            @bind-Value:set="SwitchValueChanged" />
+</div>

@@ -1,0 +1,65 @@
+﻿@use "variables";
+@use "mixins";
+@use "animations";
+
+%number-badge-x {
+    @include mixins.badge-typography();
+    @include mixins.badge-round();
+
+    background-color: variables.$badge-background-color;
+    color: variables.$badge-font-color;
+
+    padding: 1px 5px;
+    position: absolute;
+}
+
+.number-badge-1::after {
+    @extend %number-badge-x;
+    content: "1";
+}
+
+.number-badge-2::after {
+    @extend %number-badge-x;
+    content: "2";
+}
+
+.number-badge-3::after {
+    @extend %number-badge-x;
+    content: "3";
+}
+
+.number-badge-4::after {
+    @extend %number-badge-x;
+    content: "4";
+}
+
+.number-badge-5::after {
+    @extend %number-badge-x;
+    content: "5";
+}
+
+.number-badge-6::after {
+    @extend %number-badge-x;
+    content: "6";
+}
+
+.number-badge-7::after {
+    @extend %number-badge-x;
+    content: "7";
+}
+
+.number-badge-8::after {
+    @extend %number-badge-x;
+    content: "8";
+}
+
+.number-badge-9::after {
+    @extend %number-badge-x;
+    content: "9";
+}
+
+.number-badge-nine-plus::after {
+    @extend %number-badge-x;
+    content: "9+";
+    padding: 1px 3px;
+}

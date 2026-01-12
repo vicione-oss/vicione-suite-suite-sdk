@@ -1,0 +1,56 @@
+﻿.left-side-content {
+    grid-area: left-content;
+}
+
+.right-side-content {
+    grid-area: right-content;
+}
+
+.split-view-container {
+    display: grid;
+    grid-template-areas: "left-content splitter right-content";
+    grid-template-columns: var(--left-side-content-width) var(--splitter-width) auto;
+}
+
+.splitter-dragging-overlay {
+    background-color: transparent;
+    cursor: col-resize;
+    opacity: 0.5;
+    z-index: 3;
+
+    &:not(.active) {
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+        margin-left: var(--left-side-content-width);
+        width: var(--splitter-width);
+    }
+
+    &.active {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+}
+
+.splitter-ghost {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    margin-left: var(--left-side-ghost-content-width);
+    width: var(--splitter-width);
+    z-index: 2;
+
+    > div {
+        height: 100%;
+    }
+}
+
+.visible-splitter {
+    grid-area: splitter;
+    z-index: 1;
+
+    > div {
+        height: 100%;
+    }
+}

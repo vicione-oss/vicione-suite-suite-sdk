@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ViciOne.Suite.Sdk.Backend.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Sdk.Backend\Sdk.Backend.csproj" />
+    <ProjectReference Include="..\..\src\Sdk.Testing\Sdk.Testing.csproj" />
+    <ProjectReference Include="..\..\tests\TestModule.Backend\TestModule.Backend.csproj" />
+  </ItemGroup>
+
+</Project>

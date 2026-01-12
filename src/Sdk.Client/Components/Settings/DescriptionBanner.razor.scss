@@ -1,0 +1,39 @@
+﻿@use "../../Styles/colors";
+
+.description-banner {
+    display: flex;
+    flex-direction: column;
+
+    color: colors.$color-font-light;
+
+    margin-bottom: 16px;
+
+    header {
+        display: flex;
+        align-items: center;
+
+        .icon {
+            grid-area: icon;
+
+            width: 32px;
+            height: 32px;
+
+            margin-right: 16px;
+        }
+
+        .title {
+            flex-grow: 1;
+
+            font-size: 18px;
+        }
+    }
+
+    p {
+        padding: 16px;
+        margin: 0;
+
+        letter-spacing: 0.4px;
+
+        text-align: justify;
+    }
+}

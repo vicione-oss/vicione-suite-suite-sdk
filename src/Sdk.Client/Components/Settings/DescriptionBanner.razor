@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components.Sections
+
+@if (SectionId is not null)
+{
+    <SectionContent SectionId="@SectionId">
+        <aside class="description-banner">
+            <header>
+                @if (IconCssClass is not null)
+                {
+                    var iconCssClasses = new List<string> { "icon" };
+                    iconCssClasses.AddRange(IconCssClass.Split(" "));
+
+                    <div class="@string.Join(" ", iconCssClasses)"></div>
+                }
+                else if (IconUrl is not null)
+                {
+                    <img class="icon" src="@IconUrl.ToString()" alt="Icon" />
+                }
+                else
+                {
+                    var activeControlPanelDescriptor = ActiveControlPanelDescriptorProvider.GetActiveControlPanelDescriptor();
+                    if (activeControlPanelDescriptor is not null)
+                    {
+                        <img class="icon" src="@activeControlPanelDescriptor.IconPath" alt="Icon" />
+                    }
+                }
+
+                <div class="title">@Title</div>
+            </header>
+        
+            <p>
+                @ChildContent
+            </p>
+        </aside>
+    </SectionContent>
+}

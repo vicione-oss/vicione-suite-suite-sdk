@@ -1,0 +1,39 @@
+﻿@use "../../Styles/colors";
+
+.sidebar-card {
+    background-color: colors.$color-content;
+    box-shadow: 1px 1px 2px 1px rgba(colors.$color-theme-inverted, .15);
+    font-size: smaller;
+    margin-bottom: 16px;
+    padding: 3.2px;
+
+    ul {
+        padding-inline-start: 16px;
+    }
+
+    > h6 {
+        text-align: center;
+    }
+
+    > div {
+        display: flex;
+    }
+}
+
+.sidebar-card-button-panel {
+    grid-template-columns: 50% 50%;
+    text-align: -webkit-center;
+
+    > button {
+        margin-bottom: 3%;
+        width: 45%;
+    }
+}
+
+.sidebar-card-left-side-content {
+    padding: 0 8px;
+}
+
+.sidebar-card-main-content {
+    flex-grow: 1;
+}

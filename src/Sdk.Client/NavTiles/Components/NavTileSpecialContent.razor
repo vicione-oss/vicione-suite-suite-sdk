@@ -1,0 +1,55 @@
+﻿@{
+    var cssClasses = new List<string> { "nav-tile-special-content" };
+
+    var hasSubline = !string.IsNullOrEmpty(Subline);
+    if (hasSubline)
+        cssClasses.Add("with-subline");
+
+    var hasLeftContent = LeftContent is not null;
+    if (hasLeftContent)
+        cssClasses.Add("with-left-content");
+
+    var rightContent = RightContent;
+    var hasRightContent = rightContent is not null;
+    if (hasRightContent)
+        cssClasses.Add("with-right-content");
+
+    var hasContentDescriptionRow = !string.IsNullOrWhiteSpace(LeftContentDescription) || !string.IsNullOrWhiteSpace(RightContentDescription);
+}
+
+<section class="@string.Join(" ", cssClasses)">
+    <h5 class="nav-tile-special-content__headline">@Headline</h5>
+
+    @if (hasSubline)
+    {
+        <p class="nav-tile-special-content__subline">@Subline</p>
+    }
+
+    @if (hasLeftContent)
+    {
+        <div class="nav-tile-special-content__left-content">
+            @LeftContent
+        </div>
+    }
+
+    @if (hasContentDescriptionRow)
+    {
+        <div class="nav-tile-special-content__left-content-description">
+            @LeftContentDescription
+        </div>
+    }
+
+    @if (hasRightContent)
+    {
+        <div class="nav-tile-special-content__right-content">
+            @RightContent
+        </div>
+    }
+
+    @if (hasContentDescriptionRow)
+    {
+        <div class="nav-tile-special-content__right-content-description">
+            @RightContentDescription
+        </div>
+    }
+</section>

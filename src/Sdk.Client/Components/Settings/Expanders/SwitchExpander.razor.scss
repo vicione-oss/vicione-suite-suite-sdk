@@ -1,0 +1,29 @@
+@use "../../../Styles/animations";
+@use "../../../Styles/colors";
+
+@use "../../../Styles/loading-spinner/three-dots" with (
+    $dot-color: colors.$color-accent
+);
+
+@include animations.opacity-to-one-keyframes();
+@include animations.opacity-to-point-five-keyframes();
+
+.switch-expander {
+    display: flex;
+    flex-direction: row;
+    gap: 16px + three-dots.$dot-spacing;
+
+    .loading-spinner {
+        align-self: center;
+
+        opacity: 0;
+
+        @include animations.opacity-to-one-declarations();
+    }
+
+    ::deep .switch--loading {
+        pointer-events: none;
+
+        @include animations.opacity-to-point-five-declarations();
+    }
+}

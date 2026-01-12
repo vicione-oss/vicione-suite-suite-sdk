@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ViciOne.Suite.Sdk.Client.CssBundle.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)ViciOne.Suite.Sdk.Client.TypeScript.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)ViciOne.Suite.Sdk.Client.Unpack.targets" />
+</Project>

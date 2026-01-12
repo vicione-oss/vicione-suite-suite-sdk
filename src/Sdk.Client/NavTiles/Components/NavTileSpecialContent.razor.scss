@@ -1,0 +1,87 @@
+﻿@use "../../Styles/colors";
+@use "../../Styles/typography";
+@use "../../Styles/nav-tiles/mixins";
+@use 'sass:color';
+
+.nav-tile-special-content {
+    @include mixins.content();
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    grid-template-rows: min-content min-content minmax(auto, 62px) minmax(auto, 24px);
+    grid-template-areas:
+        "headline headline headline"
+        "subline subline subline"
+        "left-content empty right-content"
+        "left-content-description empty right-content-description";
+
+    .nav-tile-special-content__headline,
+    .nav-tile-special-content__subline {
+        overflow-wrap: break-word;
+        text-align: left;
+    }
+
+    .nav-tile-special-content__headline {
+        grid-area: headline;
+
+        @include mixins.headline();
+    }
+
+    .nav-tile-special-content__subline {
+        grid-area: subline;
+
+        @include mixins.subline();
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: 12px;
+    }
+
+    .nav-tile-special-content__left-content,
+    .nav-tile-special-content__right-content {
+        display: flex; // stack elements added to content ...
+        flex-direction: row; //...horizontally ...
+        gap: 3px; // .. with a default gap in between ...
+        // ... aligned to the bottom
+        align-items: flex-end;
+    }
+
+    .nav-tile-special-content__left-content-description,
+    .nav-tile-special-content__right-content-description {
+        font-weight: typography.$font-weight-light;
+        align-self: end;
+
+        font-size: 12px;
+        color: color.change(colors.$color-font-light, $alpha: 0.8);
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: -8px;
+        padding-right: 8px;
+
+        ::deep .mini-chart {
+            font-size: 10px;
+        }
+    }
+
+    .nav-tile-special-content__left-content {
+        grid-area: left-content;
+    }
+
+    .nav-tile-special-content__left-content-description {
+        grid-area: left-content-description;
+    }
+
+    .nav-tile-special-content__right-content {
+        grid-area: right-content;
+
+        // align content stack to the center
+        justify-content: center;
+    }
+
+    .nav-tile-special-content__right-content-description {
+        grid-area: right-content-description;
+        text-align: end;
+    }
+}

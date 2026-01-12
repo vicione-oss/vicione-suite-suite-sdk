@@ -1,0 +1,35 @@
+﻿@using ViciOne.Ui.MonochromeIcons.Components
+@using ViciOne.Ui.MonochromeIcons.Core.Enums
+
+@{
+    var cssClasses = new List<string> { "strip-row" };
+
+    if (!string.IsNullOrWhiteSpace(CssClass))
+        cssClasses.AddRange(CssClass.Split(" "));
+
+    var additionalAttributes = new Dictionary<string, object>();
+
+    if (OnClick.HasDelegate)
+    {
+        cssClasses.Add("clickable");
+        additionalAttributes.Add("tabindex", "0");
+    }
+}
+
+<div class="@string.Join(" ", cssClasses)" 
+        style="--color: @Color;" 
+        @onclick="@OnClickAsync" 
+        @attributes="@additionalAttributes">
+
+    <div class="strip-icon-side-container">
+        <div class="strip-icon-side-bg"></div>
+        <MonochromeIcon Name="@IconName" Size="@MonochromeIconSize.SmallMedium" />
+    </div>
+    <div class="strip-notice-side-container">
+        <div class="strip-notice-side-bg"></div>
+        <div class="strip-notice-side-content">
+            <div class="headline">@Headline</div>
+            <div class="subline">@Subline</div>
+        </div>
+    </div>
+</div>
