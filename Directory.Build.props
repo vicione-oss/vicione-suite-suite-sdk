@@ -49,7 +49,7 @@
     <!-- Für Repos die Projekte enthalten die als NuGet Paket veröffentlicht werden -->
     <PropertyGroup>
         <!-- https://docs.microsoft.com/de-de/nuget/reference/msbuild-targets -->
-        <PackageProjectUrl>https://gitlab.i40.ifm-datalink.net/acx/vo-suite/vo-suite-sdk</PackageProjectUrl>
+        <PackageProjectUrl>https://gitlab.com/vicione-oss/vicione/suite/suite-sdk</PackageProjectUrl>
         <Authors>$(Company)</Authors>
     </PropertyGroup>
 

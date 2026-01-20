@@ -447,7 +447,7 @@
 
 ### Removed
 
-- `ViciOne.Sdk.Localization` package, removed and replaced by [ViciOne.Ui.Localization](https://gitlab.i40.ifm-datalink.net/acx/vo-ui/vo-localization)
+- `ViciOne.Sdk.Localization` package, removed and replaced by [ViciOne.Ui.Localization](https://gitlab.com/vicione-oss/vicione/ui-libs/localization)
 
 ### Fixed
 
