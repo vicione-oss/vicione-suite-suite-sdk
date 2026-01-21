@@ -63,14 +63,6 @@ public sealed class ClientServiceConfigurator(IServiceCollection services)
     /// </summary>
     public IUiMediator ClientMediator { get; } = Substitute.For<IUiMediator>();
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    /// <summary>
-    /// Gets a mocked <see cref="IClientModuleService"/>. This property is obsolete.
-    /// </summary>
-    [Obsolete("Will be removed in upcoming releases")]
-    public IClientModuleService ClientModuleService { get; } = Substitute.For<IClientModuleService>();
-#pragma warning restore CS0618 // Type or member is obsolete
-
     /// <summary>
     /// Gets a mocked <see cref="IActiveNotificationElementPolicy"/> for testing notification policies.
     /// </summary>

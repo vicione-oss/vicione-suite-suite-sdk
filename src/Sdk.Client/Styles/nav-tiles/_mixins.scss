@@ -17,7 +17,7 @@
     line-height: 26px;
     margin-top: 0;
     margin-bottom: 0px;
-    color: color.adjust(colors.$color-font-light, $alpha: -0.2);
+    color: color.adjust(colors.$font-light, $alpha: -0.2);
     letter-spacing: 0.2px;
 }
 
@@ -25,7 +25,7 @@
     font-weight: typography.$font-weight-extralight;
     font-size: 13px;
     line-height: normal;
-    color: color.adjust(colors.$color-font-light, $alpha: -0.2);
+    color: color.adjust(colors.$font-light, $alpha: -0.2);
     letter-spacing: 0.2px;
     margin-top: variables.$subline-margin-top;
     margin-bottom: 0px;

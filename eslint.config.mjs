@@ -23,7 +23,8 @@ export default [
         ignores: [
             '**/wwwroot/js/*.js',
             '**/bin',
-            'tests/**/*.js'
+            'tests/**/*.js',
+            '**/ReconnectModal.razor.js'
         ]
     },
     ...xoTypeScript,

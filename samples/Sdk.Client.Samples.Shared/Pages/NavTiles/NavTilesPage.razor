@@ -1,0 +1,21 @@
+﻿@page "/nav-tiles"
+
+@using Microsoft.AspNetCore.Components.Web
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<PageTitle>Sdk.Client.NavTiles samples</PageTitle>
+
+<h1>NavTiles</h1>
+
+<h3>NavTileStandardContent</h3>
+
+<div class="example">
+    <div class="foo-nav-tile-container">
+        <FooNavTile State="_fooNavTileState" WithSubline="_fooNavTileWithSubline" />
+    </div>
+
+    <div class="options">
+        <Switch @bind-Value="_fooNavTileWithSubline" />
+        <label>With subline</label>
+    </div>
+</div>

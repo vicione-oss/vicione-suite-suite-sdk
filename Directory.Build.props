@@ -19,7 +19,7 @@
 
     <!-- Eigenschaften für alle Projekte des Repos -->
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
 
         <!-- General information -->
         <Description>-</Description>
@@ -56,7 +56,7 @@
     <PropertyGroup Condition="'$(CI)' != ''">
         <RunAnalyzers>false</RunAnalyzers>
     </PropertyGroup>
-    
+
     <!-- Testprojekte nicht packen und nicht publishen -->
     <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectDirectory.Contains('tests'))">
         <IsPackable>false</IsPackable>

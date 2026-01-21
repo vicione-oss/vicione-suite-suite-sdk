@@ -22,7 +22,7 @@
         .progress-spinner {
             position: absolute;
             --radian-value: 0;
-            --color-value: colors.$color-font-light;
+            --color-value: colors.$font-light;
             width: var(--diameter);
             height: var(--diameter);
             --mask-circle-size: calc(var(--diameter) / 2 - var(--spinner-thickness));
@@ -48,7 +48,7 @@
             display: flex;
             flex-direction: column;
             border-radius: 50%;
-            color: colors.$color-font;
+            color: colors.$font;
 
             .middle-circle-name {
                 display: flex;
@@ -84,7 +84,7 @@
                 width: 137px;
                 height: min-content;
                 background-color: #333333;
-                color: colors.$color-font-light;
+                color: colors.$font-light;
                 border-radius: 3px;
                 font-size: 8px;
                 font-weight: typography.$font-weight-regular;
@@ -101,7 +101,7 @@
                     > div:first-child {
                         padding-left: 8px;
                         width: 65px;
-                        color: colors.$color-font;
+                        color: colors.$font;
                     }
                 }
 
@@ -140,7 +140,7 @@
         }
 
         .middle-circle {
-            color: colors.$color-font-light;
+            color: colors.$font-light;
         }
     }
 
@@ -153,7 +153,7 @@
         font-size: 8px;
         font-weight: typography.$font-weight-regular;
         line-height: 13px;
-        color: colors.$color-font;
+        color: colors.$font;
 
         .scale-start {
             width: 32%;

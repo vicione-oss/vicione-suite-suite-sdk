@@ -21,9 +21,6 @@ public static class ClientServiceCollectionExtensions
         services
             .AddSingleton(config.ActiveNotificationElementPolicy)
             .AddSingleton(config.ClientMediator)
-#pragma warning disable CS0618 // Type or member is obsolete
-            .AddSingleton(config.ClientModuleService)
-#pragma warning restore CS0618 // Type or member is obsolete
             .AddSingleton(config.ConnectionService)
             .AddSingleton(config.InstanceInformationProvider)
             .AddSingleton(config.JsInterop)

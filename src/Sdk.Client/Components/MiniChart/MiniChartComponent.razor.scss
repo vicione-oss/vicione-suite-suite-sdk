@@ -27,7 +27,7 @@
         --mini-chart-value__percentage-justify-self: start;
 
         --mini-chart-value__figure-flex-direction: row-reverse;
-        --mini-chart-value__figure-background-color: color.change(colors.$color-theme-inverted, $alpha: 0.3);
+        --mini-chart-value__figure-background-color: color.change(colors.$theme-inverted, $alpha: 0.3);
     }
 
     &.vertical {

@@ -1,0 +1,10 @@
+﻿@using Sdk.Client.NavTiles.Components
+
+@inherits NavTileBase
+
+<NavTileStandardContent Headline="@_headline"
+                        Subline="@(WithSubline ? _subline : string.Empty)"
+                        IconSrc="@_iconSrc"
+                        IconAlt="@string.Empty"
+                        OnContentLoading="ContentLoading"
+                        OnContentReady="ContentReady" />

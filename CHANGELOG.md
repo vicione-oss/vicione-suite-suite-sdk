@@ -1,4 +1,14 @@
-## 1.2.0 - Unreleased
+# Changelog
+
+## 2.0.0 - Unreleased
+
+### Added
+
+- Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
+
+### Fixed
+
+- `NavTileStandardContent`, missing render cycle, which may cause nothing to be displayed on the navigation tile
 
 ### Changed
 
@@ -6,7 +16,13 @@
 
 ### Updated
 
-- `ViciOne.Ui.Blazor.Components` package, update to version `4.3.0`
+- `AspNetCore.SassCompiler` package, update to version `1.97.1`
+- `Microsoft` packages, update to version `10.0.2`
+- `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.0.1`
+- `ViciOne.Ui.Design` package, update to version `2.0.3`
+- `ViciOne.Ui.Localization` package, update to version `3.0.2`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.1.0`
 
 ## 1.1.0 - 2025-12-03
 
@@ -96,7 +112,7 @@
 
 - Remove `required` keyword from Blazor component parameters annotated with `EditorRequired`
 - Replaced `FluentAssertions` with `AwesomeAssertions` version `9.1.0`
-- Updated system configuration to match HostManagement 1.0.0  
+- Updated system configuration to match HostManagement 1.0.0
 - `Sdk.Client.Components.Wallpaper`, vector-based wallpaper images to support high resolution displays
 
 ### Updated
@@ -176,7 +192,7 @@
 
 ### Fixed
 
-- Remove of `Microsoft.AspNetCore.Components.QuickGrid` module publish process 
+- Remove of `Microsoft.AspNetCore.Components.QuickGrid` module publish process
 
 ## 0.30.2 - 2025-05-30
 
@@ -327,7 +343,7 @@
 
 ### Removed
 
-- Removed `EfMigration` tool 
+- Removed `EfMigration` tool
 
 ## 0.27.3 - 2025-03-05
 
@@ -365,7 +381,7 @@
 - `Sdk.Testing` package
   - Removed classes `TestLoadContext`, `TestPersistenceConfiguration` and `TestApplicationFactory`
   - Removed extensions `AddClientLocalizer`, `CreateNavigationManager` `AddTestSetupMvc`, `ConfigureTestSetup`,
-  - `IRenderedComponentExtensions`, added `GetSettingsField` and `AssertSettingsField` variants 
+  - `IRenderedComponentExtensions`, added `GetSettingsField` and `AssertSettingsField` variants
 - `IWorkspaceService`, obsoleted and replaced by `IWorkspaceProvider`
 - `Sdk.Client.Components` package
   - Removed `CultureSelectorComponent`, `BreadcrumbComponent` and `LoadingSpinnerComponent`
@@ -635,7 +651,7 @@
 
 ### Added
 
-- Added SerialNumber to Instance-Information and Instance-Options 
+- Added SerialNumber to Instance-Information and Instance-Options
 
 ### Changed
 
@@ -697,7 +713,7 @@
 
 ### Changed
 
-- `Sdk.Deployment` mandatory platform parameter was added to publish script 
+- `Sdk.Deployment` mandatory platform parameter was added to publish script
 
 ## 0.10.0 - 2024-02-27
 

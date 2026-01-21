@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using MassTransit;
 using MassTransit.Courier.Contracts;
-using MassTransit.Internals;
 using MassTransit.TestFramework;
 using MassTransit.Testing;
 using NUnit.Framework;
