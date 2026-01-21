@@ -1,15 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- https://github.com/koenvzeijl/AspNetCore.SassCompiler/issues/160#issuecomment-2464275724 -->
+    <SassCompilerEnableWatcher>false</SassCompilerEnableWatcher>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
+    <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+    <PackageReference Include="ViciOne.Ui.Blazor.Components" />
+    <PackageReference Include="ViciOne.Ui.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Sdk.Client\Sdk.Client.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="sasscompiler.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
+    <PropertyGroup>
+      <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
+      <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
+    </PropertyGroup>
+  </Target>
 
 </Project>

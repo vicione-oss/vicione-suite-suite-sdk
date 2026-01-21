@@ -31,13 +31,6 @@ public interface IArtifactRepository
     IArtifactQueryBuilder CreateQueryBuilder();
 
     /// <summary>
-    /// Creates an artifact instance. Obsolete — will be removed in upcoming versions.
-    /// </summary>
-    [Obsolete("This call will be removed in upcoming versions. Use only queried artifacts")]
-    IArtifact CreateArtifact(string path, string name, long? size = null, DateTimeOffset? modified = null,
-        ArtifactKind artifactKind = ArtifactKind.File);
-
-    /// <summary>
     /// Gets the absolute URI that can be used to download the specified artifact directly.
     /// </summary>
     Uri GetDownloadUri(IArtifact artifact);

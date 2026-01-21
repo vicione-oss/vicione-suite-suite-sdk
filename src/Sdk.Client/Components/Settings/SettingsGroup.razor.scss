@@ -65,7 +65,7 @@ $border-radius: 3px;
                 margin-top: -6px;
                 margin-right: -6px;
 
-                color: colors.$color-font-light;
+                color: colors.$font-light;
                 background-color: transparent;
 
                 border: none;
@@ -73,13 +73,13 @@ $border-radius: 3px;
                 @include animations.color();
 
                 &:hover {
-                    color: colors.$color-accent-hover;
+                    color: colors.$accent-hover;
                 }
 
                 &:focus {
                     outline: none;
 
-                    color: colors.$color-accent;
+                    color: colors.$accent;
                 }
             }
         }

@@ -123,6 +123,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
     public async Task SublineInitialized()
     {
         _sublineInitialized = true;
+        await InvokeAsync(StateHasChanged);
 
         await OnContentReady.InvokeAsync();
     }

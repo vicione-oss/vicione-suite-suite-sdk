@@ -19,7 +19,7 @@
 
     .notification-element-flyout-bg {
         position: absolute;
-        border-left: variables.$flyout-border-width solid colors.$color-font-light;
+        border-left: variables.$flyout-border-width solid colors.$font-light;
         left: 0;
         top: 0;
         right: 0;
@@ -41,7 +41,7 @@
             font-size: 24px;
             font-weight: typography.$font-weight-light;
             letter-spacing: 0.5px;
-            color: colors.$color-font;
+            color: colors.$font;
         }
     }
 

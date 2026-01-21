@@ -1,0 +1,26 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+    "profiles": {
+        "Interactive Server": {
+            "commandName": "Project",
+            "dotnetRunMessages": true,
+            "launchBrowser": false,
+            "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+            "applicationUrl": "https://localhost:7268;http://localhost:5276",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        "Interactive WebAssembly": {
+            "commandName": "Project",
+            "dotnetRunMessages": true,
+            "launchBrowser": false,
+            "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+            "applicationUrl": "https://localhost:7268;http://localhost:5276",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "RenderWasm": "true"
+            }
+        }
+    }
+}

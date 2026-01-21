@@ -1,14 +1,14 @@
 ﻿<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <ViciOneCodeAnalysisVersion>1.4.0</ViciOneCodeAnalysisVersion>
-    <ViciOneUiMonochromeIconsVersion>3.10.0</ViciOneUiMonochromeIconsVersion>
-    <DotNetVersion>9.0.11</DotNetVersion>
+    <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
+    <ViciOneUiMonochromeIconsVersion>4.1.0</ViciOneUiMonochromeIconsVersion>
+    <DotNetVersion>10.0.2</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.14.1" />
-    <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.14.1" />
-    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.94.2" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
+    <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.97.1" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="MassTransit.Abstractions" Version="8.5.7" />
     <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="$(DotNetVersion)" />
@@ -20,20 +20,21 @@
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(DotNetVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Localization" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.9.3" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageVersion Include="System.IO.Abstractions" Version="22.1.0" />
     <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="4.3.0" />
-    <PackageVersion Include="ViciOne.Ui.Design" Version="1.1.1" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.0.1" />
+    <PackageVersion Include="ViciOne.Ui.Design" Version="2.0.3" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Localization" Version="2.35.0" />
+    <PackageVersion Include="ViciOne.Ui.Localization" Version="3.0.2" />
     <!--Used for tests only:-->
     <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
     <PackageVersion Include="bunit" Version="1.40.0" />
@@ -48,11 +49,11 @@
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="22.1.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
-    <PackageVersion Include="xunit.analyzers" Version="1.26.0" />
+    <PackageVersion Include="xunit.analyzers" Version="1.27.0" />
     <PackageVersion Include="xunit.extensibility.core" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <!--Used for test report generation-->
-    <PackageVersion Include="JunitXml.TestLogger" Version="7.0.2" />
+    <PackageVersion Include="JunitXml.TestLogger" Version="8.0.0" />
   </ItemGroup>
   <!-- Make ViciOne.CodeAnalysis ... -->
   <ItemGroup Condition="'$(MSBuildProjectFile)' == 'Sdk.csproj'">

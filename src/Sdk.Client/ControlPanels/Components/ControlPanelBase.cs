@@ -27,12 +27,6 @@ public abstract partial class ControlPanelBase<TState> : ComponentBase, IAsyncDi
     /// </summary>
     [Parameter] public EventCallback OnCancelEdit { get; set; }
 
-    /// <summary>
-    /// Gets a value indicating whether the control panel has unsaved changes.
-    /// </summary>
-    [Obsolete("Implement own dirty state handling, e.g. by subscribing to State.Changed")]
-    protected bool IsDirty => false;
-
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
@@ -53,22 +47,11 @@ public abstract partial class ControlPanelBase<TState> : ComponentBase, IAsyncDi
         => ValueTask.CompletedTask;
 
     /// <summary>
-    /// Invoked by the control panel, when and edit takes place.
-    /// </summary>
-    [Obsolete("Override " + nameof(BeginEdit) + "() instead")]
-    protected virtual Task OnEdit()
-        => Task.CompletedTask;
-
-    /// <summary>
     /// Call this to indicate that edit has begun.
     /// </summary>
     [MustCallBase]
     protected virtual async Task BeginEdit()
     {
-#pragma warning disable CS0618 // Type or member is obsolete
-        await OnEdit();
-#pragma warning restore CS0618 // Type or member is obsolete
-
         if (OnBeginEdit.HasDelegate)
             await OnBeginEdit.InvokeAsync();
     }

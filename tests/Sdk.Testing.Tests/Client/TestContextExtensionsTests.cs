@@ -71,9 +71,6 @@ public sealed class TestContextExtensionsTests
             context.Services.GetRequiredService<IConnectionService>().Should().NotBeNull();
             context.Services.GetRequiredService<IInstanceInformationProvider>().Should().NotBeNull();
             context.Services.GetRequiredService<IUiMediator>().Should().NotBeNull();
-#pragma warning disable CS0618 // Type or member is obsolete
-            context.Services.GetRequiredService<IClientModuleService>().Should().NotBeNull();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [Fact]

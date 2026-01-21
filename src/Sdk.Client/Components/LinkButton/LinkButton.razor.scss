@@ -10,7 +10,7 @@
     border: none;
 
     background-color: inherit;
-    color: color.change(colors.$color-font-light, $alpha: 0.8);
+    color: color.change(colors.$font-light, $alpha: 0.8);
 
     font-family: inherit;
     font-weight: typography.$font-weight-light;
@@ -40,7 +40,7 @@
             width: 16px;
             height: 16px;
             margin-right: 8px;
-            color: colors.$color-accent;
+            color: colors.$accent;
         }
     }
 
@@ -53,7 +53,7 @@
         cursor: pointer;
  
         &:hover {
-            color: colors.$color-font-light;
+            color: colors.$font-light;
         }
     }
 }

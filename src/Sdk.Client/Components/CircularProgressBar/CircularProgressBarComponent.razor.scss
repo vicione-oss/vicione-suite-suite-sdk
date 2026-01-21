@@ -1,7 +1,7 @@
 ﻿@use "../../Styles/design/colors";
 
 $spinner-background-color: rgba(255, 255, 255, 0.30);
-$middle-circle-font-color: colors.$color-font-light;
+$middle-circle-font-color: colors.$font-light;
 
 .circular-progress-bar {
     --diameter: 62px;

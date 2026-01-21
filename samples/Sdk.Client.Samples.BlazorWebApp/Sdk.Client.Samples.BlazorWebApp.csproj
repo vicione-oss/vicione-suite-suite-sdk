@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sdk.Client.Samples.BlazorWebApp.WebAssemblyHost\Sdk.Client.Samples.BlazorWebApp.WebAssemblyHost.csproj" />
+    <ProjectReference Include="..\Sdk.Client.Samples.Shared\Sdk.Client.Samples.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

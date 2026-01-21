@@ -25,12 +25,6 @@ public abstract class ClientModule : IClientModule
     }
 
     /// <summary>
-    /// Allows the module to configure services based on the hosting model.
-    /// </summary>
-    [Obsolete("Support of WASM hosting model will be removed and therefore this method is obsolete. Use " + nameof(Configure) + " instead.")]
-    public virtual Action<IServiceCollection, HostingModel>? ConfigureServices => default;
-
-    /// <summary>
     /// Allows the module to configure services for the host application.
     /// Override this property to supply a delegate that registers
     /// services into the given <see cref="IServiceCollection"/>.

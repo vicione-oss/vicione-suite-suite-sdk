@@ -1,5 +1,5 @@
 default:
-  image: mcr.microsoft.com/dotnet/sdk:9.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
 
 stages:
   - build
@@ -19,7 +19,7 @@ include:
 
 .install_npm_packages: &install_npm_packages
   - npm install
-  
+
 .run_eslint: &run_eslint
   - npx eslint .
 
@@ -94,7 +94,7 @@ Sdk.Testing dev release:
   variables:
     PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
     REPO: 'JFrogViciOne'
-    
+
 #################### Release stage
 
 Sdk:
@@ -129,3 +129,18 @@ Sdk.Testing:
   variables:
     PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
     REPO: 'JFrogViciOne'
+
+#################### GitLab pages
+
+Publish Pages:
+  stage: release
+  pages: true
+  script:
+    - !reference [.nuget_credentials]
+    - dotnet publish samples/Sdk.Client.Samples.BlazorWebAssemblyStandaloneApp -c Release -o artifacts
+    - mkdir public
+    - cp -R artifacts/wwwroot/* public
+    - echo "Publish Pages on \"$CI_PAGES_URL\""
+  rules:
+    - !reference [.rules_tag_manual]
+    - !reference [.rules_default_branch]

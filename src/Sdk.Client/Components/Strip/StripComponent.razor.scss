@@ -37,7 +37,7 @@
         justify-content: center;
         padding-left: 8px;
         font-size: 12px;
-        color: colors.$color-font-light;
+        color: colors.$font-light;
         font-weight: typography.$font-weight-regular;
         letter-spacing: .4px;
 
@@ -57,7 +57,7 @@
             position: absolute;
 
             .subline {
-                color: colors.$color-font;
+                color: colors.$font;
                 font-weight: typography.$font-weight-light;
             }
         }

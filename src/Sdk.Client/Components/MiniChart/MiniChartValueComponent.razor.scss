@@ -13,7 +13,7 @@
     letter-spacing: 0.4px;
     text-align: right;
     font-weight: 300;
-    color: color.adjust(colors.$color-font-light, $alpha: -0.2);
+    color: color.adjust(colors.$font-light, $alpha: -0.2);
 
     .mini-chart-value__label {
         grid-area: label;

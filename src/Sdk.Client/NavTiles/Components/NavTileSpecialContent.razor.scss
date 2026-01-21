@@ -52,7 +52,7 @@
         align-self: end;
 
         font-size: 12px;
-        color: color.change(colors.$color-font-light, $alpha: 0.8);
+        color: color.change(colors.$font-light, $alpha: 0.8);
 
         text-overflow: ellipsis;
         overflow: hidden;
