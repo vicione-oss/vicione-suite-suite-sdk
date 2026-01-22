@@ -13,6 +13,7 @@ dotnet_diagnostic.IDE0120.severity = warning # Simplify LINQ expression
 dotnet_diagnostic.IDE0161.severity = warning # Use file-scoped namespace
 dotnet_diagnostic.IDE0270.severity = warning # Null check can be simplified (if null check)
 dotnet_diagnostic.IDE0290.severity = warning # Use primary constructor
+dotnet_diagnostic.IDE0305.severity = warning # Use collection expression for fluent
 
 dotnet_diagnostic.CA1812.severity = none # Avoid uninstantiated internal classes
 dotnet_diagnostic.CA1822.severity = warning # Mark members as static
