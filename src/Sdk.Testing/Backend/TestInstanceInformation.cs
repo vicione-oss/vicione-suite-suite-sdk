@@ -26,6 +26,9 @@ public class TestInstanceInformation : IInstanceInformation
     public string SerialNumber => Id.ToString("N");
 
     /// <inheritdoc/>
+    public string SystemType => "TestSystemType";
+
+    /// <inheritdoc/>
     public IReadOnlyCollection<string> InstalledModules { get; init; } = [];
 
     /// <inheritdoc/>

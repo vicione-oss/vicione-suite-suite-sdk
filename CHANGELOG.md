@@ -5,6 +5,7 @@
 ### Added
 
 - Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
+- Added `SystemType` property to `IInstanceInformation` interface
 
 ### Fixed
 

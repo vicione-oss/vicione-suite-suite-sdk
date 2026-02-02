@@ -36,6 +36,11 @@ public interface IInstanceInformation
     string SerialNumber { get; }
 
     /// <summary>
+    /// The system type of the instance's underlying platform or environment
+    /// </summary>
+    string SystemType { get; }
+
+    /// <summary>
     /// Read-only collection of module identifiers that are installed on this instance
     /// </summary>
     IReadOnlyCollection<string> InstalledModules { get; }

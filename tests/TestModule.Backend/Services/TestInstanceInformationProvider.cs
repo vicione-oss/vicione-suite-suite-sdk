@@ -45,6 +45,7 @@ internal sealed class TestInstanceInformationProvider : IInstanceInformationProv
         public string FormattedName { get; set; } = "{ViciOne} Suite";
         public string? Description { get; set; }
         public string SerialNumber => Id.ToString("N");
+        public string SystemType => "TestSystemType";
         public IReadOnlyCollection<string> InstalledModules { get; set; } = [];
         public DateTimeOffset? FirstTimeRegistered { get; set; }
         public DateTimeOffset? LastRegistered { get; set; }
