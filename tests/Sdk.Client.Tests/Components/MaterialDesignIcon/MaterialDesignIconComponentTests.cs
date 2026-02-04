@@ -15,10 +15,10 @@ public sealed class MaterialDesignIconComponentTests
     public void Should_render_component()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<MaterialDesignIconComponent>();
+        var renderedComponent = ctx.Render<MaterialDesignIconComponent>();
 
         // Assert
         renderedComponent.Should().NotBeNull();
@@ -30,11 +30,10 @@ public sealed class MaterialDesignIconComponentTests
     {
         // Arrange
         var iconNameTyped = Enum.Parse<MaterialDesignIconName>(iconName);
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<MaterialDesignIconComponent>(
-            ComponentParameter.CreateParameter(nameof(MaterialDesignIconComponent.Name), iconNameTyped));
+        var renderedComponent = ctx.Render<MaterialDesignIconComponent>((p) => p.Add(c => c.Name, iconNameTyped));
 
         // Assert
         var icon = renderedComponent.Find("i");

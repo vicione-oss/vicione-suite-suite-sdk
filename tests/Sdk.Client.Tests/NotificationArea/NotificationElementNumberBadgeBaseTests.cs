@@ -12,10 +12,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_render_component()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>();
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>();
 
         // Assert
         renderedComponent.Should().NotBeNull();
@@ -25,10 +25,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_not_be_visible()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>();
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>();
 
         // Assert
         renderedComponent.Markup.Should().BeNullOrEmpty();
@@ -38,12 +38,11 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_show_positive_number()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         const int Number = 8;
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElementNumberBadge.Number), Number));
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>(p => p.Add(c => c.Number, Number));
 
         // Assert
         var numberBadge = renderedComponent.Find(".number-badge");
@@ -54,12 +53,11 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_show_9_plus()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         const int Number = 11;
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElementNumberBadge.Number), Number));
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>(p => p.Add(c => c.Number, Number));
 
         // Assert
         var numberBadge = renderedComponent.Find(".number-badge");
@@ -71,12 +69,11 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_show_negative_number()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         const int Number = -7;
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElementNumberBadge.Number), Number));
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>(p => p.Add(c => c.Number, Number));
 
         // Assert
         var numberBadge = renderedComponent.Find(".number-badge");
@@ -87,12 +84,11 @@ public sealed class NotificationElementNumberBadgeBaseTests
     public void Should_show_9_minus()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         const int Number = -13;
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementNumberBadge>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElementNumberBadge.Number), Number));
+        var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>(p => p.Add(c => c.Number, Number));
 
         // Assert
         var numberBadge = renderedComponent.Find(".number-badge");

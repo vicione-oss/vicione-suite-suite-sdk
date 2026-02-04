@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>ViciOne.Suite.Sdk.Tests</AssemblyName>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\TestModule.Backend\TestModule.Backend.csproj" />
     <ProjectReference Include="..\TestModule.Client\TestModule.Client.csproj" />

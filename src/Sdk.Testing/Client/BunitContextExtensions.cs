@@ -6,9 +6,9 @@ using Sdk.Client.Infrastructure;
 namespace Sdk.Testing.Client;
 
 /// <summary>
-/// Provides extension methods for bUnit's <see cref="TestContext"/> to simplify the setup of test environments.
+/// Provides extension methods for bUnit's <see cref="BunitContext"/> to simplify the setup of test environments.
 /// </summary>
-public static class TestContextExtensions
+public static class BunitContextExtensions
 {
     /// <summary>
     /// Adds UI culture, localization, logging and Suite client services to the service collection owned by <paramref name="ctx"/>.
@@ -16,7 +16,7 @@ public static class TestContextExtensions
     /// <remarks>
     /// Use <paramref name="setup"/> to configure substitutes, e.g. for <see cref="IUiMediator"/>.
     /// </remarks>
-    public static TestContext SetupSuiteServices(this TestContext ctx, Action<ClientServiceConfigurator>? setup = null, string cultureName = "en-US")
+    public static BunitContext SetupSuiteServices(this BunitContext ctx, Action<ClientServiceConfigurator>? setup = null, string cultureName = "en-US")
     {
         ctx.SetUiCulture(cultureName);
 
@@ -27,7 +27,7 @@ public static class TestContextExtensions
         return ctx;
     }
 
-    private static TestContext SetUiCulture(this TestContext ctx, string cultureName)
+    private static BunitContext SetUiCulture(this BunitContext ctx, string cultureName)
     {
         var culture = new CultureInfo(cultureName);
         CultureInfo.DefaultThreadCurrentCulture = culture;

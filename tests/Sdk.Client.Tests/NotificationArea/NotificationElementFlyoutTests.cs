@@ -14,12 +14,11 @@ public sealed class NotificationElementFlyoutTests
     public void Should_render_component()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementFlyout>(
-            ComponentParameter.CreateCascadingValue(null, state));
+        var renderedComponent = ctx.Render<TestNotificationElementFlyout>(p => p.AddCascadingValue(state));
 
         // Assert
         renderedComponent.Should().NotBeNull();
@@ -29,12 +28,11 @@ public sealed class NotificationElementFlyoutTests
     public void Should_be_visible()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementFlyout>(
-            ComponentParameter.CreateCascadingValue(null, state));
+        var renderedComponent = ctx.Render<TestNotificationElementFlyout>(p => p.AddCascadingValue(state));
 
         // Assert
         var flyout = renderedComponent.Find(".notification-element-flyout");
@@ -45,14 +43,13 @@ public sealed class NotificationElementFlyoutTests
     public void Should_render_heading()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
         const string HeadingText = "Test heading";
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementFlyout>(
-            ComponentParameter.CreateCascadingValue(null, state),
-            ComponentParameter.CreateParameter(nameof(TestNotificationElementFlyout.Heading), HeadingText));
+        var renderedComponent = ctx.Render<TestNotificationElementFlyout>(p => p.Add(c => c.Heading, HeadingText)
+                                                                                .AddCascadingValue(state));
 
         // Assert
         var heading = renderedComponent.Find(".heading");
@@ -64,12 +61,11 @@ public sealed class NotificationElementFlyoutTests
     public void Should_render_content()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElementFlyout>(
-            ComponentParameter.CreateCascadingValue(null, state));
+        var renderedComponent = ctx.Render<TestNotificationElementFlyout>(p => p.AddCascadingValue(state));
 
         // Assert
         var content = renderedComponent.Find(".content");
