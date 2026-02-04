@@ -23,4 +23,9 @@ public record ControlServiceError(Guid CorrelationId, string ServiceName, ErrorI
     /// Error code indicating that the restart command is not supported by the service.
     /// </summary>
     public const int RestartUnsupported = 20;
+
+    /// <summary>
+    /// Error code indicating that the control service functionality is unavailable.
+    /// </summary>
+    public const int ControlServiceUnavailable = 20;
 }

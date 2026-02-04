@@ -6,6 +6,7 @@
 
 - Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
 - Added `SystemType` property to `IInstanceInformation` interface
+- Added `IsAvailable` property to `IControlServiceManagement` interface and renamed `ControleService` to `TryControlService` for clarity.
 
 ### Fixed
 
