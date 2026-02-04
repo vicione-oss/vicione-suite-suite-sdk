@@ -17,7 +17,7 @@ public sealed class WizardTests
         using var testContext = SetupTestContext();
 
         // Act
-        var component = testContext.RenderComponent<Wizard<WizardContext>>(b =>
+        var component = testContext.Render<Wizard<WizardContext>>(b =>
         {
             b.Add(p => p.Title, "Test Wizard");
             b.Add(p => p.Context, new WizardContext());
@@ -39,7 +39,7 @@ public sealed class WizardTests
         const bool AllowExit = true;
 
         // Act
-        var component = testContext.RenderComponent<Wizard<WizardContext>>(b =>
+        var component = testContext.Render<Wizard<WizardContext>>(b =>
         {
             b.Add(p => p.Title, Title);
             b.Add(p => p.Context, context);
@@ -62,11 +62,11 @@ public sealed class WizardTests
     public async Task Should_raise_visible_changed(bool initialValue, bool value)
     {
         // Arrange
-        using var testContext = SetupTestContext();
+        await using var testContext = SetupTestContext();
 
         var eventCallbackReceiver = new WizardEventCallbackReceiver { Visible = initialValue };
 
-        var component = testContext.RenderComponent<Wizard<WizardContext>>(b =>
+        var component = testContext.Render<Wizard<WizardContext>>(b =>
         {
             b.Add(p => p.Title, "Test Wizard");
             b.Add(p => p.Context, new WizardContext());
@@ -90,7 +90,7 @@ public sealed class WizardTests
         using var testContext = SetupTestContext(typeof(IWizardContent<WizardContext>));
 
         // Act
-        Action act = () => testContext.RenderComponent<Wizard<WizardContext>>(b =>
+        Action act = () => testContext.Render<Wizard<WizardContext>>(b =>
         {
             b.Add(p => p.Title, "Test Wizard");
             b.Add(p => p.Context, new WizardContext());
@@ -107,7 +107,7 @@ public sealed class WizardTests
         using var testContext = SetupTestContext(typeof(WizardTests));
 
         // Act
-        Action act = () => testContext.RenderComponent<Wizard<WizardContext>>(b =>
+        Action act = () => testContext.Render<Wizard<WizardContext>>(b =>
         {
             b.Add(p => p.Title, "Test Wizard");
             b.Add(p => p.Context, new WizardContext());
@@ -117,9 +117,9 @@ public sealed class WizardTests
         act.Should().Throw<InvalidOperationException>().WithMessage("Component type returned by * does not implement *");
     }
 
-    private static TestContext SetupTestContext(Type? wizardContentComponentType = null)
+    private static BunitContext SetupTestContext(Type? wizardContentComponentType = null)
     {
-        var testContext = new TestContext();
+        var testContext = new BunitContext();
 
         testContext.Services.AddScoped<IWizardContentComponentTypeProvider>(
             _ => new WizardContentComponentTypeProvider(wizardContentComponentType));

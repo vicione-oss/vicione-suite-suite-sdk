@@ -29,7 +29,7 @@ public sealed class IUiMediatorExtensionsTests
             mediator.SetupGetConnections(connections);
 
             // Assert
-            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request);
+            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request, CancellationToken.None);
             response.Should().Be(response);
 
         }
@@ -45,7 +45,7 @@ public sealed class IUiMediatorExtensionsTests
             mediator.SetupGetConnections();
 
             // Assert
-            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request);
+            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request, CancellationToken.None);
             response.Connections.Should().BeEmpty();
         }
     }
@@ -64,7 +64,7 @@ public sealed class IUiMediatorExtensionsTests
             mediator.SetupGetSingleConnection(connection);
 
             // Assert
-            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request);
+            var response = await mediator.Request<GetConnections, GetConnectionsResponse>(request, CancellationToken.None);
             response.Connections.Should().Contain(connection);
         }
     }

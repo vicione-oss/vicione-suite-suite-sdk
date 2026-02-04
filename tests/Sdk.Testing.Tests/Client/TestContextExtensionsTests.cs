@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using Bunit;
 using AwesomeAssertions;
+using Bunit;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -21,7 +21,7 @@ public sealed class TestContextExtensionsTests
         public void Should_setup_ui_culture()
         {
             // Arrange
-            using var context = new TestContext();
+            using var context = new BunitContext();
             var cultureInfo = new CultureInfo("de-DE");
 
             // Act
@@ -36,7 +36,7 @@ public sealed class TestContextExtensionsTests
         public void Should_add_localization()
         {
             // Arrange
-            using var context = new TestContext();
+            using var context = new BunitContext();
 
             // Act
             context.SetupSuiteServices();
@@ -49,7 +49,7 @@ public sealed class TestContextExtensionsTests
         public void Should_add_logging()
         {
             // Arrange
-            using var context = new TestContext();
+            using var context = new BunitContext();
 
             // Act
             context.SetupSuiteServices();
@@ -62,7 +62,7 @@ public sealed class TestContextExtensionsTests
         public void Should_setup_suite_client_services()
         {
             // Arrange
-            using var context = new TestContext();
+            using var context = new BunitContext();
 
             // Act
             context.SetupSuiteServices();
@@ -77,7 +77,7 @@ public sealed class TestContextExtensionsTests
         public async Task Should_setup_optional_fake_authentication()
         {
             // Arrange
-            using var context = new TestContext();
+            await using var context = new BunitContext();
 
             // Act
             context.SetupSuiteServices(setup => setup.FakeAuthenticationStateProvider = true);

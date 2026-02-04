@@ -19,7 +19,7 @@ public class HttpClientFactoryTests
         using var httpClient = HttpClientFactory.GetHttpClientWithResponse(response);
 
         // Assert
-        var clientResponse = await httpClient.GetAsync(new Uri("/some/uri", UriKind.Relative));
+        var clientResponse = await httpClient.GetAsync(new Uri("/some/uri", UriKind.Relative), CancellationToken.None);
         clientResponse.EnsureSuccessStatusCode();
     }
 
@@ -33,7 +33,7 @@ public class HttpClientFactoryTests
         using var httpClient = HttpClientFactory.GetHttpClientWithResponse(response);
 
         // Assert
-        var connection = await httpClient.GetFromJsonAsync<Connection>(new Uri("/some/uri", UriKind.Relative));
+        var connection = await httpClient.GetFromJsonAsync<Connection>(new Uri("/some/uri", UriKind.Relative), CancellationToken.None);
         connection.Should().BeEquivalentTo(response);
     }
 }

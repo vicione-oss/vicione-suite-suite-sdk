@@ -13,7 +13,7 @@ public sealed class CardTests
         [Fact]
         public void Invokes_event()
         {
-            using var ctx = new TestContext();
+            using var ctx = new BunitContext();
             var card = new Card()
             {
                 Id = Guid.NewGuid(),
@@ -23,7 +23,7 @@ public sealed class CardTests
             var invoked = false;
             ctx.SetupSuiteServices();
 
-            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {
                 b.Add(p => p.CardModel, card);
                 b.Add(p => p.OnCloseClick, () => invoked = true);
@@ -37,7 +37,7 @@ public sealed class CardTests
         [Fact]
         public void Invokes_event_when_card_has_image()
         {
-            using var ctx = new TestContext();
+            using var ctx = new BunitContext();
             var card = new Card()
             {
                 Id = Guid.NewGuid(),
@@ -48,7 +48,7 @@ public sealed class CardTests
             var invoked = false;
             ctx.SetupSuiteServices();
 
-            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {
                 b.Add(p => p.CardModel, card);
                 b.Add(p => p.OnCloseClick, () => invoked = true);
@@ -65,7 +65,7 @@ public sealed class CardTests
         [Fact]
         public void Invokes_event()
         {
-            using var ctx = new TestContext();
+            using var ctx = new BunitContext();
             var card = new Card()
             {
                 Id = Guid.NewGuid(),
@@ -77,7 +77,7 @@ public sealed class CardTests
 
             ctx.SetupSuiteServices();
 
-            var component = ctx.RenderComponent<Client.Components.Cards.Components.Card>(b =>
+            var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {
                 b.Add(p => p.CardModel, card);
                 b.Add(p => p.OnLinkClick, () => invoked = true);

@@ -2,7 +2,7 @@
 using MassTransit.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Sdk.Messaging;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Sdk.Testing.Backend;
 

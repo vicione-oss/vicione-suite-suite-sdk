@@ -14,12 +14,12 @@ public sealed class WizardPageTests
     public void Should_render()
     {
         // Arrange
-        using var testContext = new TestContext();
+        using var testContext = new BunitContext();
 
         var state = new WizardPageState();
 
         // Act
-        var component = testContext.RenderComponent<WizardPage<WizardPageState>>(b => b.Add(p => p.State, state));
+        var component = testContext.Render<WizardPage<WizardPageState>>(b => b.Add(p => p.State, state));
 
         // Assert
         component.Should().NotBeNull();
@@ -29,12 +29,12 @@ public sealed class WizardPageTests
     public async Task Should_raise_on_begin_edit()
     {
         // Arrange
-        using var testContext = new TestContext();
+        await using var testContext = new BunitContext();
 
         var state = new WizardPageState();
         var eventCallbackReceiver = Substitute.For<IWizardPageEventCallbackReceiver>();
 
-        var component = testContext.RenderComponent<TestWizardPage>(b =>
+        var component = testContext.Render<TestWizardPage>(b =>
         {
             b.Add(p => p.State, state);
             b.Add(p => p.OnBeginEdit, EventCallback.Factory.Create(eventCallbackReceiver, eventCallbackReceiver.BeginEdit));
@@ -51,12 +51,12 @@ public sealed class WizardPageTests
     public async Task Should_raise_on_cancel_edit()
     {
         // Arrange
-        using var testContext = new TestContext();
+        await using var testContext = new BunitContext();
 
         var state = new WizardPageState();
         var eventCallbackReceiver = Substitute.For<IWizardPageEventCallbackReceiver>();
 
-        var component = testContext.RenderComponent<TestWizardPage>(b =>
+        var component = testContext.Render<TestWizardPage>(b =>
         {
             b.Add(p => p.State, state);
             b.Add(p => p.OnCancelEdit, EventCallback.Factory.Create(eventCallbackReceiver, eventCallbackReceiver.CancelEdit));
@@ -75,13 +75,13 @@ public sealed class WizardPageTests
     public void Should_raise_on_after_render_cycle(bool firstRender)
     {
         // Arrange
-        using var testContext = new TestContext();
+        using var testContext = new BunitContext();
 
         var state = new WizardPageState();
         var eventCallbackReceiver = Substitute.For<IWizardPageEventCallbackReceiver>();
 
         // Act
-        var component = testContext.RenderComponent<TestWizardPage>(b =>
+        var component = testContext.Render<TestWizardPage>(b =>
         {
             b.Add(p => p.State, state);
 
@@ -94,7 +94,7 @@ public sealed class WizardPageTests
 
         if (!firstRender)
         {
-            component.SetParametersAndRender(b =>
+            component.Render(b =>
             {
                 b.Add(p => p.OnAfterRenderCycle, EventCallback.Factory.Create<WizardPageAfterRenderCycleEventArgs>(
                     eventCallbackReceiver, eventCallbackReceiver.AfterRenderCycle));

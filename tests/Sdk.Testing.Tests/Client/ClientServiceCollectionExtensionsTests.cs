@@ -67,7 +67,7 @@ public sealed class ClientServiceCollectionExtensionsTests
 
             // Assert
             var client = serviceProvider.GetRequiredService<HttpClient>();
-            var result = await client.GetFromJsonAsync<ErrorInfo>("url");
+            var result = await client.GetFromJsonAsync<ErrorInfo>("url", CancellationToken.None);
             result.Should().Be(response);
 
         }

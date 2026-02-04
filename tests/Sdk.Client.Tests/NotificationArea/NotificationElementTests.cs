@@ -15,12 +15,11 @@ public sealed class NotificationElementTests
     public void Should_render_component()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         renderedComponent.Should().NotBeNull();
@@ -30,12 +29,11 @@ public sealed class NotificationElementTests
     public void Should_have_button()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         var button = renderedComponent.Find("button");
@@ -46,12 +44,11 @@ public sealed class NotificationElementTests
     public void Should_render_title_as_button_tooltip()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         var button = renderedComponent.Find("button");
@@ -62,12 +59,11 @@ public sealed class NotificationElementTests
     public void Should_render_as_active()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         renderedComponent.Should().BeActive();
@@ -77,12 +73,11 @@ public sealed class NotificationElementTests
     public void Should_render_icon()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         var iconContainer = renderedComponent.Find(".icon-container");
@@ -94,12 +89,11 @@ public sealed class NotificationElementTests
     public void Should_render_badge()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         var badgeContainer = renderedComponent.Find(".badge-container");
@@ -111,12 +105,11 @@ public sealed class NotificationElementTests
     public void Should_render_flyout()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         // Assert
         var flyoutContainer = renderedComponent.Find(".flyout-container");
@@ -128,12 +121,11 @@ public sealed class NotificationElementTests
     public void Should_be_active_after_click()
     {
         // Arrange
-        using var ctx = new TestContext();
+        using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
-        var renderedComponent = ctx.RenderComponent<TestNotificationElement>(
-            ComponentParameter.CreateParameter(nameof(TestNotificationElement.State), state));
+        var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         var button = renderedComponent.Find("button");
         button.Click();

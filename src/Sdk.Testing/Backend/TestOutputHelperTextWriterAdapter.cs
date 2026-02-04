@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Sdk.Testing.Backend;
 
@@ -24,6 +24,9 @@ internal sealed class TestOutputHelperTextWriterAdapter(ITestOutputHelper output
 
     private void WriteCurrentLine()
     {
+        if (string.IsNullOrWhiteSpace(_currentLine.Value))
+            return;
+
         _output.WriteLine(_currentLine.Value);
         _currentLine.Value = "";
     }
