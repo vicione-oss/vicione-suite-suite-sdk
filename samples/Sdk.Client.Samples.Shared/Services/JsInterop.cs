@@ -20,7 +20,7 @@ internal sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop
     public Task IncludeLinks(object[] links) => throw new NotImplementedException();
     public Task IncludeMeta(string id, string attribute, string name, string content, string key) => throw new NotImplementedException();
 
-    public async Task<IJSObjectReference?> IncludeModuleScript(string location)
+    public async Task<IJSObjectReference?> IncludeModuleScript(Uri location)
         => await jsRuntime.ImportScript(location);
 
     public Task<IJSObjectReference?> IncludeModuleScript<T>(string filename) where T : IModule => throw new NotImplementedException();

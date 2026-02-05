@@ -5,8 +5,8 @@
 ### Added
 
 - Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
-- Added `SystemType` property to `IInstanceInformation` interface
-- Added `IsAvailable` property to `IControlServiceManagement` interface and renamed `ControleService` to `TryControlService` for clarity.
+- *Breaking* Added `SystemType` property to `IInstanceInformation` interface
+- *Breaking* Added `IsAvailable` property to `IControlServiceManagement` interface and renamed `ControleService` to `TryControlService` for clarity.
 
 ### Fixed
 
@@ -15,6 +15,7 @@
 ### Changed
 
 - Improve async disposal and error handling in `NavTileStandardContent`
+- *Breaking* `IJsInterop.IncludeModuleScript` now requires a `Uri` parameter instead of string path for better type safety
 
 ### Updated
 

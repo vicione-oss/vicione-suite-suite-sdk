@@ -34,7 +34,7 @@ public sealed partial class FileDropComponent
     {
         if (!_isInitialized)
         {
-            var jsObjectReference = await JsInterop.IncludeModuleScript("./_content/ViciOne.Suite.Sdk.Client/js/file-drop-component.js");
+            var jsObjectReference = await JsInterop.IncludeModuleScript(new Uri("./_content/ViciOne.Suite.Sdk.Client/js/file-drop-component.js", UriKind.Relative));
 
             if (_inputFile?.Element is not null &&
                 _dropZoneElement is not null &&

@@ -10,41 +10,42 @@ namespace Sdk.Testing.Client;
 /// </summary>
 public static class IUiMediatorExtensions
 {
-    /// <summary>
-    /// Sets up a mocked <see cref="IUiMediator"/> to return a predefined list of connections and their associated tags.
-    /// </summary>
-    public static IUiMediator SetupGetConnections(this IUiMediator mediator,
-        List<Connection>? connections = null)
+    extension(IUiMediator mediator)
     {
-        mediator.Request<GetConnections, GetConnectionsResponse>(
+        /// <summary>
+        /// Sets up a mocked <see cref="IUiMediator"/> to return a predefined list of connections and their associated tags.
+        /// </summary>
+        public IUiMediator SetupGetConnections(List<Connection>? connections = null)
+        {
+            mediator.Request<GetConnections, GetConnectionsResponse>(
                     Arg.Any<GetConnections>(), Arg.Any<CancellationToken>())
                 .Returns(new GetConnectionsResponse(connections ?? []));
 
-        var tags = connections?.SelectMany(k => k.Tags).ToList() ?? [];
+            var tags = connections?.SelectMany(k => k.Tags).ToList() ?? [];
 
-        mediator.Request<GetTags, GetTagsResponse>(
-                Arg.Any<GetTags>(), Arg.Any<CancellationToken>())
-                .Returns(new GetTagsResponse(tags));
-
-        return mediator;
-    }
-
-    /// <summary>
-    /// Sets up a mocked <see cref="IUiMediator"/> to return a single, specific connection and its associated tags.
-    /// </summary>
-    public static IUiMediator SetupGetSingleConnection(this IUiMediator mediator,
-        Connection connection)
-    {
-        mediator.Request<GetConnections, GetConnectionsResponse>(
-                    Arg.Any<GetConnections>(), Arg.Any<CancellationToken>())
-                .Returns(new GetConnectionsResponse([connection]));
-
-        var tags = connection.Tags.ToList();
-
-        mediator.Request<GetTags, GetTagsResponse>(
+            mediator.Request<GetTags, GetTagsResponse>(
                     Arg.Any<GetTags>(), Arg.Any<CancellationToken>())
                 .Returns(new GetTagsResponse(tags));
 
-        return mediator;
+            return mediator;
+        }
+
+        /// <summary>
+        /// Sets up a mocked <see cref="IUiMediator"/> to return a single, specific connection and its associated tags.
+        /// </summary>
+        public IUiMediator SetupGetSingleConnection(Connection connection)
+        {
+            mediator.Request<GetConnections, GetConnectionsResponse>(
+                    Arg.Any<GetConnections>(), Arg.Any<CancellationToken>())
+                .Returns(new GetConnectionsResponse([connection]));
+
+            var tags = connection.Tags.ToList();
+
+            mediator.Request<GetTags, GetTagsResponse>(
+                    Arg.Any<GetTags>(), Arg.Any<CancellationToken>())
+                .Returns(new GetTagsResponse(tags));
+
+            return mediator;
+        }
     }
 }

@@ -12,57 +12,60 @@ namespace Sdk.Client.Wizards.Extensions;
 /// </summary>
 public static class IServiceCollectionExtensions
 {
-    /// <summary>
-    /// Adds services required for a wizard associated with <typeparamref name="TContext"/> and
-    /// returns a builder for further configuration.
-    /// </summary>
-    /// <remarks>
-    /// This method registers core services, such as the <see cref="IWizardPageRegistry{TContext}"/>.
-    /// </remarks>
-    public static IWizardBuilder<TContext> AddWizard<TContext>(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddWizardPageRegistry<TContext>();
-
-        var builder = new WizardBuilder<TContext>(services);
-
-        return builder;
-    }
-
-    private static IServiceCollection AddWizardPageRegistry<TContext>(this IServiceCollection services)
-    {
-        services.TryAddScoped(serviceProvider =>
+        /// <summary>
+        /// Adds services required for a wizard associated with <typeparamref name="TContext"/> and
+        /// returns a builder for further configuration.
+        /// </summary>
+        /// <remarks>
+        /// This method registers core services, such as the <see cref="IWizardPageRegistry{TContext}"/>.
+        /// </remarks>
+        public IWizardBuilder<TContext> AddWizard<TContext>()
         {
-            var registryFactory = serviceProvider.GetRequiredService<IWizardPageRegistryFactory>();
-            var registry = registryFactory.CreateWizardPageRegistry<TContext>();
+            services.AddWizardPageRegistry<TContext>();
 
-            Func<IWizardPageDescriptor, IWizardPageState, IWizardPageRegistryItem> addMethodDelegate =
-                registry.Add<WizardPage<IWizardPageState>, IWizardPageState>;
+            var builder = new WizardBuilder<TContext>(services);
 
-            var addMethodInfo = addMethodDelegate.Method.GetGenericMethodDefinition();
+            return builder;
+        }
 
-            var wizardPageInfos = serviceProvider.GetKeyedServices<WizardPageInfo>(typeof(TContext));
-            foreach (var i in wizardPageInfos)
+        private IServiceCollection AddWizardPageRegistry<TContext>()
+        {
+            services.TryAddScoped(serviceProvider =>
             {
-                var descriptorType = typeof(IWizardPageDescriptor);
+                var registryFactory = serviceProvider.GetRequiredService<IWizardPageRegistryFactory>();
+                var registry = registryFactory.CreateWizardPageRegistry<TContext>();
 
-                if (serviceProvider.GetKeyedServices(descriptorType, i.KeyedServiceKey).FirstOrDefault() is not IWizardPageDescriptor descriptor)
-                    continue;
+                Func<IWizardPageDescriptor, IWizardPageState, IWizardPageRegistryItem> addMethodDelegate =
+                    registry.Add<WizardPage<IWizardPageState>, IWizardPageState>;
 
-                var state = (IWizardPageState)serviceProvider.GetRequiredKeyedService(i.StateType, i.KeyedServiceKey);
+                var addMethodInfo = addMethodDelegate.Method.GetGenericMethodDefinition();
 
-                addMethodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [descriptor, state]);
-            }
+                var wizardPageInfos = serviceProvider.GetKeyedServices<WizardPageInfo>(typeof(TContext));
+                foreach (var i in wizardPageInfos)
+                {
+                    var descriptorType = typeof(IWizardPageDescriptor);
 
-            return registry;
-        });
+                    if (serviceProvider.GetKeyedServices(descriptorType, i.KeyedServiceKey).FirstOrDefault() is not IWizardPageDescriptor descriptor)
+                        continue;
 
-        return services;
-    }
+                    var state = (IWizardPageState)serviceProvider.GetRequiredKeyedService(i.StateType, i.KeyedServiceKey);
 
-    internal static IServiceCollection AddWizardPageDescriptor<TDescriptor>(this IServiceCollection services, object serviceKey)
-        where TDescriptor : class, IWizardPageDescriptor
+                    addMethodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [descriptor, state]);
+                }
+
+                return registry;
+            });
+
+            return services;
+        }
+
+        internal IServiceCollection AddWizardPageDescriptor<TDescriptor>(object serviceKey)
+            where TDescriptor : class, IWizardPageDescriptor
             => services.AddKeyedScoped<IWizardPageDescriptor, TDescriptor>(serviceKey);
 
-    internal static IServiceCollection AddWizardPageState<TState>(this IServiceCollection services, object serviceKey)
-        => services.AddKeyedScoped(typeof(TState), serviceKey);
+        internal IServiceCollection AddWizardPageState<TState>(object serviceKey)
+            => services.AddKeyedScoped(typeof(TState), serviceKey);
+    }
 }

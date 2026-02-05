@@ -11,75 +11,78 @@ namespace Sdk.Testing.Client;
 /// </summary>
 public static class ClientServiceCollectionExtensions
 {
-    /// <summary>
-    /// Adds a collection of common client-side services, mostly as mocks or fakes, to the service collection for testing.
-    /// </summary>
-    public static IServiceCollection AddClientServices(this IServiceCollection services, Action<ClientServiceConfigurator>? configurator)
+    extension(IServiceCollection services)
     {
-        var config = new ClientServiceConfigurator(services);
+        /// <summary>
+        /// Adds a collection of common client-side services, mostly as mocks or fakes, to the service collection for testing.
+        /// </summary>
+        public IServiceCollection AddClientServices(Action<ClientServiceConfigurator>? configurator)
+        {
+            var config = new ClientServiceConfigurator(services);
 
-        services
-            .AddSingleton(config.ActiveNotificationElementPolicy)
-            .AddSingleton(config.ClientMediator)
-            .AddSingleton(config.ConnectionService)
-            .AddSingleton(config.InstanceInformationProvider)
-            .AddSingleton(config.JsInterop)
-            .AddSingleton(config.Layout)
-            .AddSingleton(config.MessageBanner)
-            .AddSingleton(config.StringLocalizerFactory)
-            .AddSingleton(config.ControlPanelRegistryFactory)
-            .AddSingleton(config.NavTileRegistryFactory)
-            .AddSingleton(config.NotificationElementRegistryFactory);
+            services
+                .AddSingleton(config.ActiveNotificationElementPolicy)
+                .AddSingleton(config.ClientMediator)
+                .AddSingleton(config.ConnectionService)
+                .AddSingleton(config.InstanceInformationProvider)
+                .AddSingleton(config.JsInterop)
+                .AddSingleton(config.Layout)
+                .AddSingleton(config.MessageBanner)
+                .AddSingleton(config.StringLocalizerFactory)
+                .AddSingleton(config.ControlPanelRegistryFactory)
+                .AddSingleton(config.NavTileRegistryFactory)
+                .AddSingleton(config.NotificationElementRegistryFactory);
 
-        var instanceInformation = Substitute.For<IInstanceInformation>();
+            var instanceInformation = Substitute.For<IInstanceInformation>();
 
-        instanceInformation.Id
-            .Returns(Guid.NewGuid());
+            instanceInformation.Id
+                .Returns(Guid.NewGuid());
 
-        config.InstanceInformationProvider.Local
-            .Returns(instanceInformation);
+            config.InstanceInformationProvider.Local
+                .Returns(instanceInformation);
 
-        configurator?.Invoke(config);
+            configurator?.Invoke(config);
 
-        if (config.UseNavigationManager)
-            services.AddSingleton(config.NavigationManagerMock);
+            if (config.UseNavigationManager)
+                services.AddSingleton(config.NavigationManagerMock);
 
-        if (config.UseSimpleJsMock)
-            services.AddSingleton(config.JSRuntime);
+            if (config.UseSimpleJsMock)
+                services.AddSingleton(config.JSRuntime);
 
-        if (config.FakeAuthenticationStateProvider)
-            services.AddSingleton(_ => ClientServiceFactory.CreateAuthenticationStateProvider());
+            if (config.FakeAuthenticationStateProvider)
+                services.AddSingleton(_ => ClientServiceFactory.CreateAuthenticationStateProvider());
 
-        return services;
-    }
+            return services;
+        }
 
-    /// <summary>
-    /// Adds a singleton <see cref="HttpClient"/> to the service collection that is configured to return a specific response object.
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability",
-        "CA2000:Objekte verwerfen, bevor Bereich verloren geht",
-        Justification = "Rückgabewerte für Testattrappe")]
-    public static IServiceCollection AddHttpClient(this IServiceCollection services, object responseObject, Uri? baseUri)
-    {
-        var httpClient = HttpClientFactory.GetHttpClientWithResponse(responseObject, baseUri ?? new Uri("http://localhost"));
-        services.AddSingleton(httpClient);
+        /// <summary>
+        /// Adds a singleton <see cref="HttpClient"/> to the service collection that is configured to return a specific response object.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability",
+            "CA2000:Objekte verwerfen, bevor Bereich verloren geht",
+            Justification = "Rückgabewerte für Testattrappe")]
+        public IServiceCollection AddHttpClient(object responseObject, Uri? baseUri)
+        {
+            var httpClient = HttpClientFactory.GetHttpClientWithResponse(responseObject, baseUri ?? new Uri("http://localhost"));
+            services.AddSingleton(httpClient);
 
-        return services;
-    }
+            return services;
+        }
 
-    /// <summary>
-    /// Adds a mocked <see cref="IClientModuleLocalizer{TClientModule}"/> to the service collection.
-    /// </summary>
-    public static IServiceCollection AddLocalization<TClientModule>(this IServiceCollection services)
-        where TClientModule : class, IClientModule
-    {
-        var localizer = Substitute.For<IClientModuleLocalizer<TClientModule>>();
+        /// <summary>
+        /// Adds a mocked <see cref="IClientModuleLocalizer{TClientModule}"/> to the service collection.
+        /// </summary>
+        public IServiceCollection AddLocalization<TClientModule>()
+            where TClientModule : class, IClientModule
+        {
+            var localizer = Substitute.For<IClientModuleLocalizer<TClientModule>>();
 
-        localizer.GetTitle().Returns("Test client module");
-        localizer.GetDescription().Returns("Test client module description");
+            localizer.GetTitle().Returns("Test client module");
+            localizer.GetDescription().Returns("Test client module description");
 
-        services.AddSingleton(localizer);
+            services.AddSingleton(localizer);
 
-        return services;
+            return services;
+        }
     }
 }
