@@ -52,7 +52,7 @@ public interface IJsInterop
     /// <summary>
     /// Dynamically includes a JavaScript module script.
     /// </summary>
-    Task<IJSObjectReference?> IncludeModuleScript(string location);
+    Task<IJSObjectReference?> IncludeModuleScript(Uri location);
 
     /// <summary>
     /// Dynamically includes a JavaScript module script associated with a specific module.

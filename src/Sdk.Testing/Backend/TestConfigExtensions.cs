@@ -5,47 +5,51 @@
 /// </summary>
 public static class TestConfigExtensions
 {
-    /// <summary>
-    /// Adds a dictionary of custom settings to the test configuration.
-    /// </summary>
-    public static TestConfig AddCustomSettings(this TestConfig config, Dictionary<string, string?>? settings)
+    extension(TestConfig config)
     {
-        if (settings is null)
+        /// <summary>
+        /// Adds a dictionary of custom settings to the test configuration.
+        /// </summary>
+        public TestConfig AddCustomSettings(Dictionary<string, string?>? settings)
+        {
+            if (settings is null)
+                return config;
+
+            foreach (var setting in settings)
+                config.SetSetting(setting.Key, setting.Value);
+
             return config;
+        }
 
-        foreach (var setting in settings)
-            config.SetSetting(setting.Key, setting.Value);
+        /// <summary>
+        /// Adds a setting to enable or disable a module in the test configuration.
+        /// </summary>
+        public TestConfig AddModule(string moduleId, bool disable = false)
+            => config.AddModuleInternal(moduleId, !disable);
 
-        return config;
-    }
+        /// <summary>
+        /// Adds module-specific options from an anonymous or concrete object to the test configuration.
+        /// </summary>
+        public TestConfig AddModuleWithOptions(string moduleId, object? options = null)
+        {
+            if (options is null)
+                return config;
 
-    /// <summary>
-    /// Adds a setting to enable or disable a module in the test configuration.
-    /// </summary>
-    public static TestConfig AddModule(this TestConfig conf, string moduleId, bool disable = false)
-        => conf.AddModuleInternal(moduleId, !disable);
+            var sectionKey = moduleId.Replace(".", "", StringComparison.Ordinal);
 
-    /// <summary>
-    /// Adds module-specific options from an anonymous or concrete object to the test configuration.
-    /// </summary>
-    public static TestConfig AddModuleWithOptions(this TestConfig conf, string moduleId, object? options = null)
-    {
-        if (options is null)
-            return conf;
+            foreach (var (key, value) in GetCustomOptionsFromObject(options))
+                config.SetSetting($"{sectionKey}:{key}", value?.ToString());
 
-        var sectionKey = moduleId.Replace(".", "", StringComparison.Ordinal);
+            return config;
+        }
 
-        foreach (var (key, value) in GetCustomOptionsFromObject(options))
-            conf.SetSetting($"{sectionKey}:{key}", value?.ToString());
-
-        return conf;
+        private TestConfig AddModuleInternal(string moduleId, bool enable = true)
+        {
+            config.SetSetting($"{moduleId}:Enable", enable.ToString());
+            return config;
+        }
     }
 
     private static Dictionary<string, object?> GetCustomOptionsFromObject(object options)
         => options.GetType().GetProperties().ToDictionary(property => property.Name, property => property.GetValue(options));
-    private static TestConfig AddModuleInternal(this TestConfig conf, string moduleId, bool enable = true)
-    {
-        conf.SetSetting($"{moduleId}:Enable", enable.ToString());
-        return conf;
-    }
 }

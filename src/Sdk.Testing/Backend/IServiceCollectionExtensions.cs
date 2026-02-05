@@ -13,107 +13,109 @@ namespace Sdk.Testing.Backend;
 /// </summary>
 public static class IServiceCollectionExtensions
 {
-    /// <summary>
-    /// Adds a mocked <see cref="IWorkspaceProvider{TModule}"/> to the service collection.
-    /// </summary>
-    public static IServiceCollection AddWorkspaceService<TModule>(this IServiceCollection services, Action<IWorkspaceProvider<TModule>>? setup = null)
-        where TModule : BackendModule
+    extension(IServiceCollection services)
     {
-        var workspace = Substitute.For<IWorkspaceProvider<TModule>>();
-        services.AddSingleton(workspace);
-
-        if (setup is null)
+        /// <summary>
+        /// Adds a mocked <see cref="IWorkspaceProvider{TModule}"/> to the service collection.
+        /// </summary>
+        public IServiceCollection AddWorkspaceService<TModule>(Action<IWorkspaceProvider<TModule>>? setup = null)
+            where TModule : BackendModule
         {
-            var location = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-            if (string.IsNullOrEmpty(location))
-                return services;
+            var workspace = Substitute.For<IWorkspaceProvider<TModule>>();
+            services.AddSingleton(workspace);
 
-            workspace.Home.Returns(Path.Combine(location, "home"));
-            workspace.Cache.Returns(Path.Combine(location, "cache"));
+            if (setup is null)
+            {
+                var location = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+                if (string.IsNullOrEmpty(location))
+                    return services;
+
+                workspace.Home.Returns(Path.Combine(location, "home"));
+                workspace.Cache.Returns(Path.Combine(location, "cache"));
+            }
+            else
+            {
+                setup.Invoke(workspace);
+            }
+
+            return services;
         }
-        else
+
+        /// <summary>
+        /// Adds a mocked <see cref="IMvcBuilder"/> to the service collection.
+        /// </summary>
+        public IServiceCollection AddMvcBuilder(Action<IMvcBuilder>? setup = null)
         {
-            setup.Invoke(workspace);
+            var mvcBuilder = Substitute.For<IMvcBuilder>();
+            mvcBuilder.PartManager.Returns(new Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartManager());
+            services.AddSingleton(mvcBuilder);
+
+            setup?.Invoke(mvcBuilder);
+
+            return services;
         }
 
-        return services;
-    }
+        /// <summary>
+        /// Adds a test-specific <see cref="IConfiguration"/> to the service collection.
+        /// </summary>
+        public IServiceCollection AddConfiguration(Dictionary<string, string?>? customSettings = null)
+        {
+            services.AddSingleton(new TestConfig().AddCustomSettings(customSettings).BuildConfiguration());
 
-    /// <summary>
-    /// Adds a mocked <see cref="IMvcBuilder"/> to the service collection.
-    /// </summary>
-    public static IServiceCollection AddMvcBuilder(this IServiceCollection services, Action<IMvcBuilder>? setup = null)
-    {
-        var mvcBuilder = Substitute.For<IMvcBuilder>();
-        mvcBuilder.PartManager.Returns(new Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartManager());
-        services.AddSingleton(mvcBuilder);
+            return services;
+        }
 
-        setup?.Invoke(mvcBuilder);
+        /// <summary>
+        /// Adds a test-specific <see cref="IConfiguration"/>, built from the provided <see cref="TestConfig"/>, to the service collection.
+        /// </summary>
+        public IServiceCollection AddConfiguration(TestConfig config)
+        {
+            services.AddSingleton(config.BuildConfiguration());
 
-        return services;
-    }
+            return services;
+        }
 
-    /// <summary>
-    /// Adds a test-specific <see cref="IConfiguration"/> to the service collection.
-    /// </summary>
-    public static IServiceCollection AddConfiguration(this IServiceCollection services, Dictionary<string, string?>? customSettings = null)
-    {
-        services.AddSingleton(new TestConfig().AddCustomSettings(customSettings).BuildConfiguration());
+        /// <summary>
+        /// Adds a mocked <see cref="IEndpointRouteBuilder"/> to the service collection.
+        /// </summary>
+        public IServiceCollection AddEndpointRouteBuilder(Action<IEndpointRouteBuilder>? setup = null)
+        {
+            var endpointBuilder = Substitute.For<IEndpointRouteBuilder>();
+            services.AddSingleton(endpointBuilder);
 
-        return services;
-    }
+            setup?.Invoke(endpointBuilder);
 
-    /// <summary>
-    /// Adds a test-specific <see cref="IConfiguration"/>, built from the provided <see cref="TestConfig"/>, to the service collection.
-    /// </summary>
-    public static IServiceCollection AddConfiguration(this IServiceCollection services, TestConfig config)
-    {
-        services.AddSingleton(config.BuildConfiguration());
+            return services;
+        }
 
-        return services;
-    }
+        /// <summary>
+        /// Adds mocked MassTransit configurators (<see cref="IBusRegistrationConfigurator"/> and <see cref="ISagaRegistrationConfigurator"/>) to the service collection.
+        /// </summary>
+        public IServiceCollection AddMassTransitConfigurators(Action<IBusRegistrationConfigurator>? setup = null)
+        {
+            var busRegistration = Substitute.For<IBusRegistrationConfigurator>();
+            var sagaRegistration = Substitute.For<ISagaRegistrationConfigurator>();
 
-    /// <summary>
-    /// Adds a mocked <see cref="IEndpointRouteBuilder"/> to the service collection.
-    /// </summary>
-    public static IServiceCollection AddEndpointRouteBuilder(this IServiceCollection services, Action<IEndpointRouteBuilder>? setup = null)
-    {
-        var endpointBuilder = Substitute.For<IEndpointRouteBuilder>();
-        services.AddSingleton(endpointBuilder);
+            services.AddSingleton(busRegistration);
+            services.AddSingleton(sagaRegistration);
 
-        setup?.Invoke(endpointBuilder);
+            setup?.Invoke(busRegistration);
 
-        return services;
-    }
+            return services;
+        }
 
-    /// <summary>
-    /// Adds mocked MassTransit configurators (<see cref="IBusRegistrationConfigurator"/> and <see cref="ISagaRegistrationConfigurator"/>) to the service collection.
-    /// </summary>
-    public static IServiceCollection AddMassTransitConfigurators(this IServiceCollection services,
-        Action<IBusRegistrationConfigurator>? setup = null)
-    {
-        var busRegistration = Substitute.For<IBusRegistrationConfigurator>();
-        var sagaRegistration = Substitute.For<ISagaRegistrationConfigurator>();
+        /// <summary>
+        /// Replaces any existing <see cref="IConfiguration"/> registration in the service collection with the provided instance.
+        /// </summary>
+        public IServiceCollection ReplaceConfiguration(IConfiguration config)
+        {
+            var configDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IConfiguration));
+            if (configDescriptor is not null)
+                services.Remove(configDescriptor);
 
-        services.AddSingleton(busRegistration);
-        services.AddSingleton(sagaRegistration);
+            services.AddSingleton(config);
 
-        setup?.Invoke(busRegistration);
-
-        return services;
-    }
-
-    /// <summary>
-    /// Replaces any existing <see cref="IConfiguration"/> registration in the service collection with the provided instance.
-    /// </summary>
-    public static IServiceCollection ReplaceConfiguration(this IServiceCollection services, IConfiguration config)
-    {
-        var configDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IConfiguration));
-        if (configDescriptor is not null)
-            services.Remove(configDescriptor);
-
-        services.AddSingleton(config);
-
-        return services;
+            return services;
+        }
     }
 }

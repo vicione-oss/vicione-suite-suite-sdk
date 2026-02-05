@@ -8,81 +8,84 @@ namespace Sdk.Client.Extensions;
 /// </summary>
 public static partial class IJSObjectReferenceExtensions
 {
-    /// <summary>
-    /// Safely invokes a JavaScript function that does not return a value, swallowing any <see cref="JSDisconnectedException"/>.
-    /// </summary>
-    public static async Task TryInvokeVoidAsync(this IJSObjectReference? objectReference, string jsMethodName, ILogger logger)
+    extension(IJSObjectReference? objectReference)
     {
-        if (objectReference == null)
-            return;
-
-        try
+        /// <summary>
+        /// Safely invokes a JavaScript function that does not return a value, swallowing any <see cref="JSDisconnectedException"/>.
+        /// </summary>
+        public async Task TryInvokeVoidAsync(string jsMethodName, ILogger logger)
         {
-            // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
-            // This is because the circuit has disconnected and is being disposed.
-            // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
+            if (objectReference == null)
+                return;
 
-            // TODO: seems to be fixed but we need to keep an eye on it
-            await objectReference.InvokeVoidAsync(jsMethodName).ConfigureAwait(false);
-        }
-        catch (JSDisconnectedException)
-        {
-            // swallow it https://github.com/dotnet/aspnetcore/issues/49376
-        }
-        catch (Exception ex)
-        {
-            LogInvokingAsyncJsMethodFailed(logger, ex, jsMethodName);
-        }
-    }
+            try
+            {
+                // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
+                // This is because the circuit has disconnected and is being disposed.
+                // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
 
-    /// <summary>
-    /// Safely invokes a JavaScript function that returns a value, swallowing any <see cref="JSDisconnectedException"/>.
-    /// </summary>
-    public static async ValueTask<TResult?> TryInvokeAsync<TResult>(this IJSObjectReference? objectReference, string jsMethodName, ILogger logger)
-    {
-        if (objectReference == null)
+                // TODO: seems to be fixed but we need to keep an eye on it
+                await objectReference.InvokeVoidAsync(jsMethodName).ConfigureAwait(false);
+            }
+            catch (JSDisconnectedException)
+            {
+                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+            }
+            catch (Exception ex)
+            {
+                LogInvokingAsyncJsMethodFailed(logger, ex, jsMethodName);
+            }
+        }
+
+        /// <summary>
+        /// Safely invokes a JavaScript function that returns a value, swallowing any <see cref="JSDisconnectedException"/>.
+        /// </summary>
+        public async ValueTask<TResult?> TryInvokeAsync<TResult>(string jsMethodName, ILogger logger)
+        {
+            if (objectReference == null)
+                return default;
+
+            try
+            {
+                // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
+                // This is because the circuit has disconnected and is being disposed.
+                // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
+
+                // TODO: seems to be fixed but we need to keep an eye on it
+                return await objectReference.InvokeAsync<TResult>(jsMethodName).ConfigureAwait(false);
+            }
+            catch (JSDisconnectedException)
+            {
+                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+            }
+            catch (Exception ex)
+            {
+                LogInvokingAsyncJsMethodFailed(logger, ex, jsMethodName);
+            }
+
             return default;
-
-        try
-        {
-            // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
-            // This is because the circuit has disconnected and is being disposed.
-            // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
-
-            // TODO: seems to be fixed but we need to keep an eye on it
-            return await objectReference.InvokeAsync<TResult>(jsMethodName).ConfigureAwait(false);
-        }
-        catch (JSDisconnectedException)
-        {
-            // swallow it https://github.com/dotnet/aspnetcore/issues/49376
-        }
-        catch (Exception ex)
-        {
-            LogInvokingAsyncJsMethodFailed(logger, ex, jsMethodName);
         }
 
-        return default;
-    }
+        /// <summary>
+        /// Safely disposes of the JavaScript object reference, swallowing any <see cref="JSDisconnectedException"/>.
+        /// </summary>
+        public async Task TryDisposeAsync(ILogger logger)
+        {
+            if (objectReference == null)
+                return;
 
-    /// <summary>
-    /// Safely disposes of the JavaScript object reference, swallowing any <see cref="JSDisconnectedException"/>.
-    /// </summary>
-    public static async Task TryDisposeAsync(this IJSObjectReference? objectReference, ILogger logger)
-    {
-        if (objectReference == null)
-            return;
-
-        try
-        {
-            await objectReference.DisposeAsync();
-        }
-        catch (JSDisconnectedException)
-        {
-            // swallow it https://github.com/dotnet/aspnetcore/issues/49376
-        }
-        catch (Exception ex)
-        {
-            LogDisposingJsObjectReferenceFailed(logger, ex);
+            try
+            {
+                await objectReference.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+            }
+            catch (Exception ex)
+            {
+                LogDisposingJsObjectReferenceFailed(logger, ex);
+            }
         }
     }
 

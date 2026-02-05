@@ -75,7 +75,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
     {
         if (HasSubline())
         {
-            _jsModuleReference ??= await JsInterop.IncludeModuleScript("./_content/ViciOne.Suite.Sdk.Client/js/nav-tile-standard-content.js");
+            _jsModuleReference ??= await JsInterop.IncludeModuleScript(new Uri("./_content/ViciOne.Suite.Sdk.Client/js/nav-tile-standard-content.js", UriKind.Relative));
 
             if (_initSublineResult is null)
             {

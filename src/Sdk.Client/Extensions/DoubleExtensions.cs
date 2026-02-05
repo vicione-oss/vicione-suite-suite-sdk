@@ -7,30 +7,33 @@ namespace Sdk.Client.Extensions;
 /// </summary>
 public static class DoubleExtensions
 {
-    /// <summary>
-    /// Converts a double to a string formatted for use as an attribute value, using the invariant culture.
-    /// </summary>
-    public static string ToAttributeValue(this double number, string addition = "")
+    extension(double number)
     {
-        var culture = CultureInfo.InvariantCulture;
-        return string.Format(culture, "{0:F1}{1}", number, addition);
-    }
-
-    /// <summary>
-    /// Converts a double to a fixed-point string representation using the current culture, with optional precision.
-    /// </summary>
-    public static string ToFixedPointValue(this double number, int? precision = null)
-    {
-        var culture = CultureInfo.CurrentCulture;
-
-        // build format-string with a number of decimal places, for example {0:F2}
-        var format = "{0:F";
-        if (precision != null)
+        /// <summary>
+        /// Converts a double to a string formatted for use as an attribute value, using the invariant culture.
+        /// </summary>
+        public string ToAttributeValue(string addition = "")
         {
-            format += precision;
+            var culture = CultureInfo.InvariantCulture;
+            return string.Format(culture, "{0:F1}{1}", number, addition);
         }
-        format += "}";
 
-        return string.Format(culture, format, number);
+        /// <summary>
+        /// Converts a double to a fixed-point string representation using the current culture, with optional precision.
+        /// </summary>
+        public string ToFixedPointValue(int? precision = null)
+        {
+            var culture = CultureInfo.CurrentCulture;
+
+            // build format-string with a number of decimal places, for example {0:F2}
+            var format = "{0:F";
+            if (precision != null)
+            {
+                format += precision;
+            }
+            format += "}";
+
+            return string.Format(culture, format, number);
+        }
     }
 }

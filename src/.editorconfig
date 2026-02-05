@@ -22,6 +22,7 @@ dotnet_diagnostic.CA1822.severity = warning # Mark members as static
 dotnet_diagnostic.CA1849.severity = warning # Call async methods when in an async method
 dotnet_diagnostic.CA1852.severity = warning # Seal internal types
 dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1034.severity = none # Nested types should not be visible (DISABLED, because it gives false positives with extension blocks)
 
 dotnet_diagnostic.RCS1209.severity = none # Order type parameter constraints
 

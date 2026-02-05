@@ -5,35 +5,24 @@ namespace Sdk.Client.ControlPanels.Extensions;
 
 internal static class TypeExtensions
 {
-    public static Type? GetControlPanelCategoryDescriptorType(this Type controlPanelComponentType)
+    extension(Type controlPanelComponentType)
     {
-        var attributeType = controlPanelComponentType.GetCustomAttributes()
-            .Select(customAttribute => customAttribute.GetType())
-            .FirstOrDefault(customAttributeType => customAttributeType.Name == typeof(ControlPanelCategoryAttribute<>).Name);
-
-        if (attributeType is not null)
+        public Type? GetControlPanelCategoryDescriptorType()
         {
-            var descriptorType = attributeType.GenericTypeArguments[0];
+            var attributeType = controlPanelComponentType.GetCustomAttributes()
+                .Select(customAttribute => customAttribute.GetType())
+                .FirstOrDefault(customAttributeType => customAttributeType.Name == typeof(ControlPanelCategoryAttribute<>).Name);
 
-            return descriptorType;
+            return attributeType?.GenericTypeArguments[0];
         }
 
-        return null;
-    }
-
-    public static Type? GetControlPanelGroupDescriptorType(this Type controlPanelComponentType)
-    {
-        var attributeType = controlPanelComponentType.GetCustomAttributes()
-            .Select(customAttribute => customAttribute.GetType())
-            .FirstOrDefault(customAttributeType => customAttributeType.Name == typeof(ControlPanelGroupAttribute<>).Name);
-
-        if (attributeType is not null)
+        public Type? GetControlPanelGroupDescriptorType()
         {
-            var descriptorType = attributeType.GenericTypeArguments[0];
+            var attributeType = controlPanelComponentType.GetCustomAttributes()
+                .Select(customAttribute => customAttribute.GetType())
+                .FirstOrDefault(customAttributeType => customAttributeType.Name == typeof(ControlPanelGroupAttribute<>).Name);
 
-            return descriptorType;
+            return attributeType?.GenericTypeArguments[0];
         }
-
-        return null;
     }
 }

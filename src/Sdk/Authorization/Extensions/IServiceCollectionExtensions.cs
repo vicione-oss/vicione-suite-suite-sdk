@@ -9,27 +9,30 @@ namespace Sdk.Authorization.Extensions;
 /// </summary>
 public static class IServiceCollectionExtensions
 {
-    /// <summary>
-    /// Registers services required for module authorization.
-    /// </summary>
-    public static IServiceCollection AddSdkAuthorization(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.TryAddTransient<IModuleAuthorizationClaimParser, ModuleAuthorizationClaimParser>();
-        return services;
+        /// <summary>
+        /// Registers services required for module authorization.
+        /// </summary>
+        public IServiceCollection AddSdkAuthorization()
+        {
+            services.TryAddTransient<IModuleAuthorizationClaimParser, ModuleAuthorizationClaimParser>();
+            return services;
+        }
+
+        /// <summary>
+        /// Adds a feature to the module.
+        /// </summary>
+        /// <remarks>This is required to authorize functionality based on the feature name.</remarks>
+        public IServiceCollection AddModuleFeature(Func<IServiceProvider, IModuleFeature> featureFactory)
+            => services.AddTransient(featureFactory);
+
+        /// <summary>
+        /// Registers a module feature for a specific module type with a name and description.
+        /// </summary>
+        /// <remarks>This is required to authorize functionality based on the feature name.</remarks>
+        public IServiceCollection AddModuleFeature<TModule>(string featureName, string description)
+            where TModule : IModule
+            => services.AddModuleFeature(_ => new ModuleFeature<TModule>(featureName, description));
     }
-
-    /// <summary>
-    /// Adds a feature to the module.
-    /// </summary>
-    /// <remarks>This is required to authorize functionality based on the feature name.</remarks>
-    public static IServiceCollection AddModuleFeature(this IServiceCollection services, Func<IServiceProvider, IModuleFeature> featureFactory)
-        => services.AddTransient(featureFactory);
-
-    /// <summary>
-    /// Registers a module feature for a specific module type with a name and description.
-    /// </summary>
-    /// <remarks>This is required to authorize functionality based on the feature name.</remarks>
-    public static IServiceCollection AddModuleFeature<TModule>(this IServiceCollection services, string featureName, string description)
-        where TModule : IModule
-        => services.AddModuleFeature(_ => new ModuleFeature<TModule>(featureName, description));
 }
