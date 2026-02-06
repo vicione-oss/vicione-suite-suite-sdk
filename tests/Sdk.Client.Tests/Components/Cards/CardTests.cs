@@ -14,7 +14,7 @@ public sealed class CardTests
         public void Invokes_event()
         {
             using var ctx = new BunitContext();
-            var card = new Card()
+            var card = new Card
             {
                 Id = Guid.NewGuid(),
                 Title = "Title",
@@ -38,12 +38,12 @@ public sealed class CardTests
         public void Invokes_event_when_card_has_image()
         {
             using var ctx = new BunitContext();
-            var card = new Card()
+            var card = new Card
             {
                 Id = Guid.NewGuid(),
                 Title = "Title",
                 TeaserText = "Teaser",
-                TeaserImagePath = "TeaserImagePath"
+                TeaserImageUrl = new Uri("https://example.com/image.jpg")
             };
             var invoked = false;
             ctx.SetupSuiteServices();
@@ -66,7 +66,7 @@ public sealed class CardTests
         public void Invokes_event()
         {
             using var ctx = new BunitContext();
-            var card = new Card()
+            var card = new Card
             {
                 Id = Guid.NewGuid(),
                 Title = "Title",
@@ -84,7 +84,7 @@ public sealed class CardTests
             });
 
             var divElementText = component.Find(".text");
-            var buttonElement = divElementText.NextElementSibling;   // next elemeent is the 'LinkButton'
+            var buttonElement = divElementText.NextElementSibling;   // next element is the 'LinkButton'
             buttonElement?.Click();
 
             invoked.Should().BeTrue();
@@ -96,7 +96,7 @@ public sealed class CardTests
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string TeaserText { get; set; } = string.Empty;
-        public string TeaserImagePath { get; set; } = string.Empty;
+        public Uri? TeaserImageUrl { get; set; }
         public string Text { get; set; } = string.Empty;
     }
 }

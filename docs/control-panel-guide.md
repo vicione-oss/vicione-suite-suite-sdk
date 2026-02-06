@@ -287,7 +287,7 @@ For the following  file structure in `FooClientModule` is assumed:
   public sealed class BarControlPanelDescriptor : IControlPanelDescriptor<BarControlPanel>
   {
       public string Title => "General";
-      public string IconPath => ModuleAssetHelper.GetModuleIconPath<FooClientModule>("icon.svg");
+      public Uri IconUrl => ModuleAssetHelper.GetModuleIconUrl<FooClientModule>("icon.svg");
   }
   ```
 
@@ -305,7 +305,7 @@ For the following  file structure in `FooClientModule` is assumed:
   {
       public string Title => "Foo";
       public string? IconCssClass => null;
-      public Uri? IconUrl => new(ModuleAssetHelper.GetModuleIconPath<FooClientModule>("icon.svg"), UriKind.Relative);
+      public Uri? IconUrl => ModuleAssetHelper.GetModuleIconUrl<FooClientModule>("icon.svg");
       public int? Position => 3;
   }
   ```
@@ -383,19 +383,19 @@ You can either [enable auto-discovery](#91-enable-auto-discovery) or manually re
 
   The extension method [`AddControlPanel<TClientModule, TControlPanel, TState>()`](../src/Sdk.Client/ControlPanels/Extensions/IServiceCollectionExtensions.cs#L27) registers the following core services:
 
-  Service type | Implementation type | Description
-  -|-|-
-  [`IControlPanelRegistry<TClientModule>`](../src/Sdk.Client/ControlPanels/Services/IControlPanelRegistry.cs) | [`ControlPanelRegistry<TClientModule>`](../src/Sdk.Client/ControlPanels/Services/ControlPanelRegistry.cs) | Registry for all control panels of `TClientModule`
-  [`IControlPanelPageRegistry`](../src/Sdk.Client/ControlPanels/Services/IControlPanelPageRegistry.cs) | [`ControlPanelPageRegistry`](../src/Sdk.Client/ControlPanels/Services/ControlPanelPageRegistry.cs) | Registry for control panel pages, for internal use
+  | Service type                                                                                                | Implementation type                                                                                       | Description                                        |
+  |-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------|
+  | [`IControlPanelRegistry<TClientModule>`](../src/Sdk.Client/ControlPanels/Services/IControlPanelRegistry.cs) | [`ControlPanelRegistry<TClientModule>`](../src/Sdk.Client/ControlPanels/Services/ControlPanelRegistry.cs) | Registry for all control panels of `TClientModule` |
+  | [`IControlPanelPageRegistry`](../src/Sdk.Client/ControlPanels/Services/IControlPanelPageRegistry.cs)        | [`ControlPanelPageRegistry`](../src/Sdk.Client/ControlPanels/Services/ControlPanelPageRegistry.cs)        | Registry for control panel pages, for internal use |
 
   The builder method [`WithAutoDiscovery<TDescriptor>()`](../src/Sdk.Client/ControlPanels/ControlPanelBuilder.cs#L19) registers the following scoped services:
 
-  Service type | Implementation type | Description | Registered as [keyed service](../src/Sdk.Client/ControlPanels/ControlPanelServiceKey.cs)
-  -|-|-|-
-  [`IControlPanelDescriptor<TControlPanel>`](../src/Sdk.Client/ControlPanels/Services/IControlPanelDescriptor.cs) | `TDescriptor` | Descriptor for the control panel | No
-  [`IControlPanelState`](../src/Sdk.Client/ControlPanels/Services/IControlPanelState.cs) `TState` | State for the control panel | Yes
-  `TCategoryDescriptor` | `TCategoryDescriptor` | Category for the control panel, `TCategoryDescriptor` is retrieved from [`ControlPanelCategoryAttribute`](../src/Sdk.Client/ControlPanels/Attributes/ControlPanelCategoryAttribute.cs) | No
-  `TGroupDescriptor` | `TGroupDescriptor` | Group for the control panel, `TGroupDescriptor` is retrieved from [`ControlPanelGroupAttribute`](../src/Sdk.Client/ControlPanels/Attributes/ControlPanelGroupAttribute.cs) | No
+  | Service type                                                                                                    | Implementation type         | Description                                                                                                                                                                            | Registered as [keyed service](../src/Sdk.Client/ControlPanels/ControlPanelServiceKey.cs) |
+  |-----------------------------------------------------------------------------------------------------------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+  | [`IControlPanelDescriptor<TControlPanel>`](../src/Sdk.Client/ControlPanels/Services/IControlPanelDescriptor.cs) | `TDescriptor`               | Descriptor for the control panel                                                                                                                                                       | No                                                                                       |
+  | [`IControlPanelState`](../src/Sdk.Client/ControlPanels/Services/IControlPanelState.cs) `TState`                 | State for the control panel | Yes                                                                                                                                                                                    |                                                                                          |
+  | `TCategoryDescriptor`                                                                                           | `TCategoryDescriptor`       | Category for the control panel, `TCategoryDescriptor` is retrieved from [`ControlPanelCategoryAttribute`](../src/Sdk.Client/ControlPanels/Attributes/ControlPanelCategoryAttribute.cs) | No                                                                                       |
+  | `TGroupDescriptor`                                                                                              | `TGroupDescriptor`          | Group for the control panel, `TGroupDescriptor` is retrieved from [`ControlPanelGroupAttribute`](../src/Sdk.Client/ControlPanels/Attributes/ControlPanelGroupAttribute.cs)             | No                                                                                       |
 
   > The control panel will be visible by default as it will be added to [`IControlPanelRegistry<TClientModule>`](../src/Sdk.Client/ControlPanels/Services/IControlPanelRegistry.cs) on resolve of the registry service type. See [architecture diagram](#control-panel-components) to understand how it all fits together.
 

@@ -11,7 +11,7 @@ public sealed partial class FooNavTile : NavTileBase
     private readonly string _headline = s_faker.Lorem.Text();
     private readonly string _subline = s_faker.Lorem.Sentence();
 
-    private readonly string _iconSrc = $"_content/{typeof(FooNavTile).Assembly.GetName().Name}/foo-nav-tile/icon.svg";
+    private readonly Uri _iconUrl = new($"_content/{typeof(FooNavTile).Assembly.GetName().Name}/foo-nav-tile/icon.svg", UriKind.Relative);
 
     [Parameter]
     public bool WithSubline { get; set; }

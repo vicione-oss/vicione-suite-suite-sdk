@@ -34,7 +34,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
     /// <summary>
     /// Gets or sets the source URL for the icon image.
     /// </summary>
-    [Parameter, EditorRequired] public string IconSrc { get; set; }
+    [Parameter, EditorRequired] public Uri IconUrl { get; set; }
 
     /// <summary>
     /// Gets or sets the alternative text for the icon image, used for accessibility.

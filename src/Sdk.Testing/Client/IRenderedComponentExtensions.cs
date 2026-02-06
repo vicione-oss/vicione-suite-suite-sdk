@@ -84,13 +84,13 @@ public static class IRenderedComponentExtensions
         /// <summary>
         /// Asserts that the value of a <see cref="SettingsFieldTextBox"/> with a specific label matches the expected value.
         /// </summary>
-        public void AssertSettingsFieldTextBox<TComponent>(string label, string? expectedValue)
+        public void AssertSettingsFieldTextBox(string label, string? expectedValue)
             => component.GetSettingsFieldTextBox(label).Instance.Value.Should().Be(expectedValue);
 
         /// <summary>
         /// Asserts that the value of a <see cref="CheckBox{T}"/> with a specific label matches the expected value.
         /// </summary>
-        public void AssertSettingsFieldCheckBox<TComponent>(string label, bool expectedValue)
+        public void AssertSettingsFieldCheckBox(string label, bool expectedValue)
             => component.GetSettingsFieldCheckBox(label).Instance.Value.Should().Be(expectedValue);
 
         /// <summary>

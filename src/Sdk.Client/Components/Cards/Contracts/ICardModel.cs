@@ -21,9 +21,9 @@ public interface ICardModel
     string TeaserText { get; set; }
 
     /// <summary>
-    /// Gets or sets the path to the teaser image displayed on the card.
+    /// Gets or sets the URL to the teaser image displayed on the card.
     /// </summary>
-    string TeaserImagePath { get; set; }
+    Uri? TeaserImageUrl { get; set; }
 
     /// <summary>
     /// Gets or sets the main text content of the card.

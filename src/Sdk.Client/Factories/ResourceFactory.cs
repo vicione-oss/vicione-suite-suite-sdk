@@ -18,7 +18,7 @@ internal static class ResourceFactory
     {
         ResourceType = ResourceType.Script,
         Bundle = bundle,
-        Url = ModuleAssetHelper.GetGlobalJsPath(filename, true),
+        Url = ModuleAssetHelper.GetGlobalJsUrl(filename, true),
         Declaration = ResourceDeclaration.Global
     };
 
@@ -30,7 +30,7 @@ internal static class ResourceFactory
         Id = GetUniqueId(filename),
         ResourceType = ResourceType.Stylesheet,
         Bundle = bundle,
-        Url = ModuleAssetHelper.GetGlobalCssPath(filename, true),
+        Url = ModuleAssetHelper.GetGlobalCssUrl(filename, true),
         Declaration = ResourceDeclaration.Global
     };
 
@@ -42,7 +42,7 @@ internal static class ResourceFactory
         {
             ResourceType = ResourceType.Script,
             Bundle = bundle,
-            Url = ModuleAssetHelper.GetModuleJsPath<T>(relativeFilePath, true),
+            Url = ModuleAssetHelper.GetModuleJsUrl<T>(relativeFilePath, true),
             Declaration = forceGlobal ? ResourceDeclaration.Global : ResourceDeclaration.Local
         };
 
@@ -55,7 +55,7 @@ internal static class ResourceFactory
             Id = GetUniqueId(relativeFilePath),
             ResourceType = ResourceType.Stylesheet,
             Bundle = bundle,
-            Url = ModuleAssetHelper.GetModuleCssPath<T>(relativeFilePath, true),
+            Url = ModuleAssetHelper.GetModuleCssUrl<T>(relativeFilePath, true),
             Declaration = forceGlobal ? ResourceDeclaration.Global : ResourceDeclaration.Local
         };
 
@@ -63,7 +63,7 @@ internal static class ResourceFactory
     {
         ResourceType = ResourceType.Script,
         Bundle = bundle,
-        Url = jsUrl,
+        Url = new Uri(jsUrl, UriKind.Relative),
         Declaration = ResourceDeclaration.Local
     };
 
@@ -72,7 +72,7 @@ internal static class ResourceFactory
         Id = GetUniqueId(stylesheetUrl),
         ResourceType = ResourceType.Stylesheet,
         Bundle = bundle,
-        Url = stylesheetUrl,
+        Url = new Uri(stylesheetUrl, UriKind.Relative),
         Declaration = ResourceDeclaration.Local
     };
 
@@ -90,7 +90,7 @@ internal static class ResourceFactory
         if (relativeFilePath.StartsWith('/'))
             relativeFilePath = relativeFilePath[1..];
 
-        var url = $"/{ModuleAssetHelper.ContentPrefix}/{moduleName}/{relativeFilePath}";
+        var url = new Uri($"/{ModuleAssetHelper.ContentPrefix}/{moduleName}/{relativeFilePath}", UriKind.Relative);
 
         return new Resource { Id = GetUniqueId(relativeFilePath), ResourceType = resource, Bundle = bundle, Url = url };
     }

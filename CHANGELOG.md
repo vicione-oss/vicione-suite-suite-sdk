@@ -16,6 +16,13 @@
 
 - Improve async disposal and error handling in `NavTileStandardContent`
 - *Breaking* `IJsInterop.IncludeModuleScript` now requires a `Uri` parameter instead of string path for better type safety
+- *Breaking* Overhauled `ModuleAssetHelper` which now provides `Uri` for module assets instead of string paths
+- *Breaking* `IControlPanelDescriptor` also requires `Uri` for its icon source instead of string paths
+- *Breaking* Unified naming of `Uri` properties (former strings) and methods to `...Url`
+
+### Removed
+
+- *Breaking* Removed extension method `AppendFormattedLine` for `StringBuilder` class, as it can be easily replaced
 
 ### Updated
 
@@ -44,7 +51,7 @@
     - Added `IControlPanelRegistryFactory`, reserved for internal use
 - Added flag `Managed` to `Sdk.Connections.Contracts.Connection`
 - `Sdk.Backend.Artifacts`
-    - `IArtifactRepository`, added method `GetSourceKeys` and marked `CreateArtifact` as oboslete
+    - `IArtifactRepository`, added method `GetSourceKeys` and marked `CreateArtifact` as obsolete
     - `IArtifactQueryBuilder`, added methods `FilterBy` and `Limit`
     - `IArtifactQueryResult`, added optional property `Errors` and changed single `Range` to list of `Ranges`
     - `IArtifactQueryRange`, added property `Source`
@@ -90,7 +97,7 @@
 - `AspNetCore.SassCompiler` package, update to version `1.94.2`
 - `MassTransit` packages, update to version `8.5.7`
 - `Microsoft` packages, update to version `9.0.11`
-- `Microsoft.TypeScript.MSBuild` package, update to verion `5.9.3`
+- `Microsoft.TypeScript.MSBuild` package, update to version `5.9.3`
 - `System.IO.Abstractions` package, update to version `22.1.0`
 - `ViciOne.Ui.Blazor.Components` package, update to version `4.2.0`
 - `ViciOne.Ui.Design` package, update to version `1.1.1`
@@ -242,7 +249,7 @@
 ### Added
 
 - `Sdk.Client.Components.FileDropComponent`, added localization
-- `Sdk.Backend.SystemConfiguration`, added `IControlServiceManagement` to start/stop services on linux OS
+- `Sdk.Backend.SystemConfiguration`, added `IControlServiceManagement` to start/stop services on Linux OS
 
 ### Changed
 
@@ -325,7 +332,7 @@
 
 ### Changed
 
--  Added the ServiceProvider to getting the RessourceDirectory from the BackendModule for more flexibility
+-  Added the ServiceProvider to getting the ResourceDirectory from the BackendModule for more flexibility
 
 ### Updated
 
