@@ -32,7 +32,7 @@ public interface IJsInterop
     /// <summary>
     /// Dynamically includes a 'link' element in the document's head.
     /// </summary>
-    Task IncludeLink(string id, string rel, string href, string type, string integrity, string crossorigin, string key);
+    Task IncludeLink(string id, string rel, Uri href, string type, string integrity, string crossorigin, string key);
 
     /// <summary>
     /// Dynamically includes multiple 'link' elements in the document's head.
@@ -47,7 +47,7 @@ public interface IJsInterop
     /// <summary>
     /// Dynamically includes a 'script' element in the document.
     /// </summary>
-    Task IncludeScript(string id, string src, string integrity, string crossorigin, string content, string location, string key);
+    Task IncludeScript(string id, Uri src, string integrity, string crossorigin, string content, string location, string key);
 
     /// <summary>
     /// Dynamically includes a JavaScript module script.
@@ -82,7 +82,7 @@ public interface IJsInterop
     /// <summary>
     /// Removes 'script' elements from the DOM that match a specific source URL.
     /// </summary>
-    Task RemoveScriptsBySource(string source);
+    Task RemoveScriptsBySource(Uri source);
 
     /// <summary>
     /// Sets a browser cookie.

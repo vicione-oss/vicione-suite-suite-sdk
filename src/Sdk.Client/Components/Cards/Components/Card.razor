@@ -3,10 +3,10 @@
 @using Sdk.Client.Extensions
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
-<div class="card-container @(string.IsNullOrEmpty(CardModel.TeaserImagePath) ? "text-only" : string.Empty)">
-    @if (!string.IsNullOrEmpty(CardModel.TeaserImagePath))
+<div class="card-container @(CardModel.TeaserImageUrl is null ? "text-only" : string.Empty)">
+    @if (CardModel.TeaserImageUrl is not null)
     {
-        <div class="image-container" style="--img-source: url(@CardModel.TeaserImagePath)">
+        <div class="image-container" style="--img-source: url(@CardModel.TeaserImageUrl.OriginalString)">
             <button class="close" @onclick="async () =>  await OnCloseClick.InvokeAsync(CardModel)">
                 <img src="@SvgIcon.Close.GetPath()" />
             </button>
@@ -16,7 +16,7 @@
     <div class="title">
         @CardModel.Title
 
-        @if (string.IsNullOrEmpty(CardModel.TeaserImagePath))
+        @if (CardModel.TeaserImageUrl is null)
         {
             <button class="close" @onclick="async () => await OnCloseClick.InvokeAsync(CardModel)">
                 <img src="@SvgIcon.Close.GetPath()" />

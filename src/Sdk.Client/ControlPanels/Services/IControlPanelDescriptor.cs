@@ -13,9 +13,9 @@ public interface IControlPanelDescriptor
     string Title { get; }
 
     /// <summary>
-    /// Path to the icon representing the settings provided by the control panel
+    /// URL to the icon representing the settings provided by the control panel
     /// </summary>
-    string IconPath { get; }
+    Uri? IconUrl { get; }
 
     /// <summary>
     /// Optional position in the list of all control panels of a <see cref="IControlPanelCategoryDescriptor">category</see>

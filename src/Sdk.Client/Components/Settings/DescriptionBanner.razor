@@ -21,7 +21,7 @@
                     var activeControlPanelDescriptor = ActiveControlPanelDescriptorProvider.GetActiveControlPanelDescriptor();
                     if (activeControlPanelDescriptor is not null)
                     {
-                        <img class="icon" src="@activeControlPanelDescriptor.IconPath" alt="Icon" />
+                        <img class="icon" src="@(activeControlPanelDescriptor.IconUrl?.OriginalString ?? string.Empty)" alt="Icon" />
                     }
                 }
 

@@ -23,7 +23,7 @@ public sealed class ResourceFactoryTests
             // Assert
             result.ResourceType.Should().Be(ResourceType.Script);
             result.Bundle.Should().Be(Bundle);
-            result.Url.Should().Contain("/js/" + Filename);
+            result.Url!.OriginalString.Should().Contain("/js/" + Filename);
             result.Declaration.Should().Be(ResourceDeclaration.Global);
         }
     }
@@ -42,7 +42,7 @@ public sealed class ResourceFactoryTests
             // Assert
             result.ResourceType.Should().Be(ResourceType.Stylesheet);
             result.Id.Should().StartWith("i"); // hashed id
-            result.Url.Should().Contain("/css/" + Filename);
+            result.Url!.OriginalString.Should().Contain("/css/" + Filename);
             result.Declaration.Should().Be(ResourceDeclaration.Global);
         }
     }
@@ -60,7 +60,7 @@ public sealed class ResourceFactoryTests
 
             // Assert
             result.ResourceType.Should().Be(ResourceType.Script);
-            result.Url.Should().Contain("_content");
+            result.Url!.OriginalString.Should().Contain("_content");
             result.Declaration.Should().Be(ResourceDeclaration.Local);
         }
 
@@ -92,7 +92,7 @@ public sealed class ResourceFactoryTests
             // Assert
             result.ResourceType.Should().Be(ResourceType.Stylesheet);
             result.Id.Should().NotBeNull();
-            result.Url.Should().Contain("_content");
+            result.Url!.OriginalString.Should().Contain("_content");
             result.Declaration.Should().Be(ResourceDeclaration.Local);
         }
     }
@@ -110,7 +110,7 @@ public sealed class ResourceFactoryTests
 
             // Assert
             result.ResourceType.Should().Be(ResourceType.Script);
-            result.Url.Should().Be(Url);
+            result.Url.Should().Be(new Uri(Url, UriKind.Relative));
             result.Declaration.Should().Be(ResourceDeclaration.Local);
         }
     }
@@ -129,7 +129,7 @@ public sealed class ResourceFactoryTests
             // Assert
             result.ResourceType.Should().Be(ResourceType.Stylesheet);
             result.Id.Should().StartWith("i");
-            result.Url.Should().Be(Url);
+            result.Url.Should().Be(new Uri(Url, UriKind.Relative));
             result.Declaration.Should().Be(ResourceDeclaration.Local);
         }
     }
@@ -148,8 +148,8 @@ public sealed class ResourceFactoryTests
 
             // Assert
             result.ResourceType.Should().Be(ResourceType.Script);
-            result.Url.Should().Contain("_content");
-            result.Url.Should().Contain(File);
+            result.Url!.OriginalString.Should().Contain("_content");
+            result.Url!.OriginalString.Should().Contain(File);
         }
     }
 
@@ -167,8 +167,8 @@ public sealed class ResourceFactoryTests
 
             // Assert
             result.ResourceType.Should().Be(ResourceType.Stylesheet);
-            result.Url.Should().Contain("_content");
-            result.Url.Should().Contain(File);
+            result.Url!.OriginalString.Should().Contain("_content");
+            result.Url!.OriginalString.Should().Contain(File);
             result.Id.Should().StartWith("i");
         }
     }

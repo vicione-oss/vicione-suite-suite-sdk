@@ -23,7 +23,7 @@ public sealed class ControlPanelBuilderTests
     internal sealed class TestControlPanelDescriptor : IControlPanelDescriptor<TestControlPanel>
     {
         public string Title => "Test control panel";
-        public string IconPath => string.Empty;
+        public Uri IconUrl => new("https://example.com/icon.png");
     }
 
     internal sealed class TestControlPanelSaveHandler : IControlPanelSaveHandler<TestControlPanelState>

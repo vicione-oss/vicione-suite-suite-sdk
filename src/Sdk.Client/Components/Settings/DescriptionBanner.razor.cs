@@ -10,7 +10,7 @@ namespace Sdk.Client.Components.Settings;
 /// </summary>
 /// <remarks>
 /// If neither <see cref="IconCssClass"/> nor <see cref="IconUrl"/> is specified
-/// then <see cref="IControlPanelDescriptor.IconPath"/> is used as a fallback.
+/// then <see cref="IControlPanelDescriptor.IconUrl"/> is used as a fallback.
 /// </remarks>
 public sealed partial class DescriptionBanner : ComponentBase
 {

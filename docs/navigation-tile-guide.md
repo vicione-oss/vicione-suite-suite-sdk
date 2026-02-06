@@ -207,7 +207,7 @@ Example
 
   <NavTileStandardContent Headline="Wild cards"
                           Subline="This tool can help to set up so called wild cards and this is a very long subline showing an ellipsis on overflow"
-                          IconSrc="@(ModuleAssetHelper.GetModuleIconPath<FooClientModule>("wild-cards.svg"))"
+                          IconSrc="@(ModuleAssetHelper.GetModuleIconUrl<FooClientModule>("wild-cards.svg"))"
                           IconAlt="Wild cards icon"
                           OnContentLoading="@ContentLoading"
                           OnContentReady="@ContentReady" />
@@ -254,7 +254,7 @@ Example
                         LeftContentDescription="in 1000k"
                         RightContentDescription="Figures Q1">
       <LeftContent>
-          <IconAndValueComponent IconSrc="@(ModuleAssetHelper.GetModuleIconPath<PingModule>("ticket.svg"))"
+          <IconAndValueComponent IconSrc="@(ModuleAssetHelper.GetModuleIconUrl<PingModule>("ticket.svg"))"
                                 IconAlt="Sales income icon"
                                 Value="19.84"
                                 MeasurementUnit="€" />

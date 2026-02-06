@@ -17,10 +17,10 @@ public class ModuleAssetHelperTests
             const string Filename = "file.js";
 
             // Act
-            var result = ModuleAssetHelper.GetGlobalJsPath(Filename, relative: true);
+            var result = ModuleAssetHelper.GetGlobalJsUrl(Filename, relative: true);
 
             // Assert
-            result.Should().Be($"/js/{Filename}");
+            result.Should().Be(new Uri($"/js/{Filename}", UriKind.Relative));
         }
 
         [Fact]
@@ -30,11 +30,19 @@ public class ModuleAssetHelperTests
             const string Filename = "file.js";
 
             // Act
-            var result = ModuleAssetHelper.GetGlobalJsPath(Filename);
+            var result = ModuleAssetHelper.GetGlobalJsUrl(Filename);
 
             // Assert
-            result.Should().Be($"./js/{Filename}");
+            result.Should().Be(new Uri($"./js/{Filename}", UriKind.Relative));
         }
+
+        [Fact]
+        public void Should_throw_when_filename_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetGlobalJsUrl(null!));
+
+        [Fact]
+        public void Should_throw_when_filename_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetGlobalJsUrl(""));
     }
 
     public sealed class GetGlobalCssPath
@@ -46,11 +54,19 @@ public class ModuleAssetHelperTests
             const string Filename = "style.css";
 
             // Act
-            var result = ModuleAssetHelper.GetGlobalCssPath(Filename);
+            var result = ModuleAssetHelper.GetGlobalCssUrl(Filename);
 
             // Assert
-            result.Should().Be($"./css/{Filename}");
+            result.Should().Be(new Uri($"./css/{Filename}", UriKind.Relative));
         }
+
+        [Fact]
+        public void Should_throw_when_filename_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetGlobalCssUrl(null!));
+
+        [Fact]
+        public void Should_throw_when_filename_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetGlobalCssUrl(""));
     }
 
     public sealed class GetModuleJsPath
@@ -62,12 +78,20 @@ public class ModuleAssetHelperTests
             const string Filename = "main.js";
 
             // Act
-            var result = ModuleAssetHelper.GetModuleJsPath<TestClientModule>(Filename, relative: true);
+            var result = ModuleAssetHelper.GetModuleJsUrl<TestClientModule>(Filename, relative: true);
 
             // Assert
-            result.Should().Contain(ModuleAssetHelper.ContentPrefix);
-            result.Should().EndWith($"/js/{Filename}");
+            result.OriginalString.Should().Contain(ModuleAssetHelper.ContentPrefix);
+            result.OriginalString.Should().EndWith($"/js/{Filename}");
         }
+
+        [Fact]
+        public void Should_throw_when_filename_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleJsUrl<TestClientModule>(null!));
+
+        [Fact]
+        public void Should_throw_when_filename_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleJsUrl<TestClientModule>(""));
     }
 
     public sealed class GetModuleCssPath
@@ -79,15 +103,23 @@ public class ModuleAssetHelperTests
             const string Filename = "style.css";
 
             // Act
-            var result = ModuleAssetHelper.GetModuleCssPath<TestClientModule>(Filename, relative: true);
+            var result = ModuleAssetHelper.GetModuleCssUrl<TestClientModule>(Filename, relative: true);
 
             // Assert
-            result.Should().Contain(ModuleAssetHelper.ContentPrefix);
-            result.Should().EndWith($"/css/{Filename}");
+            result.OriginalString.Should().Contain(ModuleAssetHelper.ContentPrefix);
+            result.OriginalString.Should().EndWith($"/css/{Filename}");
         }
+
+        [Fact]
+        public void Should_throw_when_filename_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleCssUrl<TestClientModule>(null!));
+
+        [Fact]
+        public void Should_throw_when_filename_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleCssUrl<TestClientModule>(""));
     }
 
-    public sealed class GetModuleImagePath
+    public sealed class GetModuleImageUrl
     {
         [Fact]
         public void Should_return_module_image_path()
@@ -96,15 +128,23 @@ public class ModuleAssetHelperTests
             const string Filename = "logo.png";
 
             // Act
-            var result = ModuleAssetHelper.GetModuleImagePath<TestClientModule>(Filename);
+            var result = ModuleAssetHelper.GetModuleImageUrl<TestClientModule>(Filename);
 
             // Assert
-            result.Should().Contain("/images/");
-            result.Should().EndWith(Filename);
+            result.OriginalString.Should().Contain("/images/");
+            result.OriginalString.Should().EndWith(Filename);
         }
+
+        [Fact]
+        public void Should_throw_when_filename_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleImageUrl<TestClientModule>(null!));
+
+        [Fact]
+        public void Should_throw_when_filename_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleImageUrl<TestClientModule>(""));
     }
 
-    public sealed class GetModuleIconPath
+    public sealed class GetModuleIconUrl
     {
         [Fact]
         public void Should_return_module_icon_path()
@@ -113,12 +153,20 @@ public class ModuleAssetHelperTests
             const string IconName = "icon.svg";
 
             // Act
-            var result = ModuleAssetHelper.GetModuleIconPath<TestClientModule>(IconName);
+            var result = ModuleAssetHelper.GetModuleIconUrl<TestClientModule>(IconName);
 
             // Assert
-            result.Should().Contain("/svg/");
-            result.Should().EndWith(IconName);
+            result.OriginalString.Should().Contain("/svg/");
+            result.OriginalString.Should().EndWith(IconName);
         }
+
+        [Fact]
+        public void Should_throw_when_icon_name_is_null()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleIconUrl<TestClientModule>(null!));
+
+        [Fact]
+        public void Should_throw_when_icon_name_is_empty()
+            => Assert.Throws<ArgumentException>(() => ModuleAssetHelper.GetModuleIconUrl<TestClientModule>(""));
     }
 
     public sealed class GetModuleManifestName

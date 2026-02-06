@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Sdk.Client.Contracts;
 
@@ -22,8 +21,7 @@ public sealed class Resource
     /// <summary>
     /// Gets or sets the path or URL to the resource.
     /// </summary>
-    [SuppressMessage("Design", "CA1056:URI-like properties should not be strings", Justification = "Can be invalid for Uri class")]
-    public string? Url { get; set; }
+    public Uri? Url { get; set; }
 
     /// <summary>
     /// Integrity checks to increase the security of resources accessed. Especially common in CDN resources.

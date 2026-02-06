@@ -68,7 +68,10 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
             if (string.IsNullOrEmpty(resource.Id))
                 continue;
 
-            await JsInterop.IncludeLink(resource.Id, "stylesheet", resource.Url ?? "", "text/css", "", "", "");
+            if (resource.Url is null)
+                continue;
+
+            await JsInterop.IncludeLink(resource.Id, "stylesheet", resource.Url, "text/css", "", "", "");
 
             LogIncludeLink(Logger, GetType().Name, resource);
         }
@@ -117,7 +120,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
                 continue;
             }
 
-            if (resource.ResourceType == ResourceType.Script && !string.IsNullOrEmpty(resource.Url))
+            if (resource is { ResourceType: ResourceType.Script, Url: not null })
             {
                 await JsInterop.RemoveScriptsBySource(resource.Url);
 

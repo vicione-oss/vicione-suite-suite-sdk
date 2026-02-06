@@ -59,7 +59,7 @@ public static class BackendModuleExtensions
         /// <param name="services">Modify DI container</param>
         /// <param name="setup">Modify application builder</param>
         /// <param name="busSetup">Modify bus configuration</param>
-        private ServiceProvider TestSagaModuleInitialization(Action<ServiceCollection>? services = null,
+        public ServiceProvider TestSagaModuleInitialization(Action<ServiceCollection>? services = null,
             Action<IApplicationBuilder>? setup = null,
             Action<IBusRegistrationConfigurator>? busSetup = null)
         {

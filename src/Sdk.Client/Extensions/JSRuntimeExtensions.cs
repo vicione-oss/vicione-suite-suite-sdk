@@ -41,7 +41,7 @@ public static class JSRuntimeExtensions
         /// </summary>
         public async Task<IJSObjectReference> ImportGlobalScript(string jsFilename)
         {
-            var jsPath = ModuleAssetHelper.GetGlobalJsPath(jsFilename);
+            var jsPath = ModuleAssetHelper.GetGlobalJsUrl(jsFilename);
 
             return await jsRuntime.InvokeAsync<IJSObjectReference>(JsImportCommand, jsPath).AsTask();
         }
@@ -52,7 +52,7 @@ public static class JSRuntimeExtensions
         public async Task<IJSObjectReference> ImportModuleScript<T>(string jsFilename)
             where T : IModule
         {
-            var jsPath = ModuleAssetHelper.GetModuleJsPath<T>(jsFilename);
+            var jsPath = ModuleAssetHelper.GetModuleJsUrl<T>(jsFilename);
 
             return await jsRuntime.InvokeAsync<IJSObjectReference>(JsImportCommand, jsPath).AsTask();
         }
