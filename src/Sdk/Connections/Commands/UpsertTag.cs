@@ -8,6 +8,6 @@ namespace Sdk.Connections.Commands;
 /// </summary>
 public sealed record UpsertTag(Tag Tag) : ICommand
 {
-    /// <inheritdoc/>
-    public Guid CorrelationId { get; } = Guid.NewGuid();
+    /// <inheritdoc cref="ICommand.CorrelationId" />
+    public Guid CorrelationId { get; init; } = Guid.NewGuid();
 }

@@ -19,6 +19,7 @@
 - *Breaking* Overhauled `ModuleAssetHelper` which now provides `Uri` for module assets instead of string paths
 - *Breaking* `IControlPanelDescriptor` also requires `Uri` for its icon source instead of string paths
 - *Breaking* Unified naming of `Uri` properties (former strings) and methods to `...Url`
+- *Breaking* `ICommand` and `IInstanceDependentCommand` now enforce providing an `init` for `CorrelationId` to ensure deserialization
 
 ### Removed
 
