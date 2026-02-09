@@ -8,6 +8,6 @@ namespace Sdk.UserManagement.Commands;
 /// </summary>
 public sealed record UpdateRole(Role Role) : ICommand
 {
-    /// <inheritdoc/>
-    public Guid CorrelationId { get; set; } = Guid.NewGuid();
+    /// <inheritdoc cref="ICommand.CorrelationId" />
+    public Guid CorrelationId { get; init; } = Guid.NewGuid();
 }
