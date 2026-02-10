@@ -198,10 +198,31 @@ public sealed class ControlPanelStateTests
         var state = new TestControlPanelState();
         state.Changed += _ => ++stateChangedCounter;
 
+        // Act
+        state.BeginUpdate();
+        try
+        {
+            var random = new Random();
+
+            var updateTasks = new List<Task>();
+            for (var i = 0; i < 1000; i++)
+                updateTasks.Add(RandomUpdateTask(random, state));
+
+            await Task.WhenAll(updateTasks);
+        }
+        finally
+        {
+            state.EndUpdate();
+        }
+
+        // Assert
+        stateChangedCounter.Should().Be(1);
+        return;
+
         static async Task RandomUpdateTask(Random random, TestControlPanelState state)
         {
             var delay = random.Next(0, 100);
-            await Task.Delay(delay);
+            await Task.Delay(delay, TestContext.Current.CancellationToken);
 
             state.BeginUpdate();
             try
@@ -231,26 +252,6 @@ public sealed class ControlPanelStateTests
                 state.EndUpdate();
             }
         }
-
-        // Act
-        state.BeginUpdate();
-        try
-        {
-            var random = new Random();
-
-            var updateTasks = new List<Task>();
-            for (var i = 0; i < 1000; i++)
-                updateTasks.Add(RandomUpdateTask(random, state));
-
-            await Task.WhenAll(updateTasks);
-        }
-        finally
-        {
-            state.EndUpdate();
-        }
-
-        // Assert
-        stateChangedCounter.Should().Be(1);
     }
 
     [Fact]
@@ -283,17 +284,14 @@ public sealed class ControlPanelStateTests
 
     public class TestControlPanelState : ControlPanelState
     {
-        private bool _foo;
-        private int? _bar = 0;
-
         public bool Foo
         {
-            get => _foo;
+            get;
             set
             {
-                if (value != _foo)
+                if (value != field)
                 {
-                    _foo = value;
+                    field = value;
 
                     OnPropertyChanged();
                 }
@@ -302,17 +300,17 @@ public sealed class ControlPanelStateTests
 
         public int? Bar
         {
-            get => _bar;
+            get;
             set
             {
-                if (value != _bar)
+                if (value != field)
                 {
-                    _bar = value;
+                    field = value;
 
                     OnPropertyChanged();
                 }
             }
-        }
+        } = 0;
     }
 
 }
