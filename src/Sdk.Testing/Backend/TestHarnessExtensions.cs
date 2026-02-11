@@ -19,8 +19,8 @@ public static class TestHarnessExtensions
     // This is the time the test can take for a consume
     private const int TestTimeout = 10;
 
-    // On the system tests of ClusterManagment it was the case that we had to add a delay after
-    // starting the harness to run all tests successfull in one rush
+    // On the system tests of ClusterManagement it was the case that we had to add a delay after
+    // starting the harness to run all tests successful in one rush
     private const int StartDelay = 500;
 
     extension(ITestHarness harness)
@@ -39,7 +39,7 @@ public static class TestHarnessExtensions
 #endif
 
             await harness.Start();
-            await Task.Delay(StartDelay);
+            await Task.Delay(StartDelay, harness.CancellationToken);
 
             var client = harness.Bus.CreateRequestClient<TRequest>();
             var response = await client.GetResponse<TResponse>(request, harness.CancellationToken);
@@ -54,7 +54,7 @@ public static class TestHarnessExtensions
             await harness.ThrowOnConsumeError<TRequest>();
 
             // assert that the response get sent
-            Assert.That(await harness.Sent.Any<TResponse>());
+            Assert.That(await harness.Sent.Any<TResponse>(harness.CancellationToken));
 
             return response.Message;
         }
@@ -70,7 +70,7 @@ public static class TestHarnessExtensions
             harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
             harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay);
+            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
             var endpoint = await harness.GetConsumerEndpoint<TConsumer>();
@@ -108,7 +108,7 @@ public static class TestHarnessExtensions
             where TConsumer : class, IConsumer
             where TResponseEvent : class
         {
-            await TestCommand<TCommand, TConsumer>(harness, command);
+            await harness.TestCommand<TCommand, TConsumer>(command);
 
             await harness.InactivityTask;
 
@@ -129,7 +129,7 @@ public static class TestHarnessExtensions
             harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
             harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay);
+            await Task.Delay(StartDelay, harness.CancellationToken);
 
             var endpoint = await harness.GetConsumerEndpoint<TConsumer>();
             var consumerHarness = harness.GetConsumerHarness<TConsumer>();
@@ -168,7 +168,7 @@ public static class TestHarnessExtensions
             harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
             harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay);
+            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
             await harness.Bus.Publish(@event, harness.CancellationToken);
@@ -235,7 +235,7 @@ public static class TestHarnessExtensions
             harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
             harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay);
+            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
             var endpointName = harness.EndpointNameFormatter.ExecuteActivity<T, TArguments>();

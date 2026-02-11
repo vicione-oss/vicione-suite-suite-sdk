@@ -25,7 +25,7 @@ public class ISuiteMediatorExtensionsTests
             _suiteMediator.SetupRequest(request, response);
 
             // Assert
-            var result = await _suiteMediator.Request<TestConsumerRequest, TestConsumerResponse>(request, CancellationToken.None);
+            var result = await _suiteMediator.Request<TestConsumerRequest, TestConsumerResponse>(request, TestContext.Current.CancellationToken);
             result.Should().Be(response);
         }
 
@@ -41,7 +41,7 @@ public class ISuiteMediatorExtensionsTests
             _suiteMediator.SetupRequest(request, response, instanceId);
 
             // Assert
-            var result = await _suiteMediator.Request<TestInstanceConsumerRequest, TestInstanceConsumerResponse>(request, instanceId, CancellationToken.None);
+            var result = await _suiteMediator.Request<TestInstanceConsumerRequest, TestInstanceConsumerResponse>(request, instanceId, TestContext.Current.CancellationToken);
             result.Should().Be(response);
         }
     }
@@ -58,7 +58,7 @@ public class ISuiteMediatorExtensionsTests
             _suiteMediator.SetupRequestFault<TestConsumerRequest, TestConsumerResponse>(request);
 
             // Assert
-            var action = () => _suiteMediator.Request<TestConsumerRequest, TestConsumerResponse>(request, CancellationToken.None);
+            var action = () => _suiteMediator.Request<TestConsumerRequest, TestConsumerResponse>(request, TestContext.Current.CancellationToken);
             await action.Should().ThrowAsync<RequestFaultException>();
         }
 
@@ -73,7 +73,7 @@ public class ISuiteMediatorExtensionsTests
             _suiteMediator.SetupRequestFault<TestInstanceConsumerRequest, TestInstanceConsumerResponse>(request, instanceId);
 
             // Assert
-            var action = () => _suiteMediator.Request<TestInstanceConsumerRequest, TestInstanceConsumerResponse>(request, instanceId, CancellationToken.None);
+            var action = () => _suiteMediator.Request<TestInstanceConsumerRequest, TestInstanceConsumerResponse>(request, instanceId, TestContext.Current.CancellationToken);
             await action.Should().ThrowAsync<RequestFaultException>();
         }
     }
