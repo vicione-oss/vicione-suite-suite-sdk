@@ -2,15 +2,15 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
-    <ViciOneUiMonochromeIconsVersion>4.1.0</ViciOneUiMonochromeIconsVersion>
-    <DotNetVersion>10.0.2</DotNetVersion>
+    <ViciOneUiMonochromeIconsVersion>4.2.0</ViciOneUiMonochromeIconsVersion>
+    <DotNetVersion>10.0.3</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
     <PackageVersion Include="AspNetCore.SassCompiler" Version="1.97.1" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
-    <PackageVersion Include="MassTransit.Abstractions" Version="8.5.7" />
+    <PackageVersion Include="MassTransit.Abstractions" Version="8.5.8" />
     <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="$(DotNetVersion)" />
@@ -31,11 +31,11 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageVersion Include="System.IO.Abstractions" Version="22.1.0" />
     <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.0.1" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.2.0" />
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.0.3" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Localization" Version="3.0.2" />
+    <PackageVersion Include="ViciOne.Ui.Localization" Version="3.1.0" />
     <!--Used for tests only:-->
     <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
     <PackageVersion Include="bunit" Version="2.5.3" />

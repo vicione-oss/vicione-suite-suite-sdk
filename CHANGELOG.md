@@ -29,13 +29,13 @@
 
 - `AspNetCore.SassCompiler` package, update to version `1.97.1`
 - `bunit` package, update to version `2.5.3`
-- `Microsoft` packages, update to version `10.0.2`
+- `Microsoft` packages, update to version `10.0.3`
 - `Microsoft.Testing.Platform` packages, update to version `2.0.2`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.0`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.0.1`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.2.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
-- `ViciOne.Ui.Localization` package, update to version `3.0.2`
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.1.0`
+- `ViciOne.Ui.Localization` package, update to version `3.1.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.2.0`
 - `xunit` packages, update to version `xunit.v3 - 3.2.2`
 - `xunit.extensibility.core` packages, update to version `xunit.v3.extensibility.core - 3.2.2`
 
