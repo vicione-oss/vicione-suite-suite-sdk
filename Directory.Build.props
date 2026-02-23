@@ -1,96 +1,74 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Versionierung -->
-    <PropertyGroup>
-        <VersionWithSuffix>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</VersionWithSuffix>
-        <!-- Version 0.1.0 ist der Standard, wenn gar keine Version gefunden wird -->
-        <VersionPrefix Condition="$(VersionWithSuffix) == ''">0.1.0</VersionPrefix>
-        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring(0, $(VersionWithSuffix.IndexOf('-'))))</VersionPrefix>
-        <VersionPrefix Condition="$(VersionWithSuffix.Contains('-')) == false">$(VersionWithSuffix)</VersionPrefix>
-        <!-- Im Standardfall gibt es keinen Suffix, wenn doch wird dieser angegeben -->
-        <VersionSuffix></VersionSuffix>
-        <VersionSuffix Condition="$(VersionWithSuffix.Contains('-')) == true">$(VersionWithSuffix.Substring($(VersionWithSuffix.IndexOf('-'))))</VersionSuffix>
-        <VersionSuffix Condition="$(VersionSuffix.Contains('-')) == true">$(VersionSuffix.Substring(1))</VersionSuffix>
-        <!-- Im Standardfall ist die PackageVersion gleich der normalen "Version" -->
-        <PackageVersion>$(VersionPrefix)</PackageVersion>
-        <PackageVersion Condition="$(VersionSuffix) != ''">$(PackageVersion)-$(VersionSuffix)</PackageVersion>
-        <!-- Wenn ein PackageVersionSuffix gegeben ist, wird dieser statt des normalen VersionPrefix verwendet -->
-        <PackageVersion Condition="$(PackageVersionSuffix) != ''">$(VersionPrefix).$(PackageVersionSuffix)</PackageVersion>
-    </PropertyGroup>
+  <!-- Properties for all projects in the repository -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
 
-    <!-- Eigenschaften für alle Projekte des Repos -->
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+    <!-- General information -->
+    <Description>-</Description>
+    <Product>ViciOne Suite SDK</Product>
+    <Company>ifm software</Company>
+    <Year>$([System.DateTime]::Now.Year)</Year>
+    <Copyright>Copyright © $(Company) $(Year)</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
 
-        <!-- General information -->
-        <Description>-</Description>
-        <Product>ViciOne Suite SDK</Product>
-        <Company>ifm software</Company>
-        <Year>$([System.DateTime]::Now.Year)</Year>
-        <Copyright>Copyright © $(Company) $(Year)</Copyright>
-        <NeutralLanguage>en-US</NeutralLanguage>
-        <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
+    <!-- Compilation -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
 
-        <!-- Compilation -->
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <!-- Code quality -->
+    <TreatWarningsAsErrors Condition="'$(CI)' != '' Or '$(TREAT_WARNINGS_AS_ERRORS)' == 'true'">true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
-        <!-- Code quality -->
-        <TreatWarningsAsErrors Condition="'$(CI)' != '' Or '$(TREAT_WARNINGS_AS_ERRORS)' == 'true'">true</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- Enable XML documentation for all projects by default as EnforceCodeStyleInBuild relys on it, see https://github.com/dotnet/roslyn/issues/41640 -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-        <!-- Enable XML documentation for all projects by default as EnforceCodeStyleInBuild relys on it, see https://github.com/dotnet/roslyn/issues/41640 -->
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- NuGet security -->
+    <NuGetAuditMode>all</NuGetAuditMode>
+  </PropertyGroup>
 
-        <!-- NuGet security -->
-        <NuGetAuditMode>all</NuGetAuditMode>
-    </PropertyGroup>
+  <!-- For repositories containing projects that are published as NuGet packages -->
+  <PropertyGroup>
+    <!-- https://docs.microsoft.com/de-de/nuget/reference/msbuild-targets -->
+    <PackageProjectUrl>https://gitlab.com/vicione-oss/vicione/suite/suite-sdk</PackageProjectUrl>
+    <Authors>$(Company)</Authors>
+  </PropertyGroup>
 
-    <!-- Für Repos die Projekte enthalten die als NuGet Paket veröffentlicht werden -->
-    <PropertyGroup>
-        <!-- https://docs.microsoft.com/de-de/nuget/reference/msbuild-targets -->
-        <PackageProjectUrl>https://gitlab.com/vicione-oss/vicione/suite/suite-sdk</PackageProjectUrl>
-        <Authors>$(Company)</Authors>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(CI)' != ''">
+    <RunAnalyzers>false</RunAnalyzers>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(CI)' != ''">
-        <RunAnalyzers>false</RunAnalyzers>
-    </PropertyGroup>
+  <!-- Update packages.lock.json with the correct version in local development environment -->
+  <PropertyGroup Condition="'$(CI)' == ''">
+    <PackageVersion>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</PackageVersion>
+  </PropertyGroup>
 
-    <!-- Testprojekte nicht packen und nicht publishen -->
-    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectDirectory.Contains('tests'))">
-        <IsPackable>false</IsPackable>
-        <IsPublishable>false</IsPublishable>
-    </PropertyGroup>
+  <!-- Do not pack and do not publish test projects -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>true</IsPublishable>
+    <!-- Microsoft Testing Platform command line experience -->
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
 
-    <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('tests'))">
-        <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-    </ItemGroup>
+  <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('tests'))">
+    <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
-    <!-- Testprojekten die Test.SDK-/XUnit-Paket-Referenzen hinzufuegen -->
-    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <ProjectReference Include="..\..\src\Sdk.Testing\Sdk.Testing.csproj" />
-        <PackageReference Include="coverlet.collector">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="JunitXml.TestLogger" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="Microsoft.Testing.Platform" />
-        <PackageReference Include="NSubstitute" />
-        <PackageReference Include="NSubstitute.Analyzers.CSharp">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="xunit.v3" />
-        <PackageReference Include="xunit.analyzers">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="xunit.runner.visualstudio">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <!-- Add Test.SDK/XUnit package references to test projects -->
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+    <ProjectReference Include="..\..\src\Sdk.Testing\Sdk.Testing.csproj" />
 
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Microsoft.Testing.Platform" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="NSubstitute.Analyzers.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3.mtp-v2" />
+  </ItemGroup>
 </Project>
