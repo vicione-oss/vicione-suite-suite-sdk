@@ -9,13 +9,12 @@ namespace Sdk.Backend.Persistence;
 /// <summary>
 /// A resolver class that dynamically provides the correct DbContext implementation based on the application's configuration.
 /// </summary>
-public sealed class DbContextResolver<TSqliteDbContext, TPostgresDbContext, TDbContextBaseInterface>(DbContextResolverOptions<TDbContextBaseInterface> options)
+public sealed class DbContextResolver<TSqliteDbContext, TPostgresDbContext, TDbContextBaseInterface>(
+    DbContextResolverOptions<TDbContextBaseInterface> options)
     where TSqliteDbContext : DbContext, ISqliteDbContext, TDbContextBaseInterface
     where TPostgresDbContext : DbContext, IPostgresDbContext, TDbContextBaseInterface
     where TDbContextBaseInterface : IModuleDbContext
 {
-    private readonly DbContextResolverOptions<TDbContextBaseInterface> _options = options;
-
     /// <summary>
     /// Resolves and returns the appropriate DbContext instance based on the current configuration.
     /// </summary>
@@ -26,13 +25,15 @@ public sealed class DbContextResolver<TSqliteDbContext, TPostgresDbContext, TDbC
             return ActivatorUtilities.CreateInstance<TSqliteDbContext>(services,
                 new DbContextOptionsBuilder<TSqliteDbContext>()
                     .UseSqlite(GetSqliteConnectionString(services))
+                    .UseApplicationServiceProvider(services)
                     .Options);
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<TPostgresDbContext>()
-            .UseNpgsql(connectionStringProvider.ConnectionString);
+            .UseNpgsql(connectionStringProvider.ConnectionString)
+            .UseApplicationServiceProvider(services);
 
-        if (_options.EnableSynchronization)
+        if (options.EnableSynchronization)
             optionsBuilder.AddInterceptors(services.GetRequiredService<ISaveChangesInterceptor>());
 
         return ActivatorUtilities.CreateInstance<TPostgresDbContext>(services, optionsBuilder.Options);
@@ -40,14 +41,14 @@ public sealed class DbContextResolver<TSqliteDbContext, TPostgresDbContext, TDbC
 
     private string GetSqliteConnectionString(IServiceProvider services)
     {
-        var serviceType = typeof(IWorkspaceProvider<>).MakeGenericType(_options.ModuleType);
+        var serviceType = typeof(IWorkspaceProvider<>).MakeGenericType(options.ModuleType);
         var wsService = services.GetRequiredService(serviceType);
         var workspace = (string)serviceType
-            .GetProperty(nameof(IWorkspaceProvider<BackendModule>.Home))!
+            .GetProperty(nameof(IWorkspaceProvider<>.Home))!
             .GetValue(wsService)!; // never null, b/c we only use references and require the service
 
         // if no dbname specified we have module id as dbname + ".db"
-        var sqliteDbName = _options.DbName;
+        var sqliteDbName = options.DbName;
         if (!sqliteDbName.EndsWith(".db", StringComparison.OrdinalIgnoreCase))
             sqliteDbName += ".db";
 
