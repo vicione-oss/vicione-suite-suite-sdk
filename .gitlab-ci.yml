@@ -1,146 +1,129 @@
-default:
-  image: mcr.microsoft.com/dotnet/sdk:10.0
+## Scripts ###
+.activate_mise: &activate_mise
+  - mise install
+  - eval "$(mise env)"
 
-stages:
-  - build
-  - test
-  - devrelease
-  - release
+.update_nuget_source_ro: &update_nuget_source_ro
+  - dotnet nuget update source JFrogNuGetProxy --configfile NuGet.Config -u $NuGet_User_JFrog -p $NuGet_PW_JFrog --store-password-in-clear-text
+  - dotnet nuget update source JFrogViciOne --configfile NuGet.Config -u $NuGet_User_JFrog -p $NuGet_PW_JFrog --store-password-in-clear-text
 
-include:
-  - project: 'vicione-oss/tooling/templates'
-    file: '/CI-Templates/v2/dotnet.yml'
+.update_nuget_source_rw: &update_nuget_source_rw
+  - dotnet nuget update source JFrogViciOne --configfile NuGet.Config -u $NuGet_User_RW_JFrog -p $NuGet_PW_RW_JFrog --store-password-in-clear-text
 
-#################### Rules
+.rule_tag: &rule_tag
+  if: "$CI_COMMIT_TAG"
 
-.install_nodejs: &install_nodejs
-  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-  - apt update && apt install -y nodejs
+.rule_default_branch: &rule_default_branch
+  if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+
+.rule_mr: &rule_mr
+  if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+.rule_web: &rule_web
+  if: '$CI_PIPELINE_SOURCE == "web"'
+
+.rules: &rules
+  - *rule_tag
+  - *rule_default_branch
+  - *rule_mr
+  - *rule_web
+
+.rules_manual: &rules_manual
+  - <<: *rule_tag
+    when: manual
+    allow_failure: true
+  - <<: *rule_default_branch
+    when: manual
+    allow_failure: true
+  - <<: *rule_mr
+    when: manual
+    allow_failure: true
+  - <<: *rule_web
+    when: manual
+    allow_failure: true
 
 .install_npm_packages: &install_npm_packages
   - npm install
 
-.run_eslint: &run_eslint
-  - npx eslint .
+### Defaults ###
+variables:
+  IMAGE_NAME: registry.gitlab.com/vicione-oss/tooling/base-image:vicione-latest
+  RUNNER_TAG: saas-linux-small-amd64
 
-#################### Global
+stages:
+  - build
+  - test
+  - pack
+  - publish
 
-before_script:
-  - *install_nodejs
-  - *install_npm_packages
-  - *run_eslint
-
-#################### Build stage
-
-Build:
-  extends: .dotnet-build
-
-####################  Test stage
-
-xUnit x64:
-  variables:
-    ARCH: 'x64'
-  extends: .dotnet-test-xunit
-  artifacts:
-    reports:
-      junit: artifacts/tests/*-test-report.xml
-
-xUnit arm64:
-  variables:
-    ARCH: 'arm64'
-  extends: .dotnet-test-xunit
-  artifacts:
-    reports:
-      junit: artifacts/tests/*-test-report.xml
-  tags:
-    - saas-linux-small-arm64
-
-#################### Development stage
-
-Sdk dev release:
-  extends: .dotnet-deploy-nuget
-  stage: devrelease
-  variables:
-    PROJECT: 'src/Sdk/Sdk.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Backend dev release:
-  extends: .dotnet-deploy-nuget
-  stage: devrelease
-  variables:
-    PROJECT: 'src/Sdk.Backend/Sdk.Backend.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Client dev release:
-  extends: .dotnet-deploy-nuget
-  stage: devrelease
-  variables:
-    PROJECT: 'src/Sdk.Client/Sdk.Client.csproj'
-    REPO: 'JFrogViciOne'
-
-Sdk.Deployment dev release:
-  extends: .dotnet-deploy-nuget
-  stage: devrelease
-  variables:
-    PROJECT: 'src/Sdk.Deployment/Sdk.Deployment.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Testing dev release:
-  extends: .dotnet-deploy-nuget
-  stage: devrelease
-  variables:
-    PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
-    REPO: 'JFrogViciOne'
-
-#################### Release stage
-
-Sdk:
-  extends: .dotnet-release-nuget
-  variables:
-    PROJECT: 'src/Sdk/Sdk.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Backend:
-  extends: .dotnet-release-nuget
-  variables:
-    PROJECT: 'src/Sdk.Backend/Sdk.Backend.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Client:
-  extends: .dotnet-release-nuget
-  variables:
-    PROJECT: 'src/Sdk.Client/Sdk.Client.csproj'
-    REPO: 'JFrogViciOne'
-
-Sdk.Deployment:
-  extends: .dotnet-release-nuget
-  variables:
-    PROJECT: 'src/Sdk.Deployment/Sdk.Deployment.csproj'
-    REPO: 'JFrogViciOne'
-  before_script: []
-
-Sdk.Testing:
-  extends: .dotnet-release-nuget
-  variables:
-    PROJECT: 'src/Sdk.Testing/Sdk.Testing.csproj'
-    REPO: 'JFrogViciOne'
-
-#################### GitLab pages
-
-Publish Pages:
-  stage: release
-  pages: true
+Version:
+  stage: .pre
   script:
-    - !reference [.nuget_credentials]
-    - dotnet publish samples/Sdk.Client.Samples.BlazorWebAssemblyStandaloneApp -c Release -o artifacts
-    - mkdir public
-    - cp -R artifacts/wwwroot/* public
-    - echo "Publish Pages on \"$CI_PAGES_URL\""
-  rules:
-    - !reference [.rules_tag_manual]
-    - !reference [.rules_default_branch]
+    - if [[ -f "VERSION" ]]; then VERSION=$(head -n 1 VERSION); fi
+    - if [[ ! -z "${CI_COMMIT_TAG}" ]]; then VERSION=$(echo $CI_COMMIT_TAG | sed 's/v//g'); fi
+    - if [[ -z "${VERSION}" ]]; then VERSION='0.1.0'; fi
+    - if [[ -z "${CI_COMMIT_TAG}" ]]; then VERSION="${VERSION}-ci${CI_PIPELINE_ID}"; fi
+    - 'echo "Version=${VERSION}" >> version.env'
+    - 'echo "PackageVersion=${VERSION}" >> version.env'
+    - cat version.env
+  artifacts:
+    reports:
+      dotenv: version.env
+
+### CI Components ###
+include:
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.1.1
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_ro
+      tags:
+        - ${RUNNER_TAG}
+
+  ### Test & Build
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.1.1
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_ro
+        - *install_npm_packages
+        - 'echo "Version: ${Version:-notAssigned}"'
+      tags:
+        - ${RUNNER_TAG}
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.1.1
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_ro
+        - *install_npm_packages
+      tags:
+        - ${RUNNER_TAG}
+      coverage: true
+
+  ### NuGet Packages
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.1.1
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules_manual
+      before_script:
+        - *activate_mise
+        - 'echo "PackageVersion: ${PackageVersion:-notAssigned}"'
+      tags:
+        - ${RUNNER_TAG}
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.1.1
+    inputs:
+      image: ${IMAGE_NAME}
+      source: "JFrogViciOne"
+      filename_pattern: "./src/*"
+      rules: *rules_manual
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_rw
+      tags:
+        - ${RUNNER_TAG}
