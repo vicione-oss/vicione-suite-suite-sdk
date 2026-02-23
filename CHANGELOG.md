@@ -11,6 +11,7 @@
 ### Fixed
 
 - `NavTileStandardContent`, missing render cycle, which may cause nothing to be displayed on the navigation tile
+- `DbContextResolver` now calls `UseApplicationServiceProvider` to make sure ASP Identity finds its options
 
 ### Changed
 

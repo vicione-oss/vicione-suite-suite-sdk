@@ -35,9 +35,9 @@ public class TestModuleDbContext(DbContextOptions options, List<SimpleDataTypes>
             .HasConversion<string>();
 
         modelBuilder.Entity<SimpleDataTypes>()
-            .Property(e => e.Built).HasColumnType("DATE");
+            .Property(e => e.Built).HasColumnType("TEXT");
         modelBuilder.Entity<SimpleDataTypes>()
-            .Property(e => e.Created).HasColumnType("DATE");
+            .Property(e => e.Created).HasColumnType("TEXT");
 
         modelBuilder.Entity<SimpleDataTypes>()
             .HasData(_seedDataSimpleDataTypes!);
