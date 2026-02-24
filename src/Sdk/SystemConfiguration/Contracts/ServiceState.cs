@@ -1,4 +1,4 @@
-﻿namespace Sdk.SystemConfiguration.Contracts.Service;
+﻿namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
 /// Represents the state of a Linux service.

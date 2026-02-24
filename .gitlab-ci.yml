@@ -58,6 +58,7 @@ stages:
 
 Version:
   stage: .pre
+  rules: *rules
   script:
     - if [[ -f "VERSION" ]]; then VERSION=$(head -n 1 VERSION); fi
     - if [[ ! -z "${CI_COMMIT_TAG}" ]]; then VERSION=$(echo $CI_COMMIT_TAG | sed 's/v//g'); fi

@@ -1,5 +1,5 @@
 ﻿using Sdk.Messaging;
-using Sdk.SystemConfiguration.Contracts.Service;
+using Sdk.SystemConfiguration.Contracts;
 
 namespace Sdk.SystemConfiguration;
 

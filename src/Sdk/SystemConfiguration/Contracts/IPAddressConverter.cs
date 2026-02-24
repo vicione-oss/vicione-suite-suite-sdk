@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Sdk.SystemConfiguration.Contracts.Network;
+namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
 /// Represents an <see cref="IPAddressConverter"/>.

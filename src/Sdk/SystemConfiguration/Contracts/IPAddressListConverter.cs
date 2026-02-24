@@ -2,15 +2,15 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Sdk.SystemConfiguration.Contracts.Network;
+namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
 /// Represents an <see cref="IPAddressListConverter"/>.
 /// </summary>
-public class IPAddressListConverter : JsonConverter<List<IPAddress>>
+public class IPAddressListConverter : JsonConverter<IReadOnlyList<IPAddress>>
 {
     /// <inheritdoc/>
-    public override List<IPAddress> Read(
+    public override IReadOnlyList<IPAddress> Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
         JsonSerializerOptions options)
@@ -40,7 +40,7 @@ public class IPAddressListConverter : JsonConverter<List<IPAddress>>
     /// <inheritdoc/>
     public override void Write(
         Utf8JsonWriter writer,
-        List<IPAddress> value,
+        IReadOnlyList<IPAddress> value,
         JsonSerializerOptions options)
     {
         writer.WriteStartArray();
