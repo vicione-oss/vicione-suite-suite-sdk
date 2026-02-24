@@ -15,6 +15,20 @@
 
 ### Changed
 
+- *Breaking* Redesigned `Sdk.SystemConfiguration.Contracts` for a read-only, module-friendly API
+  - Flattened namespace: all contract types are now in `Sdk.SystemConfiguration.Contracts` (removed `.Network`, `.Service`, `.Extensions` sub-namespaces)
+  - All properties are now `init`-only; all collections are `IReadOnlyList<T>`
+  - `SystemConfiguration`: replaced `NetworkInterfacesSettings`, `NetworkDNSSettings`, `NetworkProxySettings`, `NetworkNTPSettings` with `NetworkInterfaces`, `Dns`, `Proxy`, `Ntp`; replaced `List<ServiceDetail> Services` with `IReadOnlyList<ServiceInfo> Services`
+  - `NetworkInterface` (new): flattened from `NetworkInterfaceDetail`, `NetworkInterfaceCommonInformation`, and `IPv4Settings`. `IpAddress`, `Netmask`, and `Gateway` always reflect the currently effective values (static or DHCP-assigned). `DhcpLease` (`DhcpLeaseInfo?`) is non-null when DHCP is active. `Vlan` (`VlanInfo?`) is non-null when VLAN is active. Additional IPs are in `AdditionalAddresses`.
+  - `DnsSettings` (new, replaces `NetworkDNSSettings`): removed `StaticHostsEnabled`, `NameServersEnabled`, `DNSSuffixEnabled`, `SearchDomainsEnabled` flags — collections/values are only populated when the feature is enabled
+  - `ProxySettings` (new, replaces `NetworkProxySettings`): each proxy is `ProxyInfo?` — `null` means disabled; removed `DoNotProxyListEnabled` flag
+  - `ProxyInfo` (new, replaces `NetworkProxyDetail`): `Server` and `Port` are required; no `Enabled` flag — presence indicates enabled
+  - `NtpSettings` (new, replaces `NetworkNTPSettings`): renamed `NTPServers` to `Servers`; removed `NTPServersEnabled` flag; added `FallbackServers`
+  - `ServiceInfo` (new, replaces `ServiceDetail`)
+  - `StaticHost` (new, replaces `StaticHostDetail`)
+  - `IpAddressInfo` (new, replaces `IPv4Detail`)
+  - `DhcpLeaseInfo` (new, replaces `DHCPLease`): simplified to only contain lease timestamps; IP/Gateway moved to `NetworkInterface`
+  - `VlanInfo` (new): contains only `Id`
 - Improve async disposal and error handling in `NavTileStandardContent`
 - *Breaking* `IJsInterop.IncludeModuleScript` now requires a `Uri` parameter instead of string path for better type safety
 - *Breaking* Overhauled `ModuleAssetHelper` which now provides `Uri` for module assets instead of string paths
@@ -25,6 +39,9 @@
 ### Removed
 
 - *Breaking* Removed extension method `AppendFormattedLine` for `StringBuilder` class, as it can be easily replaced
+- *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Network` namespace and all types within (`NetworkInterfacesSettings`, `NetworkInterfaceDetail`, `NetworkInterfaceCommonInformation`, `IPv4Settings`, `IPv4Detail`, `DHCPLease`, `NetworkDNSSettings`, `NetworkNTPSettings`, `NetworkProxySettings`, `NetworkProxyDetail`, `StaticHostDetail`) — replaced by flattened types in `Sdk.SystemConfiguration.Contracts`
+- *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Service` namespace (`ServiceDetail` replaced by `ServiceInfo`)
+- *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Extensions` namespace (`IEnumerableExtensions`)
 
 ### Updated
 

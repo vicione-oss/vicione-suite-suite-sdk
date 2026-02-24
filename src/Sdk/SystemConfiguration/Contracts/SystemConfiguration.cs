@@ -1,68 +1,44 @@
 ﻿using System.Text.Json.Serialization;
-using Sdk.SystemConfiguration.Contracts.Extensions;
-using Sdk.SystemConfiguration.Contracts.Network;
-using Sdk.SystemConfiguration.Contracts.Service;
 
 namespace Sdk.SystemConfiguration.Contracts;
 
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable VO2001 // Members are not grouped by type, then sorted in predefined order
-
 /// <summary>
-/// Represents the <see cref="SystemConfiguration"/> of the target system.
+/// Represents the read-only system configuration of the target system.
 /// </summary>
-[method: JsonConstructor]
-public class SystemConfiguration(List<ServiceDetail>? services = null)
+/// <remarks>
+/// This configuration is provided by the HostManagement system and mapped to this
+/// simplified, module-friendly representation. All properties are init-only.
+/// </remarks>
+public sealed record SystemConfiguration
 {
     /// <summary>
-    /// The version of the system configuration.
+    /// The version of the system configuration schema.
     /// </summary>
     [JsonRequired]
     public int Version { get; init; } = 1;
 
     /// <summary>
-    /// The <see cref="NetworkInterfacesSettings"/>.
+    /// The list of network interfaces.
     /// </summary>
-    public NetworkInterfacesSettings NetworkInterfacesSettings { get; set; } = new();
+    public IReadOnlyList<NetworkInterface> NetworkInterfaces { get; init; } = [];
 
     /// <summary>
-    /// The <see cref="NetworkDNSSettings"/>.
+    /// The DNS settings.
     /// </summary>
-    public NetworkDNSSettings NetworkDNSSettings { get; set; } = new();
+    public DnsSettings Dns { get; init; } = new();
 
     /// <summary>
-    /// The <see cref="NetworkProxySettings"/>.
+    /// The proxy settings.
     /// </summary>
-    public NetworkProxySettings NetworkProxySettings { get; set; } = new();
+    public ProxySettings Proxy { get; init; } = new();
 
     /// <summary>
-    /// The <see cref="NetworkNTPSettings"/>.
+    /// The NTP settings.
     /// </summary>
-    public NetworkNTPSettings NetworkNTPSettings { get; set; } = new();
+    public NtpSettings Ntp { get; init; } = new();
 
     /// <summary>
     /// The list of managed services.
     /// </summary>
-    public List<ServiceDetail> Services { get; init; } = services ?? [];
-
-    /// <inheritdoc/>
-    public override int GetHashCode() =>
-        HashCode.Combine(
-            NetworkInterfacesSettings,
-            NetworkDNSSettings,
-            NetworkProxySettings,
-            NetworkNTPSettings,
-            Services.OrderBy(x => x.Name).GetSequenceHashCode());
-
-    /// <inheritdoc/>
-    public bool Equals(SystemConfiguration? other) =>
-        other is not null &&
-        NetworkInterfacesSettings.Equals(other.NetworkInterfacesSettings) &&
-        NetworkDNSSettings.Equals(other.NetworkDNSSettings) &&
-        NetworkProxySettings.Equals(other.NetworkProxySettings) &&
-        NetworkNTPSettings.Equals(other.NetworkNTPSettings) &&
-        Services.OrderBy(x => x.Name).SequenceEqual(other.Services.OrderBy(x => x.Name));
+    public IReadOnlyList<ServiceInfo> Services { get; init; } = [];
 }
-
-#pragma warning restore VO2001 // Members are not grouped by type, then sorted in predefined order
-#pragma warning restore IDE0079 // Remove unnecessary suppression

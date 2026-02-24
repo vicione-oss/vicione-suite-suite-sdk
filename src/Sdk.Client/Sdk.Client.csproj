@@ -79,6 +79,17 @@
     <Content Update="tsconfig.json" CopyToPublishDirectory="Never" Pack="False" />
   </ItemGroup>
 
+  <!--
+    Exclude generated JavaScript files in wwwroot/js/ from being packed as Content items.
+    These are produced by the TypeScript compilation targets and already included as static web assets.
+    Without this exclusion, 'dotnet pack -no-build' includes them as both contentFiles and staticwebassets
+    in the NuGet package, causing a duplicate key error (ArgumentException) in consuming projects when
+    GenerateStaticWebAssetEndpointsManifest resolves them from both sources.
+  -->
+  <ItemGroup>
+    <Content Remove="wwwroot\js\**\*.js" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Components\Cards\Localization\Card.Designer.cs">
       <DesignTime>True</DesignTime>
