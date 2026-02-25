@@ -36,10 +36,10 @@ public interface IClusterInformationProvider
     /// <summary>
     /// Retrieves the current health status of a specific instance in the cluster.
     /// </summary>
-    Task<HealthStatus?> GetHealthStatus(Guid instanceId);
+    Task<HealthStatus?> GetHealthStatus(Guid instanceId, CancellationToken token = default);
 
     /// <summary>
     /// Checks whether the cluster as a whole is considered healthy.
     /// </summary>
-    Task<bool> IsClusterHealthy();
+    Task<bool> IsClusterHealthy(CancellationToken token = default);
 }

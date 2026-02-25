@@ -32,6 +32,5 @@ public interface IModuleInitializer
     /// Override or implement this method to perform any final startup logic
     /// that should occur once migrations and configuration have finished.
     /// </summary>
-    Task OnInitialized(IServiceProvider scopedServices, CancellationToken stoppingToken = default)
-        => Task.CompletedTask;
+    Task OnInitialized(IServiceProvider scopedServices, CancellationToken stoppingToken = default);
 }
