@@ -16,7 +16,7 @@ public interface IInstanceInformationProvider
     /// <summary>
     /// Retrieves metadata about all modules installed on the local instance.
     /// </summary>
-    Task<IReadOnlyCollection<ModuleMetadata>> GetInstalledModules();
+    Task<IReadOnlyCollection<ModuleMetadata>> GetInstalledModules(CancellationToken token = default);
 
     /// <summary>
     /// Retrieves information about all instances currently registered in the same cluster.

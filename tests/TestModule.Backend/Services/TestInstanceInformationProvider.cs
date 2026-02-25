@@ -17,7 +17,7 @@ internal sealed class TestInstanceInformationProvider : IInstanceInformationProv
 
     public event Func<Guid, HealthStatus, DateTimeOffset, Task>? HealthStatusChanged;
 
-    public Task<IReadOnlyCollection<ModuleMetadata>> GetInstalledModules()
+    public Task<IReadOnlyCollection<ModuleMetadata>> GetInstalledModules(CancellationToken cancellationToken = default)
     {
         var sdkAssembly = Assembly.GetAssembly(typeof(IInstanceInformationProvider));
         var sdkName = sdkAssembly!.GetName() ?? throw new InvalidOperationException("Failed to retrieve sdk assembly");
