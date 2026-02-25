@@ -58,6 +58,11 @@
     <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- Reduce time required to build and also to publish to GitLab pages -->
+  <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples'))">    
+    <CompressionEnabled>false</CompressionEnabled>
+  </PropertyGroup>
+
   <!-- Add Test.SDK/XUnit package references to test projects -->
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
     <ProjectReference Include="..\..\src\Sdk.Testing\Sdk.Testing.csproj" />
