@@ -128,3 +128,19 @@ include:
         - *update_nuget_source_rw
       tags:
         - ${RUNNER_TAG}
+
+### GitLab Pages
+Publish Pages:
+  stage: publish
+  image: ${IMAGE_NAME}
+  pages: true
+  before_script:
+    - *activate_mise
+    - *update_nuget_source_ro
+    - *install_npm_packages
+  script:
+    - dotnet publish samples/Sdk.Client.Samples.BlazorWebAssemblyStandaloneApp -c Release -o artifacts
+    - mkdir public
+    - cp -R artifacts/wwwroot/* public
+    - echo "Publish Pages on \"$CI_PAGES_URL\""
+  rules: *rules_manual
