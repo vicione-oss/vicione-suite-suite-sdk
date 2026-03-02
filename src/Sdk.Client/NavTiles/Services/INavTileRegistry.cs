@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Sdk.Client.Interfaces;
 using Sdk.Client.Modules;
 using Sdk.Client.NavTiles.Components;
 using Sdk.Client.NavTiles.Enums;
@@ -8,7 +9,7 @@ namespace Sdk.Client.NavTiles.Services;
 /// <summary>
 /// Registry for navigation tiles
 /// </summary>
-public interface INavTileRegistry<out TClientModule> : IEnumerable<INavTileRegistryItem>
+public interface INavTileRegistry<out TClientModule> : IEnumerable<INavTileRegistryItem>, IHasUpdateLock
     where TClientModule : IClientModule
 {
     /// <summary>
