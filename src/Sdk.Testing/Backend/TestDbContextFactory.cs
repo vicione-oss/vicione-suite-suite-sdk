@@ -38,18 +38,20 @@ public static class TestDbContextFactory
     /// <summary>
     /// Creates a SQLite DbContext for testing using an existing <see cref="SqliteConnection"/>.
     /// </summary>
-    public static TDbContext CreateSqliteContext<TDbContext>(SqliteConnection connection, bool init = true)
+    public static TDbContext CreateSqliteContext<TDbContext>(SqliteConnection connection, bool init = true,
+        Action<DbContextOptionsBuilder>? optionsAction = null)
         where TDbContext : DbContext
     {
-        var options = new DbContextOptionsBuilder<TDbContext>()
+        var optionsBuilder = new DbContextOptionsBuilder<TDbContext>()
             .UseSqlite(connection)
 #if DEBUG            
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()
 #endif            
-            .Options;
+            ;
+        optionsAction?.Invoke(optionsBuilder);
 
-        var moduleDbContext = Activator.CreateInstance(typeof(TDbContext), options) as TDbContext
+        var moduleDbContext = Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options) as TDbContext
             ?? throw new InvalidOperationException($"Failed to create {typeof(TDbContext).Name}");
 
         if (init)
