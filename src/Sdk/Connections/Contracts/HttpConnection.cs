@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents the specific configuration for an HTTP/HTTPS connection.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class HttpConnection : IConnection
 {
     /// <summary>

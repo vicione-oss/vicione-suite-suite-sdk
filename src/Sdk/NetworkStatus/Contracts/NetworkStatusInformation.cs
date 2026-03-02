@@ -5,6 +5,7 @@ namespace Sdk.NetworkStatus.Contracts;
 /// <summary>
 /// Represents the <see cref="NetworkStatusInformation"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record NetworkStatusInformation
 {
     /// <summary>

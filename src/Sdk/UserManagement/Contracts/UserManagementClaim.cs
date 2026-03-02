@@ -8,6 +8,7 @@ namespace Sdk.UserManagement.Contracts;
 /// <remarks>
 /// This type was introduced because <see cref="Claim"/> is not serializable (required by MassTransit).
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public readonly record struct UserManagementClaim
 {
     /// <inheritdoc cref="Claim.Type"/>

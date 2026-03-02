@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a unique key for identifying a module.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public readonly record struct ModuleKey
 {
     /// <summary>

@@ -1,5 +1,4 @@
-﻿using NSubstitute;
-using Sdk.Instance;
+﻿using Sdk.Instance;
 
 namespace Sdk.Testing.Backend;
 

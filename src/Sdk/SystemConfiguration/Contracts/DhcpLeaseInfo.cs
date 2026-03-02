@@ -6,6 +6,7 @@
 /// <remarks>
 /// The presence of this object on a <see cref="NetworkInterface"/> indicates that DHCP is active.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record DhcpLeaseInfo
 {
     /// <summary>

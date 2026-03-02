@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents the configuration for a connection to an MQTT broker.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record MqttConnection : IConnection
 {
     /// <summary>

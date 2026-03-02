@@ -5,6 +5,7 @@ namespace Sdk.Authorization;
 /// <summary>
 /// Represents an authorization requirement that checks if a user has at least a minimum access level for a specific module or feature.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class AccessLevelAuthorizationRequirement(string moduleId, AccessLevel minimumAccessLevel) : IAuthorizationRequirement
 {
 

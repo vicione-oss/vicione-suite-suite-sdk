@@ -6,6 +6,7 @@ namespace Sdk.Connections.Commands;
 /// <summary>
 /// Represents a command to create a new connection or update an existing one.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record UpsertConnection(Connection Connection) : ICommand
 {
     /// <inheritdoc cref="ICommand.CorrelationId" />

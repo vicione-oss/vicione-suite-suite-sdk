@@ -3,6 +3,7 @@ using Xunit;
 
 namespace Sdk.Testing.Backend;
 
+[ExcludeFromCodeCoverage]
 internal sealed class TestOutputHelperTextWriterAdapter(ITestOutputHelper output) : TextWriter
 {
     private readonly AsyncLocal<string> _currentLine = new();

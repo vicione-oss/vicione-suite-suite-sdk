@@ -21,6 +21,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// When VLAN is not active, <see cref="Vlan"/> is <see langword="null"/>.
 /// </para>
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record NetworkInterface
 {
     /// <summary>

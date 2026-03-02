@@ -5,6 +5,7 @@ namespace Sdk.Authorization;
 /// <summary>
 /// Represents the value of a module authorization claim.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record ModuleAuthorizationClaimValue
 {
     /// <summary>

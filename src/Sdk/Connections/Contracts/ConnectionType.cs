@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a type of connection in a strongly-typed, extensible manner.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class ConnectionType(string name) : IEquatable<ConnectionType>
 {
     /// <summary>

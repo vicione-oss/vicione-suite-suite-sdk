@@ -1,4 +1,4 @@
-﻿using Sdk.Authorization;
+using Sdk.Authorization;
 using Sdk.Client.ControlPanels.Services;
 
 namespace Sdk.Client.ControlPanels.Models;
@@ -7,6 +7,7 @@ namespace Sdk.Client.ControlPanels.Models;
 /// Holds information required to register services related to a control panel in DI container and
 /// to orchestrate calls to <see cref="IControlPanelRegistry{TClientModule}.Add{TComponent, TState}(IControlPanelDescriptor, TState, IControlPanelCategoryDescriptor, IControlPanelGroupDescriptor?, Microsoft.AspNetCore.Authorization.IAuthorizationRequirement?)"/>
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal sealed class ControlPanelInfo
 {
     public required Type ComponentType { get; init; }

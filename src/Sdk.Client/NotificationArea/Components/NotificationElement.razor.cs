@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.NotificationArea.Services;
+﻿using Sdk.Client.NotificationArea.Services;
 using ViciOne.CodeAnalysis.MustCallBase.Attributes;
 
 namespace Sdk.Client.NotificationArea.Components;

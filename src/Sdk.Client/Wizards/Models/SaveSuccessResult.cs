@@ -1,7 +1,8 @@
-﻿namespace Sdk.Client.Wizards.Models;
+namespace Sdk.Client.Wizards.Models;
 
 /// <inheritdoc cref="ISaveResult"/>
 /// <param name="message">Success message</param>
+[ExcludeFromCodeCoverage]
 public class SaveSuccessResult(string? message = null) : ISaveResult
 {
     /// <summary>

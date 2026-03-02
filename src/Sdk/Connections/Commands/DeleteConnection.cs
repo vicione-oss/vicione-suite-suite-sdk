@@ -5,6 +5,7 @@ namespace Sdk.Connections.Commands;
 /// <summary>
 /// Represents a command to delete an existing connection.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record DeleteConnection(Guid ConnectionId) : ICommand
 {
     /// <inheritdoc cref="ICommand.CorrelationId" />

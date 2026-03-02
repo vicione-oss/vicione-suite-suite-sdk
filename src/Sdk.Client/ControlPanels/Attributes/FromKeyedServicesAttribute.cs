@@ -1,4 +1,3 @@
-﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Sdk.Client.ControlPanels.Components;
 
@@ -8,6 +7,7 @@ namespace Sdk.Client.ControlPanels.Attributes;
 /// Indicates that the parameter should be bound using the keyed service registered with the <see cref="ControlPanelServiceKey{TControlPanel}"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
+[ExcludeFromCodeCoverage]
 public sealed class FromKeyedServicesAttribute<TControlPanel> : FromKeyedServicesAttribute
     where TControlPanel : ComponentBase, IControlPanel
 {

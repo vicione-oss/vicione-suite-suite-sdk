@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.NotificationArea.Components.Layout;
+﻿namespace Sdk.Client.NotificationArea.Components.Layout;
 
 /// <summary>
 /// Provides a standard layout structure for the content of a notification element's flyout.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed partial class NotificationElementFlyoutContentLayout : ComponentBase
 {
     /// <summary>

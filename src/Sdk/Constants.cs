@@ -3,6 +3,7 @@
 /// <summary>
 /// Global SDK-wide constants for configuration sections, service keys, and predefined identifiers.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class Constants
 {
     /// <summary>

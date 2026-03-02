@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents information about a managed system service.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record ServiceInfo
 {
     /// <summary>

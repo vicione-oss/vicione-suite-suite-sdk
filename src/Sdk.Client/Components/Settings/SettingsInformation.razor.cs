@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.Settings;
+﻿namespace Sdk.Client.Components.Settings;
 
 /// <summary>
 /// A component that renders a block of informational content within a settings UI.

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
 
 namespace Sdk.Client.Components.Settings;
 

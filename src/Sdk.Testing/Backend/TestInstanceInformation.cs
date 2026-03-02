@@ -5,6 +5,7 @@ namespace Sdk.Testing.Backend;
 /// <summary>
 /// A test implementation of the <see cref="IInstanceInformation"/> interface.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TestInstanceInformation : IInstanceInformation
 {
     /// <inheritdoc/>

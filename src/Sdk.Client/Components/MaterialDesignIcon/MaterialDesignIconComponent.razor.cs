@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Enums;
+﻿using Sdk.Client.Enums;
 
 namespace Sdk.Client.Components.MaterialDesignIcon;
 

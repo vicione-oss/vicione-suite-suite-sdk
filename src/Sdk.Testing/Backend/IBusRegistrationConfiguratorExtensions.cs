@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
 using Sdk.Backend.Messaging;
 using Sdk.Testing.Factories;
 

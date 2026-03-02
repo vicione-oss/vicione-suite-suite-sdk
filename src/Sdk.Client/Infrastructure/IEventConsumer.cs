@@ -16,4 +16,5 @@ public interface IEventConsumer<T> where T : class, IEvent
 /// <summary>
 /// Encapsulates an event message and its associated metadata for consumption by a <see cref="IEventConsumer{T}"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public record ClientContext<T>(T Message, Guid? CorrelationId) where T : class;

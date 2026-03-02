@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Sdk.Connections.Contracts;
+﻿using Sdk.Connections.Contracts;
 
 namespace Sdk.Connections;
 
@@ -7,6 +6,7 @@ namespace Sdk.Connections;
 /// Provides constants for connection management including predefined tags and metadata keys.
 /// </summary>
 [SuppressMessage("Design", "CA1034:Nested types should not be visible")]
+[ExcludeFromCodeCoverage]
 public static class ConnectionConstants
 {
     /// <summary>

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Sdk.Connections.Contracts;
+﻿namespace Sdk.Connections.Contracts;
 
 /// <summary>
 /// A registry for managing different types of connections, their serializers, and tests.

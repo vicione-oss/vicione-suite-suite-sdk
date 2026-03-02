@@ -1,9 +1,12 @@
-﻿namespace Sdk.Backend.Persistence;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Sdk.Backend.Persistence;
 
 /// <summary>
 /// Provides configuration options for resolving a database context (<typeparamref name="TContextType"/>)
 /// associated with a specific module, including its type, database name, and synchronization behavior.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class DbContextResolverOptions<TContextType>(Type moduleType, string dbName, bool enableSynchronization = true)
     where TContextType : IModuleDbContext
 {

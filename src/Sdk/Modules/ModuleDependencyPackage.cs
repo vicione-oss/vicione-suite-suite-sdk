@@ -5,8 +5,9 @@ namespace Sdk.Modules;
 /// <summary>
 /// Represents a package dependency for a module, including its name, version, and transitive dependencies.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Object will be serialized")]
+[SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Object will be serialized")]
 [DebuggerDisplay("Name = {Name,nq}, Version = {Version,nq}")]
+[ExcludeFromCodeCoverage]
 public class ModuleDependencyPackage
 {
     /// <summary>

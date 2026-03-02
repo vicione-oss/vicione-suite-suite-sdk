@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 
 namespace TestModule.Backend.Consumer;

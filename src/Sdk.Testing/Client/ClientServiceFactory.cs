@@ -6,6 +6,7 @@ namespace Sdk.Testing.Client;
 /// <summary>
 /// A factory class for creating test-specific client services.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class ClientServiceFactory
 {
     /// <summary>

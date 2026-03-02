@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using MassTransit.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Sdk.Messaging;
 using Xunit;
 

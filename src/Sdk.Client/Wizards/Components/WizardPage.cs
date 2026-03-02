@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Wizards.Services;
+﻿using Sdk.Client.Wizards.Services;
 using ViciOne.CodeAnalysis.MustCallBase.Attributes;
 
 namespace Sdk.Client.Wizards.Components;

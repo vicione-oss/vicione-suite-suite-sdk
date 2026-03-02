@@ -1,10 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace Sdk.Client.NotificationArea.Services;
 
 /// <summary>
 /// Provides a default implementation of <see cref="INotificationElementState"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NotificationElementState : INotificationElementState
 {
     private readonly Lock _concurrentLock = new();

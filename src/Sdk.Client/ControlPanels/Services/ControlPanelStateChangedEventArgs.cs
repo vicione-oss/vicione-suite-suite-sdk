@@ -1,8 +1,9 @@
-﻿namespace Sdk.Client.ControlPanels.Services;
+namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
 /// Provides data for the event that is raised when a property of a control panel's state has changed.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class ControlPanelStateChangedEventArgs(IControlPanelState sender, IEnumerable<string> propertyNames) : EventArgs
 {
     /// <summary>

@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a connection with associated metadata, tags, and configuration details.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class Connection
 {
     /// <summary>

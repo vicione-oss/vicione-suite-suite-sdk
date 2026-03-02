@@ -14,5 +14,6 @@ public interface IClientModuleLocalizer<out TClientModule>
     /// <summary>
     /// Gets the optional localized description of the module.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     string? GetDescription() => null;
 }

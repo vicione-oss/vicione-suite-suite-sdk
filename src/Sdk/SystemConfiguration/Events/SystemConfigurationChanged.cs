@@ -7,4 +7,5 @@ namespace Sdk.SystemConfiguration.Events;
 /// Represents an event that is published when the system configuration has changed.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public record SystemConfigurationChanged(Guid CorrelationId) : IEvent, CorrelatedBy<Guid>;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.ControlPanels.Components;
+﻿namespace Sdk.Client.ControlPanels.Components;
 
 /// <summary>
 /// Represents a single, navigable page within a control panel.

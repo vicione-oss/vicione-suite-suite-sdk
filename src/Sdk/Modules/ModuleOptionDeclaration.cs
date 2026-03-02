@@ -7,6 +7,7 @@ namespace Sdk.Modules;
 /// including its key, current and default values, and metadata such as whether it is required or sensitive.
 /// </summary>
 [DebuggerDisplay("Option = {Key,nq}, Type = {OptionType,nq}, Default = {DefaultValue}")]
+[ExcludeFromCodeCoverage]
 public class ModuleOptionDeclaration
 {
     /// <summary>

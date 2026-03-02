@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using Sdk.Client.Models;
 using Sdk.Client.Wizards.Models;
 
@@ -7,6 +7,7 @@ namespace Sdk.Client.Wizards.Services;
 /// <summary>
 /// Provides a default implementation of <see cref="IWizardPageState"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class WizardPageState : IWizardPageState
 {
     private readonly Lock _concurrentLock = new();

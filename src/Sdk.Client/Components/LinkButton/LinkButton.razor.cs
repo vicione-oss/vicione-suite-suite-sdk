@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using ViciOne.Ui.MonochromeIcons.Core.Enums;
+﻿using ViciOne.Ui.MonochromeIcons.Core.Enums;
 
 namespace Sdk.Client.Components.LinkButton;
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.NavTiles.Components;
+﻿namespace Sdk.Client.NavTiles.Components;
 
 /// <summary>
 /// A marker interface to make navigation tile component types discoverable.

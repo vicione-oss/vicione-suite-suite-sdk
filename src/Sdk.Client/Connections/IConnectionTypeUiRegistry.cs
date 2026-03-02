@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Sdk.Connections.Contracts;
+﻿using Sdk.Connections.Contracts;
 
 namespace Sdk.Client.Connections;
 

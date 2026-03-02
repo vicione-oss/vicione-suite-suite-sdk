@@ -16,6 +16,7 @@ public interface IControlPanelCategoryDescriptor
     /// <remarks>
     /// This property has priority over <see cref="IconUrl"/>.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     string? IconCssClass => null;
 
     /// <summary>
@@ -24,6 +25,7 @@ public interface IControlPanelCategoryDescriptor
     /// <remarks>
     /// This property has lower priority than <see cref="IconCssClass"/>.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     Uri? IconUrl => null;
 
     /// <summary>
@@ -36,5 +38,6 @@ public interface IControlPanelCategoryDescriptor
     ///
     /// If not set then the category is rendered after all categories having a position in alphabetic order using <see cref="Title"/>.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     int? Position => null;
 }

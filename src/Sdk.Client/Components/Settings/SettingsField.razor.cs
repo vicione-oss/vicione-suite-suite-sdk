@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.Settings;
+﻿namespace Sdk.Client.Components.Settings;
 
 /// <summary>
 /// A component that provides a consistent layout for a single field within a settings UI.

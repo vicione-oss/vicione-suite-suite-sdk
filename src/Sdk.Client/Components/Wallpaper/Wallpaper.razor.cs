@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Components.Wallpaper.Enums;
+﻿using Sdk.Client.Components.Wallpaper.Enums;
 
 namespace Sdk.Client.Components.Wallpaper;
 
 /// <summary>
 /// Positions itself in a container absolutely and renders the specified image
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed partial class Wallpaper : ComponentBase
 {
     private readonly Uri _defaultBaseUri = new("./_content/ViciOne.Suite.Sdk.Client/wallpapers", UriKind.Relative);

@@ -6,6 +6,7 @@ namespace Sdk.SystemConfiguration;
 /// <summary>
 /// Represents the result of a service control management operation.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public record ControlServiceManagementResult(string ServiceName, ServiceState State, ErrorInfo? Error = null)
 {
     /// <summary>

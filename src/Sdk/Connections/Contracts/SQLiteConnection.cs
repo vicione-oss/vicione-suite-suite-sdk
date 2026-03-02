@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a contract for a SQLite-specific connection configuration data.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class SQLiteConnection : IConnection
 {
     /// <summary>

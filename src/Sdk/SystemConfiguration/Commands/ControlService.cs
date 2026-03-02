@@ -1,10 +1,11 @@
 ﻿using Sdk.Messaging;
 
-namespace Sdk.SystemConfiguration;
+namespace Sdk.SystemConfiguration.Commands;
 
 /// <summary>
 /// Represents a command to control a system service.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public record ControlService(string ServiceName, ServiceCommand Command) : IInstanceDependentCommand
 {
     /// <summary>

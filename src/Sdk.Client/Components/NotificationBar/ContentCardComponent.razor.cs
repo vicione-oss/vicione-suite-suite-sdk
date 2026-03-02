@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.NotificationBar;
+﻿namespace Sdk.Client.Components.NotificationBar;
 
 /// <summary>
 /// A component that displays content in a card format, typically used within a notification bar.

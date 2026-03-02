@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using ViciOne.Ui.Blazor.Components.Button;
+﻿using ViciOne.Ui.Blazor.Components.Button;
 
 namespace Sdk.Client.Components.Settings;
 

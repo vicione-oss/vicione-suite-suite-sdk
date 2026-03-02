@@ -8,4 +8,5 @@ namespace Sdk.UserManagement.Events;
 /// Represents an event that is published when a user role has been successfully deleted.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public sealed record RoleDeletedEvent(Guid CorrelationId, Role Role) : IEvent, CorrelatedBy<Guid>;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.Settings;
+﻿namespace Sdk.Client.Components.Settings;
 
 /// <summary>
 /// A reusable component that renders plus and minus buttons, commonly used for implementing stepper controls.

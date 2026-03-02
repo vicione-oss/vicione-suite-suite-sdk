@@ -3,6 +3,7 @@
 /// <summary>
 /// Arguments for event <see cref="IRegistry{T}.Changed"/>
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class RegistryChangedEventArgs<T> : EventArgs
 {
     /// <summary>

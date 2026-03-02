@@ -1,4 +1,4 @@
-﻿namespace Sdk.Client.NavTiles.Enums;
+namespace Sdk.Client.NavTiles.Enums;
 
 /// <summary>
 /// Specifies the horizontal span or width of a navigation tile.

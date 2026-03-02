@@ -12,10 +12,10 @@ namespace Sdk.Client.Tests.NotificationArea;
 public sealed class NotificationElementTests
 {
     [Fact]
-    public void Should_render_component()
+    public async Task Should_render_component()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -26,10 +26,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_have_button()
+    public async Task Should_have_button()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -41,10 +41,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_render_title_as_button_tooltip()
+    public async Task Should_render_title_as_button_tooltip()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -56,10 +56,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_render_as_active()
+    public async Task Should_render_as_active()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act
@@ -70,10 +70,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_render_icon()
+    public async Task Should_render_icon()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -86,10 +86,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_render_badge()
+    public async Task Should_render_badge()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -102,10 +102,10 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_render_flyout()
+    public async Task Should_render_flyout()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -118,17 +118,17 @@ public sealed class NotificationElementTests
     }
 
     [Fact]
-    public void Should_be_active_after_click()
+    public async Task Should_be_active_after_click()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
         var renderedComponent = ctx.Render<TestNotificationElement>(p => p.Add(c => c.State, state));
 
         var button = renderedComponent.Find("button");
-        button.Click();
+        await button.ClickAsync();
 
         renderedComponent.Render();
 

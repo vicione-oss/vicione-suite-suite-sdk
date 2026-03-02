@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Bunit;
-using Microsoft.Extensions.DependencyInjection;
 using Sdk.Client.Infrastructure;
 
 namespace Sdk.Testing.Client;

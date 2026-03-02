@@ -3,7 +3,8 @@
 /// <summary>
 /// Represents the manifest for a module package, containing metadata and a list of dependencies.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Object will be serialized")]
+[SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Object will be serialized")]
+[ExcludeFromCodeCoverage]
 public class ModulePackageManifest
 {
     /// <summary>

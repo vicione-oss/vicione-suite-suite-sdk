@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a contract for a Postgres-specific connection configuration data.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class PostgresConnection : IConnection
 {
     /// <summary>

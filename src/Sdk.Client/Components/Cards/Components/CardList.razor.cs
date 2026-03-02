@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.Cards.Components;
+﻿namespace Sdk.Client.Components.Cards.Components;
 
 /// <summary>
 /// A component that provides a layout container for a list of cards.

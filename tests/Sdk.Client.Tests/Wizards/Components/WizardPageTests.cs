@@ -11,10 +11,10 @@ namespace Sdk.Client.Tests.Wizards.Components;
 public sealed class WizardPageTests
 {
     [Fact]
-    public void Should_render()
+    public async Task Should_render()
     {
         // Arrange
-        using var testContext = new BunitContext();
+        await using var testContext = new BunitContext();
 
         var state = new WizardPageState();
 
@@ -72,10 +72,10 @@ public sealed class WizardPageTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Should_raise_on_after_render_cycle(bool firstRender)
+    public async Task Should_raise_on_after_render_cycle(bool firstRender)
     {
         // Arrange
-        using var testContext = new BunitContext();
+        await using var testContext = new BunitContext();
 
         var state = new WizardPageState();
         var eventCallbackReceiver = Substitute.For<IWizardPageEventCallbackReceiver>();
