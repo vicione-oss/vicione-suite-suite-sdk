@@ -7,6 +7,7 @@ namespace Sdk.Modules;
 /// descriptive information, dependencies, and supported capabilities.
 /// </summary>
 [DebuggerDisplay("Name = {Name,nq}, Version = {Version,nq}, MinSdk = {MinSuiteSdkVersion,nq}")]
+[ExcludeFromCodeCoverage]
 public class ModuleMetadata
 {
     /// <summary>

@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.NavTiles.Components;
+﻿namespace Sdk.Client.NavTiles.Components;
 
 /// <summary>
 /// Represents a special content layout for a navigation tile, featuring distinct left and right content areas.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public partial class NavTileSpecialContent : ComponentBase
 {
     /// <summary>

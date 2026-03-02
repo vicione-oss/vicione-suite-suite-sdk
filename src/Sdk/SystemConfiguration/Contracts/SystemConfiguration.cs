@@ -9,6 +9,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// This configuration is provided by the HostManagement system and mapped to this
 /// simplified, module-friendly representation. All properties are init-only.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record SystemConfiguration
 {
     /// <summary>

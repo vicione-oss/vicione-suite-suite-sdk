@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Sdk.Client.Modules;
+﻿using Sdk.Client.Modules;
 
 namespace Sdk.Testing.Client;
 

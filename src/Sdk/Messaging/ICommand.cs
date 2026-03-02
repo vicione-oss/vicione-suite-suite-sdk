@@ -12,5 +12,6 @@ public interface ICommand : IRoutableMessage, CorrelatedBy<Guid>
     /// </summary>
     new Guid CorrelationId { get; init; }
 
+    [ExcludeFromCodeCoverage]
     Guid CorrelatedBy<Guid>.CorrelationId => CorrelationId;
 }

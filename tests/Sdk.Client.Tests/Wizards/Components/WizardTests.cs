@@ -11,10 +11,10 @@ namespace Sdk.Client.Tests.Wizards.Components;
 public sealed class WizardTests
 {
     [Fact]
-    public void Should_render()
+    public async Task Should_render()
     {
         // Arrange
-        using var testContext = SetupTestContext();
+        await using var testContext = SetupTestContext();
 
         // Act
         var component = testContext.Render<Wizard<WizardContext>>(b =>
@@ -28,10 +28,10 @@ public sealed class WizardTests
     }
 
     [Fact]
-    public void Should_pass_parameters_to_wizard_content()
+    public async Task Should_pass_parameters_to_wizard_content()
     {
         // Arrange
-        using var testContext = SetupTestContext();
+        await using var testContext = SetupTestContext();
 
         var context = new WizardContext();
         const string Title = "Test Wizard";
@@ -84,10 +84,10 @@ public sealed class WizardTests
     }
 
     [Fact]
-    public void Should_throw_on_wrong_wizard_content_type_1()
+    public async Task Should_throw_on_wrong_wizard_content_type_1()
     {
         // Arrange
-        using var testContext = SetupTestContext(typeof(IWizardContent<WizardContext>));
+        await using var testContext = SetupTestContext(typeof(IWizardContent<WizardContext>));
 
         // Act
         Action act = () => testContext.Render<Wizard<WizardContext>>(b =>
@@ -101,10 +101,10 @@ public sealed class WizardTests
     }
 
     [Fact]
-    public void Should_throw_on_wrong_wizard_content_type_2()
+    public async Task Should_throw_on_wrong_wizard_content_type_2()
     {
         // Arrange
-        using var testContext = SetupTestContext(typeof(WizardTests));
+        await using var testContext = SetupTestContext(typeof(WizardTests));
 
         // Act
         Action act = () => testContext.Render<Wizard<WizardContext>>(b =>

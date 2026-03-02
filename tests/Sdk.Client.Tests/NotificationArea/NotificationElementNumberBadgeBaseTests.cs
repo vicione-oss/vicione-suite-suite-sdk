@@ -9,10 +9,10 @@ namespace Sdk.Client.Tests.NotificationArea;
 public sealed class NotificationElementNumberBadgeBaseTests
 {
     [Fact]
-    public void Should_render_component()
+    public async Task Should_render_component()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
 
         // Act
         var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>();
@@ -22,10 +22,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     }
 
     [Fact]
-    public void Should_not_be_visible()
+    public async Task Should_not_be_visible()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
 
         // Act
         var renderedComponent = ctx.Render<TestNotificationElementNumberBadge>();
@@ -35,10 +35,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     }
 
     [Fact]
-    public void Should_show_positive_number()
+    public async Task Should_show_positive_number()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         const int Number = 8;
 
         // Act
@@ -50,10 +50,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     }
 
     [Fact]
-    public void Should_show_9_plus()
+    public async Task Should_show_9_plus()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         const int Number = 11;
 
         // Act
@@ -66,10 +66,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     }
 
     [Fact]
-    public void Should_show_negative_number()
+    public async Task Should_show_negative_number()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         const int Number = -7;
 
         // Act
@@ -81,10 +81,10 @@ public sealed class NotificationElementNumberBadgeBaseTests
     }
 
     [Fact]
-    public void Should_show_9_minus()
+    public async Task Should_show_9_minus()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         const int Number = -13;
 
         // Act

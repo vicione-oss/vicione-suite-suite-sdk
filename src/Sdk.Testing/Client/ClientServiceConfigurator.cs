@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Authorization;
-using NSubstitute;
 using Sdk.Client.ControlPanels.Services;
 using Sdk.Client.Infrastructure;
 using Sdk.Client.NavTiles.Services;
@@ -16,6 +14,7 @@ namespace Sdk.Testing.Client;
 /// <summary>
 /// A helper class for configuring mocked services for client-side testing.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class ClientServiceConfigurator(IServiceCollection services)
 {
     /// <summary>

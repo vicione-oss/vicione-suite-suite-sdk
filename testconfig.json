@@ -16,10 +16,20 @@
                     ]
                 },
                 "ModulePaths": {
+                    "Include": {
+                        "ModulePath": [
+                            ".*ViciOne\\.Suite\\.Sdk\\.dll",
+                            ".*ViciOne\\.Suite\\.Sdk\\.Backend\\.dll",
+                            ".*ViciOne\\.Suite\\.Sdk\\.Client\\.dll",
+                            ".*ViciOne\\.Suite\\.Sdk\\.Testing\\.dll"
+                        ]
+                    },
                     "Exclude": {
                         "ModulePath": [
                             ".*Facts.dll",
-                            ".*Tests.dll"
+                            ".*Tests.dll",
+                            ".*Samples.*\\.dll",
+                            ".*TestModule.*\\.dll"
                         ]
                     }
                 }

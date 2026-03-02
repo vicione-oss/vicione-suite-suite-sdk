@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.ControlPanels.Components;
+﻿using Sdk.Client.ControlPanels.Components;
 
 namespace Sdk.Client.ControlPanels.Services;
 

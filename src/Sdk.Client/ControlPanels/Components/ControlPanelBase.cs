@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.ControlPanels.Services;
+﻿using Sdk.Client.ControlPanels.Services;
 using ViciOne.CodeAnalysis.MustCallBase.Attributes;
 
 namespace Sdk.Client.ControlPanels.Components;

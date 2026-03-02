@@ -12,6 +12,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// Currently only <see cref="System.Net.Sockets.AddressFamily.InterNetwork"/> (IPv4) is used;
 /// IPv6 support is planned for a future release.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record IpAddressInfo
 {
     /// <summary>

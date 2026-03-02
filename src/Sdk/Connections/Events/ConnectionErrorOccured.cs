@@ -7,6 +7,7 @@ namespace Sdk.Connections.Events;
 /// Represents an event indicating that an error occurred during a connection operation.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public sealed record ConnectionErrorOccured(Guid CorrelationId, ErrorInfo Error, Guid? ConnectionId) : IEvent, CorrelatedBy<Guid>
 {
     /// <summary>

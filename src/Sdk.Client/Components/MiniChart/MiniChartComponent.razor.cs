@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.MiniChart;
+﻿namespace Sdk.Client.Components.MiniChart;
 
 /// <summary>
 /// A container component for displaying a series of <see cref="MiniChartValueComponent"/> items.

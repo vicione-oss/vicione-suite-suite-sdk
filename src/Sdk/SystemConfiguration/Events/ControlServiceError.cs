@@ -1,12 +1,14 @@
 ﻿using MassTransit;
 using Sdk.Messaging;
+using Sdk.SystemConfiguration.Commands;
 
-namespace Sdk.SystemConfiguration;
+namespace Sdk.SystemConfiguration.Events;
 
 /// <summary>
 /// Represents an event indicating that an error occurred during a <see cref="ControlService"/> command.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public record ControlServiceError(Guid CorrelationId, string ServiceName, ErrorInfo RequestError) : IEvent, CorrelatedBy<Guid>
 {
     /// <summary>

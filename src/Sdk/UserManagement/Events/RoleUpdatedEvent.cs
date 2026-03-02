@@ -8,5 +8,6 @@ namespace Sdk.UserManagement.Events;
 /// Represents an event that is published when a user role has been successfully updated.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public sealed record RoleUpdatedEvent(Guid CorrelationId, Role Role)
     : IEvent, CorrelatedBy<Guid>;

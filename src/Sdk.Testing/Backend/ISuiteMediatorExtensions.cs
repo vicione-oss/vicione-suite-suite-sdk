@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using NSubstitute;
 using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 

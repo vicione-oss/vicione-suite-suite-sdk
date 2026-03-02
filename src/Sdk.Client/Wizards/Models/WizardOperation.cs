@@ -1,6 +1,7 @@
-﻿namespace Sdk.Client.Wizards.Models;
+namespace Sdk.Client.Wizards.Models;
 
 /// <inheritdoc/>
+[ExcludeFromCodeCoverage]
 public sealed class WizardOperation : IWizardOperation
 {
     /// <inheritdoc/>

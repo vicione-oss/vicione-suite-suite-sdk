@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.NotificationArea.Components;
+﻿namespace Sdk.Client.NotificationArea.Components;
 
 /// <summary>
 /// Interface to create notification element badge constraints in other generic types.

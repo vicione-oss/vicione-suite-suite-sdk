@@ -1,5 +1,6 @@
-﻿namespace Sdk.Client.Wizards.Models;
+namespace Sdk.Client.Wizards.Models;
 
+[ExcludeFromCodeCoverage]
 internal sealed class WizardPageInfo
 {
     public required Type ComponentType { get; init; }

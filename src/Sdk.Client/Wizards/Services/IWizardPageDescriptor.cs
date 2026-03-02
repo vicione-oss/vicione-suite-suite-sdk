@@ -22,5 +22,6 @@ public interface IWizardPageDescriptor
     ///
     /// If not set then the page is rendered after all pages having a position in registration order.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     int? Position => null;
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Modules;
+﻿using Sdk.Client.Modules;
 using Sdk.Client.NotificationArea.Components;
 
 namespace Sdk.Client.NotificationArea;

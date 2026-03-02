@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.NotificationArea.Components;
+﻿namespace Sdk.Client.NotificationArea.Components;
 
 /// <summary>
 /// Default implementation for a number badge

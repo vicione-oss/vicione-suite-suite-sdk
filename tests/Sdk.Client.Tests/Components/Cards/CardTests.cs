@@ -11,9 +11,9 @@ public sealed class CardTests
     public class OnCloseButtonClick
     {
         [Fact]
-        public void Invokes_event()
+        public async Task Invokes_event()
         {
-            using var ctx = new BunitContext();
+            await using var ctx = new BunitContext();
             var card = new Card
             {
                 Id = Guid.NewGuid(),
@@ -29,15 +29,15 @@ public sealed class CardTests
                 b.Add(p => p.OnCloseClick, () => invoked = true);
             });
 
-            component.Find(".close").Click();
+            await component.Find(".close").ClickAsync();
 
             invoked.Should().BeTrue();
         }
 
         [Fact]
-        public void Invokes_event_when_card_has_image()
+        public async Task Invokes_event_when_card_has_image()
         {
-            using var ctx = new BunitContext();
+            await using var ctx = new BunitContext();
             var card = new Card
             {
                 Id = Guid.NewGuid(),
@@ -54,7 +54,7 @@ public sealed class CardTests
                 b.Add(p => p.OnCloseClick, () => invoked = true);
             });
 
-            component.Find(".close").Click();
+            await component.Find(".close").ClickAsync();
 
             invoked.Should().BeTrue();
         }
@@ -63,9 +63,9 @@ public sealed class CardTests
     public class OnLinkClick
     {
         [Fact]
-        public void Invokes_event()
+        public async Task Invokes_event()
         {
-            using var ctx = new BunitContext();
+            await using var ctx = new BunitContext();
             var card = new Card
             {
                 Id = Guid.NewGuid(),
@@ -85,7 +85,8 @@ public sealed class CardTests
 
             var divElementText = component.Find(".text");
             var buttonElement = divElementText.NextElementSibling;   // next element is the 'LinkButton'
-            buttonElement?.Click();
+            if (buttonElement is not null)
+                await buttonElement.ClickAsync();
 
             invoked.Should().BeTrue();
         }

@@ -1,10 +1,11 @@
-﻿namespace Sdk.Client.ControlPanels.Services;
+namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
 /// Arguments for event <see cref="IControlPanelRequest.ControlPanelRequested"/>
 /// </summary>
 /// <param name="registryItem">Registry item associated with the requested control panel</param>
 /// <param name="configureState">Configures the state associated with the requested control panel</param>
+[ExcludeFromCodeCoverage]
 public sealed class ControlPanelRequestedEventArgs(IControlPanelRegistryItem registryItem,
     Action? configureState) : EventArgs
 {

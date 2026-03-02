@@ -1,6 +1,7 @@
 ﻿using MassTransit;
+using Sdk.Messaging;
 
-namespace Sdk.Messaging;
+namespace Sdk.Backend.Messaging;
 
 /// <summary>
 /// A base consumer for handling request / response messages.

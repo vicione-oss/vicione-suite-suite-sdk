@@ -1,8 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Sdk.Backend.Modules;
 using Sdk.Instance;
 

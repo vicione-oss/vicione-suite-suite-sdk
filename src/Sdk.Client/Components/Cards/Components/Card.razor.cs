@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Components.Cards.Contracts;
+﻿using Sdk.Client.Components.Cards.Contracts;
 
 namespace Sdk.Client.Components.Cards.Components;
 

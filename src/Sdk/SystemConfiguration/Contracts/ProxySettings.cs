@@ -15,6 +15,7 @@
 /// or has no entries configured.
 /// </para>
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record ProxySettings
 {
     /// <summary>

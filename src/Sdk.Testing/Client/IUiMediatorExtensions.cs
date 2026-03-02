@@ -1,5 +1,4 @@
-﻿using NSubstitute;
-using Sdk.Client.Infrastructure;
+﻿using Sdk.Client.Infrastructure;
 using Sdk.Connections.Contracts;
 using Sdk.Connections.Requests;
 

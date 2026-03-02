@@ -5,6 +5,7 @@ namespace Sdk.Client.Models;
 /// <summary>
 /// Arguments for <see cref="IHasChangeableProperties.Changed"/> event
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class PropertiesChangedEventArgs(IHasChangeableProperties sender, IReadOnlySet<string> propertyNames) : EventArgs
 {
     /// <summary>

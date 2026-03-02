@@ -6,6 +6,7 @@ namespace Sdk.NetworkStatus.Requests;
 /// <summary>
 /// Represents the response to a request for network status information.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record GetNetworkStatusInformationResponse : IResponse
 {
     /// <summary>

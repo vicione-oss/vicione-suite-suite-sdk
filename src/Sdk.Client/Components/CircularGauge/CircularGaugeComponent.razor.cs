@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.CircularGauge;
+﻿namespace Sdk.Client.Components.CircularGauge;
 
 /// <summary>
 /// A component that displays a value as a circular gauge.

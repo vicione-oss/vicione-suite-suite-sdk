@@ -6,4 +6,5 @@ namespace Sdk.Instance.Events;
 /// Represents an event indicating that a new instance has been created or detected.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public sealed record InstanceCreated(Guid InstanceId) : IEvent;

@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a user role, which defines a set of permissions.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Role
 {
     /// <summary>

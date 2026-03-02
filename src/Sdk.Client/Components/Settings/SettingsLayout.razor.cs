@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Components.Settings;
+﻿namespace Sdk.Client.Components.Settings;
 
 /// <summary>
 /// Provides the main layout structure for a settings page.

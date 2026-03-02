@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using NSubstitute;
 
 namespace Sdk.Testing.Client;
 

@@ -6,6 +6,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// <summary>
 /// Represents a static host entry mapping a hostname to an IP address.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record StaticHost
 {
     /// <summary>

@@ -11,10 +11,10 @@ namespace Sdk.Client.Tests.NotificationArea;
 public sealed class NotificationElementFlyoutTests
 {
     [Fact]
-    public void Should_render_component()
+    public async Task Should_render_component()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState();
 
         // Act
@@ -25,10 +25,10 @@ public sealed class NotificationElementFlyoutTests
     }
 
     [Fact]
-    public void Should_be_visible()
+    public async Task Should_be_visible()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act
@@ -40,10 +40,10 @@ public sealed class NotificationElementFlyoutTests
     }
 
     [Fact]
-    public void Should_render_heading()
+    public async Task Should_render_heading()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
         const string HeadingText = "Test heading";
 
@@ -58,10 +58,10 @@ public sealed class NotificationElementFlyoutTests
     }
 
     [Fact]
-    public void Should_render_content()
+    public async Task Should_render_content()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
         var state = new NotificationElementState { IsActive = true };
 
         // Act

@@ -1,4 +1,4 @@
-﻿namespace Sdk.Client.NavTiles.Enums;
+namespace Sdk.Client.NavTiles.Enums;
 
 /// <summary>
 /// Specifies the group a navigation tile belongs to.

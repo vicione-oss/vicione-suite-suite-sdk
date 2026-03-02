@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Connections.Contracts;
+﻿using Sdk.Connections.Contracts;
 
 namespace Sdk.Client.Connections;
 
 /// <summary>
 /// Provides a base class for components that render settings for a specific connection type.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ConnectionSettingsComponentBase<TConnection> : ComponentBase
     where TConnection : IConnection
 {

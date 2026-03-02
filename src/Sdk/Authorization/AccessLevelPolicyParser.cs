@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Sdk.Authorization;
+﻿namespace Sdk.Authorization;
 
 /// <summary>
 /// Parser for access level policies

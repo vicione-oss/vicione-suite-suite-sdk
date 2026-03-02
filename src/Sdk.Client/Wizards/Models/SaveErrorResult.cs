@@ -1,8 +1,9 @@
-﻿namespace Sdk.Client.Wizards.Models;
+namespace Sdk.Client.Wizards.Models;
 
 /// <summary>
 /// Represents the result of a failed save operation within a wizard.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class SaveErrorResult(string message, int? errorCode = null) : ISaveResult
 {
     /// <summary>

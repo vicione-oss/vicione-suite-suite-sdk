@@ -3,6 +3,7 @@
 /// <summary>
 /// Represents a specific wallpaper image available in the application.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public readonly record struct WallpaperImage
 {
     /// <summary>

@@ -12,5 +12,6 @@ public interface IInstanceDependentCommand : IInstanceDependentMessage, Correlat
     /// </summary>
     new Guid CorrelationId { get; init; }
 
+    [ExcludeFromCodeCoverage]
     Guid CorrelatedBy<Guid>.CorrelationId => CorrelationId;
 }

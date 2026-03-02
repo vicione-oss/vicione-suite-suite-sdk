@@ -1,8 +1,9 @@
-﻿namespace Sdk.Client.ControlPanels.Models;
+namespace Sdk.Client.ControlPanels.Models;
 
 /// <summary>
 /// Represents the result of a failed save operation.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class SaveErrorResult(string message, int? errorCode = null) : ISaveResult
 {
     /// <summary>

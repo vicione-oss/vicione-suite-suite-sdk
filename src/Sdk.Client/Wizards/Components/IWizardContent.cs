@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Sdk.Client.Wizards.Components;
+﻿namespace Sdk.Client.Wizards.Components;
 
 /// <summary>
 /// Component that implements content suitable for a wizard associated with <typeparamref name="TContext"/>.

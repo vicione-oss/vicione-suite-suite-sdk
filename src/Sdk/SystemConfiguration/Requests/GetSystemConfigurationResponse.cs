@@ -5,6 +5,7 @@ namespace Sdk.SystemConfiguration.Requests;
 /// <summary>
 /// Represents the response to a GetSystemConfiguration request.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record GetSystemConfigurationResponse : IResponse
 {
     /// <summary>

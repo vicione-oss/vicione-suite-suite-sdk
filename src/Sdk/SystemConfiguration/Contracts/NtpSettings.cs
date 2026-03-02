@@ -7,6 +7,7 @@
 /// <see cref="Servers"/> is only populated when NTP servers are enabled in the system configuration.
 /// An empty collection indicates NTP is either disabled or has no servers configured.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record NtpSettings
 {
     /// <summary>

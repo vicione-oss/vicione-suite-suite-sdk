@@ -6,6 +6,7 @@
 /// <remarks>
 /// The presence of this object on a <see cref="NetworkInterface"/> indicates that VLAN is active.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record VlanInfo
 {
     /// <summary>

@@ -8,6 +8,7 @@ namespace Sdk.UserManagement.Events;
 /// Represents an event that is published when an error occurs during a role management operation.
 /// </summary>
 [ForwardToUI]
+[ExcludeFromCodeCoverage]
 public sealed record RoleErrorEvent(Guid CorrelationId, ErrorInfo ErrorInfo, Role Role) : IEvent, CorrelatedBy<Guid>
 {
     /// <summary>

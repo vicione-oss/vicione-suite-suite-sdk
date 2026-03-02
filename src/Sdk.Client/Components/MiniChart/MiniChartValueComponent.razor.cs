@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Colors;
+﻿using Sdk.Client.Colors;
 
 namespace Sdk.Client.Components.MiniChart;
 

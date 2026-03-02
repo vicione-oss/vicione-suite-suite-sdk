@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Microsoft.AspNetCore.Components;
 using Sdk.Client.Wizards.Services;
 
 namespace Sdk.Client.Wizards.Components;

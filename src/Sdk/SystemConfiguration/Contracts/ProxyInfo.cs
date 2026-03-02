@@ -6,6 +6,7 @@
 /// <remarks>
 /// The presence of a <see cref="ProxyInfo"/> instance indicates that the proxy is enabled.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record ProxyInfo
 {
     /// <summary>

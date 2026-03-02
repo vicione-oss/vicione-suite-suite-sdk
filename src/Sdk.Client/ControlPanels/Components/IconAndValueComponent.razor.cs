@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using Sdk.Client.Colors;
+﻿using Sdk.Client.Colors;
 
 namespace Sdk.Client.ControlPanels.Components;
 
 /// <summary>
 /// A component that displays an icon next to a formatted value and an optional measurement unit.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public partial class IconAndValueComponent<T> : ComponentBase
 {
     /// <summary>

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-
-namespace Sdk.Client.Components.Layout;
+﻿namespace Sdk.Client.Components.Layout;
 
 /// <summary>
 /// A layout component that creates two resizable panes separated by a draggable splitter.

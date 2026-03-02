@@ -1,4 +1,4 @@
-﻿using Sdk.Client.ControlPanels.Components;
+using Sdk.Client.ControlPanels.Components;
 using Sdk.Client.ControlPanels.Extensions;
 using Sdk.Client.ControlPanels.Services;
 
@@ -13,5 +13,6 @@ namespace Sdk.Client.ControlPanels.Attributes;
 /// <see cref="IServiceCollectionExtensions.AddControlPanel{TClientModule, TControlPanel, TState}"/>.
 /// </remarks>
 [AttributeUsage(AttributeTargets.Class, Inherited = true)]
+[ExcludeFromCodeCoverage]
 public sealed class ControlPanelCategoryAttribute<TControlPanelCategoryDescriptor> : Attribute
     where TControlPanelCategoryDescriptor : class, IControlPanelCategoryDescriptor;

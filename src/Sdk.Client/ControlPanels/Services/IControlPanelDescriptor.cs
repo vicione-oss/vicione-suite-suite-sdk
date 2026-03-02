@@ -28,6 +28,7 @@ public interface IControlPanelDescriptor
     ///
     /// If not set then the control panel is rendered after all control panels having a position in alphabetic order using <see cref="Title"/>.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     int? Position => null;
 
     /// <summary>
@@ -36,6 +37,7 @@ public interface IControlPanelDescriptor
     /// <remarks>
     /// Hidden control panels can be shown dynamically from code via <see cref="IControlPanelRequest"/>.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     bool ShowInNavigation => true;
 }
 

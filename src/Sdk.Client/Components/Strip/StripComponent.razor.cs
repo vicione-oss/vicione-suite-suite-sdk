@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Sdk.Client.Colors;
+﻿using Sdk.Client.Colors;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 
 namespace Sdk.Client.Components.Strip;

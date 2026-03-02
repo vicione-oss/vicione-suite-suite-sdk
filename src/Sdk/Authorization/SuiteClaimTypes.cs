@@ -6,6 +6,7 @@
 /// <remarks>
 /// https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claim.type?#remarks
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public static class SuiteClaimTypes
 {
     /// <summary>

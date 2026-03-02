@@ -12,10 +12,10 @@ public sealed class MaterialDesignIconComponentTests
     public static readonly TheoryData<string> IconNames = [.. Enum.GetNames<MaterialDesignIconName>()];
 
     [Fact]
-    public void Should_render_component()
+    public async Task Should_render_component()
     {
         // Arrange
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
 
         // Act
         var renderedComponent = ctx.Render<MaterialDesignIconComponent>();
@@ -26,11 +26,11 @@ public sealed class MaterialDesignIconComponentTests
 
     [Theory]
     [MemberData(nameof(IconNames))]
-    public void Should_render_icon(string iconName)
+    public async Task Should_render_icon(string iconName)
     {
         // Arrange
         var iconNameTyped = Enum.Parse<MaterialDesignIconName>(iconName);
-        using var ctx = new BunitContext();
+        await using var ctx = new BunitContext();
 
         // Act
         var renderedComponent = ctx.Render<MaterialDesignIconComponent>((p) => p.Add(c => c.Name, iconNameTyped));

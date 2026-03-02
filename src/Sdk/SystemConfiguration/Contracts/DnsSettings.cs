@@ -20,6 +20,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// <see cref="MulticastDnsEnabled"/> reflects whether multicast DNS (mDNS) is enabled on the system.
 /// </para>
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public sealed record DnsSettings
 {
     /// <summary>

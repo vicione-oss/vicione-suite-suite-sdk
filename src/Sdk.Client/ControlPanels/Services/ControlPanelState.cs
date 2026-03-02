@@ -1,10 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
 /// Provides a default implementation of <see cref="IControlPanelState"/>.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ControlPanelState : IControlPanelState
 {
     private readonly Lock _concurrentLock = new();

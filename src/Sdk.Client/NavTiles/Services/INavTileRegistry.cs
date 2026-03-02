@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Sdk.Client.Modules;
 using Sdk.Client.NavTiles.Components;
 using Sdk.Client.NavTiles.Enums;

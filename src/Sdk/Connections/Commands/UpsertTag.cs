@@ -6,6 +6,7 @@ namespace Sdk.Connections.Commands;
 /// <summary>
 /// Represents a command to create a new tag or update an existing one.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record UpsertTag(Tag Tag) : ICommand
 {
     /// <inheritdoc cref="ICommand.CorrelationId" />

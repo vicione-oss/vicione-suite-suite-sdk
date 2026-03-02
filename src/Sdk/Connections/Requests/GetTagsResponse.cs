@@ -6,4 +6,5 @@ namespace Sdk.Connections.Requests;
 /// <summary>
 /// Represents the response to a request for all connection tags.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed record GetTagsResponse(List<Tag> Tags, ErrorInfo? RequestError = null) : IResponse;
