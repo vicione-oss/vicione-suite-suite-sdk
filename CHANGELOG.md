@@ -7,11 +7,15 @@
 - Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
 - *Breaking* Added `SystemType` property to `IInstanceInformation` interface
 - *Breaking* Added `IsAvailable` property to `IControlServiceManagement` interface and renamed `ControleService` to `TryControlService` for clarity.
+- `Sdk.Backend.Persistence`
+  - Added `IModuleDbContextRegistrar` interface — the host application (suite) implements this to provide the actual database context resolution strategy
+  - Added `ModuleDbContext` abstract base class with built-in default schema enforcement, `OnModuleModelCreating` / `OnConfigureConventions` hooks, and SQLite `DateTimeOffset` workaround
+  - Added `Database` property to `IModuleDbContext` interface, exposing the `DatabaseFacade`
+  - Added `AddModuleDbContext` extension method on `IServiceCollection` — modules call this to register their DbContext; it delegates to the host-provided `IModuleDbContextRegistrar`
 
 ### Fixed
 
 - `NavTileStandardContent`, missing render cycle, which may cause nothing to be displayed on the navigation tile
-- `DbContextResolver` now calls `UseApplicationServiceProvider` to make sure ASP Identity finds its options
 
 ### Changed
 
@@ -39,6 +43,8 @@
 
 ### Removed
 
+- *Breaking* Removed `DbContextResolver` and `DbContextResolverOptions` from `Sdk.Backend.Persistence` — resolution logic is now provided by the host application via `IModuleDbContextRegistrar`
+- *Breaking* Removed `AddDynamicDbContext` extension method — replaced by `AddModuleDbContext`
 - *Breaking* Removed extension method `AppendFormattedLine` for `StringBuilder` class, as it can be easily replaced
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Network` namespace and all types within (`NetworkInterfacesSettings`, `NetworkInterfaceDetail`, `NetworkInterfaceCommonInformation`, `IPv4Settings`, `IPv4Detail`, `DHCPLease`, `NetworkDNSSettings`, `NetworkNTPSettings`, `NetworkProxySettings`, `NetworkProxyDetail`, `StaticHostDetail`) — replaced by flattened types in `Sdk.SystemConfiguration.Contracts`
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Service` namespace (`ServiceDetail` replaced by `ServiceInfo`)

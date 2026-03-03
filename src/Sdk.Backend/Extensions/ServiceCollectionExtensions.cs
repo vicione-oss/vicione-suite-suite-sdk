@@ -14,43 +14,40 @@ public static class ServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Registers a database context that can dynamically switch between a SQLite and a PostgreSQL implementation based on the application's configuration.
+        /// Registers a module's database context that dynamically switches between a SQLite and a PostgreSQL
+        /// implementation based on the host application's configuration.
         /// </summary>
+        /// <remarks>
+        /// The host application must register an <see cref="IModuleDbContextRegistrar"/> implementation
+        /// before modules call this method. The registrar provides the actual resolution strategy.
+        /// </remarks>
         public IServiceCollection
-            AddDynamicDbContext<TDbContextBaseInterface, TSqliteImplementation, TPostgresImplementation>(BackendModule module,
+            AddModuleDbContext<TDbContextInterface, TSqliteImplementation, TPostgresImplementation>(
+                BackendModule module,
                 string? sqliteDbName = null,
                 bool enableSynchronization = true)
-            where TDbContextBaseInterface : IModuleDbContext
-            where TSqliteImplementation : DbContext, ISqliteDbContext, TDbContextBaseInterface
-            where TPostgresImplementation : DbContext, IPostgresDbContext, TDbContextBaseInterface
+            where TDbContextInterface : IModuleDbContext
+            where TSqliteImplementation : DbContext, ISqliteDbContext, TDbContextInterface
+            where TPostgresImplementation : DbContext, IPostgresDbContext, TDbContextInterface
         {
             if (module.ModuleInitializer is null)
             {
                 throw new InvalidOperationException(
-                    $"A database context {typeof(TDbContextBaseInterface).Name} was registered, but no initializer is present in the {module.ModuleId}-module");
+                    $"A database context {typeof(TDbContextInterface).Name} was registered, but no initializer is present in the {module.ModuleId}-module");
             }
 
-            if (!typeof(TDbContextBaseInterface).IsInterface)
-                throw new InvalidOperationException($"{nameof(TDbContextBaseInterface)} must be an interface type!");
+            if (!typeof(TDbContextInterface).IsInterface)
+                throw new InvalidOperationException($"{nameof(TDbContextInterface)} must be an interface type!");
 
-            services.AddSingleton(
-                new DbContextResolverOptions<TDbContextBaseInterface>(module.GetType(),
-                    sqliteDbName ?? module.ModuleId,
-                    enableSynchronization));
+            var registrar = services.FindRegistrar();
 
-            services.AddTransient<DbContextResolver<TSqliteImplementation, TPostgresImplementation, TDbContextBaseInterface>>();
-            services.AddSingleton(new ModuleContextTypeInformation(module.ModuleId,
-                typeof(TDbContextBaseInterface),
-                typeof(TDbContextBaseInterface).FullName!));
+            registrar.Register<TDbContextInterface, TSqliteImplementation, TPostgresImplementation>(
+                services,
+                module.ModuleId,
+                module.GetType(),
+                sqliteDbName ?? module.ModuleId,
+                enableSynchronization);
 
-            services.AddScoped(typeof(TDbContextBaseInterface),
-                s => s.GetRequiredService<DbContextResolver<TSqliteImplementation, TPostgresImplementation, TDbContextBaseInterface>>()
-                    .Resolve(s));
-
-            services.AddScoped(typeof(TPostgresImplementation).BaseType!,
-                s => //allows to inject shared type - necessary for Sagas
-                    s.GetRequiredService<DbContextResolver<TSqliteImplementation, TPostgresImplementation, TDbContextBaseInterface>>()
-                        .Resolve(s));
             return services;
         }
 
@@ -85,5 +82,15 @@ public static class ServiceCollectionExtensions
         public IServiceCollection AddModuleHostRequestHandler<TRequestHandler>()
             where TRequestHandler : class, IModuleHostRequestHandler
             => services.AddTransient<IModuleHostRequestHandler, TRequestHandler>();
+
+        private IModuleDbContextRegistrar FindRegistrar()
+        {
+            var descriptor = services.LastOrDefault(d => d.ServiceType == typeof(IModuleDbContextRegistrar));
+
+            return descriptor?.ImplementationInstance as IModuleDbContextRegistrar
+                   ?? throw new InvalidOperationException(
+                       $"No {nameof(IModuleDbContextRegistrar)} has been registered. " +
+                       "The host application must register an implementation before modules can register database contexts.");
+        }
     }
 }

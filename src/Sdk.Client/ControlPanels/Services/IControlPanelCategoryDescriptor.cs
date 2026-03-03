@@ -32,11 +32,12 @@ public interface IControlPanelCategoryDescriptor
     /// Optional position in the list of all category of a <see cref="IControlPanelGroupDescriptor">group</see>
     /// </summary>
     /// <remarks>
+    /// <para>
     /// This property affects the render order.
     /// When Position X of category A is lower than Position Y of category B then category A is rendered first.
     /// In a vertical representation this would mean that category A is displayed above category B.
-    ///
-    /// If not set then the category is rendered after all categories having a position in alphabetic order using <see cref="Title"/>.
+    /// </para>
+    /// <para>If not set then the category is rendered after all categories having a position in alphabetic order using <see cref="Title"/>.</para>
     /// </remarks>
     [ExcludeFromCodeCoverage]
     int? Position => null;

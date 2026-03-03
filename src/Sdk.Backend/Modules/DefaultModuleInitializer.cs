@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Sdk.Backend.Persistence;
 
 namespace Sdk.Backend.Modules;
@@ -20,14 +18,13 @@ public class DefaultModuleInitializer<TDbContext> : IModuleInitializer
         => Task.CompletedTask;
 
     /// <summary>
-    /// Performs database migrations by resolving the configured <typeparamref name="TDbContext"/>
-    /// and running <see cref="RelationalDatabaseFacadeExtensions.MigrateAsync(DatabaseFacade, CancellationToken)"/>.
+    /// Performs database migrations by resolving the configured <typeparamref name="TDbContext"/>.
     /// </summary>
     public virtual async Task Migrate(IServiceProvider scopedServices, CancellationToken stoppingToken)
     {
         var context = scopedServices.GetRequiredService<TDbContext>();
 
-        await context.Instance.Database.MigrateAsync(stoppingToken);
+        await context.MigrateAsync(stoppingToken);
     }
 
     /// <summary>
