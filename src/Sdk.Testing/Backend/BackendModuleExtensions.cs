@@ -1,7 +1,8 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Sdk.Backend.Modules;
+using Sdk.Backend.Persistence;
 using Sdk.Instance;
 
 namespace Sdk.Testing.Backend;
@@ -24,7 +25,7 @@ public static class BackendModuleExtensions
                 .AddEndpointRouteBuilder()
                 .AddMassTransitConfigurators(busSetup)
                 .AddLogging();
-
+            services.AddSingleton<IModuleDbContextRegistrar>(new TestModuleDbContextRegistrar());
             setup?.Invoke(services);
 
             using var serviceProvider = services.BuildServiceProvider();

@@ -9,13 +9,14 @@ namespace Sdk.Backend.Persistence;
 public abstract class ModuleDbContext(DbContextOptions options) : DbContext(options), IModuleDbContext
 {
     /// <inheritdoc/>
-    public DbContext Instance => this;
-
-    /// <inheritdoc/>
     public abstract string DefaultSchemaName { get; }
 
     /// <inheritdoc/>
     public virtual IEnumerable<Type> NotSynchronizedEntityTypes => [];
+
+    /// <inheritdoc/>
+    public Task MigrateAsync(CancellationToken cancellationToken = default)
+        => Database.MigrateAsync(cancellationToken);
 
     /// <summary>
     /// Overrides the base model creation process to enforce a default schema and then calls <see cref="OnModuleModelCreating"/>.

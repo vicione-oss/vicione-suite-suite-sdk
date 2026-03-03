@@ -21,21 +21,18 @@ public class TestWithDbContextSqliteTests : TestWithDbContextSqlite<TheDbContext
         using var dbContext = services.GetRequiredService<ITheDbContext>();
 
         // Assert
-        dbContext.Db.Should().NotBeNull();
+        dbContext.ChangeTracker.Should().NotBeNull();
+        dbContext.DefaultSchemaName.Should().Be(TheDbContext.DbSchemaName);
     }
 }
 
-public interface ITheDbContext : IModuleDbContext
-{
-    DbContext Db { get; }
-}
+public interface ITheDbContext : IModuleDbContext;
 
 public class TheDbContext : ModuleDbContext, ITheDbContext
 {
     internal const string DbSchemaName = "tests";
     public override string DefaultSchemaName => DbSchemaName;
 
-    public DbContext Db => Instance;
 
     internal TheDbContext(DbContextOptions options)
         : base(options)

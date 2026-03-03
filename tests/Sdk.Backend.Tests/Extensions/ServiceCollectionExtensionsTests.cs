@@ -3,114 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Sdk.Backend.Extensions;
-using Sdk.Backend.Modules;
-using Sdk.Backend.Persistence;
 using Sdk.Modules;
-using TestModule.Backend;
-using TestModule.Backend.DbContext;
 using Xunit;
 
 namespace Sdk.Backend.Tests.Extensions;
 
 public class ServiceCollectionExtensionsTests
 {
-    public sealed class AddDynamicDbContext : ServiceCollectionExtensionsTests
-    {
-        private readonly ServiceCollection _services = new();
-
-        [Fact]
-        public void Should_throw_if_module_initializer_is_null()
-        {
-            // Arrange
-            var module = new TestBackendModule();
-
-            // Act
-            Action act = () => _services.AddDynamicDbContext<ITestModuleDbContext, TestModuleDbContextSqlite, TestModuleDbContextPostgres>(module);
-
-            // Assert
-            act.Should().Throw<InvalidOperationException>();
-        }
-
-        [Fact]
-        public void Should_db_context_base_is_no_interface()
-        {
-            // Arrange
-            var module = new TestBackendModule();
-
-            // Act
-            Action act = () => _services.AddDynamicDbContext<TestModuleDbContext, TestModuleDbContextSqlite, TestModuleDbContextPostgres>(module);
-
-            // Assert
-            act.Should().Throw<InvalidOperationException>();
-        }
-
-        [Fact]
-        public void Should_register_required_services()
-        {
-            // Arrange
-            var initializer = Substitute.For<IModuleInitializer>();
-            var workspaceService = Substitute.For<IWorkspaceProvider<TestBackendModule>>();
-            var module = new TestBackendModule(initializer);
-
-            _services.AddSingleton(workspaceService);
-
-            // Act
-            var provider = _services
-                .AddDynamicDbContext<ITestModuleDbContext, TestModuleDbContextSqlite, TestModuleDbContextPostgres>(module)
-                .BuildServiceProvider();
-
-            // Assert
-            provider.GetService<DbContextResolverOptions<ITestModuleDbContext>>()
-                .Should().NotBeNull();
-
-            provider.GetService<DbContextResolver<TestModuleDbContextSqlite, TestModuleDbContextPostgres, ITestModuleDbContext>>()
-                .Should().NotBeNull();
-
-            provider.GetService<ITestModuleDbContext>()
-                .Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Should_use_given_sqlite_db_name()
-        {
-            // Arrange
-            var initializer = Substitute.For<IModuleInitializer>();
-            var workspaceService = Substitute.For<IWorkspaceProvider<TestBackendModule>>();
-            var module = new TestBackendModule(initializer);
-            const string SqliteDbName = "MySqliteDb.db";
-
-            _services.AddSingleton(workspaceService);
-
-            // Act
-            var provider = _services
-                .AddDynamicDbContext<ITestModuleDbContext, TestModuleDbContextSqlite, TestModuleDbContextPostgres>(module, SqliteDbName)
-                .BuildServiceProvider();
-
-            // Assert
-            var options = provider.GetRequiredService<DbContextResolverOptions<ITestModuleDbContext>>();
-            options.DbName.Should().Be(SqliteDbName);
-        }
-
-        [Fact]
-        public void Should_use_module_id_as_default_sqlite_db_name()
-        {
-            // Arrange
-            var initializer = Substitute.For<IModuleInitializer>();
-            var workspaceService = Substitute.For<IWorkspaceProvider<TestBackendModule>>();
-            var module = new TestBackendModule(initializer);
-
-            _services.AddSingleton(workspaceService);
-
-            // Act
-            var provider = _services
-                .AddDynamicDbContext<ITestModuleDbContext, TestModuleDbContextSqlite, TestModuleDbContextPostgres>(module)
-                .BuildServiceProvider();
-
-            // Assert
-            var options = provider.GetRequiredService<DbContextResolverOptions<ITestModuleDbContext>>();
-            options.DbName.Should().Be(module.ModuleId);
-        }
-    }
 
     public sealed class AddModuleSection : ServiceCollectionExtensionsTests
     {

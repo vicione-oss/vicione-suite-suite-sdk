@@ -14,7 +14,7 @@ public class TestDbContextFactoryTests
         using var dbContext = TestDbContextFactory.CreateSqliteContext<TheDbContextSqlite>();
 
         // Assert
-        dbContext.Db.Should().NotBeNull();
+        dbContext.ChangeTracker.Should().NotBeNull();
     }
 
     [Fact]
@@ -28,6 +28,6 @@ public class TestDbContextFactoryTests
         using var dbContext = TestDbContextFactory.CreateSqliteContext<TheDbContextSqlite>(connection);
 
         // Assert
-        dbContext.Db.Should().NotBeNull();
+        dbContext.ChangeTracker.Should().NotBeNull();
     }
 }

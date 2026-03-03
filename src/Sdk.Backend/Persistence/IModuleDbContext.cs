@@ -1,22 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Sdk.Backend.Persistence;
 
 /// <summary>
 /// Represents a database context that is specific to a module,
-/// exposing the underlying <see cref="DbContext"/> instance along with metadata
-/// such as default schema and entities that are excluded from synchronization.
+/// providing access to change tracking, persistence operations, migration,
+/// and metadata such as default schema and entities excluded from synchronization.
 /// </summary>
-public interface IModuleDbContext : IDisposable
+public interface IModuleDbContext : IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Gets the underlying <see cref="DbContext"/> instance used by this module.
+    /// Gets the <see cref="Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker"/> instance
+    /// for tracking entity state changes in this context.
     /// </summary>
-    /// <remarks>
-    /// This property provides direct access to Entity Framework Core features such as
-    /// querying, migrations, and transaction management.
-    /// </remarks>
-    DbContext Instance { get; }
+    ChangeTracker ChangeTracker { get; }
+
+    /// <summary>
+    /// Gets the <see cref="DatabaseFacade"/> for this context, providing access to
+    /// database-related operations such as connection management, transactions, and raw SQL execution.
+    /// </summary>
+    DatabaseFacade Database { get; }
 
     /// <summary>
     /// Gets the default schema name used by this module's database objects.
@@ -34,4 +38,23 @@ public interface IModuleDbContext : IDisposable
     /// These types are excluded from the automatic synchronization between master and slave databases.
     /// </remarks>
     IEnumerable<Type> NotSynchronizedEntityTypes { get; }
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <returns>The number of state entries written to the database.</returns>
+    int SaveChanges();
+
+    /// <summary>
+    /// Asynchronously saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous save operation. The task result contains the number of state entries written to the database.</returns>
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Applies any pending migrations for this context to the database.
+    /// </summary>
+    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+    Task MigrateAsync(CancellationToken cancellationToken = default);
 }

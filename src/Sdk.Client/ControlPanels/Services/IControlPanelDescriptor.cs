@@ -21,12 +21,12 @@ public interface IControlPanelDescriptor
     /// Optional position in the list of all control panels of a <see cref="IControlPanelCategoryDescriptor">category</see>
     /// </summary>
     /// <remarks>
-    /// This property affects the render order.
-    ///
+    /// <para>This property affects the render order.</para>
+    /// <para>
     /// When Position X of control panel A is lower than Position Y of control panel B then control panel A is rendered first.
     /// In a vertical representation this would mean that control panel A is displayed above control panel B.
-    ///
-    /// If not set then the control panel is rendered after all control panels having a position in alphabetic order using <see cref="Title"/>.
+    /// </para>
+    /// <para>If not set then the control panel is rendered after all control panels having a position in alphabetic order using <see cref="Title"/>.</para>
     /// </remarks>
     [ExcludeFromCodeCoverage]
     int? Position => null;
