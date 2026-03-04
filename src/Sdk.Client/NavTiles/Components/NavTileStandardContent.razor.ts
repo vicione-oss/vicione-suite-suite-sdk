@@ -4,8 +4,7 @@ class NavTileStandardContent {
 
     constructor(readonly sublineElement: HTMLElement, readonly headlineElement: HTMLElement,
         readonly contentElement: HTMLElement, readonly iconElement: HTMLElement,
-        readonly dotNetHelper: DotNet.DotNetObject) {
-    }
+        readonly dotNetHelper: DotNet.DotNetObject) {}
 
     public async initSubline() {
         if (this.isDisposed)
@@ -68,7 +67,11 @@ class NavTileStandardContent {
     }
 
     private getSingleLineHeadlineOffsetHeight(headlineElement: HTMLElement, contentElement: HTMLElement) {
-        const headlineElementClone = headlineElement.cloneNode(true) as HTMLElement;
+        const headlineElementClone = headlineElement.cloneNode(true);
+
+        if (!(headlineElementClone instanceof HTMLElement))
+            throw new Error('Expected cloned node to be an HTMLElement');
+
         headlineElementClone.innerText = 'Ag';
         headlineElementClone.style.setProperty('position', 'absolute'); // Absolute positioning to avoid realignment of grid elements which would trigger the resize observer
 
