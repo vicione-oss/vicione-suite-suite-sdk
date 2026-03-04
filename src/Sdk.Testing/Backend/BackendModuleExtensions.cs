@@ -25,7 +25,7 @@ public static class BackendModuleExtensions
                 .AddEndpointRouteBuilder()
                 .AddMassTransitConfigurators(busSetup)
                 .AddLogging();
-            services.AddSingleton<IModuleDbContextRegistrar>(new TestModuleDbContextRegistrar());
+            services.AddSingleton<IModuleDbContextRegistrar, TestModuleDbContextRegistrar>();
             setup?.Invoke(services);
 
             using var serviceProvider = services.BuildServiceProvider();

@@ -87,10 +87,40 @@ public static class ServiceCollectionExtensions
         {
             var descriptor = services.LastOrDefault(d => d.ServiceType == typeof(IModuleDbContextRegistrar));
 
-            return descriptor?.ImplementationInstance as IModuleDbContextRegistrar
-                   ?? throw new InvalidOperationException(
-                       $"No {nameof(IModuleDbContextRegistrar)} has been registered. " +
-                       "The host application must register an implementation before modules can register database contexts.");
+            if (descriptor is null)
+            {
+                throw new InvalidOperationException(
+                    $"No {nameof(IModuleDbContextRegistrar)} has been registered. " +
+                    "The host application must register an implementation before modules can register database contexts.");
+            }
+
+            // Already an instance — DI owns it, nothing to do
+            if (descriptor.ImplementationInstance is IModuleDbContextRegistrar instance)
+                return instance;
+
+            // Type or factory registration — resolve the instance once, then replace
+            // the descriptor so the real ServiceProvider is bound to this exact object.
+            var resolved = descriptor switch
+            {
+                { ImplementationType: not null } =>
+                    (IModuleDbContextRegistrar)(Activator.CreateInstance(descriptor.ImplementationType)
+                                                ?? throw new InvalidOperationException($"Failed to create {descriptor.ImplementationType.FullName}")),
+                { ImplementationFactory: not null } =>
+                    (IModuleDbContextRegistrar)descriptor.ImplementationFactory(EmptyServiceProvider.Instance),
+                _ => throw new InvalidOperationException("Invalid service registration for IModuleDbContextRegistrar.")
+            };
+
+            // Pin the resolved instance back so the real container uses the same object.
+            services.Remove(descriptor);
+            services.AddSingleton(resolved);
+
+            return resolved;
         }
+    }
+
+    private sealed class EmptyServiceProvider : IServiceProvider
+    {
+        internal static readonly EmptyServiceProvider Instance = new();
+        public object? GetService(Type serviceType) => null;
     }
 }
