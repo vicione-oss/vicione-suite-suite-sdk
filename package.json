@@ -1,15 +1,19 @@
-﻿{
+{
   "version": "1.0.0",
   "name": "vicione.suite",
   "private": true,
   "devDependencies": {
     "@types/blazor__javascript-interop": "^3.1.7",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
-    "eslint": "^9.16.0",
-    "eslint-config-xo": "^0.46.0",
-    "eslint-config-xo-typescript": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "eslint": "^10.0.2",
+    "eslint-config-xo": "^0.50.0",
+    "eslint-config-xo-typescript": "^9.0.0",
     "three-dots": "^0.3.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint-with-fix": "eslint . --fix"
   }
 }
