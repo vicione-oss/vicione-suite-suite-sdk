@@ -1,4 +1,4 @@
-﻿using Sdk.Messaging;
+using Sdk.Messaging;
 
 namespace Sdk.Client.Infrastructure;
 
@@ -7,6 +7,11 @@ namespace Sdk.Client.Infrastructure;
 /// </summary>
 public interface IUiMediator
 {
+    /// <summary>
+    /// The default command timeout configured for the UI, in milliseconds.
+    /// </summary>
+    int CommandTimeoutMs { get; }
+
     /// <summary>
     /// Sends a command for asynchronous processing.
     /// </summary>
