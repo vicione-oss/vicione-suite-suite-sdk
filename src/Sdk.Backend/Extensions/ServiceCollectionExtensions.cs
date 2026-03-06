@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Sdk.Backend.Modules;
 using Sdk.Backend.Persistence;
@@ -85,14 +85,9 @@ public static class ServiceCollectionExtensions
 
         private IModuleDbContextRegistrar FindRegistrar()
         {
-            var descriptor = services.LastOrDefault(d => d.ServiceType == typeof(IModuleDbContextRegistrar));
-
-            if (descriptor is null)
-            {
-                throw new InvalidOperationException(
+            var descriptor = services.LastOrDefault(d => d.ServiceType == typeof(IModuleDbContextRegistrar)) ?? throw new InvalidOperationException(
                     $"No {nameof(IModuleDbContextRegistrar)} has been registered. " +
                     "The host application must register an implementation before modules can register database contexts.");
-            }
 
             // Already an instance — DI owns it, nothing to do
             if (descriptor.ImplementationInstance is IModuleDbContextRegistrar instance)
@@ -120,7 +115,7 @@ public static class ServiceCollectionExtensions
 
     private sealed class EmptyServiceProvider : IServiceProvider
     {
-        internal static readonly EmptyServiceProvider Instance = new();
+        public static readonly EmptyServiceProvider Instance = new();
         public object? GetService(Type serviceType) => null;
     }
 }

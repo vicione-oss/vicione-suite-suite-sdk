@@ -1,8 +1,8 @@
 <Solution>
   <Folder Name="/samples/">
     <File Path="samples/.editorconfig" />
-    <Project Path="samples/Sdk.Client.Samples.BlazorWebApp/Sdk.Client.Samples.BlazorWebApp.csproj" />
     <Project Path="samples/Sdk.Client.Samples.BlazorWebApp.WebAssemblyHost/Sdk.Client.Samples.BlazorWebApp.WebAssemblyHost.csproj" />
+    <Project Path="samples/Sdk.Client.Samples.BlazorWebApp/Sdk.Client.Samples.BlazorWebApp.csproj" />
     <Project Path="samples/Sdk.Client.Samples.BlazorWebAssemblyStandaloneApp/Sdk.Client.Samples.BlazorWebAssemblyStandaloneApp.csproj" />
     <Project Path="samples/Sdk.Client.Samples.Shared/Sdk.Client.Samples.Shared.csproj" />
   </Folder>
@@ -24,7 +24,9 @@
   </Folder>
   <Folder Name="/SolutionItems/docs/">
     <File Path="docs/code-style-guide.md" />
+    <File Path="docs/completion-source-handler-base.md" />
     <File Path="docs/control-panel-guide.md" />
+    <File Path="docs/localization-guide.md" />
     <File Path="docs/navigation-tile-guide.md" />
     <File Path="docs/notification-element-guide.md" />
     <File Path="docs/wizard-guide.md" />
