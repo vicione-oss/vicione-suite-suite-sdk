@@ -12,8 +12,9 @@
   - Added `ModuleDbContext` abstract base class with built-in default schema enforcement, `OnModuleModelCreating` / `OnConfigureConventions` hooks, and SQLite `DateTimeOffset` workaround
   - Added `Database` property to `IModuleDbContext` interface, exposing the `DatabaseFacade`
   - Added `AddModuleDbContext` extension method on `IServiceCollection` — modules call this to register their DbContext; it delegates to the host-provided `IModuleDbContextRegistrar`
-- `Sdk.Client.Services`
-  - Added `ControlPanelSaveHandlerBase` and `ControlPanelResetHandlerBase` with built-in support for async command, event operations and cancellation
+- `Sdk.Client`
+  - Added `ControlPanelSaveHandlerBase` and `ControlPanelResetHandlerBase` services with built-in support for async command, event operations and cancellation
+  - Added `ILocalHttpClient` to support DI for typed `HttpClient` instances that are pre-configured for the local suite environment
 
 ### Fixed
 
