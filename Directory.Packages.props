@@ -1,10 +1,10 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
     <ViciOneUiMonochromeIconsVersion>4.3.0</ViciOneUiMonochromeIconsVersion>
     <MassTransitVersion>8.5.8</MassTransitVersion>
-    <DotNetVersion>10.0.3</DotNetVersion>
+    <DotNetVersion>10.0.4</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
@@ -30,7 +30,7 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageVersion Include="System.IO.Abstractions" Version="22.1.0" />
     <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.3.0" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.5.0" />
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.0.3" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
