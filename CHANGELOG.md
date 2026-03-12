@@ -15,6 +15,7 @@
 - `Sdk.Client`
   - Added `ControlPanelSaveHandlerBase` and `ControlPanelResetHandlerBase` services with built-in support for async command, event operations and cancellation
   - Added `ILocalHttpClient` to support DI for typed `HttpClient` instances that are pre-configured for the local suite environment
+  - Added `SettingsFieldSwitch` component for boolean settings
 
 ### Fixed
 
@@ -63,7 +64,7 @@
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.5.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
 - `ViciOne.Ui.Localization` package, update to version `3.2.0`
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.3.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.4.0`
 - `xunit` packages, update to version `xunit.v3 - 3.2.2`
 - `xunit.extensibility.core` packages, update to version `xunit.v3.extensibility.core - 3.2.2`
 

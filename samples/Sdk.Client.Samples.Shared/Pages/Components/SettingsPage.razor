@@ -1,4 +1,4 @@
-﻿@page "/components/settings"
+@page "/components/settings"
 
 @using Microsoft.AspNetCore.Components.Web
 @using Sdk.Client.Components.Settings
@@ -45,6 +45,10 @@
 
             <SettingsField IsLoading="@SettingsFieldIsLoading" Label="First name" LoadingIndication="@SettingsFieldLoadingIndication">
                 <SettingsFieldTextBox Placeholder="Jane Doe" @bind-Value="_firstName" />
+            </SettingsField>
+
+            <SettingsField IsLoading="@SettingsFieldIsLoading" Label="Enabled" LoadingIndication="@SettingsFieldLoadingIndication">
+                <SettingsFieldSwitch @bind-Value="_enabled" />
             </SettingsField>
         </ChildContent>
     </SettingsGroup>
