@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Sdk.Client.Components.Settings;
@@ -31,6 +31,7 @@ public sealed partial class SettingsPage : ComponentBase
 
     private LogLevel _logLevel = LogLevel.None;
     private string _firstName = "";
+    private bool _enabled;
     private CultureInfo _culture = s_cultureComboBoxItems[0];
 
     private bool SettingsFieldIsLoading => _selectedSettingsFieldLoadingIndication is not null;

@@ -1,0 +1,8 @@
+.settings-field-switch {
+    display: contents;
+
+    ::deep .switch:before {
+        content: "alignment-fix";
+        visibility: hidden;
+    }
+}
