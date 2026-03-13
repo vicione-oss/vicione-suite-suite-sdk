@@ -14,7 +14,7 @@ public sealed partial class SettingsPage : ComponentBase
     private bool _switchExpanderIsLoading;
     private bool _switchExpanderValue;
 
-    private bool _settingsFieldLoadingIndicationExamplesExpanded;
+    private bool _settingsFieldLoadingIndicationExamplesExpanded = true;
 
     private readonly List<ComboBoxItem<SettingsFieldLoadingIndication?, string>> _settingsFieldLoadingIndications =
         [

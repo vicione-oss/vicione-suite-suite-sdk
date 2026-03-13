@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Sdk.Connections.Contracts;
 using Sdk.Messaging;
 
@@ -149,7 +149,7 @@ public static class ConnectionExtensions
             connection.Name = other.Name;
             connection.Type = other.Type;
             connection.Tags = [.. other.Tags];
-            connection.Metadata = new Dictionary<string, string?>(other.Metadata);
+            connection.Metadata = other.Metadata.ToDictionary();
             connection.Managed = other.Managed;
         }
     }

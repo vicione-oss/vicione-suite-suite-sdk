@@ -10,7 +10,7 @@ public sealed partial class SettingsFieldSwitch
 {
     /// <inheritdoc cref="Switch.Enabled" />
     [Parameter]
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     /// <inheritdoc cref="Switch.Value" />
     [Parameter]

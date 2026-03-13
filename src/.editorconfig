@@ -7,6 +7,10 @@ dotnet_diagnostic.IDE0028.severity = warning # Use collection initializers
 dotnet_diagnostic.IDE0031.severity = warning # Use null propagation
 dotnet_diagnostic.IDE0036.severity = warning # Order modifiers
 dotnet_diagnostic.IDE0040.severity = warning # Add accessibility modifiers
+
+# https://github.com/dotnet/roslyn/issues/82691
+dotnet_diagnostic.IDE0051.severity = none # Remove unused private members
+
 dotnet_diagnostic.IDE0055.severity = warning # Fix formatting
 dotnet_diagnostic.IDE0078.severity = warning # Use pattern matching
 dotnet_diagnostic.IDE0120.severity = warning # Simplify LINQ expression
