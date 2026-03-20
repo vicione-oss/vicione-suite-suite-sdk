@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Sdk.Client.Extensions;
 using Sdk.Client.Services;
@@ -87,7 +87,9 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
                     // no invoke of OnContentLoading here as the element is already displayed in the browser, moved to OnParametersSetAsync()
                     _dotNetObjectReference = DotNetObjectReference.Create(this);
 
-                    _initSublineResult = await _jsModuleReference.InvokeAsync<IJSObjectReference>("init", _sublineElementReference, _headlineElementReference, _contentElementReference, _iconElementReference, _dotNetObjectReference);
+                    _initSublineResult = await _jsModuleReference.InvokeConstructorAsync("NavTileStandardContent", _sublineElementReference, _headlineElementReference, _contentElementReference, _iconElementReference, _dotNetObjectReference);
+
+                    await _initSublineResult.InvokeVoidAsync("initSubline");
                 }
             }
         }
