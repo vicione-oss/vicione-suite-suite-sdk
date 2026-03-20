@@ -1,13 +1,13 @@
 class NavTileStandardContent {
-    private headlineResizeObserver: ResizeObserver | undefined;
-    private isDisposed = false;
+    #headlineResizeObserver: ResizeObserver | undefined;
+    #isDisposed = false;
 
     constructor(readonly sublineElement: HTMLElement, readonly headlineElement: HTMLElement,
         readonly contentElement: HTMLElement, readonly iconElement: HTMLElement,
         readonly dotNetHelper: DotNet.DotNetObject) {}
 
     public async initSubline() {
-        if (this.isDisposed)
+        if (this.#isDisposed)
             return;
 
         if (!(this.headlineElement instanceof Element)) {
@@ -20,8 +20,8 @@ class NavTileStandardContent {
             return;
         }
 
-        this.headlineResizeObserver = new ResizeObserver(this.observerCallback.bind(this));
-        this.headlineResizeObserver.observe(this.headlineElement);
+        this.#headlineResizeObserver = new ResizeObserver(this.#observerCallback.bind(this));
+        this.#headlineResizeObserver.observe(this.headlineElement);
     }
 
     public setSublineVerticalOffsetToIcon(sublineElement: HTMLElement, iconElement: HTMLElement) {
@@ -32,21 +32,21 @@ class NavTileStandardContent {
     }
 
     public dispose() {
-        this.isDisposed = true;
+        this.#isDisposed = true;
 
-        if (this.headlineResizeObserver !== undefined) {
-            this.headlineResizeObserver.disconnect();
-            this.headlineResizeObserver = undefined;
+        if (this.#headlineResizeObserver !== undefined) {
+            this.#headlineResizeObserver.disconnect();
+            this.#headlineResizeObserver = undefined;
         }
     }
 
-    private async observerCallback() {
-        if (this.isDisposed) {
+    async #observerCallback() {
+        if (this.#isDisposed) {
             await this.dotNetHelper.invokeMethodAsync('SublineInitialized');
             return;
         }
 
-        this.setSublineMaximumLineCount(this.sublineElement, this.headlineElement, this.contentElement);
+        this.#setSublineMaximumLineCount(this.sublineElement, this.headlineElement, this.contentElement);
         this.setSublineVerticalOffsetToIcon(this.sublineElement, this.iconElement);
 
         try {
@@ -56,8 +56,8 @@ class NavTileStandardContent {
         }
     }
 
-    private setSublineMaximumLineCount(sublineElement: HTMLElement, headlineElement: HTMLElement, contentElement: HTMLElement) {
-        const singleLineHeadlineOffsetHeight = this.getSingleLineHeadlineOffsetHeight(headlineElement, contentElement);
+    #setSublineMaximumLineCount(sublineElement: HTMLElement, headlineElement: HTMLElement, contentElement: HTMLElement) {
+        const singleLineHeadlineOffsetHeight = this.#getSingleLineHeadlineOffsetHeight(headlineElement, contentElement);
         const currentHeadlineOffsetHeight = headlineElement.offsetHeight;
 
         if (currentHeadlineOffsetHeight > singleLineHeadlineOffsetHeight)
@@ -66,7 +66,7 @@ class NavTileStandardContent {
             sublineElement.style.setProperty('--maximum-line-count', '5');
     }
 
-    private getSingleLineHeadlineOffsetHeight(headlineElement: HTMLElement, contentElement: HTMLElement) {
+    #getSingleLineHeadlineOffsetHeight(headlineElement: HTMLElement, contentElement: HTMLElement) {
         const headlineElementClone = headlineElement.cloneNode(true);
 
         if (!(headlineElementClone instanceof HTMLElement))
