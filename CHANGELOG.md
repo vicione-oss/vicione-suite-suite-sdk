@@ -43,6 +43,7 @@
 - *Breaking* `IControlPanelDescriptor` also requires `Uri` for its icon source instead of string paths
 - *Breaking* Unified naming of `Uri` properties (former strings) and methods to `...Url`
 - *Breaking* `ICommand` and `IInstanceDependentCommand` now enforce providing an `init` for `CorrelationId` to ensure deserialization
+- *Breaking* `RequestConsumer<TRequest, TResponse>` and `InstanceDependentRequestConsumer<TRequest, TResponse>` no longer use `IConsumeContext<TRequest>` in its methods
 - `INavTileRegistry`, add `BeginUpdate` and `EndUpdate` methods by inheriting `IHasUpdateLock`
 
 ### Removed
