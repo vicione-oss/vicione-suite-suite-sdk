@@ -28,7 +28,7 @@ flowchart TD
         subgraph Attributes
            InitialNotificationElementAttribute
         end
-        
+
         subgraph Services
             INotificationElementState
             NotificationElementRegistryItem
@@ -50,7 +50,7 @@ flowchart TD
         FooNotificationElementBadge
         FooNotificationElementFlyout
         FooNotificationElementFlyoutContent
-        
+
         FooNotificationElement-- "renders" -->FooNotificationElementIcon
         FooNotificationElement-- "renders" -->FooNotificationElementBadge
         FooNotificationElement-- "renders" -->FooNotificationElementFlyout
@@ -70,7 +70,7 @@ flowchart TD
             INotificationElementRegistryItem-- "provides" -->FooNotificationElementState
             FooNotificationElementState-- "passed as parameter to" -->DynamicComponent
             DynamicComponent-. "instantiates" .->FooNotificationElement
-        end  
+        end
 
         TopBar("TopBar")
         NotificationArea("NotificationArea")
@@ -90,7 +90,7 @@ flowchart TD
     end
 
     OpenApplication-- "renders" -->TopBar
-        
+
     InitialNotificationElementAttribute-. "decorates" .->FooNotificationElement
     ModuleAuthorizeAttribute-. "decorates" .->FooNotificationElement
 
@@ -124,7 +124,7 @@ For the following  file structure in `FooClientModule` is assumed:
 
   ``` csharp
   // Foo.Client/FooClientModule.cs
-  
+
   using Sdk.Client.NotificationArea.Extensions;
 
   public sealed class FooClientModule : ClientModule
@@ -140,13 +140,13 @@ For the following  file structure in `FooClientModule` is assumed:
 
   As a result, the following services are registered based on the given client module type per notification element decorated with [`InitialNotificationElementAttribute`](../src/Sdk.Client/NotificationArea/Attributes/InitialNotificationElementAttribute.cs) in the DI container:
 
-  Service | Description 
+  Service | Description
   -|-
   Class implementing [`INotificationElementState`](../src/Sdk.Client/NotificationArea/Services/INotificationElementState.cs) | The state for a notification element. The class is retrieved from parameter `TState` of base class [`NotificationElementBase<>`](../src/Sdk.Client/NotificationArea/Components/NotificationElementBase.cs) picked from the inheritance chain of the notification element. Once found it is registered as [keyed service](../src/Sdk.Client/NotificationArea/NotificationElementServiceKey.cs).
 
   Additionally, the following services are registered based on the given client module type in the DI container:
 
-  Service | Description 
+  Service | Description
   -|-
   [`INotificationElementRegistry<TClientModule>`](../src/Sdk.Client/NotificationArea/Services/INotificationElementRegistry.cs) | Registry for all notification elements of a client module
 
@@ -170,16 +170,17 @@ For the following  file structure in `FooClientModule` is assumed:
 - Add `FooNotificationElementIcon.razor`
 
   ``` razor
-  @using Sdk.Client.Components.MaterialDesignIcon
   @using Sdk.Client.Enums
   @using Sdk.Client.NotificationArea.Components
+  @using ViciOne.Ui.MonochromeIcons.Components
+  @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
   @implements INotificationElementIcon
 
-  <MaterialDesignIconComponent Name="MaterialDesignIconName.Forum" />
+  <MonochromeIcon Name="@MonochromeIconName.Wifi" Size="@MonochromeIconSize.Small" />
   ```
 
-  > The code above uses the [MaterialDesignIconComponent](../src/Sdk.Client.Components/MaterialDesignIcon/MaterialDesignIconComponent.razor) to implement the icon.
+  > The code above uses the [MonochromeIcon](https://gitlab.com/vicione-oss/vicione/ui-libs/monochrome-icons/-/blob/main/src/ViciOne.Ui.MonochromeIcons.Components/MonochromeIcon.razor.cs) component from the [Monochrome Icons repository](https://gitlab.com/vicione-oss/vicione/ui-libs/monochrome-icons/-/blob/main/README.md?ref_type=heads) to implement the icon.
 
 ### 5. Add notification element badge (optional)
 
@@ -205,7 +206,7 @@ For the following  file structure in `FooClientModule` is assumed:
 
   @inherits ComponentBase
   @implements INotificationElementFlyoutContent
-  
+
   Lorem ipsum
   ```
 
@@ -241,7 +242,7 @@ For the following  file structure in `FooClientModule` is assumed:
 
       protected override string GetTitle() => ...
   }
-  ``` 
+  ```
 
 ### 8. Configure notification element (optional)
 

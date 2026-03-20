@@ -53,6 +53,7 @@
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Network` namespace and all types within (`NetworkInterfacesSettings`, `NetworkInterfaceDetail`, `NetworkInterfaceCommonInformation`, `IPv4Settings`, `IPv4Detail`, `DHCPLease`, `NetworkDNSSettings`, `NetworkNTPSettings`, `NetworkProxySettings`, `NetworkProxyDetail`, `StaticHostDetail`) — replaced by flattened types in `Sdk.SystemConfiguration.Contracts`
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Service` namespace (`ServiceDetail` replaced by `ServiceInfo`)
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Extensions` namespace (`IEnumerableExtensions`)
+- *Breaking* Removed `MaterialDesignIconComponent`
 
 ### Updated
 
