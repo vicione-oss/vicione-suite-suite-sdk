@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using System.Diagnostics.CodeAnalysis;
+using MassTransit;
 using Sdk.Messaging;
 
 namespace Sdk.Backend.Messaging;
@@ -6,6 +7,7 @@ namespace Sdk.Backend.Messaging;
 /// <summary>
 /// A base consumer for handling request / response messages.
 /// </summary>
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 public abstract class RequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
     where TRequest : class, IRequest<TResponse>
     where TResponse : IResponse
@@ -18,22 +20,24 @@ public abstract class RequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
     {
         try
         {
-            await context.RespondAsync(await Respond(context)).ConfigureAwait(false);
+            await context.RespondAsync(await Respond(context.Message, context.CancellationToken).ConfigureAwait(false))
+                .ConfigureAwait(false);
         }
         catch (Exception e)
         {
-            await context.RespondAsync(await HandleException(context, e)).ConfigureAwait(false);
+            await context.RespondAsync(await HandleException(context.Message, e, context.CancellationToken).ConfigureAwait(false))
+                .ConfigureAwait(false);
         }
     }
 
     /// <summary>
     /// Handles an incoming request and produces a successful response.
     /// </summary>
-    protected abstract Task<TResponse> Respond(ConsumeContext<TRequest> context);
+    public abstract Task<TResponse> Respond(TRequest message, CancellationToken cancellationToken);
 
     /// <summary>
     /// Handles an exception occurred during <see cref="Respond"/>.
     /// </summary>
-    protected abstract Task<TResponse> HandleException(ConsumeContext<TRequest> context, Exception e);
+    public abstract Task<TResponse> HandleException(TRequest message, Exception e, CancellationToken cancellationToken);
 }
 

@@ -1,5 +1,4 @@
-﻿using MassTransit;
-using Sdk.Backend.Messaging;
+﻿using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 
 namespace TestModule.Backend.Consumer;
@@ -7,14 +6,14 @@ namespace TestModule.Backend.Consumer;
 public sealed class TestRequestConsumer : RequestConsumer<TestConsumerRequest, TestConsumerResponse>
 {
     /// <inheritdoc/>
-    protected override Task<TestConsumerResponse> Respond(ConsumeContext<TestConsumerRequest> context)
-        => context.Message.ThrowException
+    public override Task<TestConsumerResponse> Respond(TestConsumerRequest message, CancellationToken cancellationToken)
+        => message.ThrowException
             ? throw new InvalidOperationException("TriggeredException")
-            : Task.FromResult<TestConsumerResponse>(new(context.Message.RequestId));
+            : Task.FromResult(new TestConsumerResponse(message.RequestId));
 
     /// <inheritdoc/>
-    protected override Task<TestConsumerResponse> HandleException(ConsumeContext<TestConsumerRequest> context, Exception e)
-        => Task.FromResult<TestConsumerResponse>(new(context.Message.RequestId, new ErrorInfo(100, "Fail")));
+    public override Task<TestConsumerResponse> HandleException(TestConsumerRequest message, Exception e, CancellationToken cancellationToken)
+        => Task.FromResult(new TestConsumerResponse(message.RequestId, new ErrorInfo(100, "Fail")));
 }
 
 public record TestConsumerRequest(Guid RequestId) : IRequest<TestConsumerResponse>

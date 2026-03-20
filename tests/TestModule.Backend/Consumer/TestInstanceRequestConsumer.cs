@@ -1,5 +1,4 @@
-﻿using MassTransit;
-using Sdk.Backend.Messaging;
+﻿using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 
 namespace TestModule.Backend.Consumer;
@@ -7,14 +6,14 @@ namespace TestModule.Backend.Consumer;
 public sealed class TestInstanceRequestConsumer : InstanceDependentRequestConsumer<TestInstanceConsumerRequest, TestInstanceConsumerResponse>
 {
     /// <inheritdoc/>
-    protected override Task<TestInstanceConsumerResponse> Respond(ConsumeContext<TestInstanceConsumerRequest> context)
-        => context.Message.ThrowException
+    public override Task<TestInstanceConsumerResponse> Respond(TestInstanceConsumerRequest message, CancellationToken cancellationToken)
+        => message.ThrowException
             ? throw new InvalidOperationException("TriggeredException")
-            : Task.FromResult<TestInstanceConsumerResponse>(new(context.Message.RequestId));
+            : Task.FromResult(new TestInstanceConsumerResponse(message.RequestId));
 
     /// <inheritdoc/>
-    protected override Task<TestInstanceConsumerResponse> HandleException(ConsumeContext<TestInstanceConsumerRequest> context, Exception e)
-        => Task.FromResult<TestInstanceConsumerResponse>(new(context.Message.RequestId, new ErrorInfo(100, "Fail")));
+    public override Task<TestInstanceConsumerResponse> HandleException(TestInstanceConsumerRequest message, Exception e, CancellationToken cancellationToken)
+        => Task.FromResult(new TestInstanceConsumerResponse(message.RequestId, new ErrorInfo(100, "Fail")));
 }
 
 public record TestInstanceConsumerRequest(Guid RequestId) : IInstanceDependentRequest<TestInstanceConsumerResponse>
