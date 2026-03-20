@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Sdk.Client.Extensions;
@@ -44,7 +44,7 @@ public sealed partial class FileDropComponent
             {
                 _isInitialized = true;
 
-                _fileDrop = await jsObjectReference.InvokeAsync<IJSObjectReference>("init", _dropZoneElement, _inputLabel, _descriptionLabel, Localization.FileDropComponent.NoFileSelected, _inputFile.Element);
+                _fileDrop = await jsObjectReference.InvokeConstructorAsync("FileDrop", _dropZoneElement, _inputLabel, _descriptionLabel, Localization.FileDropComponent.NoFileSelected, _inputFile.Element);
             }
         }
     }

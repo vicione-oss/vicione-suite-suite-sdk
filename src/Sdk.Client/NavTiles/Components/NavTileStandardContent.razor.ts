@@ -1,4 +1,4 @@
-class NavTileStandardContent {
+export class NavTileStandardContent {
     #headlineResizeObserver: ResizeObserver | undefined;
     #isDisposed = false;
 
@@ -83,12 +83,4 @@ class NavTileStandardContent {
 
         return result;
     }
-}
-
-export async function init(sublineElement: HTMLElement, headlineElement: HTMLElement, contentElement: HTMLElement, iconElement: HTMLElement, dotNetHelper: DotNet.DotNetObject) {
-    const navTileStandardContent = new NavTileStandardContent(sublineElement, headlineElement, contentElement, iconElement, dotNetHelper);
-
-    await navTileStandardContent.initSubline();
-
-    return navTileStandardContent;
 }

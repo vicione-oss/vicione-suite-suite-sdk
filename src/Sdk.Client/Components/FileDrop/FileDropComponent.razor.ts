@@ -1,4 +1,4 @@
-class FileDrop {
+export class FileDrop {
 
     readonly #descriptionWidth: number;
 
@@ -8,9 +8,7 @@ class FileDrop {
         readonly noFileUploaded: string,
         readonly inputFile: HTMLInputElement) {
         this.#descriptionWidth = descriptionLabel.clientWidth;
-    }
 
-    public init() {
         this.dropZoneElement.addEventListener('dragenter', this.#onDragHover.bind(this));
         this.dropZoneElement.addEventListener('dragover', this.#onDragHover.bind(this));
         this.dropZoneElement.addEventListener('dragleave', this.#onDragLeave.bind(this));
@@ -64,11 +62,4 @@ class FileDrop {
         this.descriptionLabel.textContent = this.inputFile.files[0].name;
         this.inputLabel.title = this.inputFile.files[0].name;
     }
-}
-
-export function init(dropZoneElement: HTMLElement, inputLabel: HTMLElement, descriptionLabel: HTMLElement, noFileUploaded: string, inputFile: HTMLInputElement) {
-    const fileDrop = new FileDrop(dropZoneElement, inputLabel, descriptionLabel, noFileUploaded, inputFile);
-    fileDrop.init();
-
-    return fileDrop;
 }
