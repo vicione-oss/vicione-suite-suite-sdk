@@ -9,6 +9,7 @@ namespace Sdk.Testing.Backend;
 public sealed class TestModuleDbContextRegistrar : IModuleDbContextRegistrar, IAsyncDisposable
 {
     private readonly Dictionary<string, SqliteConnection> _keeperConnections = [];
+    private readonly string _testUId = Guid.NewGuid().ToString();
 
     /// <inheritdoc/>
     public void Register<TDbContextInterface, TSqliteImplementation, TPostgresImplementation>(
@@ -23,7 +24,7 @@ public sealed class TestModuleDbContextRegistrar : IModuleDbContextRegistrar, IA
     {
         if (!_keeperConnections.ContainsKey(sqliteDbName))
         {
-            var connection = new SqliteConnection($"Data Source={sqliteDbName};Mode=Memory;Cache=Shared");
+            var connection = new SqliteConnection($"Data Source={sqliteDbName}_{_testUId};Mode=Memory;Cache=Shared");
             connection.Open();
             _keeperConnections[sqliteDbName] = connection;
         }
@@ -33,7 +34,7 @@ public sealed class TestModuleDbContextRegistrar : IModuleDbContextRegistrar, IA
             typeof(TDbContextInterface).FullName!));
         services.AddScoped(typeof(TDbContextInterface), _ =>
         {
-            var connection = new SqliteConnection($"Data Source={sqliteDbName};Mode=Memory;Cache=Shared");
+            var connection = new SqliteConnection($"Data Source={sqliteDbName}_{_testUId};Mode=Memory;Cache=Shared");
             try
             {
                 connection.Open();
