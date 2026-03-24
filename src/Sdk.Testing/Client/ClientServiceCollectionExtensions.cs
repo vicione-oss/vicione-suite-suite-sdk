@@ -1,4 +1,5 @@
-﻿using Sdk.Client.Modules;
+﻿using Microsoft.JSInterop;
+using Sdk.Client.Modules;
 using Sdk.Client.Modules.Localization;
 using Sdk.Instance;
 
@@ -17,6 +18,13 @@ public static class ClientServiceCollectionExtensions
         public IServiceCollection AddClientServices(Action<ClientServiceConfigurator>? configurator)
         {
             var config = new ClientServiceConfigurator(services);
+
+            // NSubstitute auto-generates a non-null IJSObjectReference from IncludeModuleScript by default.
+            // Methods like InvokeConstructorAsync on that auto-generated mock return null, which causes NREs
+            // when components call InvokeVoidAsync on the result. Return null explicitly so that components'
+            // JS interop null guards prevent entering those code paths during tests.
+            config.JsInterop.IncludeModuleScript(Arg.Any<Uri>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<IJSObjectReference?>(null));
 
             services
                 .AddSingleton(config.ActiveNotificationElementPolicy)
