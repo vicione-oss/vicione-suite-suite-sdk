@@ -34,6 +34,7 @@
   <Folder Name="/src/">
     <File Path="src/.editorconfig" />
     <Project Path="src/Sdk.Backend/Sdk.Backend.csproj" />
+    <Project Path="src/Sdk.Backend.SourceGenerators/Sdk.Backend.SourceGenerators.csproj" />
     <Project Path="src/Sdk.Client/Sdk.Client.csproj" />
     <Project Path="src/Sdk.Deployment/Sdk.Deployment.csproj" />
     <Project Path="src/Sdk.Testing/Sdk.Testing.csproj" />
@@ -41,6 +42,7 @@
   </Folder>
   <Folder Name="/Tests/">
     <File Path="tests/.editorconfig" />
+    <Project Path="tests/Sdk.Backend.SourceGenerators.Tests/Sdk.Backend.SourceGenerators.Tests.csproj" />
     <Project Path="tests/Sdk.Backend.Tests/Sdk.Backend.Tests.csproj" />
     <Project Path="tests/Sdk.Client.Tests/Sdk.Client.Tests.csproj" />
     <Project Path="tests/Sdk.Testing.Tests/Sdk.Testing.Tests.csproj" />

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ViciOne.Suite.Sdk.Backend.SourceGenerators.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Sdk.Backend.SourceGenerators\Sdk.Backend.SourceGenerators.csproj" />
+    <ProjectReference Include="..\..\src\Sdk.Backend\Sdk.Backend.csproj" />
+  </ItemGroup>
+
+</Project>
