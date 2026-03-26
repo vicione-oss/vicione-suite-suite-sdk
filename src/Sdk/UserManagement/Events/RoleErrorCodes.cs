@@ -1,15 +1,9 @@
-﻿using MassTransit;
-using Sdk.Messaging;
-using Sdk.UserManagement.Contracts;
-
 namespace Sdk.UserManagement.Events;
 
 /// <summary>
-/// Represents an event that is published when an error occurs during a role management operation.
+/// Represents possible error codes that can be associated with role-related events, such as creation, update, or deletion failures.
 /// </summary>
-[ForwardToUI]
-[ExcludeFromCodeCoverage]
-public sealed record RoleErrorEvent(Guid CorrelationId, ErrorInfo ErrorInfo, Role Role) : IEvent, CorrelatedBy<Guid>
+public static class RoleErrorCodes
 {
     /// <summary>
     /// An unknown or unspecified error occurred.

@@ -1,4 +1,3 @@
-﻿using MassTransit;
 using Sdk.Messaging;
 using Sdk.SystemConfiguration.Commands;
 using Sdk.SystemConfiguration.Contracts;
@@ -10,4 +9,4 @@ namespace Sdk.SystemConfiguration.Events;
 /// </summary>
 [ForwardToUI]
 [ExcludeFromCodeCoverage]
-public record ControlServiceCompleted(Guid CorrelationId, string ServiceName, ServiceState ServiceState) : IEvent, CorrelatedBy<Guid>;
+public record ControlServiceCompleted(string ServiceName, ServiceState ServiceState) : ResponseEventBase;

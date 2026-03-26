@@ -1,4 +1,3 @@
-﻿using MassTransit;
 using Sdk.Connections.Contracts;
 using Sdk.Messaging;
 
@@ -9,4 +8,4 @@ namespace Sdk.Connections.Events;
 /// </summary>
 [ForwardToUI]
 [ExcludeFromCodeCoverage]
-public sealed record TagsChanged(Guid CorrelationId, CrudAction Action, List<Tag> Tags) : IEvent, CorrelatedBy<Guid>;
+public sealed record TagsChanged(CrudAction Action, List<Tag> Tags) : ResponseEventBase;

@@ -1,4 +1,3 @@
-﻿using MassTransit;
 using Sdk.Messaging;
 
 namespace Sdk.SystemConfiguration.Events;
@@ -8,4 +7,4 @@ namespace Sdk.SystemConfiguration.Events;
 /// </summary>
 [ForwardToUI]
 [ExcludeFromCodeCoverage]
-public record SystemConfigurationChanged(Guid CorrelationId) : IEvent, CorrelatedBy<Guid>;
+public record SystemConfigurationChanged() : ResponseEventBase;
