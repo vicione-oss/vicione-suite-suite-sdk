@@ -22,11 +22,22 @@
     <ProjectReference Include="..\Sdk\Sdk.csproj">
       <Private>false</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Sdk.Backend.SourceGenerators\Sdk.Backend.SourceGenerators.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="ViciOne.Suite.Sdk.Backend.Tests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <!-- Pack the source generator into the NuGet package so consumers get it automatically -->
+  <ItemGroup>
+    <None Include="..\Sdk.Backend.SourceGenerators\bin\$(Configuration)\netstandard2.0\ViciOne.Suite.Sdk.Backend.SourceGenerators.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
   </ItemGroup>
   
 </Project>
