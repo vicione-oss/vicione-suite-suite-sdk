@@ -1,4 +1,3 @@
-﻿using MassTransit;
 using Sdk.Messaging;
 using Sdk.UserManagement.Contracts;
 
@@ -9,4 +8,4 @@ namespace Sdk.UserManagement.Events;
 /// </summary>
 [ForwardToUI]
 [ExcludeFromCodeCoverage]
-public sealed record RoleDeletedEvent(Guid CorrelationId, Role Role) : IEvent, CorrelatedBy<Guid>;
+public sealed record RoleDeletedEvent(Role Role) : ResponseEventBase;

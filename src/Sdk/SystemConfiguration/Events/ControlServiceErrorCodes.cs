@@ -1,15 +1,9 @@
-﻿using MassTransit;
-using Sdk.Messaging;
-using Sdk.SystemConfiguration.Commands;
-
 namespace Sdk.SystemConfiguration.Events;
 
 /// <summary>
-/// Represents an event indicating that an error occurred during a <see cref="ControlService"/> command.
+/// Error codes that can be associated with service-related events, such as creation, update, or deletion failures.
 /// </summary>
-[ForwardToUI]
-[ExcludeFromCodeCoverage]
-public record ControlServiceError(Guid CorrelationId, string ServiceName, ErrorInfo RequestError) : IEvent, CorrelatedBy<Guid>
+public static class ControlServiceErrorCodes
 {
     /// <summary>
     /// Error code for an unspecified or unknown error.

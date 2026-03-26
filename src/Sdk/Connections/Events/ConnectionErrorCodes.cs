@@ -1,14 +1,9 @@
-﻿using MassTransit;
-using Sdk.Messaging;
-
 namespace Sdk.Connections.Events;
 
 /// <summary>
-/// Represents an event indicating that an error occurred during a connection operation.
+/// Error codes that can be associated with connection-related events, such as creation, update, or deletion failures.
 /// </summary>
-[ForwardToUI]
-[ExcludeFromCodeCoverage]
-public sealed record ConnectionErrorOccured(Guid CorrelationId, ErrorInfo Error, Guid? ConnectionId) : IEvent, CorrelatedBy<Guid>
+public static class ConnectionErrorCodes
 {
     /// <summary>
     /// Error code indicating an unspecified or unknown error occurred.

@@ -5,6 +5,8 @@
 ### Added
 
 - Publish samples to [GitLab pages](https://suite-sdk-0ceb85.gitlab.io)
+- `Sdk.Messaging`
+  - Added `ResponseEventBase` and `InstanceResponseEventBase` base class for response events
 - *Breaking* Added `SystemType` property to `IInstanceInformation` interface
 - *Breaking* Added `IsAvailable` property to `IControlServiceManagement` interface and renamed `ControleService` to `TryControlService` for clarity.
 - `Sdk.Backend.Persistence`
@@ -56,6 +58,7 @@
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Service` namespace (`ServiceDetail` replaced by `ServiceInfo`)
 - *Breaking* Removed `Sdk.SystemConfiguration.Contracts.Extensions` namespace (`IEnumerableExtensions`)
 - *Breaking* Removed `MaterialDesignIconComponent`
+- *Breaking* Removed `ControlServiceError`, `ConnectionErrorOccured` and `RoleErrorEvent`
 
 ### Updated
 
