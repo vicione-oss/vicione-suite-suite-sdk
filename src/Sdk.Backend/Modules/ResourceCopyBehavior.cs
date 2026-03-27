@@ -17,12 +17,6 @@ public enum ResourceCopyBehavior
     CopyAlways,
 
     /// <summary>
-    /// Copy the resource only if the source file is newer than the existing target file.
-    /// If the target file does not exist, the resource is always copied.
-    /// </summary>
-    CopyIfNewer,
-
-    /// <summary>
     /// Never copy the resource. Use this for files that exist in the resource directory
     /// for development purposes but should not be deployed to the module's workspace.
     /// </summary>

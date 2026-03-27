@@ -57,7 +57,6 @@ Assembly output directory         Module workspace directory
 |---|---|
 | `CopyIfNotExists` | Copy only if the target file does not exist. This is the default. Use this for files that users may customize after initial deployment. |
 | `CopyAlways` | Always copy, overwriting any existing file. Use this for files that must always match the version shipped with the module. |
-| `CopyIfNewer` | Copy only if the source file's last write time is newer than the target. Use this for files that should be updated with new module versions but not overwritten if unchanged. |
 | `NeverCopy` | Never copy this file. Use this to exclude files from deployment that exist in the resource directory for development purposes only. |
 
 ## Rules
