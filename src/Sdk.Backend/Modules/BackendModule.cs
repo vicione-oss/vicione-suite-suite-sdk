@@ -54,10 +54,11 @@ public abstract class BackendModule : IModule
     public virtual bool DisableDefaultFeature => false;
 
     /// <summary>
-    /// Gets the optional directory containing embedded or static resources for this module.
-    /// Override to return a path when your module needs to expose additional files.
+    /// Gets the optional resource options for this module, controlling which files are deployed
+    /// to the module's workspace directory and how they are copied.
+    /// Override to return a <see cref="ModuleResourceOptions"/> when your module needs to expose additional files.
     /// </summary>
-    public virtual string? GetResourceDirectory(IServiceProvider services) => null;
+    public virtual ModuleResourceOptions? GetResourceOptions(IServiceProvider services) => null;
 
     /// <summary>
     /// Configures services and MVC options for this module.
