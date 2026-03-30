@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
-    <ViciOneUiMonochromeIconsVersion>4.5.0</ViciOneUiMonochromeIconsVersion>
+    <ViciOneUiMonochromeIconsVersion>4.7.0</ViciOneUiMonochromeIconsVersion>
     <MassTransitVersion>8.5.8</MassTransitVersion>
     <DotNetVersion>10.0.5</DotNetVersion>
   </PropertyGroup>

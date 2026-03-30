@@ -70,7 +70,7 @@
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.6.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
 - `ViciOne.Ui.Localization` package, update to version `3.2.0`
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.5.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.7.0`
 - `xunit` packages, update to version `xunit.v3 - 3.2.2`
 - `xunit.extensibility.core` packages, update to version `xunit.v3.extensibility.core - 3.2.2`
 
