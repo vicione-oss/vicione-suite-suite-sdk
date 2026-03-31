@@ -67,7 +67,7 @@
 - `Microsoft` packages, update to version `10.0.5`
 - `Microsoft.Testing.Platform` packages, update to version `2.1.0`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.1`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.6.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.7.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
 - `ViciOne.Ui.Localization` package, update to version `3.2.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.7.0`
