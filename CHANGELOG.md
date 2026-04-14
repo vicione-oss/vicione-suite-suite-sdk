@@ -62,12 +62,13 @@
 
 ### Updated
 
-- `AspNetCore.SassCompiler` package, update to version `1.97.1`
-- `bunit` package, update to version `2.6.2`
+- `AspNetCore.SassCompiler` package, update to version `1.99.0`
+- `bunit` package, update to version `2.7.2`
+- `MassTransit` packages, update to version `8.5.9`
 - `Microsoft` packages, update to version `10.0.5`
-- `Microsoft.Testing.Platform` packages, update to version `2.1.0`
+- `Microsoft.Testing.Platform` packages, update to version `2.2.1`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.1`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.7.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.8.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
 - `ViciOne.Ui.Localization` package, update to version `3.2.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.7.0`
