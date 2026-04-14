@@ -1,4 +1,4 @@
-﻿@use "../design/colors";
+@use "../design/colors";
 @use 'sass:color';
 
 @mixin background-styles() {
@@ -50,4 +50,10 @@
     font-size: 10px;
     letter-spacing: 0.4px;
     color: color.adjust(colors.$font-light, $alpha: -0.2);
+}
+
+@mixin full-width() {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }

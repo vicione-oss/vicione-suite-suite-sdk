@@ -1,5 +1,5 @@
 @use "../../Styles/settings/mixins";
 
-.settings-field-combo-box {
+.settings-field-spin-edit {
     @include mixins.full-width();
 }

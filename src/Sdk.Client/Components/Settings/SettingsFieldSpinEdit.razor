@@ -1,0 +1,21 @@
+@using ViciOne.Ui.Blazor.Components.SpinEdit
+
+@typeparam TValue
+@typeparam TInterval
+@typeparam TLimit
+
+<div class="settings-field-spin-edit">
+    <SpinEdit TValue="TValue"
+              TInterval="TInterval"
+              TLimit="TLimit"
+              Value="@Value"
+              ValueChanged="@SpinEditValueChanged"
+              Interval="@Interval"
+              Minimum="@Minimum"
+              Maximum="@Maximum"
+              IsRastered="@IsRastered"
+              ReadOnly="@ReadOnly"
+              Enabled="@Enabled"
+              Placeholder="@Placeholder"
+              CssClass="@CssClass" />
+</div>

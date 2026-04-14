@@ -19,6 +19,7 @@
   - Added `ControlPanelSaveHandlerBase` and `ControlPanelResetHandlerBase` services with built-in support for async command, event operations and cancellation
   - Added `ILocalHttpClient` to support DI for typed `HttpClient` instances that are pre-configured for the local suite environment
   - Added `SettingsFieldSwitch` component for boolean settings
+  - Added `SettingsFieldSpinEdit` component for numeric settings
 
 ### Fixed
 
