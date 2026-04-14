@@ -50,6 +50,10 @@
             <SettingsField IsLoading="@SettingsFieldIsLoading" Label="Enabled" LoadingIndication="@SettingsFieldLoadingIndication">
                 <SettingsFieldSwitch @bind-Value="_enabled" />
             </SettingsField>
+
+            <SettingsField IsLoading="@SettingsFieldIsLoading" Label="Width" LoadingIndication="@SettingsFieldLoadingIndication">
+                <SettingsFieldSpinEdit Interval="1" Minimum="0" Maximum="1000" @bind-Value="_width" />
+            </SettingsField>
         </ChildContent>
     </SettingsGroup>
 </SettingsLayout>

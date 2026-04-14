@@ -75,7 +75,7 @@ flowchart TD
         WithSaveHandler-- "registers" -->IControlPanelSaveHandler
         WithCancelHandler-- "registers" -->IControlPanelCancelHandler
         WithResetHandler-- "registers" -->IControlPanelResetHandler
-        
+
         ControlPanelInfo-. "provides type to resolve" .->IControlPanelDescriptor
         ControlPanelInfo-. "provides type to resolve" .->IControlPanelState
         ControlPanelInfo-. "provides type to resolve" .->IControlPanelCategoryDescriptor
@@ -119,7 +119,7 @@ flowchart TD
 ### Settings components
 
 ```mermaid
-flowchart TD
+flowchart LR
     subgraph "Sdk.Client.Components"
         DescriptionBanner
         SettingsLayout
@@ -127,6 +127,10 @@ flowchart TD
         SettingsField
         SettingsFieldTextBox
         SettingsFieldButton
+        SettingsFieldComboBox
+        SettingsFieldCultureComboBox
+        SettingsFieldSpinEdit
+        SettingsFieldSwitch
         SettingsFieldSeparator
         SettingsInformation
         SettingsStepper
@@ -138,6 +142,10 @@ flowchart TD
         SettingsGroup-. "may contain" .->SettingsStepper
         SettingsField-. "may contain" .->SettingsFieldTextBox
         SettingsField-. "may contain" .->SettingsFieldButton
+        SettingsField-. "may contain" .->SettingsFieldComboBox
+        SettingsField-. "may contain" .->SettingsFieldCultureComboBox
+        SettingsField-. "may contain" .->SettingsFieldSpinEdit
+        SettingsField-. "may contain" .->SettingsFieldSwitch
         SettingsField-. "may contain" .->SettingsFieldSeparator
     end
 
@@ -150,7 +158,7 @@ flowchart TD
 
     classDef cluster fill:#ffffff10
     classDef component stroke:#00ff00
-    
+
     class BarControlPanel component;
 ```
 
@@ -189,7 +197,7 @@ For the following  file structure in `FooClientModule` is assumed:
   @using Sdk.Client.ControlPanels.Services
 
   @inherits ControlPanelBase<BarControlPanelState>
-  
+
   @* content of control panel comes here *@
   ```
 
@@ -202,10 +210,10 @@ For the following  file structure in `FooClientModule` is assumed:
   {
       // logic of the control panel comes here
   }
-  ``` 
+  ```
 ### 4.1 Add control panel content
 
-> It is recommended to use component [`SettingsLayout`](../src/Sdk.Client.Components/Settings/SettingsLayout.razor.cs), [`SettingsGroup`](../src/Sdk.Client.Components/Settings/SettingsGroup.razor.cs), [`SettingsField`](../src/Sdk.Client.Components/Settings/SettingsField.razor.cs), [`SettingsFieldTextBox`](../src/Sdk.Client.Components/Settings/SettingsFieldTextBox.razor.cs), [`SettingsFieldButton`](../src/Sdk.Client.Components/Settings/SettingsFieldButton.razor.cs), [`SettingsFieldSeparator`](../src/Sdk.Client.Components/Settings/SettingsFieldSeparator.razor.cs), [`SettingsStepper`](../src/Sdk.Client.Components/Settings/SettingsStepper.razor.cs) and [`SettingsInformation`](../src/Sdk.Client.Components/Settings/SettingsInformation.razor.cs) to implement content in a unified way holding on to a unified user experience. See [architecture diagram](#settings-components) to understand how it all fits together.
+> It is recommended to use component [`SettingsLayout`](../src/Sdk.Client/Components/Settings/SettingsLayout.razor.cs), [`SettingsGroup`](../src/Sdk.Client/Components/Settings/SettingsGroup.razor.cs), [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs), [`SettingsFieldTextBox`](../src/Sdk.Client/Components/Settings/SettingsFieldTextBox.razor.cs), [`SettingsFieldButton`](../src/Sdk.Client/Components/Settings/SettingsFieldButton.razor.cs), [`SettingsFieldComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldComboBox.razor.cs), [`SettingsFieldCultureComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldCultureComboBox.razor.cs), [`SettingsFieldSpinEdit`](../src/Sdk.Client/Components/Settings/SettingsFieldSpinEdit.razor.cs), [`SettingsFieldSwitch`](../src/Sdk.Client/Components/Settings/SettingsFieldSwitch.razor.cs), [`SettingsFieldSeparator`](../src/Sdk.Client/Components/Settings/SettingsFieldSeparator.razor.cs), [`SettingsStepper`](../src/Sdk.Client/Components/Settings/SettingsStepper.razor.cs) and [`SettingsInformation`](../src/Sdk.Client/Components/Settings/SettingsInformation.razor.cs) to implement content in a unified way holding on to a unified user experience. See [architecture diagram](#settings-components) to understand how it all fits together.
 
 - Add layout
 
@@ -217,7 +225,7 @@ For the following  file structure in `FooClientModule` is assumed:
 
   ``` html
   <SettingsLayout>
-      <SettingsGroup Title="Connection" Subline="Connection settings" @bind-Expanded="State.ConnectionExpanded">
+      <SettingsGroup Title="Connection" Subline="Connection settings" @bind-Expanded="State.ConnectionExpanded" @bind-Value:after="BeginEdit">
       </SettingsGroup>
   </SettingsLayout>
   ```
@@ -226,15 +234,17 @@ For the following  file structure in `FooClientModule` is assumed:
 
   > You may nest `SettingsGroup` in `SettingsGroup`. Deeper nesting is not supported.
 
-  > `SettingsGroup` supports customizing the expander via property `Expander`. It is recommended to use [`ComboBoxExpander`](../src/Sdk.Client.Components/Settings/Expanders/ComboBoxExpander.razor.cs) or [`SwitchExpander`](../src/Sdk.Client.Components/Settings/Expanders/SwitchExpander.razor.cs).
+  > `SettingsGroup` supports customizing the expander via property `Expander`. It is recommended to use [`ComboBoxExpander`](../src/Sdk.Client/Components/Settings/Expanders/ComboBoxExpander.razor.cs) or [`SwitchExpander`](../src/Sdk.Client/Components/Settings/Expanders/SwitchExpander.razor.cs).
+
+  > It is recommended to use `@bind-Value:after="BeginEdit"` alongside `@bind-...` statements to enter the "something has been edited" mode when the user changes settings. In this mode, the UI provides a `Save` and `Cancel` button to save or cancel user edits as a whole.
 
 - Add settings field
 
   ``` html
   <SettingsLayout>
-      <SettingsGroup Title="Connection" Subline="Connection settings" @bind-Expanded="State.ConnectionExpanded">
+      <SettingsGroup Title="Connection" Subline="Connection settings" @bind-Expanded="State.ConnectionExpanded" @bind-Value:after="BeginEdit">
           <SettingsField Label="Name">
-              <SettingsFieldTextBox Placeholder="Name" @bind-Value="@State.ConnectionName" />
+              <SettingsFieldTextBox Placeholder="Name" @bind-Value="@State.ConnectionName" @bind-Value:after="BeginEdit" />
           </SettingsField>
 
           <SettingsField>
@@ -246,11 +256,11 @@ For the following  file structure in `FooClientModule` is assumed:
 
   > In the preceding example `ConnectionName` is a property of inherited parameter `State`. The property is [bound](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/data-binding) to the input element to provide / receive the setting value and to preserve it across render cycles.
 
-  > You can also use [`SettingsInformation`](../src/Sdk.Client.Components/Settings/SettingsInformation.razor.cs) instead of [`SettingsField`](../src/Sdk.Client.Components/Settings/SettingsField.razor.cs) to render a block of informational content.
+  > You can also use [`SettingsInformation`](../src/Sdk.Client/Components/Settings/SettingsInformation.razor.cs) instead of [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs) to render a block of informational content.
 
-  > You can use [`SettingsFieldSeparator`](../src/Sdk.Client.Components/Settings/SettingsFieldSeparator.razor.cs) between a set of [`SettingsField`](../src/Sdk.Client.Components/Settings/SettingsField.razor.cs) or other components to have a visual separation between the sets.
+  > You can use [`SettingsFieldSeparator`](../src/Sdk.Client/Components/Settings/SettingsFieldSeparator.razor.cs) between a set of [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs) or other components to have a visual separation between the sets.
 
-  > You can use [`SettingsStepper`](../src/Sdk.Client.Components/Settings/SettingsStepper.razor.cs) below a [`SettingsField`](../src/Sdk.Client.Components/Settings/SettingsField.razor.cs) to render a component with plus / minus buttons.
+  > You can use [`SettingsStepper`](../src/Sdk.Client/Components/Settings/SettingsStepper.razor.cs) below a [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs) to render a component with plus / minus buttons.
 
 - Optional, wrap content in [`ControlPanelPage`](../src/Sdk.Client/ControlPanels/Components/ControlPanelPage.razor.cs)
 
@@ -262,7 +272,7 @@ For the following  file structure in `FooClientModule` is assumed:
 
   > Wrapping content in [`ControlPanelPage`](../src/Sdk.Client/Components/ControlPanelPage.razor.cs) results in a tab being displayed for the content in the header area of the settings popup.
 
-- Optional, add [`DescriptionBanner`](../src/Sdk.Client.Components/Settings/DescriptionBanner.razor.cs) to show a brief description for the control panel or control panel page
+- Optional, add [`DescriptionBanner`](../src/Sdk.Client/Components/Settings/DescriptionBanner.razor.cs) to show a brief description for the control panel or control panel page
 
   ``` html
   <ControlPanelPage Title="General">

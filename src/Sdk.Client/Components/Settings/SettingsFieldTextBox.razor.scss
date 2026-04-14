@@ -1,9 +1,7 @@
-﻿@use "../../Styles/settings/mixins";
+@use "../../Styles/settings/mixins";
 
 .settings-field-text-box {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+    @include mixins.full-width();
 
     > ::deep input {
         text-align: right;
