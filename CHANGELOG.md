@@ -66,7 +66,7 @@
 - `AspNetCore.SassCompiler` package, update to version `1.99.0`
 - `bunit` package, update to version `2.7.2`
 - `MassTransit` packages, update to version `8.5.9`
-- `Microsoft` packages, update to version `10.0.5`
+- `Microsoft` packages, update to version `10.0.6`
 - `Microsoft.Testing.Platform` packages, update to version `2.2.1`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.1`
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.8.0`
