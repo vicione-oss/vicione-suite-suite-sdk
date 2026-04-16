@@ -15,6 +15,8 @@
   - Added `Database` property to `IModuleDbContext` interface, exposing the `DatabaseFacade`
   - Added `AddModuleDbContext` extension method on `IServiceCollection` — modules call this to register their DbContext; it delegates to the host-provided `IModuleDbContextRegistrar`
   - Added `[ModuleDbContext]` attribute and incremental source generator (`Sdk.Backend.SourceGenerators`) that eliminates boilerplate for `ModuleDbContext` subclasses — automatically generates the `Sqlite`/`Postgres` implementation classes, their `IDesignTimeDbContextFactory` factories, a `protected` constructor, and optionally the `DefaultSchemaName` override
+- `Sdk.Backend.Artifacts`
+  - Added `ModifiedAfter` method to `IArtifactQueryBuilder` to limit the query results to artifacts modified after a certain date
 - `Sdk.Client`
   - Added `ControlPanelSaveHandlerBase` and `ControlPanelResetHandlerBase` services with built-in support for async command, event operations and cancellation
   - Added `ILocalHttpClient` to support DI for typed `HttpClient` instances that are pre-configured for the local suite environment
@@ -71,7 +73,7 @@
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.1`
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.8.0`
 - `ViciOne.Ui.Design` package, update to version `2.0.3`
-- `ViciOne.Ui.Localization` package, update to version `3.2.0`
+- `ViciOne.Ui.Localization` package, update to version `3.3.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.7.0`
 - `xunit` packages, update to version `xunit.v3 - 3.2.2`
 - `xunit.extensibility.core` packages, update to version `xunit.v3.extensibility.core - 3.2.2`
