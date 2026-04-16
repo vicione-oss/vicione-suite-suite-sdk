@@ -1,4 +1,4 @@
-#SDK:ViciOne.Suite.Sdk:v2.0.0-ci1970741
+#SDK:ViciOne.Suite.Sdk:v2.0.0
 #RUNTIMES:linux-x64,linux-arm64,win-x64,win-x86
 #LANGUAGES:en,de
 BouncyCastle.Cryptography.dll
