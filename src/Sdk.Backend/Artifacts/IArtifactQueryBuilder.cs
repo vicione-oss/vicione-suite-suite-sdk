@@ -1,4 +1,4 @@
-﻿namespace Sdk.Backend.Artifacts;
+namespace Sdk.Backend.Artifacts;
 
 /// <summary>
 /// Fluent builder for constructing artifact queries.
@@ -19,6 +19,11 @@ public interface IArtifactQueryBuilder
     /// Adds a condition that the artifact path must match the specified regular expression pattern.
     /// </summary>
     IArtifactQueryBuilder AndPathMatches(string pattern);
+
+    /// <summary>
+    /// Adds a condition that the artifact has to be modified after the specified date and time.
+    /// </summary>
+    IArtifactQueryBuilder ModifiedAfter(DateTimeOffset value);
 
     /// <summary>
     /// Specifies which fields to include in the query result.
