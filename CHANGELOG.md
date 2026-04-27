@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 - Unreleased
+
+### Updated
+
+- `Microsoft` packages, update to version `10.0.7`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.8.0`
+
 ## 2.0.0 - 2026-04-16
 
 ### Added

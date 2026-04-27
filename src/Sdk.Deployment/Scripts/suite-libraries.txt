@@ -1,4 +1,4 @@
-#SDK:ViciOne.Suite.Sdk:v2.0.0
+#SDK:ViciOne.Suite.Sdk:v2.0.1
 #RUNTIMES:linux-x64,linux-arm64,win-x64,win-x86
 #LANGUAGES:en,de
 BouncyCastle.Cryptography.dll
@@ -434,6 +434,7 @@ ViciOne.Ui.Shared.Dx.dll
 libe_sqlite3
 libe_sqlite3.so
 e_sqlite3.so
+e_sqlite3.dll
 /wwwroot/_content/DevExpress.Blazor
 /wwwroot/_content/DevExpress.Blazor.Resources
 /wwwroot/_content/DevExpress.Blazor.RichEdit
