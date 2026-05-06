@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using Sdk.Client.Extensions;
 using Sdk.Client.Services;
 using Sdk.Modules;
 
@@ -8,7 +8,7 @@ namespace Sdk.Client.Samples.Shared.Services;
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes
-internal sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop
+internal sealed class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger) : IJsInterop
 {
     public Task DownloadAs(string content, string name, CancellationToken token = default) => throw new NotImplementedException();
     public Task DownloadAs(Stream content, string name, CancellationToken token = default) => throw new NotImplementedException();
@@ -20,7 +20,21 @@ internal sealed class JsInterop(IJSRuntime jsRuntime) : IJsInterop
     public Task IncludeLinks(object[] links, CancellationToken token = default) => throw new NotImplementedException();
     public Task IncludeMeta(string id, string attribute, string name, string content, string key, CancellationToken token = default) => throw new NotImplementedException();
     public Task IncludeScript(string id, Uri src, string integrity, string crossorigin, string content, string location, string key, CancellationToken token = default) => throw new NotImplementedException();
-    public async Task<IJSObjectReference?> IncludeModuleScript(Uri location, CancellationToken token = default) => await jsRuntime.ImportScript(location);
+    public async Task<IJSObjectReference?> IncludeModuleScript(Uri location, CancellationToken token = default)
+    {
+        try
+        {
+            var reference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", location.OriginalString);
+
+            return reference;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, nameof(IncludeModuleScript));
+
+            return null;
+        }
+    }
     public Task<IJSObjectReference?> IncludeModuleScript<T>(string filename, CancellationToken token = default) where T : IModule => throw new NotImplementedException();
     public Task IncludeScript(string id, string src, string integrity, string crossorigin, string content, string location, string key, CancellationToken token = default) => throw new NotImplementedException();
     public Task IncludeScripts(object[] scripts, CancellationToken token = default) => throw new NotImplementedException();
