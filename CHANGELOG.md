@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.1 - Unreleased
+## 2.0.1 - 2026-05-20
 
 ### Changed
 
@@ -8,9 +8,10 @@
 
 ### Updated
 
-- `Microsoft` packages, update to version `10.0.7`
+- `Microsoft` packages, update to version `10.0.8`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.12.0`
 - `ViciOne.Ui.Design` package, update to version `2.1.0`
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.8.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.10.0`
 
 ## 2.0.0 - 2026-04-16
 
