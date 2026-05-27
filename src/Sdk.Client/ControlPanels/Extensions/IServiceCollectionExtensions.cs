@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sdk.Authorization.Extensions;
@@ -63,6 +63,11 @@ public static class IServiceCollectionExtensions
 
         internal IServiceCollection AddControlPanelCategoryDescriptor(ControlPanelInfo controlPanelInfo)
         {
+            // if the category descriptor type is an interface, we assume it's registered by its implementor
+            // because we don't know the concrete implementation type
+            if (controlPanelInfo.CategoryDescriptorType?.IsInterface == true)
+                return services;
+
             if (controlPanelInfo.CategoryDescriptorType is not null)
                 services.AddScoped(controlPanelInfo.CategoryDescriptorType);
 

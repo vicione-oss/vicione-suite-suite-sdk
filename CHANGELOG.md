@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.0 - Unreleased
+
+### Added
+
+- Added `IControlPanelNetworkCategoryDescriptor` to allow module control panels to be categorized under the `Network` category
+
+### Updated
+
+- `AspNetCore.SassCompiler` package, update to version `1.100.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.13.0`
+
 ## 2.0.1 - 2026-05-20
 
 ### Changed

@@ -9,7 +9,7 @@
   <ItemGroup>
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.99.0" />
+    <PackageVersion Include="AspNetCore.SassCompiler" Version="1.100.0" />
     <PackageVersion Include="MassTransit.Abstractions" Version="$(MassTransitVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(DotNetVersion)" />
@@ -30,7 +30,7 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageVersion Include="System.IO.Abstractions" Version="22.1.1" />
     <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.12.0" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.13.0" />
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.1.0" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
