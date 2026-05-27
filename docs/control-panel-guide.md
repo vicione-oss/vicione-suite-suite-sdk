@@ -301,9 +301,15 @@ For the following  file structure in `FooClientModule` is assumed:
   }
   ```
 
-### 6. Add control panel category descriptor
+### 6. Use or add control panel category descriptor
 
-- Add `BarControlPanelCategoryDescriptor.cs`
+- Either use one of the predefined descriptors ...
+
+  | Descriptor | Category
+  |-|-|
+  | [`IControlPanelNetworkCategoryDescriptor`](../src/Sdk.Client/ControlPanels/Services/IControlPanelNetworkCategoryDescriptor.cs) | `Network` |
+
+- ... or add `BarControlPanelCategoryDescriptor.cs`
 
   ``` csharp
   using Sdk.Client.ControlPanels.Services;

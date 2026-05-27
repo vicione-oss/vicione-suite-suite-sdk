@@ -15,4 +15,4 @@ namespace Sdk.Client.ControlPanels.Attributes;
 [AttributeUsage(AttributeTargets.Class, Inherited = true)]
 [ExcludeFromCodeCoverage]
 public sealed class ControlPanelCategoryAttribute<TControlPanelCategoryDescriptor> : Attribute
-    where TControlPanelCategoryDescriptor : class, IControlPanelCategoryDescriptor;
+    where TControlPanelCategoryDescriptor : IControlPanelCategoryDescriptor;
