@@ -1,3 +1,8 @@
+---
+name: add-migration
+description: Scaffold Entity Framework migrations for both SQLite and PostgreSQL providers. Use when adding or modifying database schema, creating migrations, or changing EF Core model.
+---
+
 # Scaffold EF migration
 
 Create Entity Framework migrations for both SQLite and PostgreSQL providers.

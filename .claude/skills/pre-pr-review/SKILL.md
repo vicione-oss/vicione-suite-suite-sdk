@@ -1,3 +1,8 @@
+---
+name: pre-pr-review
+description: Run pre-PR review checks including translations, code style, XML docs, API compatibility, and changelog validation. Use before raising a pull request or when reviewing branch changes.
+---
+
 # Pre-PR Review
 
 Run this after implementing changes on a branch to catch common issues before raising a PR.

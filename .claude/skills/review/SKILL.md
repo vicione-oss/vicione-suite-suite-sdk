@@ -1,3 +1,8 @@
+---
+name: review
+description: Review SDK changes for public API quality, semantic versioning, module author impact, cross-cutting concerns, and changelog. Use when reviewing SDK code changes or preparing releases.
+---
+
 # Review SDK changes
 
 Review the current changes for SDK quality standards:
@@ -18,7 +23,7 @@ Review the current changes for SDK quality standards:
    - Is the API intuitive for module developers?
 
 4. **Cross-cutting concerns:**
-   - Works on constrained hardware (Edge-S: 1GB RAM, flash)
+   - Works on constrained hardware (Edge-S: 1.9 GB RAM, ARM Cortex-A53, 2.3 GB flash)
    - Cluster-aware (master/slave topology)
    - Offline-capable
    - Consumers are idempotent
@@ -27,11 +32,3 @@ Review the current changes for SDK quality standards:
    - `CHANGELOG.md` is updated following [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
    - Changes are categorized as Added, Changed, Deprecated, Removed, Fixed, Security
    - Entry describes the change from a module author's perspective
-
-6. **Test coverage:**
-   - New public APIs have corresponding tests
-   - Sdk.Testing helpers updated if needed
-   - Test naming follows snake_case convention
-   - Tests have explicit `// Arrange`, `// Act`, `// Assert` comments
-
-Report **only actual issues found.** For each issue state: file path, line number (if applicable), severity, and a one-line description of the violation. Do not report positive findings or praise. If nothing is found, say so.
