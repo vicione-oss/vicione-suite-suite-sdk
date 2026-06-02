@@ -262,7 +262,7 @@ Reusable skill definitions located in `.claude/skills/` following the [Agent Ski
 | [add-contract](.claude/skills/add-contract/SKILL.md) | Add a new public SDK contract with correct placement and XML docs |
 | [add-migration](.claude/skills/add-migration/SKILL.md) | Scaffold EF migrations for both SQLite and PostgreSQL |
 | [check-api-compat](.claude/skills/check-api-compat/SKILL.md) | Detect breaking/additive/patch changes, flag version bump requirements |
-| [pre-pr-review](.claude/skills/pre-pr-review/SKILL.md) | Pre-PR checklist: translations, code style, XML docs, API compat, changelog |
+| [pre-mr-review](.claude/skills/pre-mr-review/SKILL.md) | Pre-MR checklist: translations, code style, XML docs, API compat, changelog |
 | [review](.claude/skills/review/SKILL.md) | SDK quality review for public API standards |
 | [build](.claude/skills/build/SKILL.md) | Build the SDK solution |
 | [test](.claude/skills/test/SKILL.md) | Run the test suite and analyze failures |
