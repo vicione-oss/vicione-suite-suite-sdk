@@ -1,3 +1,8 @@
+---
+name: check-api-compat
+description: Analyze proposed changes for semantic versioning compliance. Detect breaking, additive, and patch-level changes. Use when checking API compatibility, version bumps, or reviewing public API changes.
+---
+
 # Check API compatibility
 
 Analyze the proposed changes for semantic versioning compliance:

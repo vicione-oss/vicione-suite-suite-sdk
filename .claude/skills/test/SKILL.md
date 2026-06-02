@@ -1,3 +1,8 @@
+---
+name: test
+description: Run the full test suite for ViciOne Suite SDK and analyze failures. Use when running tests, validating changes, or diagnosing test failures.
+---
+
 # Run tests
 
 Run the full test suite for ViciOne Suite SDK.

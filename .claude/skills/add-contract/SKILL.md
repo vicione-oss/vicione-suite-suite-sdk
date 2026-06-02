@@ -1,3 +1,8 @@
+---
+name: add-contract
+description: Add a new public SDK contract (interface, class, enum, attribute) with correct package placement, XML docs, backward compatibility, and tests. Use when adding new public APIs to the SDK.
+---
+
 # Add a new SDK contract
 
 When adding a new public contract (interface, class, enum, attribute) to the SDK:
@@ -19,7 +24,7 @@ When adding a new public contract (interface, class, enum, attribute) to the SDK
    - If the contract is testable by module authors, add helpers in `Sdk.Testing`
 
 4. **Constraints to verify:**
-   - Does this work on Edge-S (1 GB RAM, flash storage)?
+   - Does this work on Edge-S (1.9 GB RAM, ARM Cortex-A53, 2.3 GB flash)?
    - Does this work in offline/disconnected scenarios?
    - Is this cluster-aware (master/slave)?
    - Is this idempotent if it involves messaging?
