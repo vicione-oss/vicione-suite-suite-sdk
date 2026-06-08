@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Properties for all projects in the repository -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -28,13 +28,20 @@
     <NuGetAuditMode>all</NuGetAuditMode>
   </PropertyGroup>
 
-  <!-- For repositories containing projects that are published as NuGet packages -->
+  <!-- NuGet package properties -->
   <PropertyGroup>
-    <!-- https://docs.microsoft.com/de-de/nuget/reference/msbuild-targets -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://gitlab.com/vicione-oss/vicione/suite/suite-sdk</PackageProjectUrl>
     <Authors>$(Company)</Authors>
   </PropertyGroup>
 
+  <!-- Configuration for resulting NuGet package -->
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+  
   <PropertyGroup Condition="'$(CI)' != ''">
     <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
