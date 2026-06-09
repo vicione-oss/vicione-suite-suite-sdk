@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.0 - Unreleased
+## 2.1.0 - 2026-06-09
 
 ### Added
 
@@ -9,7 +9,10 @@
 ### Updated
 
 - `AspNetCore.SassCompiler` package, update to version `1.100.0`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.13.0`
+- `MassTransit` packages, update to version `8.5.10`
+- `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.2`
+- `ViciOne.Ui.Localization` package, update to version `3.4.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.14.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.11.0`
 
 ## 2.0.1 - 2026-05-20
