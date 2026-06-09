@@ -6,9 +6,13 @@ const xoTypeScriptPatched = xoTypeScript.filter(config => config.language?.start
 export default [
     {
         ignores: [
+            '**/wwwroot/_framework/*.js',
+            '**/wwwroot/_content/*.js',
             '**/wwwroot/js/*.js',
+            '**/*.razor.js',
             '**/bin',
             '**/obj',
+            '**/packages',
             'tests/**/*.js',
             '**/ReconnectModal.razor.js'
         ]
