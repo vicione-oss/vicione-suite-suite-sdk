@@ -10,6 +10,7 @@
 
 - `AspNetCore.SassCompiler` package, update to version `1.100.0`
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.13.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.11.0`
 
 ## 2.0.1 - 2026-05-20
 
