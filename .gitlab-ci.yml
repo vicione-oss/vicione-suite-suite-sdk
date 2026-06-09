@@ -45,6 +45,9 @@
 .install_npm_packages: &install_npm_packages
   - npm install
 
+.run_eslint: &run_eslint
+  - npm run lint
+
 ### Defaults ###
 variables:
   IMAGE_NAME: registry.gitlab.com/vicione-oss/tooling/base-image:vicione-latest
@@ -73,7 +76,7 @@ Version:
 
 ### CI Components ###
 include:
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.1.1
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -84,7 +87,7 @@ include:
         - ${RUNNER_TAG}
 
   ### Test & Build
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.1.1
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -95,7 +98,7 @@ include:
         - 'echo "Version: ${Version:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.1.1
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -108,7 +111,7 @@ include:
       coverage: true
 
   ### NuGet Packages
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.1.1
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules_manual
@@ -117,7 +120,7 @@ include:
         - 'echo "PackageVersion: ${PackageVersion:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.1.1
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2
     inputs:
       image: ${IMAGE_NAME}
       source: "JFrogViciOne"
@@ -128,6 +131,21 @@ include:
         - *update_nuget_source_rw
       tags:
         - ${RUNNER_TAG}
+
+### ESLint ###
+ESLint:
+  stage: build
+  image: ${IMAGE_NAME}
+  needs: ["dotnet Build"]
+  before_script:
+    - *activate_mise
+    - *update_nuget_source_ro
+    - *install_npm_packages
+  script:
+    - *run_eslint
+  rules: *rules
+  tags:
+    - ${RUNNER_TAG}
 
 ### GitLab Pages
 Publish Pages:
