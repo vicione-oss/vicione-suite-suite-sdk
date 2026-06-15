@@ -4,7 +4,7 @@
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
     <ViciOneUiMonochromeIconsVersion>4.11.0</ViciOneUiMonochromeIconsVersion>
     <MassTransitVersion>8.5.10</MassTransitVersion>
-    <DotNetVersion>10.0.8</DotNetVersion>
+    <DotNetVersion>10.0.9</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
