@@ -43,7 +43,7 @@
     allow_failure: true
 
 .install_npm_packages: &install_npm_packages
-  - npm install
+  - npm ci
 
 .run_eslint: &run_eslint
   - npm run lint
