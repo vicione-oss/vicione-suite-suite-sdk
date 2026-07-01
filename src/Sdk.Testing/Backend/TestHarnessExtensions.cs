@@ -4,6 +4,7 @@ using MassTransit.Courier.Contracts;
 using MassTransit.TestFramework;
 using MassTransit.Testing;
 using NUnit.Framework;
+using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 
 namespace Sdk.Testing.Backend;

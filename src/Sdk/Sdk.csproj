@@ -15,5 +15,5 @@
     <InternalsVisibleTo Include="ViciOne.Suite.Sdk.Tests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
-  
+
 </Project>

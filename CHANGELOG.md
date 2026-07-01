@@ -2,7 +2,30 @@
 
 ## 2.2.0 - Unreleased
 
+### Updated
+
 - `Microsoft` packages, update to version `10.0.9`
+
+### Added
+
+- `Sdk.Backend.Messaging`
+  - Added `IInstanceDependentActivityArgument` marker interface (`IActivityArgument` + `IInstanceDependentMessage`) so an instance-targeted activity argument is expressed by a single, intent-revealing type, consistent with `IInstanceDependentCommand` / `IInstanceEvent` / `IInstanceDependentRequest`
+- `Sdk.Backend.Diagnostics`
+  - Added `MustDeclareAttribute` to declare that every concrete type implementing a decorated interface must itself carry a specified attribute, enforced at compile time by the `MustDeclareAnalyzer`
+- `Sdk.Backend`
+  - Added analyzer `VOSDK001` reporting a compile-time error when a concrete `IActivityArgument` or `IInstanceDependentActivityArgument` implementation is not decorated with the `MessageEndpointAttribute`, which previously only surfaced as an `InvalidOperationException` when the activity endpoint was resolved at runtime
+
+### Changed
+
+- *Breaking* `Sdk`
+  - Moved `IActivityArgument` from `ViciOne.Suite.Sdk` (`Sdk.Messaging`) to `ViciOne.Suite.Sdk.Backend` (`Sdk.Backend.Messaging`). Routing-slip activities are a backend-only concept, so the interface is no longer visible to client or SDK-core-only consumers; update `using Sdk.Messaging;` to `using Sdk.Backend.Messaging;` where activity arguments are defined
+- *Breaking* `Sdk.Backend`
+  - Split the `IRoutingSlipBuilder.AddActivity` extension overloads: the variant taking an instance id now requires `TArguments : IInstanceDependentActivityArgument` and a non-nullable `Guid`, while the id-less variant remains for load-balanced activities. Passing an instance id to a non-instance-dependent activity argument (which previously discarded the id and routed to a shared queue) is now a compile error
+
+### Fixed
+
+- `Sdk.Backend`
+  - `MessagingHelper.GetActivityEndpointName` now throws when an instance-dependent activity argument is resolved without an instance id, instead of silently producing a malformed endpoint name with an empty id segment
 
 ## 2.1.0 - 2026-06-09
 

@@ -1,0 +1,16 @@
+<Project>
+
+  <!--
+    Ships the SDK analyzer to every consumer of the ViciOne.Suite.Sdk.Backend package - both direct
+    references and transitive ones. buildTransitive flows across the dependency graph by default,
+    whereas the analyzers/ folder alone would only reach direct consumers - and adding it here as
+    well as in analyzers/ would attach it twice for direct consumers. The dll therefore lives next
+    to this targets file and is wired in exclusively from here. It is packed with Sdk.Backend rather
+    than Sdk so that client/browser-only consumers, which never define activity arguments, don't load
+    it.
+  -->
+  <ItemGroup Condition="'$(Language)' == 'C#'">
+    <Analyzer Include="$(MSBuildThisFileDirectory)ViciOne.Suite.Sdk.Analyzers.dll" />
+  </ItemGroup>
+
+</Project>

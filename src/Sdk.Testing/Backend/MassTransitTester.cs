@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using MassTransit.Testing;
+using Sdk.Backend.Messaging;
 using Sdk.Messaging;
 using Xunit;
 
