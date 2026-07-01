@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ViciOne.Suite.Sdk.Analyzers.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Sdk.Analyzers\Sdk.Analyzers.csproj" />
+    <ProjectReference Include="..\..\src\Sdk.Backend\Sdk.Backend.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -65,6 +65,12 @@ public static class MessagingHelper
         => new($"{ExchangePrefix}:{GetActivityEndpointName(typeof(TArgument), instanceId)}");
 
     /// <summary>
+    /// Gets the MassTransit endpoint address for a specified instance-dependent activity argument type.
+    /// </summary>
+    public static Uri GetActivityEndpointAddress<TArgument>(Guid instanceId) where TArgument : class, IInstanceDependentActivityArgument
+        => new($"{ExchangePrefix}:{GetActivityEndpointName(typeof(TArgument), instanceId)}");
+
+    /// <summary>
     /// Gets the endpoint name for a command message.
     /// </summary>
     public static string GetCommandEndpointName(MemberInfo? consumerType, Type messageType, Guid? instanceId)
@@ -166,9 +172,14 @@ public static class MessagingHelper
         var endpointName = argumentType.GetEndpointName()
             ?? throw new InvalidOperationException("Routable activities must define an endpoint");
 
-        return argumentType.IsInstanceDependent()
-            ? CleanName($"{endpointName}_{instanceId}")
-            : CleanName(endpointName);
+        if (!argumentType.IsInstanceDependent())
+            return CleanName(endpointName);
+
+        if (instanceId is null)
+            throw new InvalidOperationException(
+                $"{argumentType.Name} is instance-dependent but no instance id was provided when resolving its activity endpoint");
+
+        return CleanName($"{endpointName}_{instanceId}");
     }
 
     /// <summary>

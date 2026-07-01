@@ -145,9 +145,7 @@ public sealed class MessagingHelperTests
         [InlineData(typeof(InstanceIndependentEvent))]
         [InlineData(typeof(ConsumerActivityOwnEndpointInstanceIndependent))]
         public void Should_return_false_for_instance_independent(Type type)
-            =>
-                // Act + Assert
-                Assert.False(type.IsInstanceDependent());
+            => Assert.False(type.IsInstanceDependent());
     }
 
     public sealed class GetEndpointName
@@ -222,6 +220,10 @@ public sealed class MessagingHelperTests
         [Fact]
         public void Should_throw_if_MessageEndpointAttribute_is_missing()
              => Assert.Throws<InvalidOperationException>(() => typeof(InvalidActivity).GetActivityEndpointName(Guid.NewGuid()));
+
+        [Fact]
+        public void Should_throw_if_instance_dependent_but_no_instance_id()
+             => Assert.Throws<InvalidOperationException>(() => typeof(DataActivityOwnEndpointInstanceDependent).GetActivityEndpointName(null));
     }
 
     private sealed record InstanceDependentEvent : IInstanceEvent;
@@ -248,7 +250,7 @@ public sealed class MessagingHelperTests
     private sealed record DataActivityOwnEndpointInstanceIndependent : IActivityArgument;
 
     [MessageEndpoint(ActivityEndpoint)]
-    private sealed record DataActivityOwnEndpointInstanceDependent : IActivityArgument, IInstanceDependentMessage;
+    private sealed record DataActivityOwnEndpointInstanceDependent : IInstanceDependentActivityArgument;
 
     private sealed record InvalidActivity : IActivityArgument;
 

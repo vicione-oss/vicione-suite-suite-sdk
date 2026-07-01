@@ -25,6 +25,11 @@
     <ProjectReference Include="..\Sdk.Backend.SourceGenerators\Sdk.Backend.SourceGenerators.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
+    <!-- Run the analyzer on Sdk.Backend itself and ensure it is built before this project is packed -->
+    <ProjectReference Include="..\Sdk.Analyzers\Sdk.Analyzers.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false"
+                      PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +42,22 @@
     <None Include="..\Sdk.Backend.SourceGenerators\bin\$(Configuration)\netstandard2.0\ViciOne.Suite.Sdk.Backend.SourceGenerators.dll"
           Pack="true"
           PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
+
+  <!--
+    Ship the SDK analyzer to backend consumers (direct and transitive) via buildTransitive.
+    Scoped to this package because the only rule it enforces today - MessageEndpoint on activity
+    arguments - is a backend-only concern, so client/browser builds never load it.
+  -->
+  <ItemGroup>
+    <None Include="..\Sdk.Analyzers\bin\$(Configuration)\netstandard2.0\ViciOne.Suite.Sdk.Analyzers.dll"
+          Pack="true"
+          PackagePath="buildTransitive"
+          Visible="false" />
+    <None Include="buildTransitive\ViciOne.Suite.Sdk.Backend.targets"
+          Pack="true"
+          PackagePath="buildTransitive"
           Visible="false" />
   </ItemGroup>
   
