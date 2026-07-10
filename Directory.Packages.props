@@ -34,7 +34,7 @@
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.1.0" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Localization" Version="3.4.0" />
+    <PackageVersion Include="ViciOne.Ui.Localization" Version="3.5.0" />
     <!--Used for tests only:-->
     <PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
