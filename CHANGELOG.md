@@ -5,6 +5,7 @@
 ### Updated
 
 - `Microsoft` packages, update to version `10.0.9`
+- `ViciOne.Ui.Localization` package, update to version `3.5.0`
 
 ### Added
 
