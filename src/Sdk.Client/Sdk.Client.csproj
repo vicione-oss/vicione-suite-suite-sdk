@@ -125,9 +125,11 @@
 
   <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
     <ItemGroup>
+      <MonochromeIcon Include="close-medium" Size="16" />
       <MonochromeIcon Include="expander-light-down" Size="32" />
       <MonochromeIcon Include="expander-light-top" Size="32" />
       <MonochromeIcon Include="external-link" Size="16" />
+      <MonochromeIcon Include="folder" Size="16" />
       <MonochromeIcon Include="minus-slim" Size="24" />
       <MonochromeIcon Include="plus-slim" Size="24" />
     </ItemGroup>

@@ -7,6 +7,8 @@
 @using ViciOne.Ui.Blazor.Components.Button.Enums
 @using ViciOne.Ui.Blazor.Components.ComboBox
 @using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
+@using Sdk.Client.Samples.Shared.Models;
+@using Sdk.Client.Samples.Shared.Services;
 
 <PageTitle>Sdk.Client.Components.Settings samples</PageTitle>
 
@@ -53,6 +55,10 @@
 
             <SettingsField IsLoading="@SettingsFieldIsLoading" Label="Width" LoadingIndication="@SettingsFieldLoadingIndication">
                 <SettingsFieldSpinEdit Interval="1" Minimum="0" Maximum="1000" @bind-Value="_width" />
+            </SettingsField>
+
+            <SettingsField IsLoading="@SettingsFieldIsLoading" Label="File" LoadingIndication="@SettingsFieldLoadingIndication">
+                <SettingsFieldFileUpload Filename="test" UploadTicketFactory="@(new TestUploadTicketFactory())" UploadHandler="@(new TestUploadHandler())"/>
             </SettingsField>
         </ChildContent>
     </SettingsGroup>
