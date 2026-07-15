@@ -4,7 +4,13 @@
 
 ### Updated
 
-- `Microsoft` packages, update to version `10.0.9`
+- `AspNetCore.SassCompiler` package, update to version `1.101.0`
+- `Microsoft` packages, update to version `10.0.10`
+- `Microsoft.Testing.Extensions.CodeCoverage` package, update to version `18.9.0`
+- `Microsoft.Testing.Platform` package, update to version `2.3.2`
+- `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.3`
+- `System.IO.Abstractions` packages, update to version `22.2.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.15.0`
 - `ViciOne.Ui.Localization` package, update to version `3.5.0`
 
 ### Added
