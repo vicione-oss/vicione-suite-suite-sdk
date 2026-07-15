@@ -53,13 +53,13 @@ public static class CompletionSourceHandlerBaseTests
             using var sut = new TestableHandler(mediator);
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>().CorrelationId));
+                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>()!.CorrelationId));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletion(command, TestContext.Current.CancellationToken);
 
             // Assert
-            await mediator.Received().Send(Arg.Is<TestCommand>(c => c.CorrelationId == command.CorrelationId), Arg.Any<CancellationToken>());
+            await mediator.Received().Send(Arg.Is<TestCommand>(c => c!.CorrelationId == command.CorrelationId), Arg.Any<CancellationToken>());
             Assert.IsType<SaveSuccessResult>(result);
         }
 
@@ -73,13 +73,13 @@ public static class CompletionSourceHandlerBaseTests
             var errorInfo = new ErrorInfo(42, "Something went wrong");
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateError(callinfo.Arg<TestCommand>().CorrelationId, errorInfo));
+                .Do(callinfo => sut.SimulateError(callinfo.Arg<TestCommand>()!.CorrelationId, errorInfo));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletion(command, TestContext.Current.CancellationToken);
 
             // Assert
-            await mediator.Received().Send(Arg.Is<TestCommand>(c => c.CorrelationId == command.CorrelationId), Arg.Any<CancellationToken>());
+            await mediator.Received().Send(Arg.Is<TestCommand>(c => c!.CorrelationId == command.CorrelationId), Arg.Any<CancellationToken>());
             Assert.IsType<SaveErrorResult>(result);
         }
     }
@@ -96,7 +96,7 @@ public static class CompletionSourceHandlerBaseTests
             var customErrorHandlerInvoked = false;
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>().CorrelationId));
+                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>()!.CorrelationId));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletion(command, _ =>
@@ -121,7 +121,7 @@ public static class CompletionSourceHandlerBaseTests
             ErrorInfo? capturedErrorInfo = null;
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateError(callinfo.Arg<TestCommand>().CorrelationId, errorInfo));
+                .Do(callinfo => sut.SimulateError(callinfo.Arg<TestCommand>()!.CorrelationId, errorInfo));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletion(command, info =>
@@ -148,7 +148,7 @@ public static class CompletionSourceHandlerBaseTests
             var afterSendInvoked = false;
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>().CorrelationId));
+                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>()!.CorrelationId));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletionAfterwards(command, _ =>
@@ -171,7 +171,7 @@ public static class CompletionSourceHandlerBaseTests
             using var sut = new TestableHandler(mediator);
 
             mediator.When(m => m.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>()))
-                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>().CorrelationId));
+                .Do(callinfo => sut.SimulateSuccess(callinfo.Arg<TestCommand>()!.CorrelationId));
 
             // Act
             var result = await sut.InvokeSendAndWaitForCompletionAfterwards(command,
