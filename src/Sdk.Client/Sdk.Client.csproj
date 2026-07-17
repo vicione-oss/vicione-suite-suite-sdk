@@ -30,13 +30,6 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="ViciOne.Ui.Localization" />
-    <PackageReference Include="ViciOne.Ui.MonochromeIcons.Assets">
-      <PrivateAssets>all</PrivateAssets>
-      <!-- avoids include of CSS isolation bundle -->
-      <ExcludeAssets>runtime</ExcludeAssets>
-      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <!-- don't depend on assembly at runtime -->
-    </PackageReference>
     <PackageReference Include="ViciOne.Ui.MonochromeIcons.Components" />
   </ItemGroup>
 
@@ -122,23 +115,6 @@
       <LastGenOutput>FileDropComponent.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <Target Name="ConfigureMonochromeIcons" BeforeTargets="BeforeMonochromeIconTargets">
-    <ItemGroup>
-      <MonochromeIcon Include="close-medium" Size="16" />
-      <MonochromeIcon Include="expander-light-down" Size="32" />
-      <MonochromeIcon Include="expander-light-top" Size="32" />
-      <MonochromeIcon Include="external-link" Size="16" />
-      <MonochromeIcon Include="folder" Size="16" />
-      <MonochromeIcon Include="minus-slim" Size="24" />
-      <MonochromeIcon Include="plus-slim" Size="24" />
-    </ItemGroup>
-
-    <PropertyGroup>
-      <MonochromeIconSvgOutputFolder>$(MSBuildProjectDirectory)/wwwroot/assets/monochrome-icons</MonochromeIconSvgOutputFolder>
-      <MonochromeIconScssOutputFolder>$(MSBuildProjectDirectory)/Styles/icons/monochrome-icons</MonochromeIconScssOutputFolder>
-    </PropertyGroup>
-  </Target>
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>

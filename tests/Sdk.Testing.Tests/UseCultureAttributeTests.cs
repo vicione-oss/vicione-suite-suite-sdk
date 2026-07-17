@@ -17,11 +17,9 @@ public sealed class UseCultureAttributeTests
 
     [Fact]
     [UseCulture("fr-FR")]
-    public void Should_set_culture_to_french()
-    {
+    public void Should_set_culture_to_french() =>
         // Assert
         CultureInfo.CurrentCulture.Name.Should().Be("fr-FR");
-    }
 
     [Fact]
     [UseCulture("en-US", "de-DE")]

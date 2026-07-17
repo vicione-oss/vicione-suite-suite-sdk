@@ -15,7 +15,7 @@ namespace Sdk.Testing;
 /// <param name="culture">The name of the culture.</param>
 /// <param name="uiCulture">The name of the UI culture.</param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-[method: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1019:AvoidUncalledPrivateCode", Justification = "use of lazy")]
+[method: SuppressMessage("Design", "CA1019:AvoidUncalledPrivateCode", Justification = "use of lazy")]
 public class UseCultureAttribute(string culture, string uiCulture) : BeforeAfterTestAttribute
 {
     private readonly Lazy<CultureInfo> _culture = new(() => new CultureInfo(culture, false));

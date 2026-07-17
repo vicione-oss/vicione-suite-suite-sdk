@@ -2,7 +2,7 @@ using Sdk.Client.Models;
 
 namespace Sdk.Client.Samples.Shared.Models;
 
-internal class TestUploadTicket : IUploadTicket
+internal sealed class TestUploadTicket : IUploadTicket
 {
     public CancellationToken CancellationToken { get; set; }
 

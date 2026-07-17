@@ -42,7 +42,7 @@ main() {
             exit
         fi
 
-        local replace_pattern="@import '_content\/ViciOne\.((Suite\.Sdk\.Client)|(Ui.Shared)|(Ui.Blazor)).*?bundle.scp.css';"
+        local replace_pattern="@import '_content\/ViciOne\.((Suite\.Sdk\.Client)|(Ui.Shared)|(Ui.Blazor)|(Ui.MonochromeIcons)).*?bundle.scp.css';"
         local bundle_pattern='^[^@import[^\s].*]'
 
         for css_bundle in "$wwwroot_path"/*.styles.css; do

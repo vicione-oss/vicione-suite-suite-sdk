@@ -1,0 +1,16 @@
+<li>
+    <div class="navigation-item-content">
+        @_iconSvgMarkup
+
+        @if (!string.IsNullOrWhiteSpace(Href))
+        {
+            <a href="@Href">@Text</a>
+        }
+        else
+        {
+            <span>@Text</span>
+        }
+    </div>
+
+    @ChildContent
+</li>
