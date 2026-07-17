@@ -428,6 +428,7 @@ ViciOne.Suite.Sdk.dll
 ViciOne.SystemMonitoring.dll
 ViciOne.Ui.Blazor.Components.dll
 ViciOne.Ui.Localization.dll
+ViciOne.Ui.MonochromeIcons.Assets.dll
 ViciOne.Ui.MonochromeIcons.Components.dll
 ViciOne.Ui.MonochromeIcons.Core.dll
 ViciOne.Ui.Shared.Dx.dll

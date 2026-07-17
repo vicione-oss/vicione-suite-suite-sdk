@@ -3,7 +3,7 @@ using Sdk.Services;
 
 namespace Sdk.Client.Samples.Shared.Services;
 
-internal class TestUploadHandler : IStreamUploadHandler
+internal sealed class TestUploadHandler : IStreamUploadHandler
 {
     public Func<IStreamUploadProgress, Task>? OnProgress { get; set; }
 

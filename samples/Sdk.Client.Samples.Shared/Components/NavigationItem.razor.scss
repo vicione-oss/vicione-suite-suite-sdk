@@ -1,0 +1,25 @@
+@use "../Styles/design/colors";
+
+.navigation-item-content {
+    display: grid;
+    grid-template-areas: "icon text";
+    grid-template-columns: 32px auto;
+    align-items: center;
+
+    ::deep svg {
+        grid-area: icon;
+
+        polygon {
+            fill: colors.$font;
+        }
+    }
+
+    a, span {
+        grid-area: text;
+    }
+
+    & + ::deep ul {
+        padding-left: 32px;
+        padding-right: 0;
+    }
+}

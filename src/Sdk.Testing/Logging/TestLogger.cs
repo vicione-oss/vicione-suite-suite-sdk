@@ -81,5 +81,5 @@ public sealed class TestLogger<T>(LogLevel logLevel = LogLevel.Trace) : ILogger<
 /// <summary>
 /// Represents a single log entry captured by the <see cref="TestLogger{T}"/>.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage]
 public record TestLogEntry(LogLevel LogLevel, string Message, Exception? Exception = default, EventId EventId = default);

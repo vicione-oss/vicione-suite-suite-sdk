@@ -64,13 +64,9 @@ public static class ClientServiceCollectionExtensions
         /// <summary>
         /// Adds a singleton <see cref="HttpClient"/> to the service collection that is configured to return a specific response object.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability",
-            "CA2000:Objekte verwerfen, bevor Bereich verloren geht",
-            Justification = "Rückgabewerte für Testattrappe")]
         public IServiceCollection AddHttpClient(object responseObject, Uri? baseUri)
         {
-            var httpClient = HttpClientFactory.GetHttpClientWithResponse(responseObject, baseUri ?? new Uri("http://localhost"));
-            services.AddSingleton(httpClient);
+            services.AddSingleton(_ => HttpClientFactory.GetHttpClientWithResponse(responseObject, baseUri ?? new Uri("http://localhost")));
 
             return services;
         }

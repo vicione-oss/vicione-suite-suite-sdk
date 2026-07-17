@@ -1,6 +1,7 @@
-﻿using Sdk.Client.Samples.BlazorWebApp.Extensions;
+using Sdk.Client.Samples.BlazorWebApp.Extensions;
 using Sdk.Client.Samples.BlazorWebApp.Services;
 using Sdk.Client.Samples.Shared.Extensions;
+using ViciOne.Ui.MonochromeIcons.Assets.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,17 @@ var useWebAssembly = builder.Configuration.GetValue<bool>("RenderWasm");
 var razorComponentsBuilder = builder.Services.AddRazorComponents();
 
 if (useWebAssembly)
+{
     razorComponentsBuilder.AddInteractiveWebAssemblyComponents();
+
+    razorComponentsBuilder.Services.AddUrlBasedMonochromeIconSvgMarkupProvider();
+}
 else
+{
     razorComponentsBuilder.AddInteractiveServerComponents();
+
+    razorComponentsBuilder.Services.AddFileSystemBasedMonochromeIconSvgMarkupProvider<Program>();
+}
 
 builder.Services.AddSingleton(new RenderModeProvider(useWebAssembly));
 builder.Services.AddShared();
