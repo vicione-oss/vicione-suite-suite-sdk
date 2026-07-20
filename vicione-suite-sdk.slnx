@@ -27,6 +27,7 @@
     <File Path="docs/completion-source-handler-base.md" />
     <File Path="docs/control-panel-guide.md" />
     <File Path="docs/localization-guide.md" />
+    <File Path="docs/module-resources-guide.md" />
     <File Path="docs/navigation-tile-guide.md" />
     <File Path="docs/notification-element-guide.md" />
     <File Path="docs/wizard-guide.md" />

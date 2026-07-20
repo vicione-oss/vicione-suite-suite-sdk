@@ -476,7 +476,7 @@ You can either [enable auto-discovery](#91-enable-auto-discovery) or manually re
   IControlPanelRegistry<FooClientModule> controlPanelRegistry = ...;
 
   var moduleId = ModuleIdResolver.ResolveId<FooClientModule>();
-  var authorizationRequirement = new AccessLevelRequirement(moduleId, AccessLevel.Admin);
+  var authorizationRequirement = new AccessLevelAuthorizationRequirement(moduleId, AccessLevel.Admin);
 
   controlPanelRegistry.Add<BarControlPanel, BarControlPanelState>(
       new BarControlPanelDescriptor(),

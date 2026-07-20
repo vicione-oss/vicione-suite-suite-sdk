@@ -1,4 +1,4 @@
-﻿using Sdk.Authorization;
+using Sdk.Authorization;
 using Sdk.Authorization.Extensions;
 
 namespace Sdk.Tests.Authorization;
@@ -13,7 +13,7 @@ public sealed class ModuleAuthorizeAttributeTests
         public void AcceptanceOneParameter()
         {
             var faa = new ModuleAuthorizeAttribute(ModuleName);
-            var accessLevelRequirement = faa.GetAccessLevelRequirement();
+            var accessLevelRequirement = faa.GetAccessLevelAuthorizationRequirement();
 
             Assert.NotNull(accessLevelRequirement);
             Assert.Equal(ModuleName, accessLevelRequirement.ModuleId);
@@ -25,7 +25,7 @@ public sealed class ModuleAuthorizeAttributeTests
         {
             var faa = new ModuleAuthorizeAttribute(ModuleName, AccessLevel.Partial);
 
-            var accessLevelRequirement = faa.GetAccessLevelRequirement();
+            var accessLevelRequirement = faa.GetAccessLevelAuthorizationRequirement();
 
             Assert.NotNull(accessLevelRequirement);
             Assert.Equal(ModuleName, accessLevelRequirement.ModuleId);

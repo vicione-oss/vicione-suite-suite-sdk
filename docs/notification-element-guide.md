@@ -304,7 +304,7 @@ For the following  file structure in `FooClientModule` is assumed:
   IINotificationElementRegistry<FooClientModule> notificationElementRegistry = ...;
 
   var moduleId = ModuleIdResolver.ResolveId<FooClientModule>();
-  var authorizationRequirement = new AccessLevelRequirement(moduleId, AccessLevel.Admin);
+  var authorizationRequirement = new AccessLevelAuthorizationRequirement(moduleId, AccessLevel.Admin);
 
   notificationElementRegistry.Add<FooNotificationElement, FooNotificationElementState>(..., authorizationRequirement);
   ```

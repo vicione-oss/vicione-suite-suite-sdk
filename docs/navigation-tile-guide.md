@@ -185,7 +185,7 @@ The following file structure is assumed in this guide:
   INavTileRegistry<FooClientModule> navTileRegistry = ...;
 
   var moduleId = ModuleIdResolver.ResolveId<FooClientModule>();
-  var authorizationRequirement = new AccessLevelRequirement(moduleId, AccessLevel.Admin);
+  var authorizationRequirement = new AccessLevelAuthorizationRequirement(moduleId, AccessLevel.Admin);
 
   navTileRegistry.Add<FooNavTile>(..., authorizationRequirement);
   ```

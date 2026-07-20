@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Sdk.Authorization;
 using Sdk.Authorization.Extensions;
@@ -49,7 +49,7 @@ public static class IServiceCollectionExtensions
                         var state = (INotificationElementState)serviceProvider.GetRequiredKeyedService(i.StateType, i.StateServiceKey);
                         state.Visible = initialNotificationElementAttribute.Visible;
 
-                        var authorizationRequirement = i.ModuleAuthorizeAttribute.GetAccessLevelRequirement();
+                        var authorizationRequirement = i.ModuleAuthorizeAttribute.GetAccessLevelAuthorizationRequirement();
 
                         methodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [state, position, id, authorizationRequirement]);
                     }
