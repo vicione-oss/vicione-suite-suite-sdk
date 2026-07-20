@@ -23,6 +23,7 @@
   - Added `MustDeclareAttribute` to declare that every concrete type implementing a decorated interface must itself carry a specified attribute, enforced at compile time by the `MustDeclareAnalyzer`
 - `Sdk.Backend`
   - Added analyzer `VOSDK001` reporting a compile-time error when a concrete `IActivityArgument` or `IInstanceDependentActivityArgument` implementation is not decorated with the `MessageEndpointAttribute`, which previously only surfaced as an `InvalidOperationException` when the activity endpoint was resolved at runtime
+  - Added `IAtomicFileWriter` (`Sdk.Backend.IO`) with a `WriteAsync` method to write a file atomically
 
 ### Changed
 
