@@ -24,6 +24,8 @@
 - `Sdk.Backend`
   - Added analyzer `VOSDK001` reporting a compile-time error when a concrete `IActivityArgument` or `IInstanceDependentActivityArgument` implementation is not decorated with the `MessageEndpointAttribute`, which previously only surfaced as an `InvalidOperationException` when the activity endpoint was resolved at runtime
   - Added `IAtomicFileWriter` (`Sdk.Backend.IO`) with a `WriteAsync` method to write a file atomically
+- `Sdk`
+  - Added `ModuleAuthorizeAttributeExtensions.GetAccessLevelAuthorizationRequirement` extension method, aligning the name with the `AccessLevelAuthorizationRequirement` type it returns
 
 ### Changed
 
@@ -31,6 +33,8 @@
   - Moved `IActivityArgument` from `ViciOne.Suite.Sdk` (`Sdk.Messaging`) to `ViciOne.Suite.Sdk.Backend` (`Sdk.Backend.Messaging`). Routing-slip activities are a backend-only concept, so the interface is no longer visible to client or SDK-core-only consumers; update `using Sdk.Messaging;` to `using Sdk.Backend.Messaging;` where activity arguments are defined
 - *Breaking* `Sdk.Backend`
   - Split the `IRoutingSlipBuilder.AddActivity` extension overloads: the variant taking an instance id now requires `TArguments : IInstanceDependentActivityArgument` and a non-nullable `Guid`, while the id-less variant remains for load-balanced activities. Passing an instance id to a non-instance-dependent activity argument (which previously discarded the id and routed to a shared queue) is now a compile error
+- `Sdk`
+  - Deprecated `ModuleAuthorizeAttributeExtensions.GetAccessLevelRequirement`; use `GetAccessLevelAuthorizationRequirement` instead
 
 ### Fixed
 

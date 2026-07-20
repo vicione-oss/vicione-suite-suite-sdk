@@ -117,7 +117,7 @@ public static class IServiceCollectionExtensions
 
                     if (categoryDescriptor is not null)
                     {
-                        var authorizationRequirement = i.ModuleAuthorizeAttribute.GetAccessLevelRequirement();
+                        var authorizationRequirement = i.ModuleAuthorizeAttribute.GetAccessLevelAuthorizationRequirement();
 
                         addMethodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [descriptor, state, categoryDescriptor, groupDescriptor, authorizationRequirement]);
                     }

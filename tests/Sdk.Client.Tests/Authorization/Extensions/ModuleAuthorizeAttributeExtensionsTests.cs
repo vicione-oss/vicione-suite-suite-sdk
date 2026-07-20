@@ -1,4 +1,4 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Sdk.Authorization;
 using Sdk.Authorization.Extensions;
 using Xunit;
@@ -7,7 +7,7 @@ namespace Sdk.Client.Tests.Authorization.Extensions;
 
 public sealed class ModuleAuthorizeAttributeExtensionsTests
 {
-    public class GetAccessLevelRequirement
+    public class GetAccessLevelAuthorizationRequirement
     {
         public static readonly TheoryData<string> AccessLevelNames = [.. Enum.GetNames<AccessLevel>()];
 
@@ -22,7 +22,7 @@ public sealed class ModuleAuthorizeAttributeExtensionsTests
             var moduleAuthorizeAttribute = new ModuleAuthorizeAttribute(ModuleId, accessLevelTyped);
 
             // Act
-            var accessLevelRequirement = moduleAuthorizeAttribute.GetAccessLevelRequirement();
+            var accessLevelRequirement = moduleAuthorizeAttribute.GetAccessLevelAuthorizationRequirement();
 
             // Assert
             var expectedAccessLevelRequirement = new AccessLevelAuthorizationRequirement(ModuleId, accessLevelTyped);
