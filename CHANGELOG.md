@@ -37,6 +37,11 @@
 - `Sdk.Backend`
   - `MessagingHelper.GetActivityEndpointName` now throws when an instance-dependent activity argument is resolved without an instance id, instead of silently producing a malformed endpoint name with an empty id segment
 
+### Removed
+
+- `Sdk.Client`
+  - `ContentCardComponent` was removed, as there are dedicated components `Sdk.Client.Components.Cards.Components` to be used instead
+
 ## 2.1.0 - 2026-06-09
 
 ### Added
