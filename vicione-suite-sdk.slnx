@@ -19,6 +19,7 @@
     <File Path="mise.toml" />
     <File Path="package.json" />
     <File Path="README.md" />
+    <File Path="renovate.json" />
     <File Path="testconfig.json" />
     <File Path="VERSION" />
   </Folder>
@@ -34,9 +35,9 @@
   </Folder>
   <Folder Name="/src/">
     <File Path="src/.editorconfig" />
-    <Project Path="src/Sdk.Backend/Sdk.Backend.csproj" />
     <Project Path="src/Sdk.Analyzers/Sdk.Analyzers.csproj" />
     <Project Path="src/Sdk.Backend.SourceGenerators/Sdk.Backend.SourceGenerators.csproj" />
+    <Project Path="src/Sdk.Backend/Sdk.Backend.csproj" />
     <Project Path="src/Sdk.Client/Sdk.Client.csproj" />
     <Project Path="src/Sdk.Deployment/Sdk.Deployment.csproj" />
     <Project Path="src/Sdk.Testing/Sdk.Testing.csproj" />

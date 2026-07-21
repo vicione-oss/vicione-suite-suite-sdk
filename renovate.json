@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>vicione-oss/tooling/renovate-orchestrator"
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
+  "enabledManagers": [ "nuget" ],
+  "packageRules": [
+    {
+      "matchManagers": [ "nuget" ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
+      "enabled": true,
+      "rebaseWhen": "never",
+      "groupName": ".NET packages",
+      "separateMajorMinor": true,
+      "semanticCommits": "disabled",
+      "commitMessagePrefix": "",
+      "commitMessageAction": "Update to",
+      "commitMessageTopic": ".NET",
+      "commitMessageExtra": "{{newVersion}}",
+      "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
+      "addLabels": [ "Dependencies", "Modernization" ]
+    }
+  ]
+}
