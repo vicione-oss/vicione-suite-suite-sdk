@@ -48,6 +48,16 @@
 .run_eslint: &run_eslint
   - npm run lint
 
+### Renovate ###
+Validate renovate.json:
+  stage: .pre
+  image: renovate/renovate:43.272.5
+  script:
+    - renovate-config-validator --strict
+  rules:
+    - changes:
+        - renovate.json
+
 ### Defaults ###
 variables:
   IMAGE_NAME: registry.gitlab.com/vicione-oss/tooling/base-image:vicione-latest
