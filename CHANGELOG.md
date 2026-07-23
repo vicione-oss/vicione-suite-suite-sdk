@@ -26,6 +26,10 @@
   - Added `IAtomicFileWriter` (`Sdk.Backend.IO`) with a `WriteAsync` method to write a file atomically
 - `Sdk`
   - Added `ModuleAuthorizeAttributeExtensions.GetAccessLevelAuthorizationRequirement` extension method, aligning the name with the `AccessLevelAuthorizationRequirement` type it returns
+- `Sdk.Connections.Contracts`
+  - Added `MqttProtocolVersion` enum to specify the MQTT protocol version
+  - Added `MqttQualityOfServiceLevel` enum to specify the MQTT quality of service level
+  - Added `MqttConnection` configuration properties: `ProtocolVersion`, `QualityOfService`, `SslProtocol`, `ClientCertificateKeyPassword`, `AllowUntrustedCertificates`, `KeepAliveSeconds`, and `ConnectTimeoutSeconds`
 
 ### Changed
 
@@ -35,6 +39,8 @@
   - Split the `IRoutingSlipBuilder.AddActivity` extension overloads: the variant taking an instance id now requires `TArguments : IInstanceDependentActivityArgument` and a non-nullable `Guid`, while the id-less variant remains for load-balanced activities. Passing an instance id to a non-instance-dependent activity argument (which previously discarded the id and routed to a shared queue) is now a compile error
 - `Sdk`
   - Deprecated `ModuleAuthorizeAttributeExtensions.GetAccessLevelRequirement`; use `GetAccessLevelAuthorizationRequirement` instead
+- `Sdk.Connections.Contracts`
+  - Deprecated `MqttConnectionType.TCPWithTLS`; use `MqttConnection.SslProtocol` instead. This value will be removed in a future version
 
 ### Fixed
 

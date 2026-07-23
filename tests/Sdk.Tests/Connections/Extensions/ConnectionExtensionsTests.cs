@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using AwesomeAssertions;
 using Sdk.Connections;
 using Sdk.Connections.Contracts;
@@ -12,7 +12,7 @@ public class ConnectionExtensionsTests
 {
     private static readonly Guid s_instanceId = Guid.NewGuid();
 
-    private readonly Connection _mqttTlsConnection = ConnectionFactory.CreateMqttServiceConnection("MQTT TLS", protocol: MqttConnectionType.TCPWithTLS);
+    private readonly Connection _mqttTlsConnection = ConnectionFactory.CreateMqttServiceConnection("MQTT TLS", protocol: MqttConnectionType.TCP);
     private readonly Connection _mqttWebSocketConnection = ConnectionFactory.CreateMqttServiceConnection("MQTT WebSocket", protocol: MqttConnectionType.WebSocket);
     private readonly Connection _dbConnection = new() { Id = Guid.NewGuid(), Type = ConnectionType.SQLite, Name = "DB" };
     private readonly Connection _httpConnection = new() { Id = Guid.NewGuid(), Type = ConnectionType.Http, Name = "HTTP" };
