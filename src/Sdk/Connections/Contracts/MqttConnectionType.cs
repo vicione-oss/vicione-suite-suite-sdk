@@ -1,4 +1,4 @@
-﻿namespace Sdk.Connections.Contracts;
+namespace Sdk.Connections.Contracts;
 
 /// <summary>
 /// Specifies the transport protocol used for an MQTT connection.
@@ -13,6 +13,7 @@ public enum MqttConnectionType
     /// <summary>
     /// The connection is established over a TCP socket secured with Transport Layer Security (TLS).
     /// </summary>
+    [Obsolete("Use " + nameof(MqttConnection) + "." + nameof(MqttConnection.SslProtocol) + " instead. This value will be removed in a future version.")]
     TCPWithTLS,
 
     /// <summary>
