@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using Sdk.Client.Contracts;
 using Sdk.Client.Extensions;
 using Sdk.Client.Models;
 using Sdk.Client.Services;
-using Sdk.Services;
 using ViciOne.Ui.Localization.Resources;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using ViciOne.Ui.MonochromeIcons.Core.Extensions;
@@ -12,17 +12,16 @@ using ViciOne.Ui.MonochromeIcons.Core.Extensions;
 namespace Sdk.Client.Components.Settings;
 
 /// <summary>
-/// A component that provides a file upload field with drag-and-drop support and progress tracking.
+/// A component that provides a file upload field with drag-and-drop support and progress tracking. T is used as a marker to identify the upload handler for this upload control.
 /// </summary>
-public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDisposable
+public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDisposable
 {
-    private readonly string _chooseButtonIconCssClasses = MonochromeIconName.Folder.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
     private readonly string _cancelButtonIconCssClasses = MonochromeIconName.CloseMedium.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     private IJSObjectReference? _jsModule;
-    private DotNetObjectReference<SettingsFieldFileUpload>? _dotNetObjectReference;
+    private DotNetObjectReference<SettingsFieldFileUpload<T>>? _dotNetObjectReference;
     private Task? _attachJsTask;
     private IJSObjectReference? _jsObjectReference;
 
@@ -35,7 +34,7 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
     private string? _placeholder;
 
     private string? _filename;
-    private IStreamUploadHandler? _uploadHandler;
+    private IStreamUploadHandler<T>? _uploadHandler;
     private IStreamUploadResult? _uploadResult;
     private int? _uploadProgress;
     private IUploadTicket? _uploadTicket;
@@ -45,11 +44,21 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
 
     private bool _dropIncoming;
 
-    private string ChooseButtonText => _uploadTicket is not null && _uploadProgress is not null
-        ? CommonVocabulary.Cancel : CommonVocabulary.Choose;
+    /// <summary>
+    /// Gets or sets the CSS classes for the choose button icon. After a file has been chosen, during the upload it will be replaced with a cancel button icon. Default is a small folder icon.
+    /// </summary>
+    [Parameter] public string ChooseButtonIconCssClasses { get; set; } = MonochromeIconName.Folder.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
 
-    private string ChooseButtonIcon => _uploadTicket is not null && _uploadProgress is not null
-        ? _cancelButtonIconCssClasses : _chooseButtonIconCssClasses;
+    /// <summary>
+    /// Gets or sets the Text the choose button icon. After a file has been chosen, during the upload it will be replaced with a localized "cancel" text. Default is the localized word for "choose".
+    /// </summary>
+    [Parameter] public string ChooseButtonText { get; set; } = CommonVocabulary.Choose;
+
+    private string FileButtonText => _uploadTicket is not null && _uploadProgress is not null
+        ? CommonVocabulary.Cancel : ChooseButtonText;
+
+    private string FileButtonIcon => _uploadTicket is not null && _uploadProgress is not null
+        ? _cancelButtonIconCssClasses : ChooseButtonIconCssClasses;
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
@@ -85,6 +94,13 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
     [Parameter]
     public EventCallback<string?> FilenameChanged { get; set; }
 
+
+    /// <summary>
+    /// Gets or sets whether the filename should be displayed. Default is false.
+    /// </summary>
+    [Parameter]
+    public bool HideFilename { get; set; }
+
     /// <summary>
     /// Gets or sets the upload ticket used to manage the upload process.
     /// </summary>
@@ -101,7 +117,7 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
     /// Gets or sets the upload handler responsible for handling the file upload process.
     /// </summary>
     [Parameter, EditorRequired]
-    public IStreamUploadHandler UploadHandler { get; set; }
+    public IStreamUploadHandler<T> UploadHandler { get; set; }
 
     /// <summary>
     /// Gets or sets the content to render inside the component.
@@ -139,7 +155,7 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
             return;
 
         _jsModule ??= await JsRuntime.InvokeAsync<IJSObjectReference>("import",
-            $"./_content/{typeof(SettingsFieldFileUpload).Assembly.GetName().Name}/js/settings-field-file-upload.js");
+            $"./_content/{typeof(SettingsFieldFileUpload<T>).Assembly.GetName().Name}/js/settings-field-file-upload.js");
 
         _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
@@ -288,15 +304,18 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
         return false;
     }
 
-    private async Task FileActionButtonClick()
+    /// <summary>
+    /// Resets the component state so another file can be picked/uploaded.
+    /// </summary>
+    public async Task ResetAsync()
     {
-        // handle cancel upload if in progress, otherwise show file picker
-        if (_uploadTicket is not null && _uploadProgress is not null)
+        try
         {
+            await _uploadTicketSemaphore.WaitAsync(_cancellationTokenSource.Token);
             try
             {
-                _uploadTicket.Cancel();
-                //_uploadTicket = null;
+                _uploadTicket?.Cancel();
+                _uploadTicket = _uploadTicketFactory?.CreateUploadTicket();
                 _uploadProgress = null;
                 _uploadResult = null;
                 _filename = null;
@@ -306,6 +325,48 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
             {
                 _uploadTicketSemaphore.Release();
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Nothing to do here, we return gracefully
+        }
+        catch (ObjectDisposedException)
+        {
+            // Semaphore or other object already disposed, nothing we can do, return gracefully
+        }
+
+        if (FilenameChanged.HasDelegate)
+            await FilenameChanged.InvokeAsync(null);
+
+        await InvokeAsync(StateHasChanged);
+        await ResetInputAsync();
+    }
+
+    private async Task ResetInputAsync()
+    {
+        if (_jsObjectReference is not null)
+        {
+            try
+            {
+                await _jsObjectReference.InvokeVoidAsync("resetInput", _inputFile?.Element, _inputFileForShowPicker?.Element);
+            }
+            catch (JSDisconnectedException)
+            {
+                // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
+            }
+            catch (Exception exception)
+            {
+                JsResetInputFailed(Logger, exception);
+            }
+        }
+    }
+
+    private async Task FileActionButtonClick()
+    {
+        // handle cancel upload if in progress, otherwise show file picker
+        if (_uploadTicket is not null && _uploadProgress is not null)
+        {
+            await ResetAsync();
             return;
         }
 
@@ -329,6 +390,9 @@ public sealed partial class SettingsFieldFileUpload : ComponentBase, IAsyncDispo
 
     [LoggerMessage(Level = LogLevel.Error, Message = $"showFilePicker() failed")]
     private static partial void JsShowFilePickerFailed(ILogger logger, Exception ex);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = $"resetInput() failed")]
+    private static partial void JsResetInputFailed(ILogger logger, Exception ex);
 
     private async Task FileDropped(InputFileChangeEventArgs args)
     {

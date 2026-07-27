@@ -1,9 +1,10 @@
+using Sdk.Client.Contracts;
 using Sdk.Client.Models;
-using Sdk.Services;
+using Sdk.Client.Samples.Shared.Models;
 
 namespace Sdk.Client.Samples.Shared.Services;
 
-internal sealed class TestUploadHandler : IStreamUploadHandler
+internal sealed class TestUploadHandler : IStreamUploadHandler<TestUploadTicket>
 {
     public Func<IStreamUploadProgress, Task>? OnProgress { get; set; }
 
