@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Sdk.Client.Components.Settings;
+using Sdk.Client.Samples.Shared.Models;
 using ViciOne.Ui.Blazor.Components.ComboBox;
 namespace Sdk.Client.Samples.Shared.Pages.Components;
 
@@ -9,6 +10,9 @@ public sealed partial class SettingsPage : ComponentBase
 {
     private static readonly LogLevel[] s_logLevelComboBoxItems = Enum.GetValues<LogLevel>();
     private static readonly CultureInfo[] s_cultureComboBoxItems = [new("en-US"), new("de-DE")];
+
+    private SettingsFieldFileUpload<TestUploadTicket>? _fileUpload;
+
     private bool _switchExpanderIsLoading;
     private bool _switchExpanderValue;
     private int _width = 320;
@@ -33,6 +37,16 @@ public sealed partial class SettingsPage : ComponentBase
     private SettingsFieldLoadingIndication SettingsFieldLoadingIndication => _selectedSettingsFieldLoadingIndication ?? default;
     [Inject]
     public static ILogger<SettingsPage> Logger { get; set; } = default!;
+
+    public async Task ResetFileUpload()
+    {
+        if (_fileUpload is null)
+        {
+            return;
+        }
+
+        await _fileUpload.ResetAsync();
+    }
 
     private async Task SwitchExpanderValueChanged(bool value)
     {

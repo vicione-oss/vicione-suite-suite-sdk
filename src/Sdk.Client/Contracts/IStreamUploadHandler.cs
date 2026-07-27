@@ -1,11 +1,11 @@
 using Sdk.Client.Models;
 
-namespace Sdk.Services;
+namespace Sdk.Client.Contracts;
 
 /// <summary>
-/// Handler for uploading a stream to a file
+/// Handler for uploading a stream to a file, T is used as a marker to identifiy the handler for a specific upload control
 /// </summary>
-public interface IStreamUploadHandler // Maybe this could be in SDK with separate implementations for both hosting models
+public interface IStreamUploadHandler<T>
 {
     /// <summary>
     /// Raised to notify about progress in <see cref="Execute(Stream, string, CancellationToken)"/>

@@ -3,11 +3,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Sdk.Client.Components.Settings
 @using Sdk.Client.Components.Settings.Expanders
-@using ViciOne.Ui.Blazor.Components.Button
-@using ViciOne.Ui.Blazor.Components.Button.Enums
 @using ViciOne.Ui.Blazor.Components.ComboBox
-@using ViciOne.Ui.Blazor.Components.ContentLoadingIndication.Enums
-@using Sdk.Client.Samples.Shared.Models;
 @using Sdk.Client.Samples.Shared.Services;
 
 <PageTitle>Sdk.Client.Components.Settings samples</PageTitle>
@@ -58,7 +54,8 @@
             </SettingsField>
 
             <SettingsField IsLoading="@SettingsFieldIsLoading" Label="File" LoadingIndication="@SettingsFieldLoadingIndication">
-                <SettingsFieldFileUpload Filename="test" UploadTicketFactory="@(new TestUploadTicketFactory())" UploadHandler="@(new TestUploadHandler())"/>
+                <SettingsFieldFileUpload @ref="_fileUpload" Filename="test" UploadTicketFactory="@(new TestUploadTicketFactory())" UploadHandler="@(new TestUploadHandler())" ChooseButtonText="Test file upload"/>
+                <SettingsFieldButton Text="Reset File Upload" OnClick="@ResetFileUpload" />
             </SettingsField>
         </ChildContent>
     </SettingsGroup>
