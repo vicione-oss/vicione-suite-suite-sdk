@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using MassTransit.TestFramework;
@@ -174,6 +174,7 @@ public static class TestHarnessExtensions
             // Act
             await harness.Bus.Publish(@event, harness.CancellationToken);
             await harness.InactivityTask;
+            await harness.ThrowOnConsumeError<TEvent>();
 
             // did any endpoint consume the message
             Assert.That(await harness.Published.Any<TEvent>(harness.CancellationToken));
