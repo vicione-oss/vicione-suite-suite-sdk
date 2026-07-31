@@ -10,10 +10,9 @@
 - `Microsoft.Testing.Platform` package, update to version `2.3.2`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.3`
 - `System.IO.Abstractions` packages, update to version `22.2.0`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.15.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.19.0`
 - `ViciOne.Ui.Localization` package, update to version `3.5.0`
-- `ViciOne.Ui.Blazor.Components` package, update to version `5.18.0`
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.14.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.15.0`
 
 ### Added
 
@@ -46,6 +45,8 @@
 
 - `Sdk.Backend`
   - `MessagingHelper.GetActivityEndpointName` now throws when an instance-dependent activity argument is resolved without an instance id, instead of silently producing a malformed endpoint name with an empty id segment
+- `Sdk.Client`
+  - `SettingsFieldComboBox`, adjusted alignment of `ComboBox`
 - `Sdk.Testing`
   -  `MassTransitTester.TestEvent`, now forwards exceptions occuring on consumer instantiation
 

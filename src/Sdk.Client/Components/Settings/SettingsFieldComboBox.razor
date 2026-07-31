@@ -1,4 +1,4 @@
-﻿@using ViciOne.Ui.Blazor.Components.ComboBox
+@using ViciOne.Ui.Blazor.Components.ComboBox
 
 @typeparam TItem
 @typeparam TValue
@@ -12,5 +12,6 @@
               Value="@Value"
               ValueChanged="@ComboBoxValueChanged"
               ValueSelector="@ValueSelector"
-              TextSelector="@TextSelector" />
+              TextSelector="@TextSelector"
+              CssClass="combo-box--full-width" />
 </div>
