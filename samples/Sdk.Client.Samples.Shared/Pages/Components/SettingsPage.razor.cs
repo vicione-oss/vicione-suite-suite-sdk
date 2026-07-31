@@ -9,6 +9,7 @@ namespace Sdk.Client.Samples.Shared.Pages.Components;
 public sealed partial class SettingsPage : ComponentBase
 {
     private static readonly LogLevel[] s_logLevelComboBoxItems = Enum.GetValues<LogLevel>();
+    private static readonly LogLevel[] s_logLevelComboBoxExpanderItems = Enum.GetValues<LogLevel>();
     private static readonly CultureInfo[] s_cultureComboBoxItems = [new("en-US"), new("de-DE")];
 
     private SettingsFieldFileUpload<TestUploadTicket>? _fileUpload;
@@ -29,6 +30,7 @@ public sealed partial class SettingsPage : ComponentBase
         ];
     private SettingsFieldLoadingIndication? _selectedSettingsFieldLoadingIndication;
     private LogLevel _logLevel = LogLevel.None;
+    private LogLevel _logLevelComboBoxExpander = LogLevel.None;
     private string _firstName = "";
     private bool _enabled;
     private CultureInfo _culture = s_cultureComboBoxItems[0];

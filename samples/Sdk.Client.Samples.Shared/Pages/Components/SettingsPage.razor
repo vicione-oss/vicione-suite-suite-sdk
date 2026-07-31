@@ -59,4 +59,16 @@
             </SettingsField>
         </ChildContent>
     </SettingsGroup>
+
+    <SettingsGroup Title="SettingsField - ComboBoxExpander" Expanded="true">
+        <Expander>
+            <ComboBoxExpander Items="@s_logLevelComboBoxExpanderItems" @bind-Value="@_logLevelComboBoxExpander" />
+        </Expander>
+
+        <ChildContent>
+            <SettingsInformation>
+                @_logLevelComboBoxExpander
+            </SettingsInformation>
+        </ChildContent>
+    </SettingsGroup>
 </SettingsLayout>

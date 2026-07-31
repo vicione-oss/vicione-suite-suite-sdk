@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
-    <ViciOneUiMonochromeIconsVersion>4.14.0</ViciOneUiMonochromeIconsVersion>
+    <ViciOneUiMonochromeIconsVersion>4.15.0</ViciOneUiMonochromeIconsVersion>
     <MassTransitVersion>8.5.10</MassTransitVersion>
     <DotNetVersion>10.0.10</DotNetVersion>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="System.IO.Abstractions" Version="22.2.0" />
     <PackageVersion Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" Version="$(ViciOneCodeAnalysisVersion)" />
-    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.18.0" />
+    <PackageVersion Include="ViciOne.Ui.Blazor.Components" Version="5.19.0" />
     <PackageVersion Include="ViciOne.Ui.Design" Version="2.1.0" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Assets" Version="$(ViciOneUiMonochromeIconsVersion)" />
     <PackageVersion Include="ViciOne.Ui.MonochromeIcons.Components" Version="$(ViciOneUiMonochromeIconsVersion)" />

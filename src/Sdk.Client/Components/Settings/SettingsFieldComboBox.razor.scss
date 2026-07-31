@@ -1,5 +1,7 @@
-@use "../../Styles/settings/mixins";
-
 .settings-field-combo-box {
-    @include mixins.full-width();
+    width: 100%;
+
+    ::deep .combo-box--full-width {
+        width: 100%;
+    }
 }
