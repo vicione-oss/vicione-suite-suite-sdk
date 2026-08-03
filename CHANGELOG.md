@@ -1,16 +1,19 @@
 # Changelog
 
-## 2.2.0 - Unreleased
+## 2.2.0 - 2026-08-03
 
 ### Updated
 
-- `AspNetCore.SassCompiler` package, update to version `1.101.0`
-- `Microsoft` packages, update to version `10.0.10`
+- `AspNetCore.SassCompiler` package, update to version `1.102.0`
+- `AwesomeAssertions` package, update to version `9.5.0`
+- `bunit` package, update to version `1.102.0`
+- `Microsoft` packages, update to version `2.8.6`
 - `Microsoft.Testing.Extensions.CodeCoverage` package, update to version `18.9.0`
-- `Microsoft.Testing.Platform` package, update to version `2.3.2`
+- `Microsoft.Testing.Platform` package, update to version `2.3.3`
 - `Npgsql.EntityFrameworkCore.PostgreSQL` package, update to version `10.0.3`
 - `System.IO.Abstractions` packages, update to version `22.2.0`
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.19.0`
+- `ViciOne.Ui.Design` package, update to version `2.3.0`
 - `ViciOne.Ui.Localization` package, update to version `3.5.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.15.0`
 
