@@ -1,4 +1,4 @@
-## Scripts ###
+### Scripts ###
 .activate_mise: &activate_mise
   - mise install
   - eval "$(mise env)"
@@ -48,16 +48,6 @@
 .run_eslint: &run_eslint
   - npm run lint
 
-### Renovate ###
-Validate renovate.json:
-  stage: .pre
-  image: renovate/renovate:43.272.5
-  script:
-    - renovate-config-validator --strict
-  rules:
-    - changes:
-        - renovate.json
-
 ### Defaults ###
 variables:
   IMAGE_NAME: registry.gitlab.com/vicione-oss/tooling/base-image:vicione-latest
@@ -67,6 +57,7 @@ stages:
   - build
   - test
   - pack
+  - push
   - publish
 
 Version:
@@ -86,18 +77,8 @@ Version:
 
 ### CI Components ###
 include:
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@2.2.4
-    inputs:
-      image: ${IMAGE_NAME}
-      rules: *rules
-      before_script:
-        - *activate_mise
-        - *update_nuget_source_ro
-      tags:
-        - ${RUNNER_TAG}
-
-  ### Test & Build
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@2.2.4
+  ### Restore
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-restore@v2.6.0
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules
@@ -105,23 +86,33 @@ include:
         - *activate_mise
         - *update_nuget_source_ro
         - *install_npm_packages
+      tags:
+        - ${RUNNER_TAG}
+  ### Build
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-build@v2.6.0
+    inputs:
+      image: ${IMAGE_NAME}
+      rules: *rules
+      before_script:
+        - *activate_mise
+        - *update_nuget_source_ro
         - 'echo "Version: ${Version:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@2.2.4
+  ### Test
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-test@v2.6.0
     inputs:
+      name: "dotnet Test"
       image: ${IMAGE_NAME}
       rules: *rules
       before_script:
         - *activate_mise
         - *update_nuget_source_ro
-        - *install_npm_packages
       tags:
         - ${RUNNER_TAG}
       coverage: true
-
-  ### NuGet Packages
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@2.2.4
+  ### Pack
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-pack@v2.6.0
     inputs:
       image: ${IMAGE_NAME}
       rules: *rules_manual
@@ -130,17 +121,29 @@ include:
         - 'echo "PackageVersion: ${PackageVersion:-notAssigned}"'
       tags:
         - ${RUNNER_TAG}
-  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@2.2.4
+  ### Push
+  - component: $CI_SERVER_FQDN/vicione-oss/tooling/dotnet-component/dotnet-nuget-push@v2.6.0
     inputs:
+      stage: "push"
       image: ${IMAGE_NAME}
       source: "JFrogViciOne"
       filename_pattern: "./src/*"
-      rules: *rules_manual
+      rules: *rules
       before_script:
         - *activate_mise
         - *update_nuget_source_rw
       tags:
         - ${RUNNER_TAG}
+
+### Renovate ###
+Validate renovate.json:
+  stage: .pre
+  image: renovate/renovate:43.272.5
+  script:
+    - renovate-config-validator --strict
+  rules:
+    - changes:
+        - renovate.json
 
 ### ESLint ###
 ESLint:
@@ -162,6 +165,7 @@ Publish Pages:
   stage: publish
   image: ${IMAGE_NAME}
   pages: true
+  needs: ["dotnet Test"]
   before_script:
     - *activate_mise
     - *update_nuget_source_ro
