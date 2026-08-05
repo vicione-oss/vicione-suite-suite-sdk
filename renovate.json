@@ -5,7 +5,12 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
-  "enabledManagers": [ "nuget" ],
+  "enabledManagers": [ "nuget", "npm" ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "dependencyDashboardApproval": true
+  },
+  "osvVulnerabilityAlerts": true,
   "packageRules": [
     {
       "matchManagers": [ "nuget" ],
@@ -26,6 +31,40 @@
       "commitMessageExtra": "{{newVersion}}",
       "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
       "addLabels": [ "Dependencies", "Modernization" ]
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "enabled": true
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "@types/blazor__javascript-interop" ],
+      "groupName": "interop types",
+      "groupSlug": "interop-types"
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [
+        "eslint",
+        "eslint-config-xo",
+        "eslint-config-xo-typescript",
+        "/^@typescript-eslint//",
+        "/^eslint-/"
+      ],
+      "groupName": "eslint",
+      "groupSlug": "eslint"
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "typescript" ],
+      "groupName": "typescript",
+      "groupSlug": "typescript"
+    },
+    {
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "three-dots" ],
+      "groupName": "three-dots",
+      "groupSlug": "three-dots"
     }
   ]
 }
