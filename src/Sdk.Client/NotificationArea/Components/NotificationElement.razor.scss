@@ -1,4 +1,5 @@
-﻿@use "../../Styles/colors-staged";
+@use "../../Styles/design/colors";
+@use "../../Styles/colors-staged";
 
 .notification-element {
     display: grid;
@@ -9,6 +10,10 @@
 
     button {
         position: relative;
+
+        background-color: transparent;
+        border: none;
+        color: colors.$font;
 
         &:hover {
             background-color: colors-staged.$color-content-dark-hover;

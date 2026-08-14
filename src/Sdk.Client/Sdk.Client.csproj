@@ -56,14 +56,9 @@
     <Content Include="Styles/_overflow.scss" Pack="true" PackagePath="scss/" />
     <Content Include="Styles/_mixins.scss" Pack="true" PackagePath="scss/" />
 
-    <!-- no use of **/*.scss for the following copied items as otherwise these items will be missing in nuget package -->
-    <Content Include="Styles/design/colors/_index.scss" Pack="true" PackagePath="scss/design/colors" />
-    <Content Include="Styles/design/colors/_variables.scss" Pack="true" PackagePath="scss/design/colors" />
-
     <!-- these are referenced by suite directly -->
-    <Content Include="Styles/animations/**/*.scss" Pack="true" PackagePath="scss/animations" />
     <Content Include="Styles/badges/*.scss" Pack="true" PackagePath="scss/badges" />
-    <Content Include="Styles/nav-tiles/*.scss" Pack="true" PackagePath="scss/nav-tiles" />
+    <Content Include="Styles/nav-tiles/_variables.scss" Pack="true" PackagePath="scss/nav-tiles" />
   </ItemGroup>
 
   <!-- Prevent Microsoft.NET.Sdk.Razor from copying unnecessary file -->
@@ -118,6 +113,8 @@
 
   <Target Name="ConfigureDesignTargets" BeforeTargets="BeforeDesignTargets">
     <PropertyGroup>
+      <AnimationsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/animations</AnimationsScssOutputFolder>
+      <ButtonScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/button</ButtonScssOutputFolder>
       <ColorsScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/colors</ColorsScssOutputFolder>
       <ScrollbarScssOutputFolder>$(MSBuildProjectDirectory)/Styles/design/scrollbar</ScrollbarScssOutputFolder>
     </PropertyGroup>

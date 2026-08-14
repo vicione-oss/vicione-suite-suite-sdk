@@ -1,4 +1,4 @@
-﻿@typeparam TState
+@typeparam TState
 @typeparam TIcon
 
 @inherits NotificationElementBase<TState>
@@ -11,8 +11,7 @@
         cssClass.Add("notification-element--active");
 
     <div class="@string.Join(" ", cssClass)">
-        <button title="@GetTitle()"
-                @onclick="@OnClick">
+        <button title="@GetTitle()" @onclick="@OnClick">
 
             <div class="icon-container">
                 <CascadingValue Value="State">

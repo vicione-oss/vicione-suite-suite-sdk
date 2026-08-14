@@ -1,6 +1,5 @@
-﻿@using Sdk.Client.Components.LinkButton
-@using Sdk.Client.Enums
-@using Sdk.Client.Extensions
+@using Sdk.Client.Components.LinkButton
+@using ViciOne.Ui.MonochromeIcons.Components
 @using ViciOne.Ui.MonochromeIcons.Core.Enums
 
 <div class="card-container @(CardModel.TeaserImageUrl is null ? "text-only" : string.Empty)">
@@ -8,7 +7,7 @@
     {
         <div class="image-container" style="--img-source: url(@CardModel.TeaserImageUrl.OriginalString)">
             <button class="close" @onclick="async () =>  await OnCloseClick.InvokeAsync(CardModel)">
-                <img src="@SvgIcon.Close.GetPath()" />
+                <MonochromeIcon Name="MonochromeIconName.CloseMedium" Size="MonochromeIconSize.SmallMedium" />
             </button>
         </div>
     }
@@ -19,7 +18,7 @@
         @if (CardModel.TeaserImageUrl is null)
         {
             <button class="close" @onclick="async () => await OnCloseClick.InvokeAsync(CardModel)">
-                <img src="@SvgIcon.Close.GetPath()" />
+                <MonochromeIcon Name="MonochromeIconName.CloseMedium" Size="MonochromeIconSize.SmallMedium" />
             </button>
         }
     </div>

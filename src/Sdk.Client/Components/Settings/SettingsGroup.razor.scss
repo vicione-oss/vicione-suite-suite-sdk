@@ -1,8 +1,8 @@
+@use "../../Styles/design/animations/mixins" as animations;
 @use "../../Styles/design/colors";
 
 @use "../../Styles/settings/mixins";
 @use "../../Styles/settings/settings-group/variables";
-@use "../../Styles/animations/mixins" as animations;
 
 $border-radius: 3px;
 

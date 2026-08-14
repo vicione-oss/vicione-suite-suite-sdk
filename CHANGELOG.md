@@ -2,6 +2,16 @@
 
 ## 2.3.0 - Unreleased
 
+### Updated
+
+- `.NET` packages, updated to version `10.0.11`
+- `ViciOne.Ui.Blazor.Components` package, update to version `5.20.0`
+- `ViciOne.Ui.Design` package, update to version `2.4.0`
+
+### Removed
+
+- `Sdk.Client`, `SvgIcon` and `SvgIconExtensions` were removed as there is no use of it in SDK and in other repos
+
 ## 2.2.0 - 2026-08-03
 
 ### Updated
