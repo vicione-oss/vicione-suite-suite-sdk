@@ -1,7 +1,6 @@
-﻿@use "../design/colors";
 @use "../colors-staged";
 
 $badge-height: 15px;
 $badge-background-color: colors-staged.$color-info;
-$badge-font-color: colors.$font-light;
+$badge-font-color: rgb(255, 255, 255); // adopted from @use "../design/colors"; colors.$font-light; to remove the dependency
 
