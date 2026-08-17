@@ -1,16 +1,18 @@
 # Changelog
 
-## 2.3.0 - Unreleased
+## 3.0.0 - 2026-08-17
 
 ### Updated
 
 - `.NET` packages, updated to version `10.0.11`
+- `Sdk.Client`, added `IClientModuleResourceProvider` to provide resources in client modules to be injected in Suite
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.20.0`
 - `ViciOne.Ui.Design` package, update to version `2.4.0`
 
 ### Removed
 
 - `Sdk.Client`, `SvgIcon` and `SvgIconExtensions` were removed as there is no use of it in SDK and in other repos
+- `Sdk.Deployment`, removed `DevExpress` and `System.Drawing` library references
 
 ## 2.2.0 - 2026-08-03
 
