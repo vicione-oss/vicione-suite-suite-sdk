@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0 - unreleased
+
+### Added
+
+- `Sdk.UserManagement`, added request `GetUserInformation` to fetch a list of users with basic information
+
 ## 3.0.0 - 2026-08-17
 
 ### Updated
