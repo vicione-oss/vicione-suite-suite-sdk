@@ -6,6 +6,10 @@
 
 - `Sdk.UserManagement`, added request `GetUserInformation` to fetch a list of users with basic information
 
+### Changed
+
+- `Sdk.Client`, `_overflow.scss`, `.overflow-area` allows mouse events to pass through to underlying elements
+
 ### Updated
 
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.17.0`
@@ -796,10 +800,10 @@
 
 ### Added
 
-- Added shared scss styles 'animations'
-- Added shared scss styles 'badges'
-- Added shared scss styles 'loading-spinner'
-- Added shared scss styles 'nav-tiles'
+- Added shared SCSS styles 'animations'
+- Added shared SCSS styles 'badges'
+- Added shared SCSS styles 'loading-spinner'
+- Added shared SCSS styles 'nav-tiles'
 - Added ability to send instance dependent requests using the UIMediator
 - Added `IModuleMetadata` to provide module description for appstore
 
