@@ -1,5 +1,3 @@
-@use "../Styles/design/colors";
-
 .navigation-item-content {
     display: grid;
     grid-template-areas: "icon text";
@@ -9,9 +7,7 @@
     ::deep svg {
         grid-area: icon;
 
-        polygon {
-            fill: colors.$font;
-        }
+        fill: currentColor;
     }
 
     a {
