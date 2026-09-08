@@ -133,6 +133,67 @@ public sealed class MessagingHelperTests
             => Assert.True(typeof(ValidInstanceDependentEventConsumer).ConsumesInstanceDependentMessages());
     }
 
+    public sealed class ConsumesRequest
+    {
+        [Theory]
+        [InlineData(typeof(InstanceIndependentRequestConsumer))]
+        [InlineData(typeof(DerivedRequestConsumer))]
+        public void Should_return_true_for_a_request_consumer(Type consumerType)
+            => Assert.True(consumerType.ConsumesRequest());
+
+        [Theory]
+        [InlineData(typeof(EventFaultConsumer))]
+        [InlineData(typeof(ValidInstanceDependentEventConsumerDefinition))]
+        [InlineData(typeof(MessagelessConsumer))]
+        public void Should_return_false_for_a_consumer_without_request_message_types(Type consumerType)
+            => Assert.False(consumerType.ConsumesRequest());
+
+        [Fact]
+        public void Should_return_false_for_a_consumer_that_also_handles_something_else()
+            => Assert.False(typeof(RequestAndFaultConsumer).ConsumesRequest());
+
+        [Fact]
+        public void Should_return_false_for_a_consumer_of_events_only()
+            => Assert.False(typeof(ValidInstanceDependentEventConsumer).ConsumesRequest());
+    }
+
+    public sealed class FindAllMessageTypes
+    {
+        [Fact]
+        public void Should_return_generic_message_types_that_FindMessageTypes_filters_out()
+        {
+            // Act
+            var types = typeof(ValidInstanceDependentEventConsumerWithFaultHandler).FindAllMessageTypes().ToArray();
+
+            // Assert
+            Assert.Equal(2, types.Length);
+            Assert.Contains(typeof(InstanceDependentEvent), types);
+            Assert.Contains(typeof(Fault<InstanceDependentEvent>), types);
+        }
+
+        [Fact]
+        public void Should_return_the_routing_slip_contracts()
+        {
+            // Act
+            var types = typeof(ValidInstanceDependentEventConsumerWithRoutingSlip).FindAllMessageTypes().ToArray();
+
+            // Assert
+            Assert.Equal(3, types.Length);
+            Assert.Contains(typeof(RoutingSlipCompleted), types);
+            Assert.Contains(typeof(RoutingSlipFaulted), types);
+        }
+
+        [Fact]
+        public void Should_return_nothing_for_a_type_that_consumes_no_message()
+        {
+            // Act
+            var types = typeof(ValidInstanceDependentEventConsumerDefinition).FindAllMessageTypes().ToArray();
+
+            // Assert
+            Assert.Empty(types);
+        }
+    }
+
     public sealed class IsInstanceDependent
     {
         [Theory]
@@ -296,5 +357,39 @@ public sealed class MessagingHelperTests
 
         public Task Consume(ConsumeContext<SomeCommand> context)
             => Task.CompletedTask;
+    }
+
+    private sealed class ValidInstanceDependentEventConsumerDefinition : ConsumerDefinition<ValidInstanceDependentEventConsumer>;
+
+    private sealed class EventFaultConsumer : IConsumer<Fault<InstanceIndependentEvent>>
+    {
+        public Task Consume(ConsumeContext<Fault<InstanceIndependentEvent>> context)
+            => Task.CompletedTask;
+    }
+
+    private sealed class MessagelessConsumer : IConsumer;
+
+    private sealed class InstanceIndependentRequestConsumer : IConsumer<InstanceIndependentRequest>
+    {
+        public Task Consume(ConsumeContext<InstanceIndependentRequest> context)
+            => Task.CompletedTask;
+    }
+
+    private sealed class RequestAndFaultConsumer : IConsumer<InstanceIndependentRequest>, IConsumer<Fault<InstanceIndependentRequest>>
+    {
+        public Task Consume(ConsumeContext<InstanceIndependentRequest> context)
+            => Task.CompletedTask;
+
+        public Task Consume(ConsumeContext<Fault<InstanceIndependentRequest>> context)
+            => Task.CompletedTask;
+    }
+
+    private sealed class DerivedRequestConsumer : RequestConsumer<InstanceIndependentRequest, Response>
+    {
+        public override Task<Response> Respond(InstanceIndependentRequest message, CancellationToken cancellationToken)
+            => Task.FromResult(new Response(null));
+
+        public override Task<Response> HandleException(InstanceIndependentRequest message, Exception e, CancellationToken cancellationToken)
+            => Task.FromResult(new Response(new ErrorInfo(0, e.Message)));
     }
 }

@@ -27,3 +27,4 @@ Each repository maintains its own independent ADR sequence:
 | ADR | Title | Status |
 |-----|-------|--------|
 | [ADR-001](ADR-001-adr-conventions.md) | ADR Conventions | Accepted |
+| [ADR-002](ADR-002-contract-governance-for-behavioural-change.md) | Contract Governance for Behavioural Change | Accepted |

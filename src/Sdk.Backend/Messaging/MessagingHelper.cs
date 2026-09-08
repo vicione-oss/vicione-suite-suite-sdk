@@ -111,22 +111,61 @@ public static class MessagingHelper
     /// </summary>
     /// <returns>
     /// <see langword="true"/> if the consumer handles at least one instance-dependent message,
-    /// otherwise <see langword="true"/>.
+    /// otherwise <see langword="false"/>.
     /// </returns>
     public static bool ConsumesInstanceDependentMessages(this Type consumerType)
         => consumerType.FindMessageTypes().Any(t => t.IsInstanceDependent());
 
     /// <summary>
-    /// Checks if a consumer type handles request messages.
+    /// Checks if a consumer type handles request messages and nothing else.
     /// </summary>
-    /// <returns><see langword="true"/> if the consumer handles request messages, otherwise <see langword="false"/>.</returns>
+    /// <remarks>
+    /// Uses <see cref="FindAllMessageTypes"/> and requires at least one message type, so that a type reporting no
+    /// message types - an <c>IConsumer&lt;Fault&lt;T&gt;&gt;</c> or a <c>ConsumerDefinition&lt;T&gt;</c> - is not
+    /// mistaken for a request consumer.
+    /// </remarks>
+    /// <returns>
+    /// <see langword="true"/> if the consumer handles at least one message type and all of them are
+    /// <see cref="IRequest{T}"/>, otherwise <see langword="false"/>.
+    /// </returns>
     public static bool ConsumesRequest(this Type consumerType)
-        => consumerType.FindMessageTypes().All(a => a.HasInterface(typeof(IRequest<>)));
+    {
+        var consumesAnyMessage = false;
+
+        foreach (var messageType in consumerType.FindAllMessageTypes())
+        {
+            if (!messageType.HasInterface(typeof(IRequest<>)))
+                return false;
+
+            consumesAnyMessage = true;
+        }
+
+        return consumesAnyMessage;
+    }
 
     /// <summary>
-    /// Finds all message types handled by a given consumer or activity type.
+    /// Finds the message types handled by a given consumer or activity type that may name a receive endpoint.
     /// </summary>
+    /// <remarks>
+    /// Generic message types and the routing-slip contracts are filtered out: MassTransit owns their routing, so they
+    /// must not decide a queue name. To classify a consumer rather than name its endpoint, use
+    /// <see cref="FindAllMessageTypes"/>.
+    /// </remarks>
     public static IEnumerable<Type> FindMessageTypes(this Type consumingType)
+        => consumingType.FindAllMessageTypes()
+            .Where(messageType => !messageType.IsGenericType
+                && !Equals(messageType.FullName, typeof(RoutingSlipCompleted).FullName)
+                && !Equals(messageType.FullName, typeof(RoutingSlipFaulted).FullName));
+
+    /// <summary>
+    /// Finds every message type handled by a given consumer or activity type, including the generic ones such as
+    /// <see cref="Fault{T}"/> and the routing-slip contracts that <see cref="FindMessageTypes"/> filters out.
+    /// </summary>
+    /// <remarks>
+    /// The set to use when classifying a consumer - which bus it belongs on, which retry ladder it gets. An empty
+    /// result means the type consumes nothing at all.
+    /// </remarks>
+    public static IEnumerable<Type> FindAllMessageTypes(this Type consumingType)
     {
         foreach (var interfaceType in consumingType.GetTypeInfo().ImplementedInterfaces)
         {
@@ -134,20 +173,8 @@ public static class MessagingHelper
                 continue;
 
             var genericTypeDefinition = interfaceType.GetGenericTypeDefinition();
-            if (!(genericTypeDefinition == typeof(IConsumer<>) || genericTypeDefinition == typeof(IExecuteActivity<>)))
-                continue;
-
-            var messageType = interfaceType.GetGenericArguments()[0];
-            if (messageType.IsGenericType)
-                continue;
-
-            if (Equals(messageType.FullName, typeof(RoutingSlipCompleted).FullName)
-                || Equals(messageType.FullName, typeof(RoutingSlipFaulted).FullName))
-            {
-                continue;
-            }
-
-            yield return messageType;
+            if (genericTypeDefinition == typeof(IConsumer<>) || genericTypeDefinition == typeof(IExecuteActivity<>))
+                yield return interfaceType.GetGenericArguments()[0];
         }
     }
 
