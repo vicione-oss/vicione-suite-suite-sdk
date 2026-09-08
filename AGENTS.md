@@ -240,6 +240,8 @@ Both inherit from `ModuleDbContext` which enforces:
 
 **Deprecation policy:** Use `[Obsolete("Use XYZ instead.")]` to mark APIs for removal. Deprecated APIs stay for at least one minor release before being removed in the next major version. The obsolete message must always point to the replacement.
 
+**Behavioural change policy:** A change that keeps a signature and changes the answer is governed by [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md). Apply its direction test: a change that moves an implementation *toward* its documented contract is a defect fix (minor or patch) and needs a `### Fixed` changelog entry naming the observable difference; a change that moves the documented contract itself is breaking and needs a major bump.
+
 ## Design Priorities
 
 1. **Edge-S first** — 1.9 GB RAM, ARM Cortex-A53 (2 cores), 2.3 GB flash storage, limited write cycles

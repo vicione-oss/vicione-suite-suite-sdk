@@ -29,9 +29,18 @@ Analyze the proposed changes for semantic versioning compliance:
    - Documentation updates
    - Internal implementation changes
 
-Compare against the current public API surface in the `src/` projects. Flag any change that would require a major or minor version bump.
+5. **Behavioural changes (signature unchanged, answers change) — see ADR-002:**
+   - A public method body that returns a different answer for an input that reaches it today
+   - Apply the direction test from `docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md`:
+     - **Toward the documented contract** (the implementation was wrong, the XML documentation was right) → defect fix, minor or patch
+     - **Away from it, or the documented contract itself changes** → breaking, major
+   - Cite the XML documentation *as it stood before the change*. If the documentation has to be edited to make the new behaviour correct, the change is BREAKING
+   - Requires a `### Fixed` changelog entry naming the API, the observable difference, and the call pattern most likely to notice
+
+Compare against the current public API surface in the `src/` projects, and read the body of every changed public method - a behavioural change is invisible to a signature-level diff. Flag any change that would require a major or minor version bump.
 
 Output format:
 - 🔴 BREAKING (requires major bump): [description]
+- 🟠 BEHAVIOURAL (direction test, then minor/patch or major): [description]
 - 🟡 ADDITIVE (requires minor bump): [description]
 - 🟢 PATCH (no version change needed): [description]
