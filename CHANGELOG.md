@@ -25,7 +25,7 @@
 
 ### Updated
 
-- `.NET` packages, updated to version `10.0.11`
+- `.NET` packages, updated to version `10.0.12`
 - `Sdk.Client`, added `IClientModuleResourceProvider` to provide resources in client modules to be injected in Suite
 - `ViciOne.Ui.Blazor.Components` package, update to version `5.20.0`
 - `ViciOne.Ui.Design` package, update to version `2.4.0`
