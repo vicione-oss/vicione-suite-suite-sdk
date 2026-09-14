@@ -19,7 +19,17 @@
 
 ### Updated
 
-- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.17.0`
+- `AspNetCore.SassCompiler` package, update to version `1.103.0`
+- `AwesomeAssertions` package, update to version `9.6.0`
+- `bunit` package, update to version `2.10.3`
+- `Microsoft.CodeAnalysis.CSharp` package, update to version `5.9.0`
+- `Microsoft.Testing.Extensions.CodeCoverage` package, update to version `18.11.0`
+- `Microsoft.Testing.Platform` package, update to version `2.4.0`
+- `NSubstitute` package, update to version `6.2.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.0.0`
+- `ViciOne.Ui.Design` package, update to version `2.5.0`
+- `ViciOne.Ui.MonochromeIcons` packages, update to version `4.18.0`
+- `xunit.v3` packages, update to version `4.0.0`
 
 ## 3.0.0 - 2026-08-17
 
