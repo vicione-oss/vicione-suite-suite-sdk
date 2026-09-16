@@ -23,5 +23,5 @@ public static class ControlServiceErrorCodes
     /// <summary>
     /// Error code indicating that the control service functionality is unavailable.
     /// </summary>
-    public const int ControlServiceUnavailable = 20;
+    public const int ControlServiceUnavailable = 30;
 }
