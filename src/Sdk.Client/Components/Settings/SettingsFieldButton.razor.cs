@@ -1,4 +1,5 @@
 ﻿using ViciOne.Ui.Blazor.Components.Button;
+using ViciOne.Ui.Blazor.Components.Button.Enums;
 
 namespace Sdk.Client.Components.Settings;
 
@@ -7,6 +8,14 @@ namespace Sdk.Client.Components.Settings;
 /// </summary>
 public sealed partial class SettingsFieldButton : ComponentBase
 {
+    /// <inheritdoc cref="Button.Busy"/>
+    [Parameter]
+    public bool Busy { get; set; }
+
+    /// <inheritdoc cref="Button.BusyIndication"/>
+    [Parameter]
+    public ButtonBusyIndication BusyIndication { get; set; } = ButtonBusyIndication.Sweep;
+
     /// <inheritdoc cref="Button.CssClass"/>
     [Parameter]
     public string? CssClass { get; set; }

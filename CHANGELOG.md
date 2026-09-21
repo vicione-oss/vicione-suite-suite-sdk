@@ -7,6 +7,7 @@
 - `Sdk.UserManagement`, added request `GetUserInformation` to fetch a list of users with basic information
 - `Sdk.Backend.Messaging`
   - Added `MessagingHelper.FindAllMessageTypes`, returning every message type a consumer or activity handles, including the generic ones (`Fault<T>`) and the routing-slip contracts that `MessagingHelper.FindMessageTypes` filters out. `FindMessageTypes` answers "which message may name this receive endpoint" and is unchanged; `FindAllMessageTypes` is the set to use when classifying a consumer - which bus it belongs on, which retry ladder it gets. See ADR-002
+- `Sdk.Client`, `SettingsFieldButton` forwards `Busy` and `BusyIndication` to the underlying `Button`, so an action can show that it is running on the button itself instead of the field replacing the button with a spinner
 
 ### Fixed
 
