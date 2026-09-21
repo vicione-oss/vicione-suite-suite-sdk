@@ -248,11 +248,13 @@ For the following  file structure in `FooClientModule` is assumed:
           </SettingsField>
 
           <SettingsField>
-              SettingsFieldButton Text="Test connection" OnClick="TestConnectionButtonClick" />
+              <SettingsFieldButton Text="Test connection" Busy="@State.TestConnectionRunning" OnClick="TestConnectionButtonClick" />
           </SettingsField>
       </SettingsGroup>
   </SettingsLayout>
   ```
+
+  > Set `Busy` on [`SettingsFieldButton`](../src/Sdk.Client/Components/Settings/SettingsFieldButton.razor.cs) while the action behind it runs. The button keeps its place, size and text, shows that it is working and ignores further clicks, instead of the field replacing it with a spinner. `BusyIndication` selects the effect. Keep `Enabled` for a button that is unavailable: a button that is not enabled shows no busy state.
 
   > In the preceding example `ConnectionName` is a property of inherited parameter `State`. The property is [bound](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/data-binding) to the input element to provide / receive the setting value and to preserve it across render cycles.
 
