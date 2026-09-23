@@ -41,7 +41,7 @@
     <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
-  
+
   <PropertyGroup Condition="'$(CI)' != ''">
     <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
@@ -52,26 +52,38 @@
     <PackageVersion>$([System.IO.File]::ReadAllText('$(MsBuildThisFileDirectory)VERSION').Trim())</PackageVersion>
   </PropertyGroup>
 
-    <!-- Do not pack and do not publish test projects -->
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+  <PropertyGroup>
+    <IsTestProject>$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('Tests'))</IsTestProject>
+    <IsInTestFolder>$([System.String]::Copy('$(MSBuildProjectDirectory)').Contains('tests'))</IsInTestFolder>
+    <IsInSamplesFolder>$([System.String]::Copy('$(MSBuildProjectDirectory)').Contains('samples'))</IsInSamplesFolder>
+  </PropertyGroup>
+
+  <!-- Do not pack and do not publish test projects -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'True'">
     <OutputType>Exe</OutputType>
-    <IsPackable>false</IsPackable>
     <IsPublishable>true</IsPublishable>
     <!-- Microsoft Testing Platform command line experience -->
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('tests'))">
+  <!-- Do not pack test modules or samples -->
+  <PropertyGroup Condition="'$(IsInTestFolder)' == 'True' Or '$(IsInSamplesFolder)' == 'True'">
+    <IsPackable>false</IsPackable>
+    <!-- Microsoft.NET.Sdk.Web enables this warning for non-packable projects, which breaks a solution-wide 'dotnet pack' -->
+    <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsInTestFolder)' == 'True'">
     <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Reduce time required to build and also to publish to GitLab pages -->
-  <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('samples'))">    
+  <PropertyGroup Condition="'$(IsInSamplesFolder)' == 'True'">
     <CompressionEnabled>false</CompressionEnabled>
   </PropertyGroup>
 
   <!-- Add Test.SDK/XUnit package references to test projects -->
-  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+  <ItemGroup Condition="'$(IsTestProject)' == 'True'">
     <ProjectReference Include="..\..\src\Sdk.Testing\Sdk.Testing.csproj" />
 
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
