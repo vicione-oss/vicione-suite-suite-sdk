@@ -2,6 +2,11 @@
 
 ## 3.1.1 - unreleased
 
+### Fixed
+
+- `Sdk.Client`
+  - `SettingsFieldSpinEdit`, `SettingsFieldSwitch` and `SettingsFieldTextBox` no longer swallow exceptions thrown by async `ValueChanged` handlers
+
 ## 3.1.0 - 2026-09-24
 
 ### Added

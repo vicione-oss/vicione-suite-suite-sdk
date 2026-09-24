@@ -250,4 +250,29 @@ public sealed class SettingsFieldSpinEditTests
         // Assert
         changedValue.Should().Be(25);
     }
+
+    [Fact]
+    public async Task Should_propagate_exception_of_value_changed_handler()
+    {
+        // Arrange
+        await using var ctx = new BunitContext();
+        ctx.SetupSuiteServices();
+        ctx.Services.AddIntSpinEdit();
+
+        var component = ctx.Render<SettingsFieldSpinEdit<int, int, int>>(b =>
+        {
+            b.Add(p => p.ValueChanged, (int _) => Task.FromException(new InvalidOperationException("Handler failed.")));
+            b.Add(p => p.Interval, 1);
+            b.Add(p => p.Minimum, 0);
+            b.Add(p => p.Maximum, 100);
+        });
+
+        var spinEdit = component.FindComponent<SpinEdit<int, int, int>>();
+
+        // Act
+        var act = () => spinEdit.InvokeAsync(() => spinEdit.Instance.ValueChanged.InvokeAsync(25));
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Handler failed.");
+    }
 }
