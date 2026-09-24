@@ -12,14 +12,13 @@ public class ModuleDbContextGeneratorTests
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(source);
 
-        // Collect metadata references from the loaded assemblies that the generator needs to resolve
         var references = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location))
             .Select(a => MetadataReference.CreateFromFile(a.Location))
             .Cast<MetadataReference>()
             .ToList();
 
-        // Ensure Sdk.Backend types are available
+        // Sdk.Backend is not necessarily loaded yet, so it is referenced explicitly.
         references.Add(MetadataReference.CreateFromFile(typeof(ModuleDbContext).Assembly.Location));
         references.Add(MetadataReference.CreateFromFile(typeof(ModuleDbContextAttribute).Assembly.Location));
 
@@ -347,5 +346,86 @@ public class ModuleDbContextGeneratorTests
         var generatedCode = result.GeneratedTrees[0].GetText(TestContext.Current.CancellationToken).ToString();
         generatedCode.Should().NotContain("MyEntities");
         generatedCode.Should().Contain("OtherEntities");
+    }
+
+    [Fact]
+    public void Should_generate_dbset_properties_from_every_level_of_a_layered_interface()
+    {
+        // Arrange
+        const string Source = """
+            using Microsoft.EntityFrameworkCore;
+            using Sdk.Backend.Persistence;
+
+            namespace Test.DbContext;
+
+            public class MyEntity { public int Id { get; set; } }
+            public class OtherEntity { public int Id { get; set; } }
+
+            public interface IBaseDbContext : IModuleDbContext
+            {
+                DbSet<MyEntity> MyEntities { get; }
+            }
+
+            public interface IMyDbContext : IBaseDbContext
+            {
+                DbSet<OtherEntity> OtherEntities { get; }
+            }
+
+            [ModuleDbContext(DefaultSchemaName = "test")]
+            public partial class MyDbContext : ModuleDbContext, IMyDbContext
+            {
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(Source);
+
+        // Assert
+        result.Diagnostics.Should().BeEmpty();
+
+        var generatedCode = result.GeneratedTrees[0].GetText(TestContext.Current.CancellationToken).ToString();
+        generatedCode.Should().Contain("DbSet<global::Test.DbContext.MyEntity> MyEntities => Set<global::Test.DbContext.MyEntity>();");
+        generatedCode.Should().Contain("DbSet<global::Test.DbContext.OtherEntity> OtherEntities => Set<global::Test.DbContext.OtherEntity>();");
+    }
+
+    [Fact]
+    public void Should_generate_dbset_properties_from_every_implemented_module_interface()
+    {
+        // Arrange
+        const string Source = """
+            using Microsoft.EntityFrameworkCore;
+            using Sdk.Backend.Persistence;
+
+            namespace Test.DbContext;
+
+            public class MyEntity { public int Id { get; set; } }
+            public class OtherEntity { public int Id { get; set; } }
+
+            public interface IFirstDbContext : IModuleDbContext
+            {
+                DbSet<MyEntity> MyEntities { get; }
+            }
+
+            public interface ISecondDbContext : IModuleDbContext
+            {
+                DbSet<MyEntity> MyEntities { get; }
+                DbSet<OtherEntity> OtherEntities { get; }
+            }
+
+            [ModuleDbContext(DefaultSchemaName = "test")]
+            public partial class MyDbContext : ModuleDbContext, IFirstDbContext, ISecondDbContext
+            {
+            }
+            """;
+
+        // Act
+        var result = RunGenerator(Source);
+
+        // Assert
+        result.Diagnostics.Should().BeEmpty();
+
+        var generatedCode = result.GeneratedTrees[0].GetText(TestContext.Current.CancellationToken).ToString();
+        generatedCode.Should().Contain("DbSet<global::Test.DbContext.OtherEntity> OtherEntities => Set<global::Test.DbContext.OtherEntity>();");
+        generatedCode.Split("MyEntities =>").Should().HaveCount(2, "a property declared by two interfaces is generated once");
     }
 }

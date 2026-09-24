@@ -8,8 +8,8 @@ namespace Sdk.Testing.Client;
 public static class ClientContextFactory
 {
     /// <summary>
-    /// Creates a new <see cref="ClientContext{TMessage}"/> with the specified <paramref name="message"/>
-    /// and an optional <paramref name="correlationId"/>.
+    /// Wraps <paramref name="message"/> in a <see cref="ClientContext{TMessage}"/>; <paramref name="correlationId"/> defaults to
+    /// <see cref="Guid.Empty"/>.
     /// </summary>
     public static ClientContext<TMessage> Create<TMessage>(TMessage message, Guid correlationId = new Guid())
         where TMessage : class

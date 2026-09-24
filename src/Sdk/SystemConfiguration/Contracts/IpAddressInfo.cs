@@ -16,19 +16,19 @@ namespace Sdk.SystemConfiguration.Contracts;
 public sealed record IpAddressInfo
 {
     /// <summary>
-    /// Indicates whether this entry is an IPv4 (<see cref="AddressFamily.InterNetwork"/>)
+    /// Gets or initializes whether this entry is an IPv4 (<see cref="AddressFamily.InterNetwork"/>)
     /// or IPv6 (<see cref="AddressFamily.InterNetworkV6"/>) address.
     /// </summary>
     public required AddressFamily AddressFamily { get; init; }
 
     /// <summary>
-    /// The IP address.
+    /// Gets or initializes the IP address.
     /// </summary>
     [JsonConverter(typeof(IPAddressConverter))]
     public required IPAddress IpAddress { get; init; }
 
     /// <summary>
-    /// The netmask.
+    /// Gets or initializes the netmask.
     /// </summary>
     [JsonConverter(typeof(IPAddressConverter))]
     public required IPAddress Netmask { get; init; }

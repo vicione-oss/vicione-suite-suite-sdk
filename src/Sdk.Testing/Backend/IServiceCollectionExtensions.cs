@@ -13,7 +13,8 @@ public static class IServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Adds a mocked <see cref="IWorkspaceProvider{TModule}"/> to the service collection.
+        /// Registers an <see cref="IWorkspaceProvider{TModule}"/> substitute. Without <paramref name="setup"/>, its <c>Home</c>
+        /// and <c>Cache</c> point to <c>home</c> and <c>cache</c> next to the calling assembly.
         /// </summary>
         public IServiceCollection AddWorkspaceService<TModule>(Action<IWorkspaceProvider<TModule>>? setup = null)
             where TModule : BackendModule
@@ -39,7 +40,7 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a mocked <see cref="IMvcBuilder"/> to the service collection.
+        /// Registers an <see cref="IMvcBuilder"/> substitute whose <c>PartManager</c> is a real, empty part manager.
         /// </summary>
         public IServiceCollection AddMvcBuilder(Action<IMvcBuilder>? setup = null)
         {
@@ -53,7 +54,8 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a test-specific <see cref="IConfiguration"/> to the service collection.
+        /// Registers an <see cref="IConfiguration"/> built from the <see cref="TestConfig"/> defaults
+        /// plus <paramref name="customSettings"/>.
         /// </summary>
         public IServiceCollection AddConfiguration(Dictionary<string, string?>? customSettings = null)
         {
@@ -63,7 +65,7 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a test-specific <see cref="IConfiguration"/>, built from the provided <see cref="TestConfig"/>, to the service collection.
+        /// Registers an <see cref="IConfiguration"/> built from <paramref name="config"/>; later changes to it are not seen.
         /// </summary>
         public IServiceCollection AddConfiguration(TestConfig config)
         {
@@ -73,7 +75,7 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a mocked <see cref="IEndpointRouteBuilder"/> to the service collection.
+        /// Registers an <see cref="IEndpointRouteBuilder"/> substitute.
         /// </summary>
         public IServiceCollection AddEndpointRouteBuilder(Action<IEndpointRouteBuilder>? setup = null)
         {
@@ -86,7 +88,8 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds mocked MassTransit configurators (<see cref="IBusRegistrationConfigurator"/> and <see cref="ISagaRegistrationConfigurator"/>) to the service collection.
+        /// Registers <see cref="IBusRegistrationConfigurator"/> and <see cref="ISagaRegistrationConfigurator"/> substitutes;
+        /// <paramref name="setup"/> receives the bus configurator.
         /// </summary>
         public IServiceCollection AddMassTransitConfigurators(Action<IBusRegistrationConfigurator>? setup = null)
         {
@@ -102,7 +105,7 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Replaces any existing <see cref="IConfiguration"/> registration in the service collection with the provided instance.
+        /// Registers <paramref name="config"/> as <see cref="IConfiguration"/>, removing the first existing registration if any.
         /// </summary>
         public IServiceCollection ReplaceConfiguration(IConfiguration config)
         {

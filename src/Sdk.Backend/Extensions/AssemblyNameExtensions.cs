@@ -10,10 +10,10 @@ namespace Sdk.Backend.Extensions;
 public static class AssemblyNameExtensions
 {
     /// <summary>
-    /// Tries to load an assembly from the <see cref="AssemblyLoadContext"/> of a specified backend module,
-    /// treating it as a shared dependency.
+    /// Loads the assembly through the <see cref="AssemblyLoadContext"/> of <typeparamref name="TModule"/> if it is listed in
+    /// <paramref name="shared"/>, reusing a copy that context has already loaded; returns <see langword="null"/> otherwise.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if the module's <see cref="AssemblyLoadContext"/> has not been initialized.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the module's load context does not exist yet.</exception>
     public static Assembly? LoadSharedModuleAssembly<TModule>(this AssemblyName assemblyName, IEnumerable<Assembly> shared)
         where TModule : BackendModule
     {
@@ -27,14 +27,12 @@ public static class AssemblyNameExtensions
         var moduleContext = AssemblyLoadContext.All.FirstOrDefault(k => k.Name == moduleContextName) ??
             throw new InvalidOperationException($"Context {moduleContextName} is not initialized");
 
-        // use the existing assembly from module context
         var sharedAssembly = moduleContext.Assemblies.FirstOrDefault(a => Equals(a.GetName().Name, assemblyName.Name));
         if (sharedAssembly is not null)
         {
             return sharedAssembly;
         }
 
-        // let the module context resolve it if not present
         return moduleContext.LoadFromAssemblyName(assemblyName);
     }
 }

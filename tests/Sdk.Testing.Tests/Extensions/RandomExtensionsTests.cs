@@ -37,7 +37,7 @@ public sealed class RandomExtensionsTests
         for (var i = 0; i < 100; i++)
             results.Add(random.NextEnum<TestEnum>());
 
-        // Assert - with 100 calls over 3 values, we should see all of them
+        // Assert - 100 calls over 3 values hit each of them
         results.Should().HaveCount(3);
     }
 }

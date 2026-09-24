@@ -21,7 +21,7 @@ public interface IArtifactQueryRange
     int Total { get; }
 
     /// <summary>
-    /// Gets the Source repository of the range.
+    /// Gets the source the range belongs to.
     /// </summary>
     string Source { get; }
 }

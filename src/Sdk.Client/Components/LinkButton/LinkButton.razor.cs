@@ -20,7 +20,7 @@ public sealed partial class LinkButton
     public string? CssClass { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the button is enabled and allows user interaction.
+    /// Gets or sets whether the button is enabled and allows user interaction.
     /// </summary>
     [Parameter]
     public bool Enabled { get; set; } = true;

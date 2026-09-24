@@ -14,6 +14,8 @@ public sealed partial class NavigationItem : ComponentBase
 
     [Inject] private IMonochromeIconSvgMarkupProvider MonochromeIconSvgMarkupProvider { get; set; } = default!;
 
+    // Icons come as SVG markup from IMonochromeIconSvgMarkupProvider: on the server the host registers a provider that
+    // reads the icon files from disk, in the browser one that fetches them by URL. MarkupString renders the SVG unescaped.
     protected override async Task OnInitializedAsync()
     {
         var iconSvgMarkup = await MonochromeIconSvgMarkupProvider.GetSvgMarkupAsync(MonochromeIconName.ExpanderLightRight,

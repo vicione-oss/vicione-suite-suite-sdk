@@ -14,8 +14,7 @@ internal sealed partial class ModuleAuthorizationClaimParser(ILogger<ModuleAutho
         if (claim.Type != SuiteClaimTypes.ModuleAuthorization)
             return false;
 
-        // early detection of JSON value to minimize possible exceptions,
-        // other values are considered wrongly formatted making the claim invalid in terms of module authorization
+        // Anything but a JSON object is not a module authorization claim; rejecting it here avoids a thrown exception.
         {
             if (!claim.Value.StartsWith('{'))
                 return false;
@@ -31,7 +30,7 @@ internal sealed partial class ModuleAuthorizationClaimParser(ILogger<ModuleAutho
             if (claimValue is null)
                 return false;
 
-            if (string.IsNullOrEmpty(claimValue.FeatureName)) // compatibility
+            if (string.IsNullOrEmpty(claimValue.FeatureName)) // A claim from before features existed targets the feature named after the module.
                 claimValue = claimValue with { FeatureName = ModuleIdResolver.GetModuleName(claimValue.ModuleId) };
 
             return true;

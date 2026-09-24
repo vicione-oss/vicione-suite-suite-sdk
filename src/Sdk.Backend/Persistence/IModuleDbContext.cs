@@ -4,39 +4,29 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 namespace Sdk.Backend.Persistence;
 
 /// <summary>
-/// Represents a database context that is specific to a module,
-/// providing access to change tracking, persistence operations, migration,
-/// and metadata such as default schema and entities excluded from synchronization.
+/// The part of a module's EF Core context that the host needs to migrate, replicate and save it; a module derives its
+/// own interface from this one and adds its <c>DbSet</c> properties.
 /// </summary>
 public interface IModuleDbContext : IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Gets the <see cref="Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker"/> instance
-    /// for tracking entity state changes in this context.
+    /// Gets the context's <see cref="Microsoft.EntityFrameworkCore.DbContext.ChangeTracker"/>.
     /// </summary>
     ChangeTracker ChangeTracker { get; }
 
     /// <summary>
-    /// Gets the <see cref="DatabaseFacade"/> for this context, providing access to
-    /// database-related operations such as connection management, transactions, and raw SQL execution.
+    /// Gets the context's <see cref="Microsoft.EntityFrameworkCore.DbContext.Database"/> facade, e.g. for transactions or raw SQL.
     /// </summary>
     DatabaseFacade Database { get; }
 
     /// <summary>
-    /// Gets the default schema name used by this module's database objects.
+    /// Gets the schema the module's tables live in; <see cref="ModuleDbContext"/> applies it as the model's default schema.
     /// </summary>
-    /// <remarks>
-    /// This schema name may be used during migrations or when generating queries
-    /// to ensure objects are created in or resolved from the correct schema.
-    /// </remarks>
     string DefaultSchemaName { get; }
 
     /// <summary>
-    /// Gets a collection of entity types that should be excluded from schema synchronization or migration.
+    /// Gets the entity types whose data is not replicated between the master and slave databases.
     /// </summary>
-    /// <remarks>
-    /// These types are excluded from the automatic synchronization between master and slave databases.
-    /// </remarks>
     IEnumerable<Type> NotSynchronizedEntityTypes { get; }
 
     /// <summary>
@@ -46,15 +36,13 @@ public interface IModuleDbContext : IDisposable, IAsyncDisposable
     int SaveChanges();
 
     /// <summary>
-    /// Asynchronously saves all changes made in this context to the database.
+    /// Saves all changes made in this context to the database.
     /// </summary>
-    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
-    /// <returns>A task that represents the asynchronous save operation. The task result contains the number of state entries written to the database.</returns>
+    /// <returns>The number of state entries written to the database.</returns>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Applies any pending migrations for this context to the database.
     /// </summary>
-    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
     Task MigrateAsync(CancellationToken cancellationToken = default);
 }

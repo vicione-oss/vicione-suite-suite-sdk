@@ -3,7 +3,7 @@
 namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
-/// Represents the <see cref="SystemConfigurationSourceGenerationContext"/>.
+/// Source-generated JSON metadata for <see cref="SystemConfiguration"/>.
 /// </summary>
 [JsonSourceGenerationOptions(
     RespectNullableAnnotations = true,

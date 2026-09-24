@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
-/// Represents an <see cref="IPAddressConverter"/>.
+/// Converts an <see cref="IPAddress"/> to and from its JSON string; an empty or malformed string throws a <see cref="JsonException"/>.
 /// </summary>
 public class IPAddressConverter : JsonConverter<IPAddress>
 {

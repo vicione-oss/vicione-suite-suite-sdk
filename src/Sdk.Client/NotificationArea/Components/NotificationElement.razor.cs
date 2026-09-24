@@ -18,7 +18,7 @@ public abstract partial class NotificationElement<TState, TIcon> : NotificationE
 
     /// <summary>
     /// Gets the title for the notification element.
-    /// The title will be displayed as tooltip when hovering the notification element
+    /// It is shown as the element's tooltip.
     /// </summary>
     protected abstract string GetTitle();
 

@@ -12,10 +12,11 @@ public static class BunitContextExtensions
     extension(BunitContext ctx)
     {
         /// <summary>
-        /// Adds UI culture, localization, logging and Suite client services to the service collection owned by <paramref name="ctx"/>.
+        /// Adds localization, logging and the Suite client substitutes to the services of <paramref name="ctx"/>, and sets the culture.
         /// </summary>
         /// <remarks>
-        /// Use <paramref name="setup"/> to configure substitutes, e.g. for <see cref="IUiMediator"/>.
+        /// Use <paramref name="setup"/> to configure substitutes, e.g. for <see cref="IUiMediator"/>. The culture is set as the
+        /// process-wide default for new threads and is not restored afterwards.
         /// </remarks>
         public BunitContext SetupSuiteServices(Action<ClientServiceConfigurator>? setup = null, string cultureName = "en-US")
         {

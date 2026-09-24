@@ -5,7 +5,7 @@ using ViciOne.CodeAnalysis.MustCallBase.Attributes;
 namespace Sdk.Testing.Backend;
 
 /// <summary>
-/// An abstract base class for tests that require an in-memory SQLite database context.
+/// Base class giving each test instance its own in-memory SQLite database, kept alive by a connection held until dispose.
 /// </summary>
 public abstract class TestWithDbContextSqlite<TDbContext> : IDisposable, IAsyncDisposable
     where TDbContext : DbContext
@@ -14,12 +14,12 @@ public abstract class TestWithDbContextSqlite<TDbContext> : IDisposable, IAsyncD
     private bool _disposed;
 
     /// <summary>
-    /// Gets the DbContext instance for use in tests.
+    /// Gets the context over the test's database, with the schema created from the model.
     /// </summary>
     protected TDbContext TestDbContext { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TestWithDbContextSqlite{TDbContext}"/> class.
+    /// Opens the in-memory database and creates its schema.
     /// </summary>
     protected TestWithDbContextSqlite()
     {
@@ -30,8 +30,13 @@ public abstract class TestWithDbContextSqlite<TDbContext> : IDisposable, IAsyncD
     }
 
     /// <inheritdoc/>
+    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly",
+        Justification = "The once-only guard sits in both entry points so that overrides of Dispose(bool) run at most once too.")]
     public void Dispose()
     {
+        if (Interlocked.CompareExchange(ref _disposed, true, false))
+            return;
+
         Dispose(true);
         GC.SuppressFinalize(this);
     }
@@ -39,34 +44,39 @@ public abstract class TestWithDbContextSqlite<TDbContext> : IDisposable, IAsyncD
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        // Attempt to mark as disposed; if already disposed, no-op.
         if (Interlocked.CompareExchange(ref _disposed, true, false))
             return;
 
-        // Ensure the connection is closed before disposing.
-        await _connection.CloseAsync().ConfigureAwait(false);
-
-        await _connection.DisposeAsync().ConfigureAwait(false);
-        await TestDbContext.DisposeAsync().ConfigureAwait(false);
-
+        await DisposeAsyncCore().ConfigureAwait(false);
+        Dispose(false);
         GC.SuppressFinalize(this);
     }
 
     /// <summary>
-    /// Provides a hook for derived classes to perform their own disposal logic.
+    /// Asynchronous disposal hook for derived classes; runs at most once, and only when the test is disposed asynchronously.
     /// </summary>
     /// <remarks>
-    /// This method is called from within <see cref="Dispose()"/>.
+    /// <see cref="DisposeAsync"/> calls it first and then <see cref="Dispose(bool)"/> with <see langword="false"/>, so managed
+    /// resources belong here and in the <c>disposing</c> branch of <see cref="Dispose(bool)"/>.
+    /// </remarks>
+    [MustCallBase]
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        await _connection.CloseAsync().ConfigureAwait(false);
+        await _connection.DisposeAsync().ConfigureAwait(false);
+        await TestDbContext.DisposeAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Disposal hook for derived classes; runs at most once.
+    /// </summary>
+    /// <remarks>
+    /// <paramref name="disposing"/> is <see langword="true"/> from <see cref="Dispose()"/>. From <see cref="DisposeAsync"/> it is
+    /// <see langword="false"/>, because <see cref="DisposeAsyncCore"/> has already released the managed resources.
     /// </remarks>
     [MustCallBase]
     protected virtual void Dispose(bool disposing)
     {
-        // Atomically set disposed flag; if already set, return.
-        if (Interlocked.CompareExchange(ref _disposed, true, false))
-            return;
-
-        _connection.Close();
-
         if (disposing)
         {
             _connection.Dispose();

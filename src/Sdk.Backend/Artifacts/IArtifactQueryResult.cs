@@ -11,13 +11,12 @@ public interface IArtifactQueryResult
     IReadOnlyCollection<IArtifact> Artifacts { get; }
 
     /// <summary>
-    /// Gets the range information for the query results, which is available if pagination features like limit or offset were used.
+    /// Gets the result range per source; available when the query used a limit or offset.
     /// </summary>
     IReadOnlyCollection<IArtifactQueryRange>? Ranges { get; }
 
     /// <summary>
-    /// Error information for failed queries to a source. With multiple sources configured
-    /// the query might still return Artifacts for all sources that returned results.
+    /// Gets the errors of sources whose query failed; <see cref="Artifacts"/> still holds the results of the other sources.
     /// </summary>
     IReadOnlyCollection<IArtifactQueryError>? Errors { get; }
 }

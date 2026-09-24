@@ -3,23 +3,17 @@
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Control panel save handler
+/// Saves a control panel whose state is <typeparamref name="TState"/>.
 /// </summary>
-/// <typeparam name="TState">Type of the control panel state</typeparam>
 public interface IControlPanelSaveHandler<TState>
     where TState : IControlPanelState
 {
     /// <summary>
-    /// Save logic based on the given <paramref name="state"/> invoked when the control panel associated with the given <paramref name="state"/>
-    /// needs to be saved.
+    /// Called when the control panel owning <paramref name="state"/> is saved.
     /// </summary>
     /// <remarks>
-    /// Expected outcomes of the save operation should be indicated by the return value.
-    ///
-    /// <para>
-    /// Unexpected behavior should be indicated by throwing an exception of any kind except <see cref="OperationCanceledException"/>,
-    /// which indicates cancellation of the save operation.
-    /// </para>
+    /// Report expected outcomes, including validation failures, through the return value. Throw for anything unexpected;
+    /// an <see cref="OperationCanceledException"/> means the save was canceled.
     /// </remarks>
     /// <returns><see cref="SaveSuccessResult"/> or <see cref="SaveErrorResult"/></returns>
     Task<ISaveResult> Save(TState state, CancellationToken cancellationToken);

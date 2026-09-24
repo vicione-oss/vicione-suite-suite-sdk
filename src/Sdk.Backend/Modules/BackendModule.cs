@@ -8,23 +8,21 @@ using Sdk.Modules;
 namespace Sdk.Backend.Modules;
 
 /// <summary>
-/// Represents a base class for a backend module in the system.
-/// Provides default behavior and overridable hooks for service configuration,
-/// message bus integration, endpoint mapping, and optional initialization logic.
+/// Base class of a backend module. The host calls its hooks in the order <see cref="ConfigureServices"/>,
+/// <see cref="ConfigureMessageBus"/>, <see cref="UseServices"/>, <see cref="MapEndpoints"/>; all default to doing nothing.
 /// </summary>
 public abstract class BackendModule : IModule
 {
     private string? _moduleId;
 
     /// <summary>
-    /// Optional module initializer that can run startup logic when the module is loaded.
-    /// Override this property to provide a custom <see cref="IModuleInitializer"/>.
+    /// Gets the initializer that runs the module's startup logic, such as migrations; <see langword="null"/>, the default, means none.
+    /// A module that calls <c>AddModuleDbContext</c> must provide one.
     /// </summary>
     public virtual IModuleInitializer? ModuleInitializer => null;
 
     /// <summary>
-    /// Unique identifier for this backend module.
-    /// The value is lazily resolved from the module's <see cref="Type"/> using <see cref="ModuleIdResolver"/>.
+    /// Gets the module ID, resolved once from the assembly name by <see cref="ModuleIdResolver"/>.
     /// </summary>
     public string ModuleId
     {
@@ -36,7 +34,7 @@ public abstract class BackendModule : IModule
     }
 
     /// <summary>
-    /// <see cref="ModuleKey"/> for this module, including its <see cref="ModuleId"/> and the <see cref="ModuleType.Backend"/>
+    /// Gets the key of <see cref="ModuleId"/> and <see cref="ModuleType.Backend"/>; two modules are equal when their keys are.
     /// </summary>
     public ModuleKey ModuleKey => new()
     {
@@ -45,46 +43,41 @@ public abstract class BackendModule : IModule
     };
 
     /// <summary>
-    /// Allows disabling the default feature for this module.
+    /// Gets whether the module is created without a default feature. Defaults to <see langword="false"/>.
     /// </summary>
     /// <remarks>
-    /// If this is set to true, no default feature is created for the module.
-    /// All access checks will therefore have to be tied to a named feature making this parameter required.
+    /// Without a default feature, every access check of the module must name a feature explicitly.
     /// </remarks>
     public virtual bool DisableDefaultFeature => false;
 
     /// <summary>
-    /// Gets the optional resource options for this module, controlling which files are deployed
-    /// to the module's workspace directory and how they are copied.
-    /// Override to return a <see cref="ModuleResourceOptions"/> when your module needs to expose additional files.
+    /// Returns which files are deployed to the module's workspace directory and how they are copied;
+    /// <see langword="null"/>, the default, deploys none.
     /// </summary>
     public virtual ModuleResourceOptions? GetResourceOptions(IServiceProvider services) => null;
 
     /// <summary>
-    /// Configures services and MVC options for this module.
-    /// Override this method to register module-specific services into the provided service collection.
+    /// Registers the module's services and MVC parts. Called first, before the message bus is configured.
     /// </summary>
     public virtual void ConfigureServices(IServiceCollection services, IConfiguration config, IMvcBuilder builder) { }
 
     /// <summary>
-    /// Configures services specific to the message bus.
+    /// Registers the module's consumers, activities and sagas.
     /// </summary>
     /// <param name="busConfig">
     /// An <see cref="IServiceCollection"/> instance that can be cast to an <c>IBusRegistrationConfigurator</c>.
     /// This indirection is used because the relevant interface may not be present in MassTransit.Abstractions package yet.
     /// </param>
-    /// <param name="instanceType">The <see cref="InstanceType"/> to allow conditional bus configuration.</param>
+    /// <param name="instanceType">The type of the running instance, e.g. to register a consumer on the master only.</param>
     public virtual void ConfigureMessageBus(IServiceCollection busConfig, InstanceType instanceType) { }
 
     /// <summary>
-    /// Allows the module to configure middleware and request-handling services after they are built.
-    /// Override this method to add middleware components to the application's request pipeline.
+    /// Adds the module's middleware to the request pipeline; the service provider is built at this point.
     /// </summary>
     public virtual void UseServices(IApplicationBuilder app) { }
 
     /// <summary>
-    /// Allows the module to map its endpoints to the application's endpoint route builder.
-    /// Override this method to register HTTP endpoints specific to this module.
+    /// Maps the module's HTTP endpoints. Called last.
     /// </summary>
     public virtual void MapEndpoints(IEndpointRouteBuilder endpoints) { }
 

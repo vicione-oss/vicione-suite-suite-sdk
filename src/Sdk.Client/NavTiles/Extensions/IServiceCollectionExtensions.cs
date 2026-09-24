@@ -11,11 +11,9 @@ namespace Sdk.Client.NavTiles.Extensions;
 public static class IServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds navigation tile services for a specific module.
+    /// Registers <see cref="INavTileRegistry{TClientModule}"/>, and <see cref="INavTileRegistry{TClientModule}"/> of
+    /// <see cref="IClientModule"/> for it, once per module.
     /// </summary>
-    /// <typeparam name="TClientModule">The type of the client module for which the services are registered.</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddNavTiles<TClientModule>(this IServiceCollection services)
         where TClientModule : class, IClientModule
     {
@@ -31,7 +29,7 @@ public static class IServiceCollectionExtensions
 
         if (serviceCountBefore < services.Count)
         {
-            // Additionally register interface with IClientModule to allow resolving all registries into an IEnumerable<>
+            // The IClientModule view lets every module's registry resolve through one IEnumerable<INavTileRegistry<IClientModule>>.
             services.AddScoped<INavTileRegistry<IClientModule>>(serviceProvider => serviceProvider.GetRequiredService<INavTileRegistry<TClientModule>>());
         }
 

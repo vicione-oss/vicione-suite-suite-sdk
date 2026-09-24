@@ -12,88 +12,92 @@ using Sdk.Instance;
 namespace Sdk.Testing.Client;
 
 /// <summary>
-/// A helper class for configuring mocked services for client-side testing.
+/// Holds the NSubstitute substitutes and switches that <see cref="ClientServiceCollectionExtensions.AddClientServices"/> registers;
+/// configure the substitutes inside its callback.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public sealed class ClientServiceConfigurator(IServiceCollection services)
 {
     /// <summary>
-    /// Gets the service collection being configured.
+    /// Gets the service collection the substitutes are registered in.
     /// </summary>
     public IServiceCollection Services { get; } = services;
 
     /// <summary>
-    /// Gets a mocked <see cref="IStringLocalizerFactory"/> for testing localization.
+    /// Gets the substitute registered as <see cref="IStringLocalizerFactory"/>.
     /// </summary>
     public IStringLocalizerFactory StringLocalizerFactory { get; } = Substitute.For<IStringLocalizerFactory>();
 
     /// <summary>
-    /// Gets or sets a value indicating whether a simple mock of <see cref="IJSRuntime"/> should be used.
+    /// Gets or sets whether <see cref="JSRuntime"/> replaces bUnit's own <see cref="IJSRuntime"/>. Defaults to false.
     /// </summary>
     public bool UseSimpleJsMock { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether a fake <see cref="AuthenticationStateProvider"/> should be registered. Defaults to true.
+    /// Gets or sets whether an <see cref="AuthenticationStateProvider"/> with a fixed, authenticated Administrator is registered.
+    /// Defaults to true.
     /// </summary>
     public bool FakeAuthenticationStateProvider { get; set; } = true;
 
     /// <summary>
-    /// Gets a mocked <see cref="IConnectionService"/> for testing connection-related logic.
+    /// Gets the substitute registered as <see cref="IConnectionService"/>.
     /// </summary>
     public IConnectionService ConnectionService { get; } = Substitute.For<IConnectionService>();
 
     /// <summary>
-    /// Gets a mocked <see cref="ILayoutService"/> for testing layout modifications.
+    /// Gets the substitute registered as <see cref="ILayoutService"/>.
     /// </summary>
     public ILayoutService Layout { get; } = Substitute.For<ILayoutService>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IJsInterop"/> for testing JavaScript interoperability.
+    /// Gets the substitute registered as <see cref="IJsInterop"/>; <c>IncludeModuleScript</c> returns <see langword="null"/>
+    /// so components skip their JavaScript code paths.
     /// </summary>
     public IJsInterop JsInterop { get; } = Substitute.For<IJsInterop>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IInstanceInformationProvider"/> for providing fake instance data.
+    /// Gets the substitute registered as <see cref="IInstanceInformationProvider"/>; its <c>Local</c> instance has a random ID.
     /// </summary>
     public IInstanceInformationProvider InstanceInformationProvider { get; } = Substitute.For<IInstanceInformationProvider>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IUiMediator"/> for testing UI-to-backend communication.
+    /// Gets the substitute registered as <see cref="IUiMediator"/>.
     /// </summary>
     public IUiMediator ClientMediator { get; } = Substitute.For<IUiMediator>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IActiveNotificationElementPolicy"/> for testing notification policies.
+    /// Gets the substitute registered as <see cref="IActiveNotificationElementPolicy"/>.
     /// </summary>
     public IActiveNotificationElementPolicy ActiveNotificationElementPolicy { get; } = Substitute.For<IActiveNotificationElementPolicy>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IJSRuntime"/> for testing JavaScript interop.
+    /// Gets the <see cref="IJSRuntime"/> substitute; registered only when <see cref="UseSimpleJsMock"/> is set.
     /// </summary>
     public IJSRuntime JSRuntime { get; } = Substitute.For<IJSRuntime>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IMessageBannerService"/> for testing message banners.
+    /// Gets the substitute registered as <see cref="IMessageBannerService"/>.
     /// </summary>
     public IMessageBannerService MessageBanner { get; } = Substitute.For<IMessageBannerService>();
 
     /// <summary>
-    /// Gets a mocked <see cref="IControlPanelRegistryFactory"/> for testing control panel registration.
+    /// Gets the substitute registered as <see cref="IControlPanelRegistryFactory"/>.
     /// </summary>
     public IControlPanelRegistryFactory ControlPanelRegistryFactory { get; } = Substitute.For<IControlPanelRegistryFactory>();
 
     /// <summary>
-    /// Gets a mocked <see cref="INavTileRegistryFactory"/> for testing navigation tile registration.
+    /// Gets the substitute registered as <see cref="INavTileRegistryFactory"/>.
     /// </summary>
     public INavTileRegistryFactory NavTileRegistryFactory { get; } = Substitute.For<INavTileRegistryFactory>();
 
     /// <summary>
-    /// Gets a mocked <see cref="INotificationElementRegistryFactory"/> for testing notification element registration.
+    /// Gets the substitute registered as <see cref="INotificationElementRegistryFactory"/>.
     /// </summary>
     public INotificationElementRegistryFactory NotificationElementRegistryFactory { get; } = Substitute.For<INotificationElementRegistryFactory>();
 
     /// <summary>
-    /// Gets or sets a value indicating whether a mocked <see cref="NavigationManager"/> should be used. Defaults to true.
+    /// Gets or sets whether a <see cref="NavigationManager"/> is registered that records navigation instead of performing it;
+    /// navigating to <c>/</c> resets the URI to the base URI. Defaults to true.
     /// </summary>
     public bool UseNavigationManager { get; set; } = true;
 

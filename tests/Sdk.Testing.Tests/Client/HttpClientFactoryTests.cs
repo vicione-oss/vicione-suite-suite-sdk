@@ -36,4 +36,23 @@ public class HttpClientFactoryTests
         var connection = await httpClient.GetFromJsonAsync<Connection>(new Uri("/some/uri", UriKind.Relative), CancellationToken.None);
         connection.Should().BeEquivalentTo(response);
     }
+
+    [Fact]
+    public async Task Should_answer_every_request_with_the_full_response()
+    {
+        // Arrange
+        var response = ConnectionFactory.CreateMqttServiceConnection("test");
+        using var httpClient = HttpClientFactory.GetHttpClientWithResponse(response);
+        var uri = new Uri("/some/uri", UriKind.Relative);
+
+        // Act
+        var first = await httpClient.GetFromJsonAsync<Connection>(uri, CancellationToken.None);
+        using var second = await httpClient.GetAsync(uri, CancellationToken.None);
+        var secondConnection = await second.Content.ReadFromJsonAsync<Connection>(CancellationToken.None);
+
+        // Assert
+        first.Should().BeEquivalentTo(response);
+        secondConnection.Should().BeEquivalentTo(response);
+        second.Content.Headers.ContentType!.MediaType.Should().Be("application/json");
+    }
 }

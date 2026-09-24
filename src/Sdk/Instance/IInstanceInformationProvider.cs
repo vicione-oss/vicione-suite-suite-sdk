@@ -9,7 +9,7 @@ namespace Sdk.Instance;
 public interface IInstanceInformationProvider
 {
     /// <summary>
-    /// Information about the local instance (the instance where this provider is running)
+    /// Gets the information about the instance this provider runs on.
     /// </summary>
     IInstanceInformation Local { get; }
 

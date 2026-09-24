@@ -6,38 +6,33 @@
 public sealed partial class SettingsField : ComponentBase
 {
     /// <summary>
-    /// Optional text displayed above <see cref="Label"/> and <see cref="ChildContent"/>.
+    /// Gets or sets the optional text displayed above <see cref="Label"/> and <see cref="ChildContent"/>.
     /// </summary>
     [Parameter]
     public string? Title { get; set; }
 
     /// <summary>
-    /// Optional text displayed on the left of <see cref="ChildContent"/>.
+    /// Gets or sets the optional text displayed to the left of <see cref="ChildContent"/>.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
     /// <summary>
-    /// <see langword="true"/> when a <see cref="LoadingIndication">loading indication</see> should be rendered,
-    /// otherwise <see langword="false"/>.
+    /// Gets or sets whether the <see cref="LoadingIndication"/> is rendered.
     /// </summary>
     [Parameter]
     public bool IsLoading { get; set; }
 
     /// <summary>
-    /// <see cref="SettingsFieldLoadingIndication">Loading indication</see> that should be rendered when
-    /// <see cref="IsLoading"/> is <see langword="true"/>, otherwise parameter is ignored.
+    /// Gets or sets the loading indication rendered while <see cref="IsLoading"/> is <see langword="true"/>.
     /// </summary>
     [Parameter]
     public SettingsFieldLoadingIndication LoadingIndication { get; set; }
 
     /// <summary>
-    /// Renders the content of the settings field.
+    /// Gets or sets the field's input. The <c>SettingsField*</c> components, such as <see cref="SettingsFieldButton"/> or
+    /// <see cref="SettingsFieldTextBox"/>, keep styling and behavior consistent across the settings UI.
     /// </summary>
-    /// <remarks>
-    /// It is recommend to use provided input components like <see cref="SettingsFieldButton"/> or
-    /// <see cref="SettingsFieldTextBox"/> for consistent styling and behavior accross the settings UI.
-    /// </remarks>
     [Parameter, EditorRequired]
     public RenderFragment ChildContent { get; set; }
 }

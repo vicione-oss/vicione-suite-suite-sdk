@@ -4,7 +4,7 @@ using Sdk.Modules;
 namespace Sdk.Authorization;
 
 /// <summary>
-/// Authorizes a part of the application based on the users permissions.
+/// Requires the user to hold at least the given access level for a module or one of its features.
 /// </summary>
 /// <remarks>
 /// Make sure to register the associated feature using

@@ -1,7 +1,7 @@
 ﻿namespace Sdk.Connections.Contracts;
 
 /// <summary>
-/// Represents a contract for a Postgres-specific connection configuration data.
+/// The configuration of a PostgreSQL connection.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public sealed class PostgresConnection : IConnection

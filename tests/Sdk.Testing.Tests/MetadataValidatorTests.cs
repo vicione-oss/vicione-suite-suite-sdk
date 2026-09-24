@@ -1,4 +1,6 @@
 ﻿using System.IO.Abstractions;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Text.Json;
 using AwesomeAssertions;
 using NSubstitute;
@@ -43,7 +45,7 @@ public sealed class MetadataValidatorTests
 
         SetupMetadataFile(sdkVersion, metadata);
 
-        // Act 
+        // Act
         var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath, assembly);
 
         // Assert
@@ -52,9 +54,66 @@ public sealed class MetadataValidatorTests
     }
 
     [Fact]
-    public void Should_validate_dependency_version_matches()
+    public void Should_accept_public_dependency_with_matching_version()
     {
-        // todo - to really test this behavior we'll need a Test.Public.dll to be referenced
+        // Arrange
+        var sdkVersion = MetadataValidator.GetSdkVersion().ToString();
+        var dependency = CreateAssembly("Test.Dependency.Public", new Version(1, 2, 3, 4));
+        SetupMetadataFile(sdkVersion, CreateMetadata(sdkVersion, "Test.Dependency", "1.2.3"));
+
+        // Act
+        var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath, dependency);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Should_throw_if_dependency_version_does_not_match()
+    {
+        // Arrange
+        var sdkVersion = MetadataValidator.GetSdkVersion().ToString();
+        var dependency = CreateAssembly("Test.Dependency.Public", new Version(1, 2, 4));
+        SetupMetadataFile(sdkVersion, CreateMetadata(sdkVersion, "Test.Dependency", "1.2.3"));
+
+        // Act
+        var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath, dependency);
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*Test.Dependency*1.2.3*does*not*match*1.2.4*");
+    }
+
+    [Fact]
+    public void Should_throw_if_dependency_is_missing_in_metadata()
+    {
+        // Arrange
+        var sdkVersion = MetadataValidator.GetSdkVersion().ToString();
+        var dependency = CreateAssembly("Test.Dependency.Public", new Version(1, 2, 3));
+        SetupMetadataFile(sdkVersion, CreateMetadata(sdkVersion, "Other.Module", "1.2.3"));
+
+        // Act
+        var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath, dependency);
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*Test.Dependency*missing*");
+    }
+
+    [Fact]
+    public void Should_report_the_invalid_dependency_version()
+    {
+        // Arrange
+        var sdkVersion = MetadataValidator.GetSdkVersion().ToString();
+        var dependency = CreateAssembly("Test.Dependency.Public", new Version(1, 2, 3));
+        SetupMetadataFile(sdkVersion, CreateMetadata(sdkVersion, "Test.Dependency", "not-a-version"));
+
+        // Act
+        var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath, dependency);
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*invalid*version*not-a-version*");
     }
 
     [Fact]
@@ -64,7 +123,7 @@ public sealed class MetadataValidatorTests
         _fileSystem.File.Exists(MetadataFilePath).Returns(true);
         _fileSystem.File.ReadAllText(MetadataFilePath).Returns("}");
 
-        // Act 
+        // Act
         var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath);
 
         // Assert
@@ -77,7 +136,7 @@ public sealed class MetadataValidatorTests
         // Arrange
         SetupMetadataFile("0.47.11");
 
-        // Act 
+        // Act
         var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath);
 
         // Assert
@@ -92,13 +151,13 @@ public sealed class MetadataValidatorTests
         // Arrange
         SetupMetadataFile("x.A.z");
 
-        // Act 
+        // Act
         var act = () => MetadataValidator.ValidateMetadata(_fileSystem, MetadataFilePath);
 
         // Assert
         act.Should()
             .Throw<InvalidOperationException>()
-            .WithMessage("*invalid*version*");
+            .WithMessage("*invalid*version*x.A.z*");
     }
 
     [Fact]
@@ -107,12 +166,28 @@ public sealed class MetadataValidatorTests
         // Arrange
         const string WrongPath = "./metadata.json";
 
-        // Act 
+        // Act
         var act = () => MetadataValidator.ValidateMetadata(WrongPath);
 
         // Assert
         act.Should().Throw<FileNotFoundException>();
     }
+
+    // A dynamic assembly carries exactly the name and version the validator reads, without shipping a *.Public.dll.
+    private static AssemblyBuilder CreateAssembly(string name, Version version)
+        => AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(name) { Version = version }, AssemblyBuilderAccess.Run);
+
+    private static ModuleMetadata CreateMetadata(string sdkVersion, string dependencyName, string dependencyVersion)
+        => new()
+        {
+            Version = "1.0.0",
+            Name = "Test",
+            MinSuiteSdkVersion = sdkVersion,
+            Dependencies =
+            [
+                new() { Name = dependencyName, Version = dependencyVersion },
+            ],
+        };
 
     private void SetupMetadataFile(string minSuiteVersion, ModuleMetadata? metadata = null)
     {

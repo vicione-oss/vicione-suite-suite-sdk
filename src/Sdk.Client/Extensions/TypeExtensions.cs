@@ -6,9 +6,10 @@
 public static class TypeExtensions
 {
     /// <summary>
-    /// Recursively searches the inheritance hierarchy of a type to find a specific base type.
+    /// Returns the nearest base type with the same GUID as <paramref name="requiredBaseType"/>; comparing GUIDs lets an open
+    /// generic such as <c>NotificationElementBase&lt;&gt;</c> find its closed form.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if the specified <paramref name="requiredBaseType"/> is not found in the inheritance hierarchy of the <paramref name="type"/>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if no base type of <paramref name="type"/> matches.</exception>
     public static Type GetBaseTypeRecursive(this Type type, Type requiredBaseType)
     {
         var baseType = type.BaseType;

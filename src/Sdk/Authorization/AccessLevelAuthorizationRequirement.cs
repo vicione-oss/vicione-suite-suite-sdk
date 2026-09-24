@@ -10,17 +10,17 @@ public sealed class AccessLevelAuthorizationRequirement(string moduleId, AccessL
 {
 
     /// <summary>
-    /// The unique identifier of the module.
+    /// Gets the unique identifier of the module.
     /// </summary>
     public string ModuleId { get; } = moduleId;
 
     /// <summary>
-    /// The name of the feature within the module.
+    /// Gets or initializes the name of the feature within the module; <see langword="null"/> means the whole module.
     /// </summary>
     public string? FeatureName { get; init; }
 
     /// <summary>
-    /// The minimum required access level.
+    /// Gets the minimum required access level.
     /// </summary>
     public AccessLevel MinimumAccessLevel { get; } = minimumAccessLevel;
 }

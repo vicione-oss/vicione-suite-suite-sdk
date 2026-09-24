@@ -24,28 +24,28 @@ public sealed class Resource
     public Uri? Url { get; set; }
 
     /// <summary>
-    /// Integrity checks to increase the security of resources accessed. Especially common in CDN resources.
+    /// Gets or sets the subresource-integrity hash the browser checks the file against, as commonly used for CDN files.
     /// </summary>
     public string? Integrity { get; set; }
 
     /// <summary>
-    /// Gets or sets the CORS (Cross-Origin Resource Sharing) setting for the resource, usually `anonymous`.
+    /// Gets or sets the CORS (Cross-Origin Resource Sharing) setting for the resource, usually <c>anonymous</c>.
     /// </summary>
     public string? CrossOrigin { get; set; }
 
     /// <summary>
-    /// Bundle ID in case this Resource belongs to a set of Resources, which may have already been loaded using LoadJS.
+    /// Gets or sets the ID of the bundle the resource belongs to; a bundle already loaded with LoadJS is not loaded again.
     /// </summary>
     public string? Bundle { get; set; }
 
     /// <summary>
-    /// Determines if the Resource is global, meaning that the entire solution uses it or just some modules.
-    /// TODO: VERIFY that this explanation is correct.
+    /// Gets or sets whether the resource is removed when the component that loaded it is disposed (<see cref="ResourceDeclaration.Local"/>)
+    /// or stays loaded (<see cref="ResourceDeclaration.Global"/>).
     /// </summary>
     public ResourceDeclaration Declaration { get; set; }
 
     /// <summary>
-    /// Gets or sets the location within the HTML document where the resource should be included.
+    /// Gets or sets where in the HTML document the resource belongs; <see cref="Modules.ModuleComponentBase{TComponent}"/> ignores it.
     /// </summary>
     public ResourceLocation Location { get; set; }
 }

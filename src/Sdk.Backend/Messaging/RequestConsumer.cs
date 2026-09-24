@@ -5,7 +5,8 @@ using Sdk.Messaging;
 namespace Sdk.Backend.Messaging;
 
 /// <summary>
-/// A base consumer for handling request / response messages.
+/// Base consumer of a request: it always answers, with the result of <see cref="Respond"/> or, if that throws,
+/// of <see cref="HandleException"/>.
 /// </summary>
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 public abstract class RequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
@@ -13,8 +14,8 @@ public abstract class RequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
     where TResponse : IResponse
 {
     /// <summary>
-    /// Consumes the incoming request message from the bus and responds with either a successful result
-    /// or an error response if an exception occurs.
+    /// Responds with the result of <see cref="Respond"/>, or of <see cref="HandleException"/> if it throws; only an exception
+    /// from <see cref="HandleException"/> itself faults the request.
     /// </summary>
     public async Task Consume(ConsumeContext<TRequest> context)
     {
@@ -36,7 +37,7 @@ public abstract class RequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
     public abstract Task<TResponse> Respond(TRequest message, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Handles an exception occurred during <see cref="Respond"/>.
+    /// Builds the response for an exception thrown by <see cref="Respond"/>, typically carrying the error information.
     /// </summary>
     public abstract Task<TResponse> HandleException(TRequest message, Exception e, CancellationToken cancellationToken);
 }

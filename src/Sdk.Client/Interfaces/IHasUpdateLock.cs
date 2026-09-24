@@ -6,30 +6,17 @@
 public interface IHasUpdateLock
 {
     /// <summary>
-    /// Counts the number of times <see cref="BeginUpdate"/> was called without a corresponding call to <see cref="EndUpdate"/>.
+    /// Gets the number of open update cycles; no event is raised while it is above 0.
     /// </summary>
-    /// <remarks>
-    /// The instance will not raise any event when <see cref="UpdateLock"/> is greater than 0.
-    /// </remarks>
     int UpdateLock { get; }
 
     /// <summary>
-    /// Call this method to begin an update cycle.
+    /// Starts an update cycle that holds back change events; every call needs a matching <see cref="EndUpdate"/>.
     /// </summary>
-    /// <remarks>
-    /// This increments the <see cref="UpdateLock"/>.
-    ///
-    /// <para>
-    /// Make sure to have a corresponding call to <see cref="EndUpdate"/> to end the update cycle.
-    /// </para>
-    /// </remarks>
     void BeginUpdate();
 
     /// <summary>
-    /// Call this method to end an update cycle.
+    /// Ends an update cycle; closing the last one raises the changes collected during the cycle.
     /// </summary>
-    /// <remarks>
-    /// This decrements the <see cref="UpdateLock"/>.
-    /// </remarks>
     void EndUpdate();
 }

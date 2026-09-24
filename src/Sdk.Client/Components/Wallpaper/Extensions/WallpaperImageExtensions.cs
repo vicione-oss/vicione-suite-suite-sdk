@@ -9,7 +9,7 @@ namespace Sdk.Client.Components.Wallpaper.Extensions;
 public static class WallpaperImageExtensions
 {
     /// <summary>
-    /// Constructs the full path for <paramref name="image"/> based on a <paramref name="baseUri"/>.
+    /// Returns <c>{baseUri}/{image-name}.svg</c>, with the image name hyphen-separated, e.g. <c>black-abstract-triangles.svg</c>.
     /// </summary>
     public static string GetPath(this WallpaperImage image, Uri baseUri)
         => new Uri($"{baseUri}/{image.ToString().ToHyphenSeparated()}.svg", baseUri.IsAbsoluteUri ? UriKind.Absolute : UriKind.Relative).ToString();

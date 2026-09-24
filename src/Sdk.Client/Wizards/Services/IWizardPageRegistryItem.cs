@@ -1,22 +1,22 @@
 ﻿namespace Sdk.Client.Wizards.Services;
 
 /// <summary>
-/// Item to register a wizard page in a registry
+/// A wizard page registered in an <see cref="IWizardPageRegistry"/>.
 /// </summary>
 public interface IWizardPageRegistryItem
 {
     /// <summary>
-    /// Component type that implements the registed wizard page
+    /// Gets the component type that renders the page.
     /// </summary>
     Type ComponentType { get; }
 
     /// <summary>
-    /// Descriptor for the registed wizard page
+    /// Gets the page's descriptor.
     /// </summary>
     IWizardPageDescriptor Descriptor { get; }
 
     /// <summary>
-    /// State of the registed wizard page
+    /// Gets the page's state.
     /// </summary>
     IWizardPageState State { get; }
 }

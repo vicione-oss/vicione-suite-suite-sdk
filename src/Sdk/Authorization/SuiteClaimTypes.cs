@@ -4,7 +4,8 @@
 /// Defines custom claim types used within the suite for authorization purposes.
 /// </summary>
 /// <remarks>
-/// https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claim.type?#remarks
+/// Claim types are URIs, as described in the
+/// <see href="https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claim.type?#remarks">Claim.Type remarks</see>.
 /// </remarks>
 [ExcludeFromCodeCoverage]
 public static class SuiteClaimTypes

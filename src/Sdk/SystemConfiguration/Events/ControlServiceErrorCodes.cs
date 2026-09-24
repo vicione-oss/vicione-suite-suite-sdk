@@ -1,7 +1,7 @@
 namespace Sdk.SystemConfiguration.Events;
 
 /// <summary>
-/// Error codes that can be associated with service-related events, such as creation, update, or deletion failures.
+/// Error codes reported when controlling a system service fails.
 /// </summary>
 public static class ControlServiceErrorCodes
 {

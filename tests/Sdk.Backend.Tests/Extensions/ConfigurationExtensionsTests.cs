@@ -97,5 +97,37 @@ public class ConfigurationExtensionsTests
             // Assert
             binding.Should().BeEquivalentTo(_options);
         }
+
+        [Fact]
+        public void Should_keep_default_values_the_section_does_not_set()
+        {
+            // Arrange
+            var config = new TestConfig(addDefaults: false)
+                .SetSetting($"{TestSectionKey}:IntValue", "7")
+                .BuildConfiguration();
+
+            // Act
+            var binding = config.BindSection(TestSectionKey, _options);
+
+            // Assert
+            binding.IntValue.Should().Be(7);
+            binding.BoolValue.Should().BeTrue();
+            binding.StringValue.Should().Be("Test");
+        }
+
+        [Fact]
+        public void Should_bind_a_scalar_section()
+        {
+            // Arrange
+            var config = new TestConfig(addDefaults: false)
+                .SetSetting(TestSectionKey, "5")
+                .BuildConfiguration();
+
+            // Act
+            var binding = config.BindSection(TestSectionKey, 1);
+
+            // Assert
+            binding.Should().Be(5);
+        }
     }
 }

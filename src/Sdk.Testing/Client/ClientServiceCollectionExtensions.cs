@@ -13,8 +13,12 @@ public static class ClientServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Adds a collection of common client-side services, mostly as mocks or fakes, to the service collection for testing.
+        /// Registers the substitutes of a <see cref="ClientServiceConfigurator"/> that <paramref name="configurator"/> can adjust.
         /// </summary>
+        /// <remarks>
+        /// The substitutes are registered before <paramref name="configurator"/> runs; the switches such as
+        /// <see cref="ClientServiceConfigurator.UseNavigationManager"/> are evaluated after it.
+        /// </remarks>
         public IServiceCollection AddClientServices(Action<ClientServiceConfigurator>? configurator)
         {
             var config = new ClientServiceConfigurator(services);
@@ -62,8 +66,11 @@ public static class ClientServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a singleton <see cref="HttpClient"/> to the service collection that is configured to return a specific response object.
+        /// Registers an <see cref="HttpClient"/> that answers every request with 200 and
+        /// <paramref name="responseObject"/> as camel-case JSON.
         /// </summary>
+        /// <param name="responseObject">The response body; an empty string yields an empty body.</param>
+        /// <param name="baseUri">The client's base address; <see langword="null"/> means <c>http://localhost</c>.</param>
         public IServiceCollection AddHttpClient(object responseObject, Uri? baseUri)
         {
             services.AddSingleton(_ => HttpClientFactory.GetHttpClientWithResponse(responseObject, baseUri ?? new Uri("http://localhost")));
@@ -72,7 +79,7 @@ public static class ClientServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a mocked <see cref="IClientModuleLocalizer{TClientModule}"/> to the service collection.
+        /// Registers an <see cref="IClientModuleLocalizer{TClientModule}"/> substitute with a fixed title and description.
         /// </summary>
         public IServiceCollection AddLocalization<TClientModule>()
             where TClientModule : class, IClientModule

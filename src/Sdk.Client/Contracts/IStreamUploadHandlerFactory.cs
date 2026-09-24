@@ -3,24 +3,20 @@ using Sdk.Modules;
 namespace Sdk.Client.Contracts;
 
 /// <summary>
-/// Used to inject a customized IStreamUploadHandler type
+/// Creates <see cref="IStreamUploadHandler{T}"/> instances; the host implements it, and a host may replace it to customize uploads.
 /// </summary>
 public interface IStreamUploadHandlerFactory
 {
     /// <summary>
-    /// Creates a new instance of IStreamUploadHandler with the specified options.
+    /// Creates a handler that uploads into the workspace of <typeparamref name="TModule"/>.
     /// </summary>
-    /// <typeparam name="TMarker">marker type to match the upload to the correct handler</typeparam>
-    /// <typeparam name="TModule">module to allow handler to access the correct workspace</typeparam>
-    /// <param name="options">options to apply</param>
+    /// <typeparam name="TMarker">Ties the handler to one upload control.</typeparam>
+    /// <typeparam name="TModule">The module whose workspace receives the file.</typeparam>
     IStreamUploadHandler<TMarker> CreateStreamUploadHandler<TMarker, TModule>(StreamUploadHandlerOptions options) where TModule : IModule;
 
     /// <summary>
-    /// Creates a new instance of IStreamUploadHandler with the specified options.
+    /// Creates a handler that uploads into the workspace of the module <paramref name="moduleId"/>.
     /// </summary>
-    /// <typeparam name="TMarker">marker type to match the upload to the correct handler</typeparam>
-    /// <param name="moduleId">module to allow handler to access the correct workspace</param>
-    /// <param name="options">options to apply</param>
-    /// <returns></returns>
+    /// <typeparam name="TMarker">Ties the handler to one upload control.</typeparam>
     IStreamUploadHandler<TMarker> CreateStreamUploadHandlerFromModuleId<TMarker>(StreamUploadHandlerOptions options, string moduleId);
 }

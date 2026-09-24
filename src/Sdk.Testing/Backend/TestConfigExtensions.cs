@@ -8,7 +8,7 @@ public static class TestConfigExtensions
     extension(TestConfig config)
     {
         /// <summary>
-        /// Adds a dictionary of custom settings to the test configuration.
+        /// Copies <paramref name="settings"/> into the configuration, overwriting existing keys; <see langword="null"/> adds nothing.
         /// </summary>
         public TestConfig AddCustomSettings(Dictionary<string, string?>? settings)
         {
@@ -22,13 +22,14 @@ public static class TestConfigExtensions
         }
 
         /// <summary>
-        /// Adds a setting to enable or disable a module in the test configuration.
+        /// Sets <c>{moduleId}:Enable</c>, which enables the module unless <paramref name="disable"/> is set.
         /// </summary>
         public TestConfig AddModule(string moduleId, bool disable = false)
             => config.AddModuleInternal(moduleId, !disable);
 
         /// <summary>
-        /// Adds module-specific options from an anonymous or concrete object to the test configuration.
+        /// Writes each public property of <paramref name="options"/> to the module's options section, whose key is
+        /// <paramref name="moduleId"/> without dots; values are stored via <see cref="object.ToString"/>.
         /// </summary>
         public TestConfig AddModuleWithOptions(string moduleId, object? options = null)
         {

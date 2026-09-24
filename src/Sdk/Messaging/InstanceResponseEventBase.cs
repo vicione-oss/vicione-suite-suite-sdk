@@ -13,7 +13,7 @@ namespace Sdk.Messaging;
 public abstract record InstanceResponseEventBase : IInstanceEvent, CorrelatedBy<Guid>
 {
     /// <summary>
-    /// Gets the correlation ID that ties this response event to its originating command.
+    /// Gets or initializes the correlation ID that ties this response event to its originating command.
     /// </summary>
     public required Guid CorrelationId { get; init; }
 

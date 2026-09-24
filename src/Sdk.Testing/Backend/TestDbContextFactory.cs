@@ -10,19 +10,22 @@ namespace Sdk.Testing.Backend;
 public static class TestDbContextFactory
 {
     /// <summary>
-    /// The connection string identifier for creating an in-memory SQLite database.
+    /// SQLite data source for a private in-memory database that lives as long as its connection.
     /// </summary>
     public const string DataSourceInMemory = ":memory:";
 
     /// <summary>
-    /// Creates an in-memory SQLite DbContext for testing.
+    /// Creates a context over a new in-memory SQLite database.
     /// </summary>
+    /// <param name="init">Drops and recreates the schema from the model; <see langword="false"/> leaves the database untouched.</param>
     public static TDbContext CreateSqliteContext<TDbContext>(bool init = true)
         where TDbContext : ModuleDbContext, ISqliteDbContext => CreateSqliteContext<TDbContext>(DataSourceInMemory, init);
 
     /// <summary>
-    /// Creates a SQLite DbContext for testing using a specified data source.
+    /// Creates a context over an opened connection to <paramref name="dataSource"/>.
     /// </summary>
+    /// <param name="dataSource">A SQLite data source, e.g. a file name; <see langword="null"/> means in-memory.</param>
+    /// <param name="init">Drops and recreates the schema from the model; <see langword="false"/> leaves the database untouched.</param>
     public static TDbContext CreateSqliteContext<TDbContext>(string? dataSource, bool init = true)
         where TDbContext : ModuleDbContext, ISqliteDbContext
     {
@@ -43,8 +46,12 @@ public static class TestDbContextFactory
     }
 
     /// <summary>
-    /// Creates a SQLite DbContext for testing using an existing <see cref="SqliteConnection"/>.
+    /// Creates a context over <paramref name="connection"/>, which stays owned by the caller.
     /// </summary>
+    /// <param name="connection">An open connection; the context does not dispose it.</param>
+    /// <param name="init">Drops and recreates the schema from the model; <see langword="false"/> leaves the database untouched.</param>
+    /// <param name="optionsAction">Adjusts the options after SQLite is configured.</param>
+    /// <exception cref="MissingMethodException">Thrown if <typeparamref name="TDbContext"/> has no public options constructor.</exception>
     public static TDbContext CreateSqliteContext<TDbContext>(SqliteConnection connection, bool init = true,
         Action<DbContextOptionsBuilder>? optionsAction = null)
         where TDbContext : DbContext => CreateSqliteContext<TDbContext>(connection, contextOwnsConnection: false, init, optionsAction);

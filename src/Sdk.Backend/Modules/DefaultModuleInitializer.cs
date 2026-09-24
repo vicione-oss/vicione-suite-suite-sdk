@@ -4,21 +4,20 @@ using Sdk.Backend.Persistence;
 namespace Sdk.Backend.Modules;
 
 /// <summary>
-/// Provides a default implementation of <see cref="IModuleInitializer"/> for modules that use Entity Framework Core.
-/// Handles database migration and exposes lifecycle hooks that can be overridden.
+/// An <see cref="IModuleInitializer"/> that migrates <typeparamref name="TDbContext"/>; every other hook does nothing
+/// until overridden.
 /// </summary>
 public class DefaultModuleInitializer<TDbContext> : IModuleInitializer
     where TDbContext : IModuleDbContext
 {
     /// <summary>
-    /// Called before the database migration is started.
-    /// Override to perform tasks that must happen before any migrations are applied.
+    /// Does nothing; override to run code before migration.
     /// </summary>
     public virtual Task OnPreMigrate(IServiceProvider scopedServices, CancellationToken stoppingToken)
         => Task.CompletedTask;
 
     /// <summary>
-    /// Performs database migrations by resolving the configured <typeparamref name="TDbContext"/>.
+    /// Applies the pending migrations of the <typeparamref name="TDbContext"/> resolved from <paramref name="scopedServices"/>.
     /// </summary>
     public virtual async Task Migrate(IServiceProvider scopedServices, CancellationToken stoppingToken)
     {
@@ -28,15 +27,13 @@ public class DefaultModuleInitializer<TDbContext> : IModuleInitializer
     }
 
     /// <summary>
-    /// Called after the database migration has completed.
-    /// Override to perform tasks that must happen after migrations are applied, such as seeding data.
+    /// Does nothing; override to run code after migration, e.g. to seed data.
     /// </summary>
     public virtual Task OnPostMigrate(IServiceProvider scopedServices, CancellationToken stoppingToken)
         => Task.CompletedTask;
 
     /// <summary>
-    /// Called after the module has finished its initialization process.
-    /// Override to perform any additional startup logic for your module.
+    /// Does nothing; override to run code once the module is fully initialized.
     /// </summary>
     public virtual Task OnInitialized(IServiceProvider scopedServices, CancellationToken stoppingToken = default)
         => Task.CompletedTask;

@@ -14,34 +14,29 @@ public sealed class InitialNavTileAttribute<TClientModule> : Attribute
     where TClientModule : IClientModule
 {
     /// <summary>
-    /// Identifier for uniquely identifying the navigation tile in <see cref="INavTileRegistry{TClientModule}"/> operations.
+    /// Gets or initializes the ID identifying the tile in <see cref="INavTileRegistry{TClientModule}"/> operations.
+    /// Defaults to a random <see cref="Guid"/> string.
     /// </summary>
-    /// <remarks>
-    /// The default value is a random <see cref="Guid"/> string.
-    /// </remarks>
     public string Id { get; init; } = Guid.NewGuid().ToString();
 
     /// <summary>
-    /// Horizontal span of the navigation tile
+    /// Gets or initializes the tile's width. Defaults to <see cref="NavTileSpan.One"/>.
     /// </summary>
     public NavTileSpan HorizontalSpan { get; init; }
 
     /// <summary>
-    /// Specifies whether the navigation tile should be enabled or not.
+    /// Gets or initializes whether the tile is enabled; a disabled tile loses its hover effects and ignores clicks.
+    /// Defaults to <see langword="true"/>.
     /// </summary>
-    /// <remarks>
-    /// If the value is set to <see langword="true"/> then certain visual effects are disabled and no clicks are registered.
-    /// The default value is <see langword="true"/>.
-    /// </remarks>
     public bool Enabled { get; init; } = true;
 
     /// <summary>
-    /// Sets the link target used in the default navigation handling executed when the navigation tile is clicked.
+    /// Gets or initializes the URL the tile navigates to when clicked, unless the tile overrides <see cref="NavTileBase.Click"/>.
     /// </summary>
     public string? LinkTarget { get; init; }
 
     /// <summary>
-    /// Sets the group of the navigation tile.
+    /// Gets or initializes the tile's group. Defaults to <see cref="NavTileGroup.Applications"/>.
     /// </summary>
     public NavTileGroup Group { get; init; } = NavTileGroup.Applications;
 }

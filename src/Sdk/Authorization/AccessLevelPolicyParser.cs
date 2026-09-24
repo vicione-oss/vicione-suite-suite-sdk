@@ -1,12 +1,13 @@
 ﻿namespace Sdk.Authorization;
 
 /// <summary>
-/// Parser for access level policies
+/// Parses the policy names built by <see cref="ModulePolicyProvider"/>.
 /// </summary>
 public static class AccessLevelPolicyParser
 {
     /// <summary>
-    /// Attempts to parse the specified <paramref name="policy"/> into an <see cref="AccessLevelAuthorizationRequirement"/>.
+    /// Parses a policy of the form <c>{prefix}_{moduleId}_{accessLevel}[_{featureName}]</c>; returns <see langword="false"/> for
+    /// any other name. The name is split on <c>_</c>, so only the first part of a feature name containing <c>_</c> survives.
     /// </summary>
     public static bool TryParse(string policy, [MaybeNullWhen(false)] out AccessLevelAuthorizationRequirement accessLevelAuthorizationRequirement)
     {

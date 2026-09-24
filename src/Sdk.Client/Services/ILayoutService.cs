@@ -8,27 +8,27 @@ namespace Sdk.Client.Services;
 public interface ILayoutService : INotifyPropertyChanged
 {
     /// <summary>
-    /// Preformatted title of the local suite instance
+    /// Gets the preformatted title of the local suite instance.
     /// </summary>
     MarkupString InstanceTitle { get; }
 
     /// <summary>
-    /// Name of the local suite instance
+    /// Gets the name of the local suite instance.
     /// </summary>
     string? InstanceName { get; }
 
     /// <summary>
-    /// Use to set untranslated text on top bar
+    /// Gets or sets untranslated text shown in the title bar.
     /// </summary>
     string? TitleBarText { get; set; }
 
     /// <summary>
-    /// Use to set the app name
+    /// Gets or sets the app name shown in the title bar.
     /// </summary>
     string? TitleBarAppName { get; set; }
 
     /// <summary>
-    /// Use to toggle the loading overlay for pages
+    /// Gets or sets whether the page loading overlay is shown.
     /// </summary>
     bool IsLoadingOverlayVisible { get; set; }
 }

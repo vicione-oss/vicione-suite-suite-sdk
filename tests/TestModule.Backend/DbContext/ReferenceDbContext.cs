@@ -37,8 +37,7 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
 
     protected override void OnModuleModelCreating(ModelBuilder modelBuilder)
     {
-#pragma warning disable CS0618 // Typ oder Element ist veraltet
-        // Employees
+#pragma warning disable CS0618 // Type or member is obsolete
         modelBuilder.Entity<Employees>()
             .Property(e => e.first_name).HasColumnType("TEXT");
         modelBuilder.Entity<Employees>()
@@ -51,7 +50,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .HasCheckConstraint("employees_length_first_name", "Length(first_name) < 15 ")
             .HasCheckConstraint("employees_length_last_name", "Length(last_name) < 17 ");
 
-        // Departments
         modelBuilder.Entity<Departments>()
             .Property(d => d.dept_no).HasColumnType("TEXT");
         modelBuilder.Entity<Departments>()
@@ -62,7 +60,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .HasCheckConstraint("departments_length_dept_no", "Length(dept_no) < 5 ")
             .HasCheckConstraint("departments_length_dept_name", "Length(dept_name) < 41 ");
 
-        // DepartmentManager
         modelBuilder.Entity<DepartmentManager>()
             .Property(dm => dm.dept_no).HasColumnType("TEXT");
         modelBuilder.Entity<DepartmentManager>()
@@ -82,7 +79,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .WithMany(e => e.dept_manager)
             .HasForeignKey(dm => dm.dept_no);
 
-        // DepartmentEmployees
         modelBuilder.Entity<DepartmentEmployees>()
             .Property(de => de.dept_no).HasColumnType("TEXT");
         modelBuilder.Entity<DepartmentEmployees>()
@@ -102,7 +98,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .WithMany(e => e.dept_empl)
             .HasForeignKey(de => de.dept_no);
 
-        // Titles
         modelBuilder.Entity<Titles>()
             .Property(t => t.title).HasColumnType("TEXT");
         modelBuilder.Entity<Titles>()
@@ -118,7 +113,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .WithMany(e => e.titles)
             .HasForeignKey(t => t.emp_no);
 
-        // Salaries
         modelBuilder.Entity<Salaries>()
             .Property(t => t.from_date).HasColumnType("DATE");
         modelBuilder.Entity<Salaries>()
@@ -129,7 +123,7 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .HasOne(s => s.employee)
             .WithMany(e => e.salaries)
             .HasForeignKey(s => s.emp_no);
-#pragma warning restore CS0618 // Typ oder Element ist veraltet
+#pragma warning restore CS0618 // Type or member is obsolete
 
     }
 }

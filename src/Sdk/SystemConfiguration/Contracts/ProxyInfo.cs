@@ -10,22 +10,22 @@
 public sealed record ProxyInfo
 {
     /// <summary>
-    /// The proxy server hostname or IP address.
+    /// Gets or initializes the proxy server hostname or IP address.
     /// </summary>
     public required string Server { get; init; }
 
     /// <summary>
-    /// The proxy server port.
+    /// Gets or initializes the proxy server port.
     /// </summary>
     public required int Port { get; init; }
 
     /// <summary>
-    /// The username for proxy authentication, or <see langword="null"/> if not configured.
+    /// Gets or initializes the username for proxy authentication, or <see langword="null"/> if not configured.
     /// </summary>
     public string? Username { get; init; }
 
     /// <summary>
-    /// The password for proxy authentication, or <see langword="null"/> if not configured.
+    /// Gets or initializes the password for proxy authentication, or <see langword="null"/> if not configured.
     /// </summary>
     public string? Password { get; init; }
 }

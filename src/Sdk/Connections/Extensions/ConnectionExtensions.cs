@@ -83,7 +83,8 @@ public static class ConnectionExtensions
         }
 
         /// <summary>
-        /// Gets the strongly-typed <see cref="SQLiteConnection"/> details if the connection type is <see cref="ConnectionType.SQLite"/>.
+        /// Returns the <see cref="SQLiteConnection"/> details if the type is <see cref="ConnectionType.SQLite"/>;
+        /// otherwise <see langword="null"/>.
         /// </summary>
         public SQLiteConnection? GetSQLiteConnection()
             => connection.Type == ConnectionType.SQLite
@@ -91,7 +92,8 @@ public static class ConnectionExtensions
                 : null;
 
         /// <summary>
-        /// Gets the strongly-typed <see cref="PostgresConnection"/> details if the connection type is <see cref="ConnectionType.Postgres"/>.
+        /// Returns the <see cref="PostgresConnection"/> details if the type is <see cref="ConnectionType.Postgres"/>;
+        /// otherwise <see langword="null"/>.
         /// </summary>
         public PostgresConnection? GetPostgresConnection()
             => connection.Type == ConnectionType.Postgres
@@ -99,7 +101,8 @@ public static class ConnectionExtensions
                 : null;
 
         /// <summary>
-        /// Gets the strongly-typed <see cref="HttpConnection"/> details if the connection type is <see cref="ConnectionType.Http"/>.
+        /// Returns the <see cref="HttpConnection"/> details if the type is <see cref="ConnectionType.Http"/>;
+        /// otherwise <see langword="null"/>.
         /// </summary>
         public HttpConnection? GetHttpConnection()
             => connection.Type == ConnectionType.Http
@@ -107,7 +110,8 @@ public static class ConnectionExtensions
                 : null;
 
         /// <summary>
-        /// Gets the strongly-typed <see cref="MqttConnection"/> details if the connection type is <see cref="ConnectionType.Mqtt"/>.
+        /// Returns the <see cref="MqttConnection"/> details if the type is <see cref="ConnectionType.Mqtt"/>;
+        /// otherwise <see langword="null"/>.
         /// </summary>
         public MqttConnection? GetMqttConnection()
             => connection.Type == ConnectionType.Mqtt

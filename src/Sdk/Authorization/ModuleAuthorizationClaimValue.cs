@@ -9,18 +9,21 @@ namespace Sdk.Authorization;
 public sealed record ModuleAuthorizationClaimValue
 {
     /// <summary>
-    /// Gets the unique identifier of the module for which access is granted.
+    /// Gets or initializes the unique identifier of the module for which access is granted.
     /// </summary>
     public required string ModuleId { get; init; }
 
     /// <summary>
-    /// Name of the feature within the module, or an empty string if access applies to the entire module
+    /// Gets or initializes the name of the feature within the module; empty means the whole module.
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] // for compatibility
+    /// <remarks>
+    /// <see cref="IModuleAuthorizationClaimParser"/> replaces an empty name with the module's short name.
+    /// </remarks>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] // Claims issued before features existed omit the name.
     public string FeatureName { get; init; } = string.Empty;
 
     /// <summary>
-    /// Specifies the required access level for the module feature (if <see cref="FeatureName"/> is set) or for the module (if <see cref="FeatureName"/> is not set).
+    /// Gets or initializes the access level granted for <see cref="FeatureName"/>, or for the whole module if it is empty.
     /// </summary>
     public required AccessLevel AccessLevel { get; init; }
 }

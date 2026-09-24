@@ -41,7 +41,7 @@ public abstract class ItemValidatorBase<TItem> : IItemValidator<TItem>
     }
 
     /// <summary>
-    /// Validates a strongly typed item and returns validation errors.
+    /// Validates <paramref name="item"/> and returns its errors; the dictionary is reused and cleared by the next call.
     /// </summary>
     public IDictionary<string, List<string>> Validate(TItem item)
     {

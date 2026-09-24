@@ -29,8 +29,7 @@ public partial class IconAndValueComponent<T> : ComponentBase
     [Parameter] public IHtmlColor? ValueColor { get; set; }
 
     /// <summary>
-    /// Gets or sets an optional function to format the <see cref="Value"/> for display.
-    /// If not provided, the value's default `ToString()` method is used.
+    /// Gets or sets the function that formats <see cref="Value"/>; <see langword="null"/> uses <c>ToString()</c>.
     /// </summary>
     [Parameter] public Func<T, string>? ValueFormatter { get; set; }
 

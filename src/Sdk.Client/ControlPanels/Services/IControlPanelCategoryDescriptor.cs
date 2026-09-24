@@ -1,44 +1,33 @@
 ﻿namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Describes a control panel category
+/// Describes a category that groups control panels.
 /// </summary>
 public interface IControlPanelCategoryDescriptor
 {
     /// <summary>
-    /// Text used to categorize the settings provided by the control panel
+    /// Gets the category's title.
     /// </summary>
     string Title { get; }
 
     /// <summary>
-    /// CSS class that defines the icon displayed next to the <see cref="Title"/>
+    /// Gets the CSS class of the icon next to <see cref="Title"/>; takes priority over <see cref="IconUrl"/>.
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    /// <remarks>
-    /// This property has priority over <see cref="IconUrl"/>.
-    /// </remarks>
     [ExcludeFromCodeCoverage]
     string? IconCssClass => null;
 
     /// <summary>
-    /// Url of the icon displayed next to the <see cref="Title"/>
+    /// Gets the URL of the icon next to <see cref="Title"/>; used only when <see cref="IconCssClass"/> is <see langword="null"/>.
+    /// Defaults to <see langword="null"/>.
     /// </summary>
-    /// <remarks>
-    /// This property has lower priority than <see cref="IconCssClass"/>.
-    /// </remarks>
     [ExcludeFromCodeCoverage]
     Uri? IconUrl => null;
 
     /// <summary>
-    /// Optional position in the list of all category of a <see cref="IControlPanelGroupDescriptor">group</see>
+    /// Gets the category's position within its <see cref="IControlPanelGroupDescriptor">group</see>; lower positions render first.
+    /// Categories without a position follow, ordered by <see cref="Title"/>. Defaults to <see langword="null"/>.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// This property affects the render order.
-    /// When Position X of category A is lower than Position Y of category B then category A is rendered first.
-    /// In a vertical representation this would mean that category A is displayed above category B.
-    /// </para>
-    /// <para>If not set then the category is rendered after all categories having a position in alphabetic order using <see cref="Title"/>.</para>
-    /// </remarks>
     [ExcludeFromCodeCoverage]
     int? Position => null;
 }

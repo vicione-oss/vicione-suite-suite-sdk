@@ -6,13 +6,13 @@
 public sealed partial class SettingsStepper : ComponentBase
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the plus (increment) button is enabled.
+    /// Gets or sets whether the plus (increment) button is enabled.
     /// </summary>
     [Parameter]
     public bool PlusEnabled { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the minus (decrement) button is enabled.
+    /// Gets or sets whether the minus (decrement) button is enabled.
     /// </summary>
     [Parameter]
     public bool MinusEnabled { get; set; } = true;

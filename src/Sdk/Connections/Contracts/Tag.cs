@@ -6,7 +6,7 @@
 public sealed class Tag(string text, Guid id) : IEquatable<Tag>
 {
     /// <summary>
-    /// Gets the unique identifier of the tag.
+    /// Gets or initializes the unique identifier of the tag.
     /// </summary>
     public Guid Id { get; init; } = id;
 
@@ -16,7 +16,7 @@ public sealed class Tag(string text, Guid id) : IEquatable<Tag>
     public string Text { get; set; } = text;
 
     /// <summary>
-    /// Gets a value indicating whether the tag is protected from user modification.
+    /// Gets or initializes whether the tag is protected from user modification.
     /// </summary>
     public bool Protected { get; init; }
 

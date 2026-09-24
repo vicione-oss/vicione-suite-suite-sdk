@@ -84,7 +84,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
                     _iconElementReference is not null &&
                     _jsModuleReference is not null)
                 {
-                    // no invoke of OnContentLoading here as the element is already displayed in the browser, moved to OnParametersSetAsync()
+                    // OnContentLoading is raised in OnParametersSetAsync; here the element is already displayed.
                     _dotNetObjectReference = DotNetObjectReference.Create(this);
 
                     _initSublineResult = await _jsModuleReference.InvokeConstructorAsync("NavTileStandardContent", _sublineElementReference, _headlineElementReference, _contentElementReference, _iconElementReference, _dotNetObjectReference);
@@ -118,7 +118,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
     }
 
     /// <summary>
-    /// A method invoked by JavaScript to signal that the subline initialization is complete.
+    /// Called from JavaScript once the subline is laid out; raises <see cref="OnContentReady"/>.
     /// </summary>
     [JSInvokable]
     public async Task SublineInitialized()

@@ -8,7 +8,8 @@ public static class FormatExtensions
     private const int Factor = 1024;
 
     /// <summary>
-    /// Calculates the total number of bytes from a given limit in megabytes (MB).
+    /// Converts a limit in megabytes (1024 × 1024 bytes) to bytes; despite the name, the conversion goes from megabytes to bytes.
     /// </summary>
+    [Obsolete("Unused, and the name states the conversion backwards. This method will be removed in the next major version.")]
     public static long CalculateBytesToMb(this int limit) => (long)Factor * Factor * limit;
 }

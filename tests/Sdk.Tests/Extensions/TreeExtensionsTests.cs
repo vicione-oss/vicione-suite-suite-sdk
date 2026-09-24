@@ -13,13 +13,13 @@ public sealed class TreeExtensionsTests
             var items = CreateFlatItems();
 
             var tree = items.ToTree(i => i.Id, i => i.ParentId);
-            //Level 0
+            // Level 0
             AssertTreeNode(tree, 3);
-            //Level 1
+            // Level 1
             AssertTreeNode(tree!.Children!.Single(c => c.Item.Id == 1), 2);
             AssertTreeNode(tree.Children!.Single(c => c.Item.Id == 4), 2);
             AssertTreeNode(tree.Children!.Single(c => c.Item.Id == 10));
-            //Level 2
+            // Level 2
             AssertTreeNode(tree
                 .Children!.Single(c => c.Item.Id == 1)
                 .Children!.Single(c => c.Item.Id == 2));
@@ -32,7 +32,7 @@ public sealed class TreeExtensionsTests
             AssertTreeNode(tree
                 .Children!.Single(c => c.Item.Id == 4)
                 .Children!.Single(c => c.Item.Id == 8), 1);
-            //Level 3
+            // Level 3
             AssertTreeNode(tree
                 .Children!.Single(c => c.Item.Id == 4)
                 .Children!.Single(c => c.Item.Id == 5)

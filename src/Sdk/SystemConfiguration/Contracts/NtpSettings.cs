@@ -11,7 +11,7 @@
 public sealed record NtpSettings
 {
     /// <summary>
-    /// The list of configured NTP servers (IPv4/IPv6 addresses or DNS hostnames).
+    /// Gets or initializes the list of configured NTP servers (IPv4/IPv6 addresses or DNS hostnames).
     /// </summary>
     /// <remarks>
     /// Only populated when NTP servers are enabled in the system configuration.
@@ -19,7 +19,7 @@ public sealed record NtpSettings
     public IReadOnlyList<string> Servers { get; init; } = [];
 
     /// <summary>
-    /// The list of fallback NTP servers (IPv4/IPv6 addresses or DNS hostnames).
+    /// Gets or initializes the list of fallback NTP servers (IPv4/IPv6 addresses or DNS hostnames).
     /// </summary>
     public IReadOnlyList<string> FallbackServers { get; init; } = [];
 }

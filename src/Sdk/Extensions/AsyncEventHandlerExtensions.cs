@@ -7,24 +7,9 @@
 public static class AsyncEventHandlerExtensions
 {
     /// <summary>
-    /// Invokes an asynchronous event with two arguments, awaiting all subscribers.
+    /// Invokes every subscriber of <paramref name="event"/> in subscription order, awaiting each; <see langword="null"/> does nothing.
     /// </summary>
-    /// <param name="event">
-    /// The event delegate to invoke. May be <see langword="null"/>, in which case nothing is invoked.
-    /// </param>
-    /// <param name="args1">The first argument to pass to each event handler.</param>
-    /// <param name="args2">The second argument to pass to each event handler.</param>
-    /// <returns>
-    /// A task representing the asynchronous invocation of all handlers.
-    /// </returns>
-    /// <remarks>
-    /// All handlers are invoked sequentially in the order they were subscribed.
-    ///
-    /// <para>
-    /// If one or more handlers throw exceptions, all exceptions are collected and thrown together
-    /// as an <see cref="AggregateException"/> after all handlers have been invoked.
-    /// </para>
-    /// </remarks>
+    /// <exception cref="AggregateException">Thrown after all handlers ran if any of them threw; it holds every exception.</exception>
     public static async Task Invoke<TEventArgs1, TEventArgs2>(
         this Func<TEventArgs1, TEventArgs2, Task>? @event,
         TEventArgs1 args1,
@@ -53,24 +38,7 @@ public static class AsyncEventHandlerExtensions
             throw new AggregateException(exceptions);
     }
 
-    /// <summary>
-    /// Invokes an asynchronous event with one argument, awaiting all subscribers.
-    /// </summary>
-    /// <param name="event">
-    /// The event delegate to invoke. May be <see langword="null"/>, in which case nothing is invoked.
-    /// </param>
-    /// <param name="args">The argument to pass to each event handler.</param>
-    /// <returns>
-    /// A task representing the asynchronous invocation of all handlers.
-    /// </returns>
-    /// <remarks>
-    /// All handlers are invoked sequentially in the order they were subscribed.
-    ///
-    /// <para>
-    /// If one or more handlers throw exceptions, all exceptions are collected and thrown together
-    /// as an <see cref="AggregateException"/> after all handlers have been invoked.
-    /// </para>
-    /// </remarks>
+    /// <inheritdoc cref="Invoke{TEventArgs1, TEventArgs2}(Func{TEventArgs1, TEventArgs2, Task}?, TEventArgs1, TEventArgs2)"/>
     public static async Task Invoke<TEventArgs>(this Func<TEventArgs, Task>? @event, TEventArgs args)
     {
         if (@event is null)
@@ -96,23 +64,7 @@ public static class AsyncEventHandlerExtensions
             throw new AggregateException(exceptions);
     }
 
-    /// <summary>
-    /// Invokes an asynchronous event with no arguments, awaiting all subscribers.
-    /// </summary>
-    /// <param name="event">
-    /// The event delegate to invoke. May be <see langword="null"/>, in which case nothing is invoked.
-    /// </param>
-    /// <returns>
-    /// A task representing the asynchronous invocation of all handlers.
-    /// </returns>
-    /// <remarks>
-    /// All handlers are invoked sequentially in the order they were subscribed.
-    ///
-    /// <para>
-    /// If one or more handlers throw exceptions, all exceptions are collected and thrown together
-    /// as an <see cref="AggregateException"/> after all handlers have been invoked.
-    /// </para>
-    /// </remarks>
+    /// <inheritdoc cref="Invoke{TEventArgs1, TEventArgs2}(Func{TEventArgs1, TEventArgs2, Task}?, TEventArgs1, TEventArgs2)"/>
     public static async Task Invoke(this Func<Task>? @event)
     {
         if (@event is null)

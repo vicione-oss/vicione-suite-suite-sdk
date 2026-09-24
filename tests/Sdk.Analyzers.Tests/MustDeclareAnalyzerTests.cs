@@ -16,14 +16,13 @@ public class MustDeclareAnalyzerTests
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(source, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Collect metadata references from the loaded assemblies that the analyzer needs to resolve
         var references = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location))
             .Select(a => MetadataReference.CreateFromFile(a.Location))
             .Cast<MetadataReference>()
             .ToList();
 
-        // Ensure Sdk messaging types are available
+        // Sdk messaging is not necessarily loaded yet, so it is referenced explicitly.
         references.Add(MetadataReference.CreateFromFile(typeof(IActivityArgument).Assembly.Location));
 
         var compilation = CSharpCompilation.Create(
@@ -82,7 +81,7 @@ public class MustDeclareAnalyzerTests
     {
         // Arrange
         // The runtime attribute lookup does not consider implemented interfaces,
-        // so an attribute there does not prevent the runtime exception
+        // so an attribute there does not prevent the runtime exception.
         const string Source = """
             using Sdk.Backend.Messaging;
             using Sdk.Messaging;

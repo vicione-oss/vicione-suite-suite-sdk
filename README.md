@@ -2,6 +2,13 @@
 
 Welcome to the readme of ViciOne Suite. Questions and suggestions for improvement are warmly appreciated!
 
+## Contents
+* [Configure local development experience](#configure-local-development-experience)
+* [Database migration](#database-migration)
+    * [`Package Manager Console` of Visual Studio](#package-manager-console-of-visual-studio)
+    * [Entity Framework CLI](#entity-framework-cli)
+* [Code comments](./docs/code-style-guide.md)
+
 ## Configure local development experience
 
 Some aspects of the build process differs when running a build in a local developer environment compared to when it would run in CI pipeline.
@@ -35,3 +42,7 @@ dotnet ef migrations add Add_FooBar --output-dir Migrations\ModuleDbContext\Sqli
 
 dotnet ef migrations add Add_FooBar --output-dir Migrations\ModuleDbContext\Postgres --context ModuleDbContextPostgres --startup-project .\src\Module.Backend\Module.Backend.csproj
 ```
+
+## Code comments
+
+Comment rules for hand-written `*.cs` and `*.razor` files live in [Code Style Guide → Code comments](./docs/code-style-guide.md#code-comments).

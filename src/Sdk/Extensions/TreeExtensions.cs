@@ -137,7 +137,7 @@ public class TreeNode<T>(T item)
     public T Item { get; } = item;
 
     /// <summary>
-    /// Gets or sets the collection of child nodes for this tree node.
+    /// Gets the collection of child nodes for this tree node.
     /// </summary>
     public ICollection<TreeNode<T>>? Children { get; internal set; }
 }

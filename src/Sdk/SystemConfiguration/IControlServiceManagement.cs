@@ -12,12 +12,12 @@ namespace Sdk.SystemConfiguration;
 public interface IControlServiceManagement
 {
     /// <summary>
-    ///  Indicates whether the control service management functionality is available on the current system.
+    /// Gets whether services can be controlled on the current system.
     /// </summary>
     bool IsAvailable { get; }
 
     /// <summary>
-    /// Asynchronously sends a command to control a system service.
+    /// Sends <paramref name="command"/> to the service; a failure is reported in the result, not thrown.
     /// </summary>
     Task<ControlServiceManagementResult> TryControlService(ServiceCommand command, string serviceName,
         CancellationToken cancellationToken = default);

@@ -3,12 +3,13 @@
 namespace Sdk.Client.ControlPanels.Models;
 
 /// <summary>
-/// Return value of <see cref="IControlPanelSaveHandler{TState}.Save(TState, CancellationToken)"/>
+/// The result of <see cref="IControlPanelSaveHandler{TState}.Save(TState, CancellationToken)"/>: a <see cref="SaveSuccessResult"/>
+/// or a <see cref="SaveErrorResult"/>.
 /// </summary>
 public interface ISaveResult
 {
     /// <summary>
-    /// Message describing the result of the associated save operation
+    /// Gets the message describing the outcome; optional on success.
     /// </summary>
     string? Message { get; }
 }

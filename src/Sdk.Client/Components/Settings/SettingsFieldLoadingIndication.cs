@@ -1,17 +1,17 @@
 ﻿namespace Sdk.Client.Components.Settings;
 
 /// <summary>
-/// Available loading indications implemented in <see cref="SettingsField"/>
+/// How a <see cref="SettingsField"/> shows that it is loading.
 /// </summary>
 public enum SettingsFieldLoadingIndication
 {
     /// <summary>
-    /// Loading indication with a spinner animation
+    /// A spinner animation.
     /// </summary>
     Spinner,
 
     /// <summary>
-    /// Loading indication that adjusts opacity
+    /// Reduced opacity of the field's content.
     /// </summary>
     Opacity
 }

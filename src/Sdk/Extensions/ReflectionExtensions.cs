@@ -48,7 +48,7 @@ public static class ReflectionExtensions
     /// <summary>
     /// Determines whether a property is nullable.
     /// </summary>
-    //https://stackoverflow.com/questions/58453972/how-to-use-net-reflection-to-check-for-nullable-reference-type
+    // Based on https://stackoverflow.com/questions/58453972/how-to-use-net-reflection-to-check-for-nullable-reference-type
     public static bool IsNullable(this PropertyInfo property) =>
         IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);
 

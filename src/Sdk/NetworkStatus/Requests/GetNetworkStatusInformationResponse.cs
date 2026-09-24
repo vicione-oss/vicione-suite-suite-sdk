@@ -10,12 +10,12 @@ namespace Sdk.NetworkStatus.Requests;
 public sealed record GetNetworkStatusInformationResponse : IResponse
 {
     /// <summary>
-    /// Gets the network status information if the request was successful.
+    /// Gets or initializes the network status information if the request was successful.
     /// </summary>
     public NetworkStatusInformation? NetworkStatusInformation { get; init; }
 
     /// <summary>
-    /// Gets error information if the request failed, otherwise <see langword="null"/>.
+    /// Gets or initializes error information if the request failed, otherwise <see langword="null"/>.
     /// </summary>
     public ErrorInfo? RequestError { get; init; }
 }

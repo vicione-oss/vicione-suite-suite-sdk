@@ -6,7 +6,7 @@ using Sdk.Client.Services;
 namespace Sdk.Client.NotificationArea.Services;
 
 /// <summary>
-/// Registry for notification elements
+/// Holds a module's notification elements; this non-generic view lets the host enumerate every module's registry.
 /// </summary>
 public interface INotificationElementRegistry : IRegistry<INotificationElementRegistryItem>;
 
@@ -17,24 +17,24 @@ public interface INotificationElementRegistry<TClientModule> : INotificationElem
     /// <summary>
     /// Registers a notification element in the registry.
     /// </summary>
-    /// <param name="state">State for the notification element</param>
-    /// <param name="position">Position of the notification element</param>
-    /// <param name="id">Unique identifier for the notification element</param>
-    /// <param name="authorizationRequirement">Optional <see cref="INotificationElementRegistryItem.AuthorizationRequirement">authorization requirement</see> for the notification element</param>
+    /// <param name="state">The element's state.</param>
+    /// <param name="position">The element's position in the notification area; <see langword="null"/> uses the default.</param>
+    /// <param name="id">Identifies the element; <see langword="null"/> generates one.</param>
+    /// <param name="authorizationRequirement">The requirement to see the element; <see langword="null"/> skips authorization.</param>
     INotificationElementRegistryItem Add<TElement, TState>(TState state, int? position = null, Guid? id = null, IAuthorizationRequirement? authorizationRequirement = null)
         where TElement : NotificationElementBase<TState>
         where TState : INotificationElementState;
 
     /// <summary>
-    /// Removes an item from the registry based on the given unique identifier.
+    /// Removes the notification element with the given ID.
     /// </summary>
-    /// <returns>True when item was removed</returns>
+    /// <returns><see langword="true"/> if an element was removed.</returns>
     bool Remove(Guid id);
 
     /// <summary>
-    /// Removes all notification elements with the given type from the registry.
+    /// Removes all notification elements of type <typeparamref name="TNotificationElement"/>.
     /// </summary>
-    /// <returns>True when item was removed</returns>
+    /// <returns>The number of elements removed.</returns>
     int Remove<TNotificationElement>()
         where TNotificationElement : INotificationElement;
 }

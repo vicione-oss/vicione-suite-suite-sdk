@@ -3,12 +3,13 @@
 namespace Sdk.Authorization;
 
 /// <summary>
-/// Parser for module authorization claims
+/// Reads module authorization claims.
 /// </summary>
 public interface IModuleAuthorizationClaimParser
 {
     /// <summary>
-    /// Attempts to parse the specified <paramref name="claim"/> into a <see cref="ModuleAuthorizationClaimValue"/>.
+    /// Parses a <see cref="SuiteClaimTypes.ModuleAuthorization"/> claim; returns <see langword="false"/> for any other claim
+    /// or a malformed value.
     /// </summary>
     bool TryParse(Claim claim, [MaybeNullWhen(false)] out ModuleAuthorizationClaimValue claimValue);
 }

@@ -6,17 +6,17 @@ namespace Sdk.Connections.Contracts;
 public enum MqttQualityOfServiceLevel
 {
     /// <summary>
-    /// QoS 0: The message is delivered at most once, and delivery is not guaranteed. This is the fastest mode but may result in lost messages.
+    /// QoS 0: delivered at most once, without a guarantee; the fastest mode, but messages can be lost.
     /// </summary>
     AtMostOnce,
 
     /// <summary>
-    /// QoS 1: The message is delivered at least once, ensuring that it reaches the receiver but may result in duplicate messages.
+    /// QoS 1: delivered at least once; nothing is lost, but duplicates are possible.
     /// </summary>
     AtLeastOnce,
 
     /// <summary>
-    /// QoS 2: The message is delivered exactly once by using a four-step handshake. This is the safest and slowest mode, ensuring that messages are neither lost nor duplicated.
+    /// QoS 2: delivered exactly once through a four-step handshake; the safest and slowest mode.
     /// </summary>
     ExactlyOnce
 }

@@ -11,7 +11,8 @@ namespace Sdk.Backend.Extensions;
 public static class PropertyBuilderExtensions
 {
     /// <summary>
-    /// Configures a <see cref="Dictionary{TKey, TValue}"/> property to be stored as a JSON string in the database.
+    /// Stores the <see cref="Dictionary{TKey, TValue}"/> as a JSON string column; <c>NULL</c> or an empty column reads as
+    /// an empty collection.
     /// </summary>
     public static PropertyBuilder<Dictionary<TKey, TValue>> PersistAsJson<TKey, TValue>(
         this PropertyBuilder<Dictionary<TKey, TValue>> propertyBuilder) where TKey : notnull
@@ -22,7 +23,7 @@ public static class PropertyBuilderExtensions
             CreateDictionaryComparer<TKey, TValue>());
 
     /// <summary>
-    /// Configures a <see cref="List{T}"/> property to be stored as a JSON string in the database.
+    /// Stores the <see cref="List{T}"/> as a JSON string column; <c>NULL</c> or an empty column reads as an empty collection.
     /// </summary>
     public static PropertyBuilder<List<T>> PersistAsJson<T>(this PropertyBuilder<List<T>> propertyBuilder)
         => propertyBuilder.HasConversion(
@@ -32,7 +33,7 @@ public static class PropertyBuilderExtensions
             CreateListComparer<T>());
 
     /// <summary>
-    /// Configures a <see cref="HashSet{T}"/> property to be stored as a JSON string in the database.
+    /// Stores the <see cref="HashSet{T}"/> as a JSON string column; <c>NULL</c> or an empty column reads as an empty collection.
     /// </summary>
     public static PropertyBuilder<HashSet<T>> PersistAsJson<T>(this PropertyBuilder<HashSet<T>> propertyBuilder)
         => propertyBuilder.HasConversion(

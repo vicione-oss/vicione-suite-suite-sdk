@@ -1,22 +1,22 @@
 ﻿namespace Sdk.Client.NotificationArea.Services;
 
 /// <summary>
-/// Policy for active notification elements
+/// Tracks notification elements whose active state is managed together.
 /// </summary>
 public interface IActiveNotificationElementPolicy
 {
     /// <summary>
-    /// Includes a notification element in the policy
+    /// Adds a notification element to the policy.
     /// </summary>
     void Include(INotificationElementState notificationElementState);
 
     /// <summary>
-    /// Excludes a notification element from the policy
+    /// Removes a notification element from the policy.
     /// </summary>
     void Exclude(INotificationElementState notificationElementState);
 
     /// <summary>
-    /// Ensures that all notification elements included in the policy are not active
+    /// Deactivates every notification element in the policy.
     /// </summary>
     void NoneActive();
 }

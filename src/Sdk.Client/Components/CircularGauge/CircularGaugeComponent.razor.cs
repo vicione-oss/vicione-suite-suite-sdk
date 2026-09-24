@@ -32,7 +32,7 @@ public partial class CircularGaugeComponent
     [Parameter, EditorRequired] public int Maximum { get; set; }
 
     /// <summary>
-    /// Gets or sets the starting value of the gauge's range.
+    /// Gets or sets the value printed at the start of the scale; positions on the arc are computed from 0 regardless.
     /// </summary>
     [Parameter] public int RangeStart { get; set; }
 

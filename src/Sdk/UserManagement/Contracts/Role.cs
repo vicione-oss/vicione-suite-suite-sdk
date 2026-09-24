@@ -17,7 +17,7 @@ public class Role
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the role is managed by the system.
+    /// Gets or sets whether the role is managed by the system.
     /// </summary>
     /// <remarks>
     /// Managed roles cannot be deleted or modified.

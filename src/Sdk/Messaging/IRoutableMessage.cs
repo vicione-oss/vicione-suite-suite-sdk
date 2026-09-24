@@ -1,6 +1,6 @@
 namespace Sdk.Messaging;
 
 /// <summary>
-/// Base type of all routable messages
+/// Marks every message the suite routes through its message bus.
 /// </summary>
 public interface IRoutableMessage;

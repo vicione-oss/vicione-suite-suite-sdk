@@ -22,7 +22,7 @@ public sealed class StandardHtmlColor : IHtmlColor
     public static StandardHtmlColor From(StandardColor standardColor) => new(standardColor);
 
     /// <summary>
-    /// Returns the string representation of the color as a CSS custom property variable.
+    /// Returns the CSS custom property reference, e.g. <c>var(--vo-standard-color-light-green)</c>.
     /// </summary>
     public override string ToString() => _cssCustomVariable;
 }

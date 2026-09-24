@@ -49,8 +49,8 @@ public sealed partial class SettingsGroup : ComponentBase
     public RenderFragment? BeforeExpander { get; set; }
 
     /// <summary>
-    /// Optional <see cref="RenderFragment"/> to place one or multiple <see cref="SettingsField"/>,
-    /// <see cref="SettingsInformation"/> and / or <see cref="SettingsGroup"/> components.
+    /// Gets or sets the group's content: <see cref="SettingsField"/>, <see cref="SettingsInformation"/> and nested
+    /// <see cref="SettingsGroup"/> components.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

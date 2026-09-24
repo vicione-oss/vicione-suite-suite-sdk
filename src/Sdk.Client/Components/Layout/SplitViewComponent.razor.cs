@@ -11,7 +11,7 @@ public sealed partial class SplitViewComponent : ComponentBase
     private int _leftSideGhostContentWidth;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the resizing is applied live while dragging.
+    /// Gets or sets whether the resizing is applied live while dragging.
     /// If false, the resize is only applied after the mouse button is released.
     /// </summary>
     [Parameter]

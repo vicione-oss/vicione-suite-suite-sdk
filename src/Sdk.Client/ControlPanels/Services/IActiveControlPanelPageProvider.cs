@@ -3,13 +3,12 @@
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Provides the active control panel page for a control panel
+/// Tells which page of a control panel is currently shown.
 /// </summary>
 public interface IActiveControlPanelPageProvider
 {
-    /// <returns>
-    /// Active control panel page for the control panel represented by
-    /// the given <paramref name="controlPanelRegistryItem"/>
-    /// </returns>
+    /// <summary>
+    /// Returns the page shown for the control panel of <paramref name="controlPanelRegistryItem"/>; <see langword="null"/> if none is.
+    /// </summary>
     IControlPanelPage? GetActiveControlPanelPage(IControlPanelRegistryItem controlPanelRegistryItem);
 }

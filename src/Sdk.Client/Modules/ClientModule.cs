@@ -12,8 +12,7 @@ public abstract class ClientModule : IClientModule
     private string? _moduleId;
 
     /// <summary>
-    /// Gets the unique identifier for this client module.
-    /// The value is lazily resolved from the module's <see cref="Type"/> using <see cref="ModuleIdResolver"/>.
+    /// Gets the module ID, resolved once from the assembly name by <see cref="ModuleIdResolver"/>.
     /// </summary>
     public string ModuleId
     {
@@ -25,28 +24,22 @@ public abstract class ClientModule : IClientModule
     }
 
     /// <summary>
-    /// Allows the module to configure services for the host application.
-    /// Override this property to supply a delegate that registers
-    /// services into the given <see cref="IServiceCollection"/>.
+    /// Gets the delegate that registers the module's services; <see langword="null"/>, the default, registers none.
     /// </summary>
     public virtual Action<IServiceCollection>? Configure => default;
 
     /// <summary>
-    /// Provides an optional asynchronous delegate that runs after the service provider has been built.
-    /// Override this to perform module-specific initialization, such as
-    /// seeding data or warming caches.
+    /// Gets the delegate run once the service provider is built, e.g. to warm caches; <see langword="null"/>, the default, runs none.
     /// </summary>
     public virtual Func<IServiceProvider, Task>? InitializeServices => default;
 
     /// <summary>
-    /// Provides an optional asynchronous delegate that runs after a user has been authenticated.
-    /// Override this to perform actions like loading user-specific settings or permissions.
+    /// Gets the delegate run after a user is authenticated, e.g. to load user settings; <see langword="null"/>, the default, runs none.
     /// </summary>
     public virtual Func<IServiceProvider, ClaimsPrincipal, Task>? OnUserAuthenticated => default;
 
     /// <summary>
-    /// Gets the <see cref="ModuleKey"/> representing this module,
-    /// including its <see cref="ModuleId"/> and module type (<see cref="ModuleType.Client"/>).
+    /// Gets the key of <see cref="ModuleId"/> and <see cref="ModuleType.Client"/>.
     /// </summary>
     public ModuleKey ModuleKey => new()
     {

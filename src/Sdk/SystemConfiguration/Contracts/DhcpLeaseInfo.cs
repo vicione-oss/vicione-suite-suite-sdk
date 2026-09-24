@@ -10,12 +10,12 @@
 public sealed record DhcpLeaseInfo
 {
     /// <summary>
-    /// The date and time the lease was obtained, or <see langword="null"/> if not available.
+    /// Gets or initializes the date and time the lease was obtained, or <see langword="null"/> if not available.
     /// </summary>
     public DateTimeOffset? LeaseObtained { get; init; }
 
     /// <summary>
-    /// The date and time the lease will expire, or <see langword="null"/> if not available.
+    /// Gets or initializes the date and time the lease will expire, or <see langword="null"/> if not available.
     /// </summary>
     public DateTimeOffset? LeaseExpires { get; init; }
 }

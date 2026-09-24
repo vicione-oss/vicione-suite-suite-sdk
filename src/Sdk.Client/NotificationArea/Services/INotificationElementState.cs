@@ -1,49 +1,34 @@
 ﻿namespace Sdk.Client.NotificationArea.Services;
 
 /// <summary>
-/// State for a notification element
+/// The state of a notification element, kept outside the component's render cycle.
 /// </summary>
 public interface INotificationElementState
 {
     /// <summary>
-    /// This flag indicates the active state. For example, the element is active after it has been clicked.
+    /// Gets or sets whether the element is active, e.g. after it was clicked; setting it also makes the element
+    /// <see cref="Visible"/>. Defaults to <see langword="false"/>.
     /// </summary>
-    /// <remarks>
-    /// If set to <see langword="true"/> then <see cref="Visible"/> is also set to <see langword="true"/>.
-    ///
-    /// <para>
-    /// The default value is <see langword="false"/>.
-    /// </para>
-    /// </remarks>
     bool IsActive { get; set; }
 
     /// <summary>
-    /// Returns true when the notification element should be visible.
+    /// Gets or sets whether the element is shown; hiding it also deactivates it. Defaults to <see langword="true"/>.
     /// </summary>
-    /// <remarks>
-    /// If set to <see langword="false"/> then <see cref="IsActive"/> is also set to <see langword="false"/>.
-    ///
-    /// <para>
-    /// The default value is <see langword="true"/>.
-    /// </para>
-    /// </remarks>
     bool Visible { get; set; }
 
     /// <summary>
-    /// Raised when state has been changed and no <see cref="BeginUpdate">update cycle</see> is running.
+    /// Raised when the state changed; during an <see cref="BeginUpdate">update cycle</see> it is raised once, by the final
+    /// <see cref="EndUpdate"/>.
     /// </summary>
     event Action<NotificationElementStateChangedEventArgs>? Changed;
 
     /// <summary>
-    /// Call this method to begin an update cycle.
+    /// Starts an update cycle that collects changes; every call needs a matching <see cref="EndUpdate"/>.
     /// </summary>
-    /// <remarks>
-    /// Make sure to have a corresponding call to <see cref="EndUpdate"/> to end the update cycle.
-    /// </remarks>
     void BeginUpdate();
 
     /// <summary>
-    /// Call this method to end an update cycle.
+    /// Ends an update cycle; the final one raises <see cref="Changed"/> for everything changed during the cycle.
     /// </summary>
     void EndUpdate();
 }

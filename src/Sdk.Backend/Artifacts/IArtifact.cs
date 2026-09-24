@@ -6,11 +6,8 @@
 public interface IArtifact
 {
     /// <summary>
-    /// Gets the date and time when the artifact was last modified.
+    /// Gets when the artifact was last modified; <see langword="null"/> if unknown.
     /// </summary>
-    /// <remarks>
-    /// Is <see langword="null"/> if the information is not available.
-    /// </remarks>
     DateTimeOffset? Modified { get; }
 
     /// <summary>
@@ -32,29 +29,22 @@ public interface IArtifact
     string Repository { get; }
 
     /// <summary>
-    /// Gets the size of the artifact in bytes.
+    /// Gets the size of the artifact in bytes; <see langword="null"/> if unknown.
     /// </summary>
-    /// <remarks>
-    /// Is <see langword="null"/> if size information is not available.
-    /// </remarks>
     long? Size { get; }
 
     /// <summary>
-    /// Gets the kind of artifact
+    /// Gets whether the artifact is a file or a folder.
     /// </summary>
     ArtifactKind Kind { get; }
 
     /// <summary>
-    /// Gets the unique source key identifier for the artifact.
-    /// It is used to reference the source repository the artifact belongs to.
+    /// Gets the key of the configured source the artifact comes from; see <see cref="IArtifactRepository.GetSourceKeys"/>.
     /// </summary>
     string SourceKey { get; }
 
     /// <summary>
-    /// Gets the checksum used to verify the artifact’s integrity.
+    /// Gets the checksums to verify the artifact's integrity with; <see langword="null"/> if none are available.
     /// </summary>
-    /// <remarks>
-    /// Is <see langword="null"/> if no checksum is available.
-    /// </remarks>
     IArtifactChecksum? Checksum { get; }
 }

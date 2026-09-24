@@ -16,7 +16,7 @@ public static class JSRuntimeExtensions
     extension(IJSRuntime jsRuntime)
     {
         /// <summary>
-        /// Dynamically loads one or more CSS files into the document's head by using a helper JavaScript module.
+        /// Adds the stylesheets to the document head and returns the loader module that did it.
         /// </summary>
         public async Task<IJSObjectReference> IncludeCssPaths(IEnumerable<string> cssFilePaths)
         {
@@ -31,13 +31,13 @@ public static class JSRuntimeExtensions
         }
 
         /// <summary>
-        /// Imports a JavaScript module from the specified <see cref="Uri"/>.
+        /// Imports the JavaScript module at the path of <paramref name="jsUrl"/>, which must be absolute.
         /// </summary>
         public async Task<IJSObjectReference> ImportScript(Uri jsUrl)
             => await jsRuntime.InvokeAsync<IJSObjectReference>(JsImportCommand, jsUrl.AbsolutePath).AsTask();
 
         /// <summary>
-        /// Imports a JavaScript module from the application's global 'wwwroot/js' folder.
+        /// Imports a JavaScript module from the application's global <c>js</c> folder.
         /// </summary>
         public async Task<IJSObjectReference> ImportGlobalScript(string jsFilename)
         {
@@ -47,7 +47,7 @@ public static class JSRuntimeExtensions
         }
 
         /// <summary>
-        /// Imports a JavaScript module from a specific module's 'wwwroot/js' folder.
+        /// Imports a JavaScript module from the <c>js</c> folder of module <typeparamref name="T"/>.
         /// </summary>
         public async Task<IJSObjectReference> ImportModuleScript<T>(string jsFilename)
             where T : IModule

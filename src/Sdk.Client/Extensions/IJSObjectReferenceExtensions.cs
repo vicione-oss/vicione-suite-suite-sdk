@@ -20,16 +20,15 @@ public static partial class IJSObjectReferenceExtensions
 
             try
             {
-                // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
-                // This is because the circuit has disconnected and is being disposed.
-                // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
+                // A disconnected circuit makes this call throw JSDisconnectedException, handled below; the workaround came from
+                // https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
 
                 // TODO: seems to be fixed but we need to keep an eye on it
                 await objectReference.InvokeVoidAsync(jsMethodName).ConfigureAwait(false);
             }
             catch (JSDisconnectedException)
             {
-                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+                // The circuit is gone, so there is nothing left to call: https://github.com/dotnet/aspnetcore/issues/49376
             }
             catch (Exception ex)
             {
@@ -47,16 +46,15 @@ public static partial class IJSObjectReferenceExtensions
 
             try
             {
-                // Microsoft.JSInterop.JSDisconnectedException: JavaScript interop calls cannot be issued at this time.
-                // This is because the circuit has disconnected and is being disposed.
-                // This was "solved" by https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
+                // A disconnected circuit makes this call throw JSDisconnectedException, handled below; the workaround came from
+                // https://github.com/danroth27/BestForYouRecipes/commit/8a54651e8d57337ed8e76576dd18a3efd962e215
 
                 // TODO: seems to be fixed but we need to keep an eye on it
                 return await objectReference.InvokeAsync<TResult>(jsMethodName).ConfigureAwait(false);
             }
             catch (JSDisconnectedException)
             {
-                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+                // The circuit is gone, so there is nothing left to call: https://github.com/dotnet/aspnetcore/issues/49376
             }
             catch (Exception ex)
             {
@@ -80,7 +78,7 @@ public static partial class IJSObjectReferenceExtensions
             }
             catch (JSDisconnectedException)
             {
-                // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+                // The circuit is gone, so there is nothing left to call: https://github.com/dotnet/aspnetcore/issues/49376
             }
             catch (Exception ex)
             {

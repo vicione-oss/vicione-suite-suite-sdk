@@ -35,7 +35,8 @@ public static class ModuleIdResolver
         => ResolveId(typeof(TModule));
 
     /// <summary>
-    /// Resolves the module ID from a given type's assembly name by removing the recognized suffix.
+    /// Resolves the module ID from the name of the type's <c>.Backend</c> or <c>.Client</c> assembly, e.g. <c>ViciOne.Suite.Oee</c>
+    /// for <c>ViciOne.Suite.Oee.Backend</c>.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// Thrown if the assembly name is null or does not match expected suffix conventions.
@@ -49,10 +50,10 @@ public static class ModuleIdResolver
             ?? throw new InvalidOperationException($"Failed to get assembly name for type '{moduleType}'");
 
         if (assemblyName.EndsWith(ModuleSuffixBackend, StringComparison.Ordinal))
-            return assemblyName.Replace(ModuleSuffixBackend, "", StringComparison.Ordinal);
+            return TrimSuffix(assemblyName, ModuleSuffixBackend);
 
         if (assemblyName.EndsWith(ModuleSuffixClient, StringComparison.Ordinal))
-            return assemblyName.Replace(ModuleSuffixClient, "", StringComparison.Ordinal);
+            return TrimSuffix(assemblyName, ModuleSuffixClient);
 
         if (assemblyName.EndsWith(ModuleSuffixInternal, StringComparison.Ordinal))
             throw new NotSupportedException($"Internal part '{assemblyName}' does not support Client|Backend module");
@@ -84,16 +85,16 @@ public static class ModuleIdResolver
     public static string ResolveId(string moduleAssemblyName)
     {
         if (moduleAssemblyName.EndsWith(ModuleSuffixBackend, StringComparison.Ordinal))
-            return moduleAssemblyName.Replace(ModuleSuffixBackend, "", StringComparison.Ordinal);
+            return TrimSuffix(moduleAssemblyName, ModuleSuffixBackend);
 
         if (moduleAssemblyName.EndsWith(ModuleSuffixClient, StringComparison.Ordinal))
-            return moduleAssemblyName.Replace(ModuleSuffixClient, "", StringComparison.Ordinal);
+            return TrimSuffix(moduleAssemblyName, ModuleSuffixClient);
 
         if (moduleAssemblyName.EndsWith(ModuleSuffixInternal, StringComparison.Ordinal))
-            return moduleAssemblyName.Replace(ModuleSuffixInternal, "", StringComparison.Ordinal);
+            return TrimSuffix(moduleAssemblyName, ModuleSuffixInternal);
 
         if (moduleAssemblyName.EndsWith(ModuleSuffixPublic, StringComparison.Ordinal))
-            return moduleAssemblyName.Replace(ModuleSuffixPublic, "", StringComparison.Ordinal);
+            return TrimSuffix(moduleAssemblyName, ModuleSuffixPublic);
 
         throw new InvalidOperationException($"Assembly '{moduleAssemblyName}' does not fit suite module naming conventions");
     }
@@ -102,4 +103,8 @@ public static class ModuleIdResolver
     /// Extracts the short module name (e.g. <c>MyModule</c>) from a fully-qualified module ID (e.g. <c>Suite.Core.MyModule</c>).
     /// </summary>
     public static string GetModuleName(string moduleId) => moduleId.Split('.').Last();
+
+    // Callers have checked EndsWith; only the trailing occurrence is removed, so "A.Backend.B.Backend" keeps its inner part.
+    private static string TrimSuffix(string assemblyName, string suffix)
+        => assemblyName[..^suffix.Length];
 }
