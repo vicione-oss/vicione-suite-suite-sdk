@@ -84,11 +84,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Card.resx</DependentUpon>
     </Compile>
-    <Compile Update="Components\CircularGauge\Localization\CircularGauge.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CircularGauge.resx</DependentUpon>
-    </Compile>
     <Compile Update="Components\FileDrop\Localization\FileDropComponent.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -100,10 +95,6 @@
     <EmbeddedResource Update="Components\Cards\Localization\Card.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Card.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Components\CircularGauge\Localization\CircularGauge.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CircularGauge.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Components\FileDrop\Localization\FileDropComponent.resx">
       <Generator>ResXFileCodeGenerator</Generator>

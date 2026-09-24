@@ -51,6 +51,10 @@
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.18.0`
 - `xunit.v3` packages, update to version `4.0.1`
 
+### Removed
+
+- `CircularGaugeComponent`, not used anywhere
+
 ## 3.0.0 - 2026-08-17
 
 ### Updated
