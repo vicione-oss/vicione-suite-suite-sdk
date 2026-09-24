@@ -28,9 +28,9 @@ public sealed partial class SettingsFieldSwitch
     [Parameter]
     public string? CssClass { get; set; }
 
-    private void SwitchValueChanged(bool value)
+    private async Task SwitchValueChanged(bool value)
     {
         if (ValueChanged.HasDelegate)
-            ValueChanged.InvokeAsync(value);
+            await ValueChanged.InvokeAsync(value);
     }
 }

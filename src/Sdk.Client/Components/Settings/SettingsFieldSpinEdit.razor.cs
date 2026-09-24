@@ -47,9 +47,9 @@ public sealed partial class SettingsFieldSpinEdit<TValue, TInterval, TLimit>
     [Parameter]
     public string? CssClass { get; set; }
 
-    private void SpinEditValueChanged(TValue value)
+    private async Task SpinEditValueChanged(TValue value)
     {
         if (ValueChanged.HasDelegate)
-            ValueChanged.InvokeAsync(value);
+            await ValueChanged.InvokeAsync(value);
     }
 }

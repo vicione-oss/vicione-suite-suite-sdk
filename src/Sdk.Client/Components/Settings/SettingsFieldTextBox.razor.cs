@@ -41,9 +41,9 @@ public sealed partial class SettingsFieldTextBox
     [Parameter]
     public string? Subline { get; set; }
 
-    private void TextBoxValueChanged(string? value)
+    private async Task TextBoxValueChanged(string? value)
     {
         if (ValueChanged.HasDelegate)
-            ValueChanged.InvokeAsync(value);
+            await ValueChanged.InvokeAsync(value);
     }
 }
