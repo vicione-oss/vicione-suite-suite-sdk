@@ -27,12 +27,19 @@ public static class TestDbContextFactory
         where TDbContext : ModuleDbContext, ISqliteDbContext
     {
 #pragma warning disable CA2000 // Dispose objects before losing scope
-        // Connection gets disposed by DbContext
+        // The returned context owns this connection and disposes it when the context is disposed
         var connection = new SqliteConnection($"Data Source={dataSource ?? DataSourceInMemory};");
 #pragma warning restore CA2000 // Dispose objects before losing scope
-        connection.Open();
-
-        return CreateSqliteContext<TDbContext>(connection, init);
+        try
+        {
+            connection.Open();
+            return CreateSqliteContext<TDbContext>(connection, contextOwnsConnection: true, init, optionsAction: null);
+        }
+        catch
+        {
+            connection.Dispose();
+            throw;
+        }
     }
 
     /// <summary>
@@ -40,10 +47,18 @@ public static class TestDbContextFactory
     /// </summary>
     public static TDbContext CreateSqliteContext<TDbContext>(SqliteConnection connection, bool init = true,
         Action<DbContextOptionsBuilder>? optionsAction = null)
+        where TDbContext : DbContext => CreateSqliteContext<TDbContext>(connection, contextOwnsConnection: false, init, optionsAction);
+
+    /// <summary>
+    /// Creates a SQLite DbContext for testing using an existing <see cref="SqliteConnection"/>.
+    /// When <paramref name="contextOwnsConnection"/> is <see langword="true"/>, disposing the context disposes the connection.
+    /// </summary>
+    internal static TDbContext CreateSqliteContext<TDbContext>(SqliteConnection connection, bool contextOwnsConnection,
+        bool init, Action<DbContextOptionsBuilder>? optionsAction)
         where TDbContext : DbContext
     {
         var optionsBuilder = new DbContextOptionsBuilder<TDbContext>()
-            .UseSqlite(connection)
+            .UseSqlite(connection, contextOwnsConnection)
 #if DEBUG            
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()

@@ -13,6 +13,7 @@
 
 - `Sdk.Backend.Messaging`
   - `MessagingHelper.ConsumesRequest` no longer reports non-request consumers as request consumers. It was an `All` over `FindMessageTypes`, which filters out generic message types, so a consumer with no remaining message types passed vacuously: every `IConsumer<Fault<T>>` and every `ConsumerDefinition<T>` answered `true`. It now requires at least one message type and evaluates all of them via `FindAllMessageTypes`. **Behaviour change:** `AddConsumers(MessagingHelper.ConsumesRequest, ...)` registers fewer consumers than before - fault consumers and consumer definitions are no longer registered by it, and any code that used the predicate to pick a bus or a retry policy will now classify those types differently. Classified as a behavioural defect fix under [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md), hence a minor rather than a major release
+- `Sdk.Testing`, SQLite contexts from `TestDbContextFactory` and `TestModuleDbContextRegistrar` now close their connection when disposed
 
 ### Changed
 
