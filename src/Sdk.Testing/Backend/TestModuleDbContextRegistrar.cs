@@ -38,7 +38,9 @@ public sealed class TestModuleDbContextRegistrar : IModuleDbContextRegistrar, IA
             try
             {
                 connection.Open();
-                return TestDbContextFactory.CreateSqliteContext<TSqliteImplementation>(connection, init: false);
+                // The context owns this per-scope connection; the keeper connection above stays open until DisposeAsync
+                return TestDbContextFactory.CreateSqliteContext<TSqliteImplementation>(connection, contextOwnsConnection: true,
+                    init: false, optionsAction: null);
             }
             catch
             {

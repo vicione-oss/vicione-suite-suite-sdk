@@ -1,4 +1,6 @@
-﻿using AwesomeAssertions;
+﻿using System.Data;
+using AwesomeAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Sdk.Backend.Persistence;
 using Sdk.Testing.Backend;
@@ -144,6 +146,58 @@ public sealed class TestModuleDbContextRegistrarTests : IAsyncDisposable
         typeInfos.Should().HaveCount(2);
         typeInfos.Should().Contain(t => t.ModuleId == "ModuleA" && t.ContextType == typeof(IReferenceDbContext));
         typeInfos.Should().Contain(t => t.ModuleId == "ModuleB" && t.ContextType == typeof(ITestModuleDbContext));
+    }
+
+    [Fact]
+    public void Should_close_the_scoped_connection_when_the_scope_is_disposed()
+    {
+        // Arrange
+        _registrar.Register<IReferenceDbContext, ReferenceDbContextSqlite, ReferenceDbContextPostgres>(
+            _serviceCollection, ModuleId, typeof(TestModuleDbContextRegistrarTests), "scoped_connection", true);
+
+        using var provider = _serviceCollection.BuildServiceProvider();
+        var scope = provider.CreateScope();
+        var connection = scope.ServiceProvider.GetRequiredService<IReferenceDbContext>().Database.GetDbConnection();
+
+        // Act
+        scope.Dispose();
+
+        // Assert
+        connection.State.Should().Be(ConnectionState.Closed);
+    }
+
+    [Fact]
+    public async Task Should_keep_the_shared_database_alive_for_as_long_as_the_registrar_lives()
+    {
+        // Arrange
+        _registrar.Register<IReferenceDbContext, ReferenceDbContextSqlite, ReferenceDbContextPostgres>(
+            _serviceCollection, ModuleId, typeof(TestModuleDbContextRegistrarTests), "keeper_lifetime", true);
+
+        await using var provider = _serviceCollection.BuildServiceProvider();
+        await using (var scope = provider.CreateAsyncScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<IReferenceDbContext>();
+            await dbContext.Database.ExecuteSqlRawAsync("CREATE TABLE marker (id INTEGER)", TestContext.Current.CancellationToken);
+        }
+
+        // Act
+        var existsWhileRegistrarLives = await MarkerTableExists(provider);
+        await _registrar.DisposeAsync();
+        var existsAfterRegistrarDisposed = await MarkerTableExists(provider);
+
+        // Assert
+        existsWhileRegistrarLives.Should().BeTrue();
+        existsAfterRegistrarDisposed.Should().BeFalse();
+    }
+
+    private static async Task<bool> MarkerTableExists(IServiceProvider provider)
+    {
+        await using var scope = provider.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<IReferenceDbContext>();
+        var count = await dbContext.Database
+            .SqlQueryRaw<int>("SELECT COUNT(*) AS Value FROM sqlite_master WHERE type = 'table' AND name = 'marker'")
+            .SingleAsync(TestContext.Current.CancellationToken);
+        return count == 1;
     }
 
     public async ValueTask DisposeAsync() =>
