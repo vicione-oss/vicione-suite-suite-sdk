@@ -41,13 +41,13 @@ public abstract class ItemValidatorBase<TItem> : IItemValidator<TItem>
     }
 
     /// <summary>
-    /// Validates <paramref name="item"/> and returns its errors; the dictionary is reused and cleared by the next call.
+    /// Validates <paramref name="item"/> and returns its errors in a new dictionary that later calls leave unchanged.
     /// </summary>
     public IDictionary<string, List<string>> Validate(TItem item)
     {
         _errors.Clear();
         ValidateInternal(item);
-        return _errors;
+        return _errors.ToDictionary(error => error.Key, error => error.Value.ToList());
     }
 
     /// <summary>

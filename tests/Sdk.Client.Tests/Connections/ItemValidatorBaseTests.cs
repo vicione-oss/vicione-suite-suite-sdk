@@ -83,6 +83,23 @@ public sealed class ItemValidatorBaseTests
     }
 
     [Fact]
+    public void Validate_should_return_errors_that_later_calls_leave_unchanged()
+    {
+        // Arrange
+        var validator = new MultiErrorValidator();
+
+        // Act
+        var firstErrors = validator.Validate(new TestItem { Name = null });
+        var secondErrors = validator.Validate(new TestItem { Name = " " });
+
+        // Assert
+        secondErrors.Should().NotBeSameAs(firstErrors);
+        secondErrors[nameof(TestItem.Name)].Should().NotBeSameAs(firstErrors[nameof(TestItem.Name)]);
+        firstErrors.Should().ContainKey(nameof(TestItem.Name))
+            .WhoseValue.Should().Equal("Name is required.", "Name cannot be whitespace.");
+    }
+
+    [Fact]
     public void AddError_should_accumulate_multiple_errors_for_same_key()
     {
         var multiValidator = new MultiErrorValidator();
