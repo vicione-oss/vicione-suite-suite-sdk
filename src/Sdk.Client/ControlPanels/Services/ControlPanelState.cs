@@ -54,25 +54,43 @@ public class ControlPanelState : IControlPanelState
     /// <inheritdoc/>
     public void BeginLoading()
     {
-        lock (_concurrentLock)
+        // IsLoading changes under the lock, so the call runs as an update cycle: EndUpdate raises Changed after releasing it.
+        BeginUpdate();
+        try
         {
-            _loadingCounter++;
+            lock (_concurrentLock)
+            {
+                _loadingCounter++;
 
-            if (_loadingCounter == 1)
-                IsLoading = true;
+                if (_loadingCounter == 1)
+                    IsLoading = true;
+            }
+        }
+        finally
+        {
+            EndUpdate();
         }
     }
 
     /// <inheritdoc/>
     public void EndLoading()
     {
-        lock (_concurrentLock)
+        // See BeginLoading.
+        BeginUpdate();
+        try
         {
-            if (_loadingCounter > 0)
-                _loadingCounter--;
+            lock (_concurrentLock)
+            {
+                if (_loadingCounter > 0)
+                    _loadingCounter--;
 
-            if (_loadingCounter == 0)
-                IsLoading = false;
+                if (_loadingCounter == 0)
+                    IsLoading = false;
+            }
+        }
+        finally
+        {
+            EndUpdate();
         }
     }
 
@@ -85,17 +103,18 @@ public class ControlPanelState : IControlPanelState
         if (propertyName is null)
             return;
 
-        if (UpdateLock == 0)
+        // Checked and buffered under one lock, so an EndUpdate running in between cannot strand the name in the buffer.
+        lock (_concurrentLock)
         {
-            Changed?.Invoke(new ControlPanelStateChangedEventArgs(this, new HashSet<string> { propertyName }));
-        }
-        else
-        {
-            lock (_concurrentLock)
+            if (UpdateLock > 0)
             {
                 _changedProperties.Add(propertyName);
+
+                return;
             }
         }
+
+        Changed?.Invoke(new ControlPanelStateChangedEventArgs(this, new HashSet<string> { propertyName }));
     }
 
     /// <inheritdoc/>
