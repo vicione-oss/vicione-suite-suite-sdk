@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.0 - unreleased
+## 3.1.0 - 2026-09-24
 
 ### Added
 
@@ -39,16 +39,17 @@
 
 ### Updated
 
-- `AspNetCore.SassCompiler` package, update to version `1.103.0`
+- `AspNetCore.SassCompiler` package, update to version `1.103.1`
 - `AwesomeAssertions` package, update to version `9.6.0`
 - `bunit` package, update to version `2.11.3`
 - `Microsoft.CodeAnalysis.CSharp` package, update to version `5.9.0`
 - `Microsoft.Testing.Extensions.CodeCoverage` package, update to version `18.11.0`
 - `Microsoft.Testing.Platform` package, update to version `2.4.1`
 - `NSubstitute` package, update to version `6.2.0`
-- `ViciOne.Ui.Blazor.Components` package, update to version `6.1.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.1.1`
 - `ViciOne.Ui.Design` package, update to version `2.5.0`
 - `ViciOne.Ui.MonochromeIcons` packages, update to version `4.18.0`
+- `ViciOne.Ui.Localization` package, update to version `3.6.0`
 - `xunit.v3` packages, update to version `4.0.1`
 
 ### Removed
