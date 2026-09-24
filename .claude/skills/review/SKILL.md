@@ -29,6 +29,5 @@ Review the current changes for SDK quality standards:
    - Consumers are idempotent
 
 5. **Changelog:**
-   - `CHANGELOG.md` is updated following [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
-   - Changes are categorized as Added, Changed, Deprecated, Removed, Fixed, Security
-   - Entry describes the change from a module author's perspective
+   - `CHANGELOG.md` has an entry for every change a module author can notice
+   - Entries follow the *Changelog* rules in `AGENTS.md`: unreleased header, one line from the module author's view, no implementation details
