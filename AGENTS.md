@@ -321,7 +321,32 @@ Both inherit from `ModuleDbContext` which enforces:
 
 **Deprecation policy:** Use `[Obsolete("Use XYZ instead.")]` to mark APIs for removal. Deprecated APIs stay for at least one minor release before being removed in the next major version. The obsolete message must always point to the replacement.
 
-**Behavioural change policy:** A change that keeps a signature and changes the answer is governed by [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md). Apply its direction test: a change that moves an implementation *toward* its documented contract is a defect fix (minor or patch) and needs a `### Fixed` changelog entry naming the observable difference; a change that moves the documented contract itself is breaking and needs a major bump.
+**Behavioural change policy:** A change that keeps a signature and changes the answer is governed by [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md). Apply its direction test: a change that moves an implementation *toward* its documented contract is a defect fix (minor or patch) and needs a `### Fixed` changelog entry naming the observable difference (see [Changelog](#changelog)); a change that moves the documented contract itself is breaking and needs a major bump.
+
+## Changelog
+
+`CHANGELOG.md` tells module authors what an upgrade changes for them. It follows
+[Keep a Changelog](https://keepachangelog.com/en/1.0.0/); these rules decide what an entry says.
+
+- **Where:** under the topmost `## x.y.z - unreleased` header. Released sections are never edited.
+- **Sections:** `### Added`, `### Changed`, `### Deprecated`, `### Removed`, `### Fixed`, `### Updated` (dependency versions).
+- **Form:** one line per change, ``- `Scope`, what changed``, where `Scope` is the package, namespace or type a module
+  author knows. Several entries for one scope go in a nested list under ``- `Scope` ``. Dependency updates read
+  ``- `Name` package, update to version `x.y.z` ``.
+- **Content:** the result as a module author sees it, in the present tense and in one sentence. Aim for 120 characters;
+  a longer entry usually explains something that belongs elsewhere.
+- **Leave out** what the MR and the commit message carry: how the defect came about, how the fix works ("it compared …",
+  "because …", "now copies …"), private members, tests, and reasoning about the issue or the version. A change module
+  authors cannot notice gets no entry.
+- **Behaviour change** ([ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md)): append
+  `**Behaviour change:**` and one sentence naming what a caller that relied on the old answer notices. Together with the
+  API name and the new answer, that meets the ADR's changelog obligation.
+- Entries of older releases predate these rules; do not copy their length.
+
+| Too much | Enough |
+|---|---|
+| `ItemValidatorBase.Validate` returns a new dictionary with new error lists on every call. It returned its own internal dictionary, which the next call cleared and refilled, so errors a caller kept from an earlier call changed or vanished. **Behaviour change:** … | `ItemValidatorBase.Validate` returns a new dictionary on every call. **Behaviour change:** a result kept from an earlier call no longer changes when validating again |
+| `SettingsFieldFileUpload` checks a dropped file against `Accept` the way the browser checks a picked one: tokens are trimmed, file extensions match case-insensitively … It compared the untrimmed tokens with the file extension only, so … | `SettingsFieldFileUpload` matches dropped files against `Accept` like the browser does, including MIME types and wildcards |
 
 ## Design Priorities
 
