@@ -5,8 +5,11 @@ using MassTransit.Courier.Contracts;
 namespace Sdk.Backend.Messaging;
 
 /// <summary>
-/// An abstract base class for consumers that need to track the completion or faulting of a specific routing slip.
+/// Base class of a consumer that reacts to the completion or fault of the routing slips it started with <see cref="ExecuteTracked"/>.
 /// </summary>
+/// <remarks>
+/// Tracking lives in memory in this process: a slip started before a restart, or by another process, is ignored.
+/// </remarks>
 public abstract class TrackingConsumerBase : IConsumer<RoutingSlipCompleted>, IConsumer<RoutingSlipFaulted>
 {
     private static readonly ConcurrentDictionary<Guid, Type> s_activeRoutingSlips = new();
@@ -20,8 +23,7 @@ public abstract class TrackingConsumerBase : IConsumer<RoutingSlipCompleted>, IC
            && s_activeRoutingSlips.TryRemove(trackingNumber, out _);
 
     /// <summary>
-    /// Consumes the <see cref="RoutingSlipCompleted"/> event,
-    /// forwarding it to the <see cref="ConsumeCompleted"/> method if the tracking number matches.
+    /// Forwards the event to <see cref="ConsumeCompleted"/> if this consumer type started the slip; ignores it otherwise.
     /// </summary>
     public Task Consume(ConsumeContext<RoutingSlipCompleted> context)
     {
@@ -32,7 +34,8 @@ public abstract class TrackingConsumerBase : IConsumer<RoutingSlipCompleted>, IC
     }
 
     /// <summary>
-    /// Executes a routing slip and tracks its <see cref="IItineraryBuilder.TrackingNumber"/> for future correlation.
+    /// Builds and executes the routing slip, remembering its <see cref="IItineraryBuilder.TrackingNumber"/> so that its
+    /// completion or fault reaches this consumer type.
     /// </summary>
     protected Task ExecuteTracked<T>(T source, IRoutingSlipBuilder builder)
         where T : IPublishEndpoint, ISendEndpointProvider
@@ -45,13 +48,12 @@ public abstract class TrackingConsumerBase : IConsumer<RoutingSlipCompleted>, IC
     }
 
     /// <summary>
-    /// When overridden in a derived class, handles the <see cref="RoutingSlipCompleted"/> event for a tracked routing slip.
+    /// Handles the completion of a routing slip this consumer type started.
     /// </summary>
     protected abstract Task ConsumeCompleted(ConsumeContext<RoutingSlipCompleted> context);
 
     /// <summary>
-    /// Consumes the <see cref="RoutingSlipFaulted"/> event,
-    /// forwarding it to the <see cref="ConsumeFaulted"/> method if the tracking number matches.
+    /// Forwards the event to <see cref="ConsumeFaulted"/> if this consumer type started the slip; ignores it otherwise.
     /// </summary>
     public Task Consume(ConsumeContext<RoutingSlipFaulted> context)
     {
@@ -62,7 +64,7 @@ public abstract class TrackingConsumerBase : IConsumer<RoutingSlipCompleted>, IC
     }
 
     /// <summary>
-    /// When overridden in a derived class, handles the <see cref="RoutingSlipFaulted"/> event for a tracked routing slip.
+    /// Handles the fault of a routing slip this consumer type started.
     /// </summary>
     protected abstract Task ConsumeFaulted(ConsumeContext<RoutingSlipFaulted> context);
 }

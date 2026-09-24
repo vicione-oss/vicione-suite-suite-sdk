@@ -12,7 +12,7 @@ public sealed partial class SwitchExpander : ComponentBase
     public bool Enabled { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether a loading indication should be rendered. When <see langword="true"/>, user input is blocked.
+    /// Gets or sets whether a loading indication should be rendered. When <see langword="true"/>, user input is blocked.
     /// </summary>
     [Parameter]
     public bool IsLoading { get; set; }
@@ -28,7 +28,7 @@ public sealed partial class SwitchExpander : ComponentBase
     private async Task SwitchValueChanged(bool value)
     {
         if (IsLoading)
-            return; // do not allow value change while loading is indicated
+            return;
 
         if (ValueChanged.HasDelegate)
             await ValueChanged.InvokeAsync(value);

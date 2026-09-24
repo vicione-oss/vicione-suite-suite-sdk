@@ -2,7 +2,7 @@
 
 namespace TestModule.Backend.Contracts;
 
-#pragma warning disable CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class Departments
 {
     [Key]
@@ -15,4 +15,4 @@ public class Departments
     public IList<DepartmentManager> dept_manager { get; init; }
     public IList<DepartmentEmployees> dept_empl { get; init; }
 }
-#pragma warning restore CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

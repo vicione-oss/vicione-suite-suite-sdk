@@ -1,12 +1,14 @@
 namespace Sdk.Client.ControlPanels.Models;
 
-/// <inheritdoc cref="ISaveResult"/>
-/// <param name="message">Success message</param>
+/// <summary>
+/// The result of a successful save.
+/// </summary>
+/// <param name="message">An optional message to show; <see langword="null"/> shows none.</param>
 [ExcludeFromCodeCoverage]
 public class SaveSuccessResult(string? message = null) : ISaveResult
 {
     /// <summary>
-    /// Success message
+    /// Gets the optional message to show.
     /// </summary>
     public string? Message => message;
 }

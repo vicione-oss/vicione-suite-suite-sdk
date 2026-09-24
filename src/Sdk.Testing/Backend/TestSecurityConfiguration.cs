@@ -13,7 +13,7 @@ namespace Sdk.Testing.Backend;
 public static class TestSecurityConfiguration
 {
     /// <summary>
-    /// Adds fake security services to the service collection to bypass authentication and authorization during tests.
+    /// Replaces authentication and authorization so every request is authenticated as an Administrator and every policy passes.
     /// </summary>
     public static IServiceCollection AddTestSecurity(this IServiceCollection services)
     {
@@ -27,7 +27,7 @@ public static class TestSecurityConfiguration
     }
 
     /// <summary>
-    /// fake authentication to let client access authorized controllers
+    /// Succeeds the first requirement only; a policy with several requirements still fails through this handler.
     /// </summary>
     private sealed class FakeAccessLevelHandler : IAuthorizationHandler
     {

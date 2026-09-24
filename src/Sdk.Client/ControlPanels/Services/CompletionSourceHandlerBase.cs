@@ -24,6 +24,10 @@ namespace Sdk.Client.ControlPanels.Services;
 /// Event subscriptions must be registered in the subclass constructor via
 /// <see cref="Register{TEvent}"/> and are automatically cleaned up on disposal.
 /// </para>
+/// <para>
+/// A wait that ends by cancellation, through the token or by disposing the handler, yields
+/// <see cref="CreateSuccessResult"/>, not an error.
+/// </para>
 /// </remarks>
 /// <typeparam name="TServiceResult">
 /// The result type returned to the caller after command completion or failure.
@@ -44,7 +48,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// events and tracks the subscription for automatic disposal.
     /// </summary>
     /// <typeparam name="TEvent">The event type to consume.</typeparam>
-    /// <exception cref="InvalidOperationException">Thrown if the current instance does not implement <see cref="IEventConsumer{TEvent}"/>.</exception>"
+    /// <exception cref="InvalidOperationException">Thrown if this instance is no <see cref="IEventConsumer{TEvent}"/>.</exception>
     protected void Register<TEvent>() where TEvent : class, IEvent
     {
         if (this is not IEventConsumer<TEvent> handler)
@@ -150,7 +154,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// </summary>
     /// <typeparam name="TCommand">A command type that carries a <see cref="Guid"/> correlation ID.</typeparam>
     /// <param name="command">The command to dispatch.</param>
-    /// <param name="cancellationToken">Token to cancel the wait.</param>
+    /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     /// <returns>
     /// <see cref="CreateSuccessResult()"/> on success, or <see cref="CreateErrorResult(string, int?)"/>
     /// on backend error or timeout.
@@ -166,7 +170,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <typeparam name="TCommand">A command type that carries a <see cref="Guid"/> correlation ID.</typeparam>
     /// <param name="command">The command to dispatch.</param>
     /// <param name="errorOccured">Factory invoked with the backend <see cref="ErrorInfo"/> when the operation fails.</param>
-    /// <param name="cancellationToken">Token to cancel the wait.</param>
+    /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Func<ErrorInfo, TServiceResult> errorOccured, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, errorOccured, null, cancellationToken);
@@ -178,7 +182,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <typeparam name="TCommand">A command type that carries a <see cref="Guid"/> correlation ID.</typeparam>
     /// <param name="command">The command to dispatch.</param>
     /// <param name="afterSend">Optional async continuation to run immediately after the command is sent.</param>
-    /// <param name="cancellationToken">Token to cancel the wait.</param>
+    /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Func<CancellationToken, Task>? afterSend = null, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, CreateErrorResult, afterSend, cancellationToken);
@@ -200,7 +204,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <typeparam name="TCommand">An instance-dependent command type that carries a <see cref="Guid"/> correlation ID.</typeparam>
     /// <param name="command">The command to dispatch.</param>
     /// <param name="instanceId">The target instance ID forwarded to <see cref="IUiMediator"/>.</param>
-    /// <param name="cancellationToken">Token to cancel the wait.</param>
+    /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Guid instanceId, CancellationToken cancellationToken = default)
         where TCommand : class, IInstanceDependentCommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, instanceId, CreateErrorResult, null, cancellationToken);
@@ -213,7 +217,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="command">The command to dispatch.</param>
     /// <param name="instanceId">The target instance ID forwarded to <see cref="IUiMediator"/>.</param>
     /// <param name="errorOccured">Factory invoked with the backend <see cref="ErrorInfo"/> when the operation fails.</param>
-    /// <param name="cancellationToken">Token to cancel the wait.</param>
+    /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Guid instanceId, Func<ErrorInfo, TServiceResult> errorOccured, CancellationToken cancellationToken = default)
         where TCommand : class, IInstanceDependentCommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, instanceId, errorOccured, null, cancellationToken);
@@ -234,8 +238,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
         var taskCompletionSource = new TaskCompletionSource<ErrorInfo?>();
         _taskCompletionSourceMap[correlationId] = taskCompletionSource;
 
-        // Post-add guard: Dispose may have set _disposed and completed its drain
-        // between the pre-check and the map insertion above.
+        // Dispose may have drained the map before this entry was added; cancel it here so it cannot wait forever.
         if (_disposed)
         {
             _taskCompletionSourceMap.TryRemove(correlationId, out _);
@@ -252,7 +255,7 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
                 }
                 catch (Exception ex)
                 {
-                    // Ensure the caller receives a proper ISaveResult on failure
+                    // A failed send becomes an error result, like a backend error, rather than an exception.
                     return CreateErrorResult(new ErrorInfo(0, ex.Message));
                 }
             }

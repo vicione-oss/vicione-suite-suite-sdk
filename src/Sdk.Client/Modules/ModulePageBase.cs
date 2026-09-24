@@ -26,7 +26,8 @@ public abstract class ModulePageBase<TClientModule> : ModuleComponentBase<TClien
     protected virtual string PageTitle { get; } = typeof(TClientModule).Name;
 
     /// <summary>
-    /// Method invoked when the component is initialized. This method is sealed and orchestrates the initialization sequence.
+    /// Shows <see cref="PageTitle"/> in the title bar and, if the title changed, deactivates all notification elements;
+    /// then calls <see cref="OnAfterInitialized"/>.
     /// </summary>
     protected sealed override void OnInitialized()
     {
@@ -40,7 +41,7 @@ public abstract class ModulePageBase<TClientModule> : ModuleComponentBase<TClien
     private void OnModulePageInitialized()
     {
         if (Equals(LayoutService.TitleBarAppName, PageTitle))
-            return; // no change
+            return;
 
         LayoutService.TitleBarAppName = PageTitle;
         if (!string.IsNullOrEmpty(LayoutService.TitleBarAppName))

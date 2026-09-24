@@ -1,12 +1,12 @@
 ﻿namespace Sdk.Client.Wizards.Components;
 
 /// <summary>
-/// Arguments for <see cref="WizardPage{TState}.OnAfterRenderCycle"/> event
+/// Arguments of <see cref="WizardPage{TState}.OnAfterRenderCycle"/>.
 /// </summary>
 public sealed class WizardPageAfterRenderCycleEventArgs(bool firstRender) : EventArgs
 {
     /// <summary>
-    /// <see langword="true"/> when the render cycle is the first render, otherwise <see langword="false"/>.
+    /// Gets whether this is the page's first render.
     /// </summary>
     public bool FirstRender => firstRender;
 }

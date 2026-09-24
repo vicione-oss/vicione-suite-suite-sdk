@@ -34,15 +34,15 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
     /// </summary>
     [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; }
     /// <summary>
-    /// Raised when an <b>accepted</b> drag enters the drop zone
+    /// Gets or sets the callback raised when an <b>accepted</b> drag enters the drop zone.
     /// </summary>
     [Parameter] public EventCallback OnDragEnter { get; set; }
     /// <summary>
-    /// Raised when an <b>accepted</b> drag leaves the drop zone
+    /// Gets or sets the callback raised when an <b>accepted</b> drag leaves the drop zone.
     /// </summary>
     [Parameter] public EventCallback OnDragLeave { get; set; }
     /// <summary>
-    /// Raised when a file has been dropped
+    /// Gets or sets the callback raised when a file has been dropped.
     /// </summary>
     [Parameter] public EventCallback OnDrop { get; set; }
 
@@ -66,6 +66,7 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
             }
             catch (JSDisconnectedException)
             {
+                // The circuit is gone, so there is no JavaScript side left to update:
                 // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
             }
             catch (Exception exception)
@@ -92,9 +93,8 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
     }
 
     /// <summary>
-    /// Sets the reference to the input file element.
+    /// Connects the drop zone to the input file element that receives dropped files; re-renders only if the element changed.
     /// </summary>
-    /// <param name="inputFileElementReference">The reference to the input file element.</param>
     public void SetInputFileElementReference(ElementReference? inputFileElementReference)
     {
         if (_inputFileElementReference?.Id != inputFileElementReference?.Id)
@@ -138,9 +138,8 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
     }
 
     /// <summary>
-    /// Invokes the event "OnDragEnter"
+    /// Called from JavaScript when a drag enters the drop zone; raises <see cref="OnDragEnter"/>.
     /// </summary>
-    /// <returns></returns>
     [JSInvokable]
     public async Task DragEnter()
     {
@@ -149,9 +148,8 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
     }
 
     /// <summary>
-    /// Invokes the event "OnDragLeave"
+    /// Called from JavaScript when a drag leaves the drop zone; raises <see cref="OnDragLeave"/>.
     /// </summary>
-    /// <returns></returns>
     [JSInvokable]
     public async Task DragLeave()
     {
@@ -160,9 +158,8 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
     }
 
     /// <summary>
-    /// Invokes the event "OnDrop"
+    /// Called from JavaScript when files are dropped on the zone; raises <see cref="OnDrop"/>.
     /// </summary>
-    /// <returns></returns>
     [JSInvokable]
     public async Task Drop()
     {

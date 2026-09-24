@@ -2,9 +2,16 @@ using Sdk.Client.Models;
 
 namespace Sdk.Client.Samples.Shared.Models;
 
-internal sealed class TestUploadTicket : IUploadTicket
+// A ticket stands for one upload: SettingsFieldFileUpload creates one per picked file, passes its token to the upload
+// handler and calls Cancel to abort it. The type also serves as the marker T that pairs the upload field with its
+// IStreamUploadHandler. The field disposes its current ticket when it is disposed itself.
+internal sealed class TestUploadTicket : IUploadTicket, IDisposable
 {
-    public CancellationToken CancellationToken { get; set; }
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
-    public void Cancel() { }
+    public CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+    public void Cancel() => _cancellationTokenSource.Cancel();
+
+    public void Dispose() => _cancellationTokenSource.Dispose();
 }

@@ -1,6 +1,6 @@
 ﻿namespace Sdk.Client.ControlPanels.Components;
 
 /// <summary>
-/// Interface to create control panel constraints in other generic types.
+/// Marks a component as a control panel, for use in generic constraints.
 /// </summary>
 public interface IControlPanel : IComponent;

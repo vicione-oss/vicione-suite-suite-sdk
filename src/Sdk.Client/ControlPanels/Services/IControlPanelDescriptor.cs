@@ -3,36 +3,29 @@
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Describes common characteristics of a control panel
+/// Describes how a control panel is presented in navigation.
 /// </summary>
 public interface IControlPanelDescriptor
 {
     /// <summary>
-    /// Title of the settings provided by the control panel
+    /// Gets the control panel's title.
     /// </summary>
     string Title { get; }
 
     /// <summary>
-    /// URL to the icon representing the settings provided by the control panel
+    /// Gets the URL of the control panel's icon; <see langword="null"/> for none.
     /// </summary>
     Uri? IconUrl { get; }
 
     /// <summary>
-    /// Optional position in the list of all control panels of a <see cref="IControlPanelCategoryDescriptor">category</see>
+    /// Gets the control panel's position within its <see cref="IControlPanelCategoryDescriptor">category</see>; lower positions
+    /// render first. Control panels without a position follow, ordered by <see cref="Title"/>. Defaults to <see langword="null"/>.
     /// </summary>
-    /// <remarks>
-    /// <para>This property affects the render order.</para>
-    /// <para>
-    /// When Position X of control panel A is lower than Position Y of control panel B then control panel A is rendered first.
-    /// In a vertical representation this would mean that control panel A is displayed above control panel B.
-    /// </para>
-    /// <para>If not set then the control panel is rendered after all control panels having a position in alphabetic order using <see cref="Title"/>.</para>
-    /// </remarks>
     [ExcludeFromCodeCoverage]
     int? Position => null;
 
     /// <summary>
-    /// True when the control panel should be displayed in navigation, otherwise false.
+    /// Gets whether the control panel is listed in navigation. Defaults to <see langword="true"/>.
     /// </summary>
     /// <remarks>
     /// Hidden control panels can be shown dynamically from code via <see cref="IControlPanelRequest"/>.

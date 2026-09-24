@@ -6,7 +6,8 @@ using Sdk.Client.Services;
 namespace Sdk.Client.Modules;
 
 /// <summary>
-/// An abstract base class for Blazor components within modules that require automatic loading and unloading of component-specific resources.
+/// Base class of a module component that loads its <see cref="Resources"/> on first render and unloads the non-global ones
+/// on dispose.
 /// </summary>
 public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, IAsyncDisposable
 {
@@ -75,7 +76,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
             LogIncludeLink(Logger, GetType().Name, resource);
         }
 
-        // global scripts won't be removed and loading it into one operation was necessary to find the bundle issue
+        // Global scripts are never unloaded; loading them in a call of their own was needed to track down the bundle issue.
         await IncludeScripts(resources, ResourceDeclaration.Global);
 
         await IncludeScripts(resources, ResourceDeclaration.Local);
@@ -137,7 +138,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
         }
         catch (JSDisconnectedException)
         {
-            // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+            // The circuit is gone, so there is nothing left to call: https://github.com/dotnet/aspnetcore/issues/49376
         }
         catch (Exception ex)
         {
@@ -150,7 +151,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
         }
         catch (JSDisconnectedException)
         {
-            // swallow it https://github.com/dotnet/aspnetcore/issues/49376
+            // The circuit is gone, so there is nothing left to call: https://github.com/dotnet/aspnetcore/issues/49376
         }
         catch (Exception ex)
         {
@@ -161,11 +162,9 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
     }
 
     /// <summary>
-    /// Provides a hook for derived classes to perform their own asynchronous disposal logic.
+    /// Asynchronous disposal hook for derived classes, called by <see cref="DisposeAsync()"/> after the component's
+    /// non-global resources are unloaded; a <see cref="JSDisconnectedException"/> from it is ignored and anything else is logged.
     /// </summary>
-    /// <remarks>
-    /// This method is called from within <see cref="DisposeAsync()"/>.
-    /// </remarks>
     protected virtual ValueTask DisposeInternal() => ValueTask.CompletedTask;
 
     [LoggerMessage(EventId = 1, Level = LogLevel.Debug, Message = "{className} - OnAfterRenderAsync loading resources on first render")]

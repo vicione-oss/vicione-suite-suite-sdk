@@ -16,6 +16,10 @@ public sealed class ModuleIdResolverTests
         [InlineData("MyModule.Client", "MyModule")]
         [InlineData("MyModule.Internal", "MyModule")]
         [InlineData("MyModule.Public", "MyModule")]
+        [InlineData("Acme.Backend.Tools.Backend", "Acme.Backend.Tools")]
+        [InlineData("Acme.Client.Kit.Client", "Acme.Client.Kit")]
+        [InlineData("Acme.Internal.Core.Internal", "Acme.Internal.Core")]
+        [InlineData("Acme.Public.Api.Public", "Acme.Public.Api")]
         public void Should_remove_known_suffixes(string input, string expected)
         {
             // Arrange + Act
@@ -101,6 +105,22 @@ public sealed class ModuleIdResolverTests
 
             // Assert
             result.Should().Be("ViciOne.Suite.TestModule");
+        }
+
+        [Theory]
+        [InlineData("Acme.Backend.Tools.Backend", "Acme.Backend.Tools")]
+        [InlineData("Acme.Client.Kit.Client", "Acme.Client.Kit")]
+        public void Should_remove_only_the_trailing_suffix(string assemblyName, string expected)
+        {
+            // Arrange
+            var assembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+            var type = assembly.DefineDynamicModule(assemblyName).DefineType("Module").CreateType();
+
+            // Act
+            var result = ModuleIdResolver.ResolveId(type);
+
+            // Assert
+            result.Should().Be(expected);
         }
 
         [Fact]

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Sdk.Client.Tests.Modules;
 
-public class ModuleAssetHelperTests
+public static class ModuleAssetHelperTests
 {
     public sealed class GetGlobalJsPath
     {
@@ -189,20 +189,26 @@ public class ModuleAssetHelperTests
         public void Should_fallback_to_manifest_module_name_when_name_is_null()
         {
             // Arrange
-            var assembly = SubstituteAssemblyWithoutName();
+            var assembly = new AssemblyWithoutName("Fake.Module.dll");
 
             // Act
             var result = ModuleAssetHelper.GetModuleManifestName(assembly);
 
             // Assert
-            result.Should().NotBeEmpty();
+            result.Should().Be("Fake.Module");
         }
 
-        private static Assembly SubstituteAssemblyWithoutName()
+        // Stands in for a WebAssembly assembly whose AssemblyName carries no name.
+        private sealed class AssemblyWithoutName(string manifestModuleName) : Assembly
         {
-            // Trick: use current assembly but override GetName().Name to null (simulate wasm scenario)
-            var assembly = typeof(ModuleAssetHelperTests).Assembly;
-            return assembly; // In practice, you'd need a dynamic assembly mock, simplified here
+            public override Module ManifestModule { get; } = new NamedModule(manifestModuleName);
+
+            public override AssemblyName GetName() => new();
+        }
+
+        private sealed class NamedModule(string name) : Module
+        {
+            public override string Name { get; } = name;
         }
     }
 }

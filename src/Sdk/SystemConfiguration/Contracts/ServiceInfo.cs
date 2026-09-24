@@ -7,12 +7,12 @@
 public sealed record ServiceInfo
 {
     /// <summary>
-    /// The service name.
+    /// Gets or initializes the service name.
     /// </summary>
     public required string Name { get; init; }
 
     /// <summary>
-    /// The current state of the service.
+    /// Gets or initializes the current state of the service.
     /// </summary>
     public required ServiceState State { get; init; }
 }

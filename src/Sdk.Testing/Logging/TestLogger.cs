@@ -4,7 +4,8 @@ using Microsoft.Extensions.Logging;
 namespace Sdk.Testing.Logging;
 
 /// <summary>
-/// An in-memory logger implementation for testing purposes.
+/// Records every entry at or above the given minimum level in <see cref="Entries"/>, and the latest one in the
+/// <see cref="LogLevel"/>, <see cref="EventId"/>, <see cref="Exception"/> and <see cref="Message"/> properties.
 /// </summary>
 public sealed class TestLogger<T>(LogLevel logLevel = LogLevel.Trace) : ILogger<T>, IDisposable
 {
@@ -36,24 +37,20 @@ public sealed class TestLogger<T>(LogLevel logLevel = LogLevel.Trace) : ILogger<
     public string? Message { get; private set; }
 
     /// <summary>
-    /// Gets the concurrent queue containing all captured log entries.
+    /// Gets all captured entries in logging order; safe to read while other threads log.
     /// </summary>
     public ConcurrentQueue<TestLogEntry> Entries { get; } = new();
 
     /// <summary>
-    /// Begins a logical operation scope. This implementation returns a new disposable logger instance.
+    /// Returns a throw-away disposable; scopes and their state are not recorded.
     /// </summary>
     public IDisposable BeginScope<TState>(TState state) where TState : notnull
         => new TestLogger<T>(_logLevel);
 
-    /// <summary>
-    /// Checks if the given <paramref name="logLevel"/> is enabled.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsEnabled(LogLevel logLevel) => logLevel >= _logLevel;
 
-    /// <summary>
-    /// Writes a log entry if the specified log level is enabled.
-    /// </summary>
+    /// <inheritdoc/>
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         if (IsEnabled(logLevel))
@@ -67,12 +64,12 @@ public sealed class TestLogger<T>(LogLevel logLevel = LogLevel.Trace) : ILogger<
     }
 
     /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// Does nothing; the logger holds no resources.
     /// </summary>
     public void Dispose() { }
 
     /// <summary>
-    /// Clears all captured log entries.
+    /// Clears <see cref="Entries"/>; the properties describing the latest entry keep their values.
     /// </summary>
     public void Clear()
         => Entries.Clear();

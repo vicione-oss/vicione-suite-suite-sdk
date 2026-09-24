@@ -9,7 +9,7 @@ namespace Sdk.SystemConfiguration.Commands;
 public record ControlService(string ServiceName, ServiceCommand Command) : IInstanceDependentCommand
 {
     /// <summary>
-    /// Gets the unique identifier for this command instance, used for correlation.
+    /// Gets or initializes the unique identifier for this command instance, used for correlation.
     /// </summary>
     public Guid CorrelationId { get; init; } = Guid.NewGuid();
 }

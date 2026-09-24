@@ -3,6 +3,6 @@
 namespace Sdk.Client.Wizards.Components;
 
 /// <summary>
-/// Component that implements a wizard page based on <typeparamref name="TState"/>
+/// Marks a component as a wizard page whose state is <typeparamref name="TState"/>.
 /// </summary>
 public interface IWizardPage<TState> : IComponent where TState : IWizardPageState;

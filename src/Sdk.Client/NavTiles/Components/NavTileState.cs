@@ -12,12 +12,12 @@ public class NavTileState
     private string? _linkTarget;
 
     /// <summary>
-    /// Gets the horizontal span of the tile, which determines its width.
+    /// Gets or initializes the horizontal span of the tile, which determines its width.
     /// </summary>
     public NavTileSpan HorizontalSpan { get; init; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the tile is enabled and interactive.
+    /// Gets or sets whether the tile is enabled and interactive.
     /// </summary>
     public bool Enabled
     {
@@ -34,7 +34,7 @@ public class NavTileState
     }
 
     /// <summary>
-    /// Gets a value indicating whether the tile is currently in a loading state.
+    /// Gets whether the tile is currently in a loading state.
     /// </summary>
     public bool IsLoading { get; private set; }
 

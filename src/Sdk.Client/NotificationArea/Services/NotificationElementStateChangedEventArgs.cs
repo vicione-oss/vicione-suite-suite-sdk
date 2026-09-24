@@ -1,7 +1,7 @@
 namespace Sdk.Client.NotificationArea.Services;
 
 /// <summary>
-/// Arguments for event <see cref="INotificationElementState.Changed"/>
+/// Arguments of <see cref="INotificationElementState.Changed"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public sealed class NotificationElementStateChangedEventArgs(INotificationElementState sender, IEnumerable<string> propertyNames)

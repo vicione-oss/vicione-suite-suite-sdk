@@ -9,12 +9,12 @@ namespace Sdk.SystemConfiguration.Requests;
 public sealed record GetSystemConfigurationResponse : IResponse
 {
     /// <summary>
-    /// Gets the system configuration if the request was successful.
+    /// Gets or initializes the system configuration if the request was successful.
     /// </summary>
     public Contracts.SystemConfiguration? Configuration { get; init; }
 
     /// <summary>
-    /// Gets error information if the request failed, otherwise <see langword="null"/>.
+    /// Gets or initializes error information if the request failed, otherwise <see langword="null"/>.
     /// </summary>
     public ErrorInfo? RequestError { get; init; }
 }

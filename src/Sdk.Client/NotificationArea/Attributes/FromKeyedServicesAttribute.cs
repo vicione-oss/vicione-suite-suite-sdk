@@ -5,7 +5,8 @@ using Sdk.Client.NotificationArea.Components;
 namespace Sdk.Client.NotificationArea.Attributes;
 
 /// <summary>
-/// Indicates that the parameter should be bound using the keyed service registered with the <see cref="NotificationElementServiceKey{TClientModule, TNotificationElement}"/>.
+/// Injects the parameter from the keyed service registered under
+/// <see cref="NotificationElementServiceKey{TClientModule, TNotificationElement}"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
 [ExcludeFromCodeCoverage]

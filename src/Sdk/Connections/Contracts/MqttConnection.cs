@@ -63,7 +63,7 @@ public sealed record MqttConnection : IConnection
     public string? ClientCertificateKeyPassword { get; set; }
 
     /// <summary>
-    /// Gets or sets the value which determines whether the client should accept untrusted or self-signed certificates when establishing a secure connection.
+    /// Gets or sets whether the client accepts untrusted or self-signed broker certificates.
     /// </summary>
     public bool AllowUntrustedCertificates { get; set; }
 
@@ -83,12 +83,12 @@ public sealed record MqttConnection : IConnection
     public string? WillMessage { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the "Last Will and Testament" (LWT) message should be retained by the broker.
+    /// Gets or sets whether the "Last Will and Testament" (LWT) message should be retained by the broker.
     /// </summary>
     public bool WillRetain { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the client should establish a clean session with the broker.
+    /// Gets or sets whether the client should establish a clean session with the broker.
     /// </summary>
     public bool CleanSession { get; set; } = true;
 

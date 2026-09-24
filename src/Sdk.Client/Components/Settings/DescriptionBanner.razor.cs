@@ -17,31 +17,25 @@ public sealed partial class DescriptionBanner : ComponentBase
     private DescriptionBannerSectionId SectionId { get; set; } = default!;
 
     /// <summary>
-    /// CSS class that defines the icon displayed next to the <see cref="Title"/>
+    /// Gets or sets the CSS class of the icon next to the <see cref="Title"/>; takes priority over <see cref="IconUrl"/>.
     /// </summary>
-    /// <remarks>
-    /// This property has priority over <see cref="IconUrl"/>.
-    /// </remarks>
     [Parameter]
     public string? IconCssClass { get; set; }
 
     /// <summary>
-    /// Url of the icon displayed next to the <see cref="Title"/>
+    /// Gets or sets the URL of the icon next to the <see cref="Title"/>; used only when <see cref="IconCssClass"/> is not set.
     /// </summary>
-    /// <remarks>
-    /// This property has lower priority than <see cref="IconCssClass"/>.
-    /// </remarks>
     [Parameter]
     public Uri? IconUrl { get; set; }
 
     /// <summary>
-    /// Title displayed next to the icon
+    /// Gets or sets the title displayed next to the icon.
     /// </summary>
     [Parameter, EditorRequired]
     public string Title { get; set; }
 
     /// <summary>
-    /// Description content
+    /// Gets or sets the description text.
     /// </summary>
     [Parameter, EditorRequired]
     public RenderFragment ChildContent { get; set; }

@@ -27,7 +27,7 @@ public interface IWizardContent<TContext> : IComponent
     EventCallback<bool> VisibleChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the wizard allows exit at any time.
+    /// Gets or sets whether the wizard allows exit at any time.
     /// </summary>
     bool AllowExit { get; set; }
 }

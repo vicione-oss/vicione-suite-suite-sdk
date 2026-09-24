@@ -135,7 +135,7 @@ public class MassTransitTesterTests
                 ThrowException = true
             };
 
-            // Act 
+            // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() => tester.TestCommandFault<TestConsumerCommand, TestCommandConsumer>(command));
 
             // Assert
@@ -228,7 +228,7 @@ public class MassTransitTesterTests
                 ThrowException = true
             };
 
-            // Act 
+            // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() => tester.TestInstanceDependentCommandFault<TestInstanceConsumerCommand, TestInstanceCommandConsumer>(command));
 
             // Assert

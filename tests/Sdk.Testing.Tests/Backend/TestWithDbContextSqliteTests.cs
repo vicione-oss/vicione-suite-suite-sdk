@@ -26,6 +26,54 @@ public class TestWithDbContextSqliteTests : TestWithDbContextSqlite<TheDbContext
     }
 }
 
+public class TestWithDbContextSqliteDisposeTests
+{
+    [Fact]
+    public async Task Should_run_both_hooks_once_when_disposed_asynchronously()
+    {
+        // Arrange
+        var test = new RecordingTest();
+
+        // Act
+        await test.DisposeAsync();
+        await test.DisposeAsync();
+
+        // Assert
+        test.Calls.Should().Equal("DisposeAsyncCore", "Dispose(False)");
+    }
+
+    [Fact]
+    public void Should_run_the_sync_hook_once_when_disposed_synchronously()
+    {
+        // Arrange
+        var test = new RecordingTest();
+
+        // Act
+        test.Dispose();
+        test.Dispose();
+
+        // Assert
+        test.Calls.Should().Equal("Dispose(True)");
+    }
+
+    private sealed class RecordingTest : TestWithDbContextSqlite<TheDbContextSqlite>
+    {
+        public List<string> Calls { get; } = [];
+
+        protected override async ValueTask DisposeAsyncCore()
+        {
+            Calls.Add(nameof(DisposeAsyncCore));
+            await base.DisposeAsyncCore();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Calls.Add($"Dispose({disposing})");
+            base.Dispose(disposing);
+        }
+    }
+}
+
 public interface ITheDbContext : IModuleDbContext;
 
 public class TheDbContext : ModuleDbContext, ITheDbContext

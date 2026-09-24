@@ -6,72 +6,72 @@
 public interface IInstanceInformation
 {
     /// <summary>
-    /// Unique identifier of the instance
+    /// Gets the instance's unique ID.
     /// </summary>
     Guid Id { get; }
 
     /// <summary>
-    /// Type of the instance, such as backend or client
+    /// Gets the instance's role: standalone, master or slave.
     /// </summary>
     InstanceType Type { get; }
 
     /// <summary>
-    /// Optional display name of the instance, if provided
+    /// Gets the instance's display name; <see langword="null"/> if none is set.
     /// </summary>
     string? Name { get; }
 
     /// <summary>
-    /// Pre-formatted name for the instance, suitable for UI display or logging
+    /// Gets the name formatted for display or logging.
     /// </summary>
     string FormattedName { get; }
 
     /// <summary>
-    /// Optional description of the instance, such as its purpose or environment
+    /// Gets the instance's description, e.g. its purpose; <see langword="null"/> if none is set.
     /// </summary>
     string? Description { get; }
 
     /// <summary>
-    /// Unique serial number assigned to the instance
+    /// Gets the instance's unique serial number.
     /// </summary>
     string SerialNumber { get; }
 
     /// <summary>
-    /// The system type of the instance's underlying platform or environment
+    /// Gets the type of the platform the instance runs on.
     /// </summary>
     string SystemType { get; }
 
     /// <summary>
-    /// Read-only collection of module identifiers that are installed on this instance
+    /// Gets the IDs of the modules installed on the instance.
     /// </summary>
     IReadOnlyCollection<string> InstalledModules { get; }
 
     /// <summary>
-    /// Timestamp when this instance was first registered in the system, if available
+    /// Gets when the instance was first registered; <see langword="null"/> if unknown.
     /// </summary>
     DateTimeOffset? FirstTimeRegistered { get; }
 
     /// <summary>
-    /// Timestamp when this instance was last registered or updated in the system, if available
+    /// Gets when the instance was last registered or updated; <see langword="null"/> if unknown.
     /// </summary>
     DateTimeOffset? LastRegistered { get; }
 
     /// <summary>
-    /// Version of the instance's software
+    /// Gets the version of the instance's software.
     /// </summary>
     string Version { get; }
 
     /// <summary>
-    /// Source control branch name the instance is running from, if available
+    /// Gets the source control branch the instance was built from; <see langword="null"/> if unknown.
     /// </summary>
     string? BranchName { get; }
 
     /// <summary>
-    /// Version of the SDK that this instance was built with
+    /// Gets the version of the SDK the instance was built with.
     /// </summary>
     string SdkVersion { get; }
 
     /// <summary>
-    /// Value indicating whether the instance is running in recovery mode without loading its modules
+    /// Gets whether the instance runs in recovery mode, without loading its modules.
     /// </summary>
     bool InRecoveryMode { get; }
 }

@@ -11,12 +11,12 @@ public partial class MiniChartComponent : ComponentBase
     [Parameter] public MiniChartOrientation Orientation { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to display percentage values for each data point.
+    /// Gets or sets whether to display percentage values for each data point.
     /// </summary>
     [Parameter] public bool ShowPercentages { get; set; }
 
     /// <summary>
-    /// Gets or sets the child content of the component, which should consist of one or more <see cref="MiniChartValueComponent"/> instances.
+    /// Gets or sets the chart's values: one or more <see cref="MiniChartValueComponent"/> instances.
     /// </summary>
     [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; }
 }

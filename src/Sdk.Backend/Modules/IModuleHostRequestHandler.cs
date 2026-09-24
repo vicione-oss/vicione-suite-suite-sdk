@@ -1,22 +1,18 @@
 ﻿namespace Sdk.Backend.Modules;
 
 /// <summary>
-/// Defines a contract for modules to handle requests from the module host,
-/// particularly for system-level lifecycle events.
+/// Lets a module clean up before the host restarts the system for a factory reset or a backup restore.
+/// Register an implementation with <c>AddModuleHostRequestHandler</c>.
 /// </summary>
 public interface IModuleHostRequestHandler
 {
     /// <summary>
-    /// This callback is triggered when reset to factory settings is requested.
-    /// Module can react on to do cleanup work before system will be restarted
-    /// like perform moneo offboarding
+    /// Called when a reset to factory settings is requested, before the system restarts, e.g. to off-board from moneo.
     /// </summary>
     Task OnReset(CancellationToken stoppingToken = default);
 
     /// <summary>
-    /// This callback is triggered when restoring a backup was requested.
-    /// Module can react on to do cleanup work before system will be restarted
-    /// like stopping EngineHosts etc.
+    /// Called when a backup restore is requested, before the system restarts, e.g. to stop engine hosts.
     /// </summary>
     Task OnRestore(CancellationToken stoppingToken = default);
 }

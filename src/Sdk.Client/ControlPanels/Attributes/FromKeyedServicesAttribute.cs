@@ -4,7 +4,7 @@ using Sdk.Client.ControlPanels.Components;
 namespace Sdk.Client.ControlPanels.Attributes;
 
 /// <summary>
-/// Indicates that the parameter should be bound using the keyed service registered with the <see cref="ControlPanelServiceKey{TControlPanel}"/>.
+/// Injects the parameter from the keyed service registered under <see cref="ControlPanelServiceKey{TControlPanel}"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter)]
 [ExcludeFromCodeCoverage]

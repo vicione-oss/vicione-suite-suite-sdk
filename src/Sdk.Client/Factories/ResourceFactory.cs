@@ -11,7 +11,7 @@ namespace Sdk.Client.Factories;
 internal static class ResourceFactory
 {
     /// <summary>
-    /// creates resource with url /js/filename
+    /// Creates a global script resource at <c>/js/{filename}</c>.
     /// </summary>
     public static Resource CreateGlobalScript(string? bundle, string filename) => new()
     {
@@ -22,7 +22,7 @@ internal static class ResourceFactory
     };
 
     /// <summary>
-    /// creates resource with url /css/filename
+    /// Creates a global stylesheet resource at <c>/css/{filename}</c>.
     /// </summary>
     public static Resource CreateGlobalStylesheet(string? bundle, string filename) => new()
     {
@@ -34,7 +34,7 @@ internal static class ResourceFactory
     };
 
     /// <summary>
-    /// creates resource with url /_content/moduleDllName/relativeFilePath
+    /// Creates a script resource at <c>/_content/{assembly of T}/js/{relativeFilePath}</c>.
     /// </summary>
     public static Resource CreateModuleScript<T>(string? bundle, string relativeFilePath, bool forceGlobal = false)
         where T : IModule => new()
@@ -46,7 +46,7 @@ internal static class ResourceFactory
         };
 
     /// <summary>
-    /// creates resource with url /_content/module/relativeFilePath
+    /// Creates a stylesheet resource at <c>/_content/{assembly of T}/css/{relativeFilePath}</c>.
     /// </summary>
     public static Resource CreateModuleStylesheet<T>(string? bundle, string relativeFilePath, bool forceGlobal = false)
         where T : IModule => new()
@@ -99,7 +99,6 @@ internal static class ResourceFactory
     {
         if (string.IsNullOrEmpty(strText)) return 0;
 
-        //Unicode Encode Covering all characterset
         var byteContents = Encoding.Unicode.GetBytes(strText);
         var hashText = SHA1.HashData(byteContents);
         var hashCodeStart = BitConverter.ToUInt32(hashText, 0);
@@ -110,7 +109,7 @@ internal static class ResourceFactory
     }
 
     /// <summary>
-    /// used to identify css links by id
+    /// Derives a stable element ID from the path, so a stylesheet link can be found and removed later.
     /// </summary>
     private static string GetUniqueId(string filename) =>
         string.Format(CultureInfo.InvariantCulture, "i{0}", GetUInt32HashCode(filename));

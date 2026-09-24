@@ -1,6 +1,6 @@
 ﻿namespace Sdk.Client.NotificationArea.Components;
 
 /// <summary>
-/// Interface to create notification element flyout content constraints in other generic types.
+/// Marks a component as the content of a notification element flyout, for use in generic constraints.
 /// </summary>
 public interface INotificationElementFlyoutContent : IComponent;

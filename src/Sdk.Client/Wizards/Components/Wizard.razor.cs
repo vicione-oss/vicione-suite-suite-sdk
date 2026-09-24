@@ -23,7 +23,7 @@ public sealed partial class Wizard<TContext> : ComponentBase
     [Parameter, EditorRequired] public TContext Context { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the wizard is currently visible.
+    /// Gets or sets whether the wizard is currently visible.
     /// </summary>
     [Parameter] public bool Visible { get; set; } = true;
 
@@ -33,7 +33,7 @@ public sealed partial class Wizard<TContext> : ComponentBase
     [Parameter] public EventCallback<bool> VisibleChanged { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the user is allowed to exit the wizard at any step.
+    /// Gets or sets whether the user is allowed to exit the wizard at any step.
     /// </summary>
     [Parameter] public bool AllowExit { get; set; }
 

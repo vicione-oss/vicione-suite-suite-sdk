@@ -22,11 +22,11 @@ public class TestDbContextFactoryTests
     [Fact]
     public void Should_create_instance_from_connection()
     {
-        //
+        // Arrange
         using var connection = new SqliteConnection($"Data Source={TestDbContextFactory.DataSourceInMemory};");
         connection.Open();
 
-        // Arrange + Act
+        // Act
         using var dbContext = TestDbContextFactory.CreateSqliteContext<TheDbContextSqlite>(connection);
 
         // Assert

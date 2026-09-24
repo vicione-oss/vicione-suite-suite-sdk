@@ -19,8 +19,8 @@ public interface IRegistry<T> : IEnumerable<T>, IHasUpdateLock
     bool Remove(T item);
 
     /// <summary>
-    /// Removes all items with the given predicate from the registry.
+    /// Removes every item matching <paramref name="match"/>.
     /// </summary>
-    /// <returns>Number of notification elements removed.</returns>
+    /// <returns>The number of items removed.</returns>
     int Remove(Predicate<T> match);
 }

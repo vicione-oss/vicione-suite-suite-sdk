@@ -1,7 +1,7 @@
 ﻿namespace Sdk.Connections.Contracts;
 
 /// <summary>
-/// Represents a contract for a SQLite-specific connection configuration data.
+/// The configuration of a SQLite connection.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public sealed class SQLiteConnection : IConnection

@@ -24,8 +24,10 @@ public sealed class MassTransitTester : IAsyncDisposable
     public ITestHarness Harness { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MassTransitTester"/> class.
+    /// Builds a service provider with the MassTransit test harness; bus output goes to <paramref name="testOutputHelper"/>.
     /// </summary>
+    /// <param name="servicesConfig">Registers consumers, activities and sagas under test.</param>
+    /// <param name="testOutputHelper">Receives the harness log; <see langword="null"/> discards it.</param>
     public MassTransitTester(Action<IBusRegistrationConfigurator>? servicesConfig = null, ITestOutputHelper? testOutputHelper = null)
     {
         var textWriter = testOutputHelper is null
@@ -53,31 +55,35 @@ public sealed class MassTransitTester : IAsyncDisposable
     }
 
     /// <summary>
-    /// Tests a request-response message exchange.
+    /// Sends a request and returns the response, asserting that the request was consumed and the response sent.
     /// </summary>
+    /// <exception cref="RequestFaultException">Thrown by the request client if the consumer faulted, before any assertion.</exception>
     public Task<TResponse> TestRequest<TResponse, TRequest>(TRequest request)
         where TResponse : class, IResponse
         where TRequest : class, IRequest<TResponse>
         => Harness.TestRequest<TResponse, TRequest>(request);
 
     /// <summary>
-    /// Tests an instance-dependent request-response message exchange.
+    /// Sends an instance-dependent request and returns the response, asserting that the request was consumed and the response sent.
     /// </summary>
+    /// <exception cref="RequestFaultException">Thrown by the request client if the consumer faulted, before any assertion.</exception>
     public Task<TResponse> TestInstanceDependentRequest<TResponse, TRequest>(TRequest request)
         where TResponse : class, IResponse
         where TRequest : class, IInstanceDependentRequest<TResponse>
         => Harness.TestRequest<TResponse, TRequest>(request);
 
     /// <summary>
-    /// Tests a command sent to a specific consumer.
+    /// Sends a command to <typeparamref name="TConsumer"/> and asserts that it was consumed.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown if the consumer faulted; carries the fault's first exception message.</exception>
     public Task TestCommand<TCommand, TConsumer>(TCommand command, Guid? correlationId = null)
         where TCommand : class, ICommand
         where TConsumer : class, IConsumer
         => Harness.TestCommand<TCommand, TConsumer>(command, correlationId);
 
     /// <summary>
-    /// Tests a command sent to a specific consumer, expecting a potential fault.
+    /// Like <see cref="TestCommand{TCommand, TConsumer}(TCommand, Guid?)"/>, but a consumer exception propagates as the
+    /// original exception rather than an <see cref="InvalidOperationException"/> rebuilt from the published fault.
     /// </summary>
     public Task TestCommandFault<TCommand, TConsumer>(TCommand command, Guid? correlationId = null)
         where TCommand : class, ICommand
@@ -85,15 +91,17 @@ public sealed class MassTransitTester : IAsyncDisposable
         => Harness.TestCommand<TCommand, TConsumer>(command, correlationId, false);
 
     /// <summary>
-    /// Tests an instance-dependent command sent to a specific consumer.
+    /// Sends an instance-dependent command to <typeparamref name="TConsumer"/> and asserts that it was consumed.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown if the consumer faulted; carries the fault's first exception message.</exception>
     public Task TestInstanceDependentCommand<TCommand, TConsumer>(TCommand command, Guid? correlationId = null)
         where TCommand : class, IInstanceDependentCommand
         where TConsumer : class, IConsumer
         => Harness.TestCommand<TCommand, TConsumer>(command, correlationId);
 
     /// <summary>
-    /// Tests an instance-dependent command sent to a specific consumer, expecting a potential fault.
+    /// Like <see cref="TestInstanceDependentCommand{TCommand, TConsumer}(TCommand, Guid?)"/>, but a consumer exception propagates
+    /// as the original exception rather than an <see cref="InvalidOperationException"/> rebuilt from the published fault.
     /// </summary>
     public Task TestInstanceDependentCommandFault<TCommand, TConsumer>(TCommand command, Guid? correlationId = null)
         where TCommand : class, IInstanceDependentCommand
@@ -101,7 +109,8 @@ public sealed class MassTransitTester : IAsyncDisposable
         => Harness.TestCommand<TCommand, TConsumer>(command, correlationId, false);
 
     /// <summary>
-    /// Tests a command that is expected to publish a specific event as a result.
+    /// Sends a command to <typeparamref name="TConsumer"/> and returns the first published <typeparamref name="TResponseEvent"/>,
+    /// asserting that one was published.
     /// </summary>
     public Task<TResponseEvent> TestCommand<TCommand, TConsumer, TResponseEvent>(TCommand command)
         where TCommand : class, ICommand
@@ -110,7 +119,7 @@ public sealed class MassTransitTester : IAsyncDisposable
         => Harness.TestCommand<TCommand, TConsumer, TResponseEvent>(command);
 
     /// <summary>
-    /// Tests a series of commands and collects the resulting published events.
+    /// Sends the commands in order, asserting each was consumed, and returns every published <typeparamref name="TResponseEvent"/>.
     /// </summary>
     public Task<TResponseEvent[]> TestCommands<TCommand, TConsumer, TResponseEvent>(TCommand[] commands)
         where TCommand : class, ICommand
@@ -119,7 +128,7 @@ public sealed class MassTransitTester : IAsyncDisposable
         => Harness.TestCommands<TCommand, TConsumer, TResponseEvent>(commands);
 
     /// <summary>
-    /// Tests an event published to a specific consumer.
+    /// Publishes an event and asserts that <typeparamref name="TConsumer"/> consumed it.
     /// </summary>
     public Task TestEvent<TEvent, TConsumer>(TEvent @event)
         where TEvent : class, IEvent
@@ -127,7 +136,7 @@ public sealed class MassTransitTester : IAsyncDisposable
         => Harness.TestEvent<TEvent, TConsumer>(@event);
 
     /// <summary>
-    /// Tests the execution of a routing slip activity.
+    /// Runs <typeparamref name="T"/> as the only activity of a routing slip; nothing is asserted, so the test checks the outcome.
     /// </summary>
     public Task TestExecuteActivity<T, TArguments>(TArguments arguments, IEnumerable<KeyValuePair<string, object>>? variables = null)
         where T : class, IExecuteActivity<TArguments>

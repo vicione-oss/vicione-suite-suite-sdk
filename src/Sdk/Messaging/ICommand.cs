@@ -3,12 +3,12 @@
 namespace Sdk.Messaging;
 
 /// <summary>
-/// Message that is sent to the central broker and is then consumed by the Master instance only
+/// A state change sent to the central broker and consumed by the master instance only; results come back as events.
 /// </summary>
 public interface ICommand : IRoutableMessage, CorrelatedBy<Guid>
 {
     /// <summary>
-    /// Returns the CorrelationId for the message. Setter is required for deserialization
+    /// Gets or initializes the ID that correlates the message with its outcome; the init accessor exists for deserialization.
     /// </summary>
     new Guid CorrelationId { get; init; }
 

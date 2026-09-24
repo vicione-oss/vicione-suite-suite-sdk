@@ -11,32 +11,32 @@ namespace Sdk.Modules;
 public class ModuleOptionDeclaration
 {
     /// <summary>
-    /// Unique key that identifies this option.
+    /// Gets or sets the unique key that identifies this option.
     /// </summary>
     public required string Key { get; set; }
 
     /// <summary>
-    /// Currently assigned value for this option, if any.
+    /// Gets or sets the currently assigned value for this option, if any.
     /// </summary>
     public string? Value { get; set; }
 
     /// <summary>
-    /// Optional default value for this option.
+    /// Gets or sets the optional default value for this option.
     /// </summary>
     public string? DefaultValue { get; set; }
 
     /// <summary>
-    /// Value indicating whether this option represents a password or other sensitive information.
+    /// Gets or sets whether this option represents a password or other sensitive information.
     /// </summary>
     public bool IsPassword { get; set; }
 
     /// <summary>
-    /// Value indicating whether this option must be provided by the user or system.
+    /// Gets or sets whether this option must be provided by the user or system.
     /// </summary>
     public bool IsRequired { get; set; }
 
     /// <summary>
-    /// Type of this option, describing how it should be interpreted or validated.
+    /// Gets or sets the type of this option, describing how it should be interpreted or validated.
     /// </summary>
     public ModuleOptionType OptionType { get; set; }
 }

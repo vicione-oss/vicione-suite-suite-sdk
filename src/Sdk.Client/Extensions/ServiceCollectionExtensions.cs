@@ -12,12 +12,12 @@ public static class ServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Adds a stream upload handler for the specified context type, while allowing for optional configuration of the handler options.
+        /// Registers a transient <see cref="IStreamUploadHandler{T}"/> of <typeparamref name="TMarker"/> that uploads into the
+        /// workspace of module <paramref name="moduleId"/>.
         /// </summary>
-        /// <typeparam name="TMarker">Marker type to match the upload to the correct handler</typeparam>
-        /// <param name="moduleId">Used to identify the correct backend module</param>
-        /// <param name="configureOptions">Allows the customization of the handler options</param>
-        /// <returns></returns>
+        /// <typeparam name="TMarker">Ties the handler to one upload control.</typeparam>
+        /// <param name="moduleId">The backend module whose workspace receives the files.</param>
+        /// <param name="configureOptions">Adjusts the handler options; <see langword="null"/> keeps the defaults.</param>
         public IServiceCollection AddStreamUploadHandler<TMarker>(string moduleId, Action<StreamUploadHandlerOptions>? configureOptions = null)
         {
             _ = services.AddTransient((sp) =>
@@ -37,12 +37,12 @@ public static class ServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds a stream upload handler for the specified context type, while allowing for optional configuration of the handler options.
+        /// Registers a transient <see cref="IStreamUploadHandler{T}"/> of <typeparamref name="TMarker"/> that uploads into the
+        /// workspace of <typeparamref name="TModule"/>.
         /// </summary>
-        /// <typeparam name="TMarker">Marker type to match the upload to the correct handler</typeparam>
-        /// <typeparam name="TModule">Used to identify the correct backend module</typeparam>
-        /// <param name="configureOptions">Allows the customization of the handler options</param>
-        /// <returns></returns>
+        /// <typeparam name="TMarker">Ties the handler to one upload control.</typeparam>
+        /// <typeparam name="TModule">The backend module whose workspace receives the files.</typeparam>
+        /// <param name="configureOptions">Adjusts the handler options; <see langword="null"/> keeps the defaults.</param>
         public IServiceCollection AddStreamUploadHandler<TMarker, TModule>(Action<StreamUploadHandlerOptions>? configureOptions = null) where TModule : IModule
         {
             _ = services.AddTransient((sp) =>

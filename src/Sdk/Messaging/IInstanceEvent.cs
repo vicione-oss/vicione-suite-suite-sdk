@@ -1,6 +1,6 @@
 namespace Sdk.Messaging;
 
 /// <summary>
-/// An event that will be consumed only on the current instance
+/// An event consumed only on the instance that publishes it.
 /// </summary>
 public interface IInstanceEvent : IInstanceDependentMessage, IEvent;

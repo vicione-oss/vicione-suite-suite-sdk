@@ -18,9 +18,9 @@ public static class IServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Adds the necessary services for a control panel and returns a builder for further configuration.
+        /// Registers the control panel services of <typeparamref name="TClientModule"/> and returns a builder that adds
+        /// <typeparamref name="TControlPanel"/> to them, e.g. with <c>WithAutoDiscovery</c>.
         /// </summary>
-        /// <returns>An <see cref="IControlPanelBuilder{TClientModule, TControlPanel, TState}"/> for advanced configuration of the control panel.</returns>
         public IControlPanelBuilder<TClientModule, TControlPanel, TState> AddControlPanel<TClientModule, TControlPanel, TState>()
             where TClientModule : class, IClientModule
             where TControlPanel : ControlPanelBase<TState>
@@ -34,12 +34,8 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds the core services required for control panel functionality, such as the registries.
+        /// Registers <see cref="IControlPanelRegistry{TClientModule}"/>, and <see cref="IControlPanelRegistry"/> for it, once per module.
         /// </summary>
-        /// <remarks>
-        /// This method ensures that <see cref="IControlPanelRegistry{TClientModule}"/> and <see cref="IControlPanelPageRegistry"/>
-        /// are registered in the DI container.
-        /// </remarks>
         public IServiceCollection AddControlPanelCore<TClientModule>()
             where TClientModule : class, IClientModule
         {
@@ -63,8 +59,7 @@ public static class IServiceCollectionExtensions
 
         internal IServiceCollection AddControlPanelCategoryDescriptor(ControlPanelInfo controlPanelInfo)
         {
-            // if the category descriptor type is an interface, we assume it's registered by its implementor
-            // because we don't know the concrete implementation type
+            // An interface cannot be registered without its implementation type, so its implementor registers it.
             if (controlPanelInfo.CategoryDescriptorType?.IsInterface == true)
                 return services;
 
@@ -128,7 +123,7 @@ public static class IServiceCollectionExtensions
 
             if (serviceCountBefore < services.Count)
             {
-                // additionally register base interface to allow resolving all registries into an IEnumerable<>
+                // The non-generic interface lets every module's registry resolve through one IEnumerable<IControlPanelRegistry>.
                 services.AddScoped<IControlPanelRegistry>(
                     serviceProvider => serviceProvider.GetRequiredService<IControlPanelRegistry<TClientModule>>());
             }

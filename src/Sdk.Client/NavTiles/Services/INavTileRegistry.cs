@@ -7,7 +7,7 @@ using Sdk.Client.NavTiles.Enums;
 namespace Sdk.Client.NavTiles.Services;
 
 /// <summary>
-/// Registry for navigation tiles
+/// Holds a module's navigation tiles.
 /// </summary>
 public interface INavTileRegistry<out TClientModule> : IEnumerable<INavTileRegistryItem>, IHasUpdateLock
     where TClientModule : IClientModule
@@ -20,12 +20,12 @@ public interface INavTileRegistry<out TClientModule> : IEnumerable<INavTileRegis
     /// <summary>
     /// Registers a navigation tile in the registry.
     /// </summary>
-    /// <param name="id">Identifier for uniquely identifying the navigation tile</param>
-    /// <param name="horizontalSpan">Horizontal span of the navigation tile</param>
-    /// <param name="enabled">Specifies whether the navigation tile should be enabled or not</param>
-    /// <param name="linkTarget">Link target used in the default navigation handling executed when the navigation tile is clicked</param>
-    /// <param name="group">Group of the navigation tile</param>
-    /// <param name="authorizationRequirement">Optional authorization requirement, otherwise <see langword="null" /> to skip authorization</param>
+    /// <param name="id">The ID identifying the tile in later operations.</param>
+    /// <param name="horizontalSpan">The tile's width.</param>
+    /// <param name="enabled">Whether the tile is enabled; a disabled tile ignores clicks.</param>
+    /// <param name="linkTarget">The URL <see cref="NavTileBase.Click"/> navigates to; <see langword="null"/> for none.</param>
+    /// <param name="group">The tile's group.</param>
+    /// <param name="authorizationRequirement">The requirement to see the tile; <see langword="null"/> skips authorization.</param>
     INavTileRegistryItem Add<T>(string id, NavTileSpan horizontalSpan = NavTileSpan.One, bool enabled = true,
         string? linkTarget = null, NavTileGroup group = NavTileGroup.Applications, IAuthorizationRequirement? authorizationRequirement = null)
             where T : ComponentBase, INavTile;
@@ -33,6 +33,6 @@ public interface INavTileRegistry<out TClientModule> : IEnumerable<INavTileRegis
     /// <summary>
     /// Removes the navigation tile with the given <paramref name="id"/> from the registry.
     /// </summary>
-    /// <returns><see langword="true"/> when the navigation tile was removed, otherwise <see langword="false"/></returns>
+    /// <returns><see langword="true"/> if the tile was removed.</returns>
     bool Remove(string id);
 }

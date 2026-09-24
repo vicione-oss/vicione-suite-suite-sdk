@@ -20,33 +20,37 @@ public static class IRenderedComponentExtensions
     extension<T>(IRenderedComponent<T> page) where T : IComponent
     {
         /// <summary>
-        /// Finds a button element that contains an icon with the specified CSS class.
+        /// Finds the only button whose inner HTML contains <paramref name="iconCss"/>.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if no button or more than one button matches.</exception>
         public IElement FindIconButton(string iconCss) => page.FindAll("button")
             .Single(k => k.InnerHtml.Contains(iconCss, StringComparison.Ordinal));
 
         /// <summary>
-        /// Finds a grid action button by its monochrome icon.
+        /// Finds the first grid action button showing <paramref name="iconName"/> at <paramref name="size"/>.
         /// </summary>
+        /// <param name="iconName">The icon to look for.</param>
+        /// <param name="size">The icon size; <see langword="null"/> means <see cref="MonochromeIconSize.SmallMedium"/>.</param>
         /// <exception cref="ElementNotFoundException">Thrown if no button with the specified icon is found.</exception>
         public IElement FindGridActionButton(MonochromeIconName iconName, MonochromeIconSize? size = null)
         {
             var iconSize = size ?? MonochromeIconSize.SmallMedium;
             var iconCssClasses = iconName.GetCssClasses(iconSize).ToSpaceSeparated();
 
-            var buttton = page
+            var button = page
                 .FindAll(".grid-action-button")
                 .FirstOrDefault(bt => bt.FirstElementChild?.ClassName?.Contains(iconCssClasses, StringComparison.Ordinal) ?? false);
 
-            return buttton ?? throw new ElementNotFoundException($"Element with css class attribute containing '{iconCssClasses}' not found");
+            return button ?? throw new ElementNotFoundException($"Element with css class attribute containing '{iconCssClasses}' not found");
         }
     }
 
     extension(IRenderedComponent<IComponent> component)
     {
         /// <summary>
-        /// Finds a <see cref="SettingsField"/> by its label and returns a rendered child component of a specific type.
+        /// Returns the <typeparamref name="TChild"/> inside the first <see cref="SettingsField"/> labelled <paramref name="label"/>.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if no settings field has that label.</exception>
         public IRenderedComponent<TChild> GetSettingsFieldChild<TChild>(string label)
             where TChild : IComponent
         {
@@ -100,13 +104,14 @@ public static class IRenderedComponentExtensions
             => component.GetSettingsFieldComboBox<TItem, TValue>(label).Instance.Value.Should().Be(expectedValue);
 
         /// <summary>
-        /// Asserts that the value of a <see cref="SettingsFieldComboBox{TItem, TValue}"/> with a specific label matches the expected value, assuming a standard <see cref="ComboBoxItem{TValue, TDisplay}"/>.
+        /// Asserts the value of a <see cref="SettingsFieldComboBox{TItem, TValue}"/> with a specific label, for a combo box
+        /// whose items are <see cref="ComboBoxItem{TValue, TDisplay}"/> with a <see cref="string"/> display.
         /// </summary>
         public void AssertSettingsFieldComboBoxWithItem<TValue>(string label, TValue expectedValue)
             => component.GetSettingsFieldComboBox<ComboBoxItem<TValue, string>, TValue>(label).Instance.Value.Should().Be(expectedValue);
 
         /// <summary>
-        /// Asserts that the integer value of a <see cref="SpinEdit{TValue, TInterval, TLimit}"/> with a specific label matches the expected value.
+        /// Asserts the value of an <see cref="int"/> <see cref="SpinEdit{TValue, TInterval, TLimit}"/> with a specific label.
         /// </summary>
         public void AssertSettingsFieldSpinEditInt(string label, int expectedValue)
             => component.GetSettingsFieldSpinEdit<int, int, int>(label).Instance.Value.Should().Be(expectedValue);
@@ -121,17 +126,21 @@ public static class IRenderedComponentExtensions
     extension<TComponent>(IRenderedComponent<TComponent> component) where TComponent : IComponent
     {
         /// <summary>
-        /// Triggers a selection state change on the first data row of a grid.
+        /// Raises <c>oninput</c> on the selection checkbox of the first data row, skipping the header row.
         /// </summary>
+        /// <exception cref="ElementNotFoundException">Thrown if the grid has no selection column.</exception>
+        [Obsolete("No replacement; implement your own helper if needed. This method will be removed in the next major version.")]
         public void TriggerGridFirstRowSelectionChange(bool select) => component.FindAllGridSelectRows()
             .First()
-            .GetGridSelectColumn() // first checkbox in the grid
+            .GetGridSelectColumn()
             .TriggerOnInputEvent(select);
 
         /// <summary>
-        /// Triggers a selection state change for one or more grid rows specified by their index.
+        /// Raises <c>oninput</c> on the selection checkbox of each listed row. Index 0 is the header row,
+        /// so data rows start at 1.
         /// </summary>
         /// <exception cref="ElementNotFoundException">Thrown if a specified row index is out of range.</exception>
+        [Obsolete("No replacement; implement your own helper if needed. This method will be removed in the next major version.")]
         public void TriggerGridRowSelectionChange(bool select, params IEnumerable<int> rowIndexes)
         {
             var rows = component.FindAllGridSelectRows(true).ToArray();

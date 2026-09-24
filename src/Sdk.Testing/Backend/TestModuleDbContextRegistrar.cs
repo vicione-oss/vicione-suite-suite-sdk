@@ -22,6 +22,7 @@ public sealed class TestModuleDbContextRegistrar : IModuleDbContextRegistrar, IA
         where TSqliteImplementation : DbContext, ISqliteDbContext, TDbContextInterface
         where TPostgresImplementation : DbContext, IPostgresDbContext, TDbContextInterface
     {
+        // A shared-cache in-memory database is dropped when its last connection closes; this one keeps it alive until dispose.
         if (!_keeperConnections.ContainsKey(sqliteDbName))
         {
             var connection = new SqliteConnection($"Data Source={sqliteDbName}_{_testUId};Mode=Memory;Cache=Shared");

@@ -6,12 +6,12 @@ namespace Sdk.Client.Contracts;
 public sealed class StreamUploadHandlerOptions
 {
     /// <summary>
-    /// Customizes the directory that the file gets uploaded to.
+    /// Gets or sets the function that transforms the directory the file is uploaded to; <see langword="null"/> keeps it.
     /// </summary>
     public Func<string, string>? PathTransform { get; set; }
 
     /// <summary>
-    /// Customizes the name that the file gets once it is uploaded.
+    /// Gets or sets the function that transforms the name the uploaded file is stored under; <see langword="null"/> keeps it.
     /// </summary>
     public Func<string, string>? FilenameTransform { get; set; }
 }

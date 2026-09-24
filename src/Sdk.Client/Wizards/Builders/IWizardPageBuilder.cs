@@ -24,19 +24,19 @@ public interface IWizardPageBuilder<TContext, TComponent, TState>
         where TDescriptor : class, IWizardPageDescriptor;
 
     /// <summary>
-    /// Configures <typeparamref name="TSaveHandler"/> for handling save requests in context of <typeparamref name="TComponent"/>
+    /// Configures <typeparamref name="TSaveHandler"/> for handling save requests in context of <typeparamref name="TComponent"/>.
     /// </summary>
     IWizardPageBuilder<TContext, TComponent, TState> WithSaveHandler<TSaveHandler>()
         where TSaveHandler : class, IWizardPageSaveHandler<TState>;
 
     /// <summary>
-    /// Configures <typeparamref name="TCancelHandler"/> for handling cancel requests in context of <typeparamref name="TComponent"/>
+    /// Configures <typeparamref name="TCancelHandler"/> for handling cancel requests in context of <typeparamref name="TComponent"/>.
     /// </summary>
     IWizardPageBuilder<TContext, TComponent, TState> WithCancelHandler<TCancelHandler>()
         where TCancelHandler : class, IWizardPageCancelHandler<TState>;
 
     /// <summary>
-    /// Configures <typeparamref name="TResetHandler"/> for handling reset requests in context of <typeparamref name="TComponent"/>
+    /// Configures <typeparamref name="TResetHandler"/> for handling reset requests in context of <typeparamref name="TComponent"/>.
     /// </summary>
     IWizardPageBuilder<TContext, TComponent, TState> WithResetHandler<TResetHandler>()
         where TResetHandler : class, IWizardPageResetHandler<TState>;

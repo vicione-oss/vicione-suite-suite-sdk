@@ -12,11 +12,11 @@ public interface IControlPanelPageRegistry : IRegistry<IControlPanelPageRegistry
     /// Registers a control panel page in the registry.
     /// </summary>
     /// <param name="controlPanelPage">The control panel page that should be registered in the registry.</param>
-    /// <param name="controlPanelRegistryItem">The registration associated with the control panel in which the control panel page lives.</param>
+    /// <param name="controlPanelRegistryItem">The registry item of the control panel the page belongs to.</param>
     void Add(IControlPanelPage controlPanelPage, IControlPanelRegistryItem controlPanelRegistryItem);
 
     /// <summary>
-    /// Removes a control panel page in the registry.
+    /// Removes a control panel page from the registry.
     /// </summary>
     /// <returns><see langword="true"/> when item was removed, otherwise <see langword="false"/>.</returns>
     bool Remove(IControlPanelPage controlPanelPage);

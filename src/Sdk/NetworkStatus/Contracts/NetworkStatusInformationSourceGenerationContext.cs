@@ -3,7 +3,7 @@
 namespace Sdk.NetworkStatus.Contracts;
 
 /// <summary>
-/// Represents the <see cref="NetworkStatusInformationSourceGenerationContext"/>.
+/// Source-generated JSON metadata for <see cref="NetworkStatusInformation"/>; unknown members are rejected.
 /// </summary>
 [JsonSourceGenerationOptions(
     RespectNullableAnnotations = true,

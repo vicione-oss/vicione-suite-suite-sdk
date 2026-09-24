@@ -82,7 +82,6 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
                 ErrorId: ErrorKind.DoesNotDeriveFromBase);
         }
 
-        // Read DefaultSchemaName from the attribute
         string? defaultSchemaName = null;
         foreach (var attr in context.Attributes)
         {
@@ -93,7 +92,6 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
             }
         }
 
-        // Generate constructor only if the user hasn't declared one
         var hasUserConstructor = false;
         foreach (var ctor in classSymbol.Constructors)
         {
@@ -104,8 +102,6 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
             }
         }
 
-        // Collect DbSet<T> properties from the IModuleDbContext-derived interface
-        // that the user hasn't already implemented on the class
         var dbSetProperties = GetDbSetPropertiesToGenerate(classSymbol);
 
         var accessibility = classSymbol.DeclaredAccessibility;
@@ -123,61 +119,56 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
 
     private static EquatableArray<DbSetPropertyInfo> GetDbSetPropertiesToGenerate(INamedTypeSymbol classSymbol)
     {
-        // Find the interface that directly extends IModuleDbContext (not IModuleDbContext itself)
-        INamedTypeSymbol? moduleInterface = null;
-        foreach (var iface in classSymbol.AllInterfaces)
-        {
-            if (iface.ToDisplayString() == IModuleDbContextFullName)
-                continue;
-
-            foreach (var baseIface in iface.AllInterfaces)
-            {
-                if (baseIface.ToDisplayString() == IModuleDbContextFullName)
-                {
-                    moduleInterface = iface;
-                    break;
-                }
-            }
-
-            if (moduleInterface is not null)
-                break;
-        }
-
-        if (moduleInterface is null)
-            return new EquatableArray<DbSetPropertyInfo>(Array.Empty<DbSetPropertyInfo>());
-
-        // Collect existing property names declared directly on the class (across all partial declarations)
-        var existingProperties = new HashSet<string>(StringComparer.Ordinal);
+        // GetMembers() spans every partial declaration, so a hand-written property in any part is skipped.
+        var skippedNames = new HashSet<string>(StringComparer.Ordinal);
         foreach (var member in classSymbol.GetMembers())
         {
             if (member is IPropertySymbol prop)
-                existingProperties.Add(prop.Name);
+                skippedNames.Add(prop.Name);
         }
 
-        // Collect DbSet<T> properties from the interface that aren't already on the class
+        // GetMembers() on an interface excludes inherited members, so every level of a layered module interface
+        // and every sibling interface is visited separately; skippedNames then emits a shared name only once.
         var result = new List<DbSetPropertyInfo>();
-        foreach (var member in moduleInterface.GetMembers())
+        foreach (var moduleInterface in classSymbol.AllInterfaces)
         {
-            if (member is not IPropertySymbol property)
+            if (!DerivesFromModuleDbContext(moduleInterface))
                 continue;
 
-            if (property.Type is not INamedTypeSymbol propertyType || !propertyType.IsGenericType)
-                continue;
+            foreach (var member in moduleInterface.GetMembers())
+            {
+                if (member is not IPropertySymbol property)
+                    continue;
 
-            if (propertyType.ConstructedFrom.Name != "DbSet" ||
-                propertyType.ConstructedFrom.ContainingNamespace.ToDisplayString() != "Microsoft.EntityFrameworkCore")
-                continue;
+                if (property.Type is not INamedTypeSymbol propertyType || !propertyType.IsGenericType)
+                    continue;
 
-            if (existingProperties.Contains(property.Name))
-                continue;
+                if (propertyType.ConstructedFrom.Name != "DbSet" ||
+                    propertyType.ConstructedFrom.ContainingNamespace.ToDisplayString() != "Microsoft.EntityFrameworkCore")
+                    continue;
 
-            var entityType = propertyType.TypeArguments[0];
-            var fullyQualifiedEntityType = entityType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                if (!skippedNames.Add(property.Name))
+                    continue;
 
-            result.Add(new DbSetPropertyInfo(property.Name, fullyQualifiedEntityType));
+                var entityType = propertyType.TypeArguments[0];
+                var fullyQualifiedEntityType = entityType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+                result.Add(new DbSetPropertyInfo(property.Name, fullyQualifiedEntityType));
+            }
         }
 
         return new EquatableArray<DbSetPropertyInfo>([.. result]);
+    }
+
+    private static bool DerivesFromModuleDbContext(INamedTypeSymbol iface)
+    {
+        foreach (var baseIface in iface.AllInterfaces)
+        {
+            if (baseIface.ToDisplayString() == IModuleDbContextFullName)
+                return true;
+        }
+
+        return false;
     }
 
     private static bool DerivesFrom(INamedTypeSymbol symbol, string baseTypeFullName)
@@ -225,7 +216,6 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
         sb.AppendLine();
         sb.AppendLine($"namespace {ns};");
 
-        // Partial class members (constructor, DefaultSchemaName, DbSet properties)
         if (model.GenerateConstructor || model.DefaultSchemaName is not null || model.DbSetProperties.Count > 0)
         {
             sb.AppendLine();
@@ -252,13 +242,11 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
             sb.AppendLine("}");
         }
 
-        // Sqlite / Postgres subclasses
         sb.AppendLine();
         sb.AppendLine($"{access} sealed class {name}Sqlite(DbContextOptions<{name}Sqlite> options) : {name}(options), ISqliteDbContext;");
         sb.AppendLine();
         sb.AppendLine($"{access} sealed class {name}Postgres(DbContextOptions<{name}Postgres> options) : {name}(options), IPostgresDbContext;");
 
-        // Design-time factories
         sb.AppendLine();
         sb.AppendLine($"{access} sealed class {name}SqliteFactory : IDesignTimeDbContextFactory<{name}Sqlite>");
         sb.AppendLine("{");

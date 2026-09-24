@@ -4,14 +4,16 @@ using Sdk.Messaging;
 namespace Sdk.Backend.Messaging;
 
 /// <summary>
-/// A base consumer for handling instance‑dependent request / response messages.
+/// Base consumer of an instance-dependent request: it always answers, with the result of <see cref="Respond"/> or, if that throws,
+/// of <see cref="HandleException"/>.
 /// </summary>
 public abstract class InstanceDependentRequestConsumer<TRequest, TResponse> : IConsumer<TRequest>
     where TRequest : class, IInstanceDependentRequest<TResponse>
     where TResponse : IResponse
 {
     /// <summary>
-    /// Consumes and incoming request message from the message bus.
+    /// Responds with the result of <see cref="Respond"/>, or of <see cref="HandleException"/> if it throws; only an exception
+    /// from <see cref="HandleException"/> itself faults the request.
     /// </summary>
     public async Task Consume(ConsumeContext<TRequest> context)
     {
@@ -33,7 +35,7 @@ public abstract class InstanceDependentRequestConsumer<TRequest, TResponse> : IC
     public abstract Task<TResponse> Respond(TRequest message, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Handles an exception occurred during <see cref="Respond"/>.
+    /// Builds the response for an exception thrown by <see cref="Respond"/>, typically carrying the error information.
     /// </summary>
     public abstract Task<TResponse> HandleException(TRequest message, Exception e, CancellationToken cancellationToken);
 }

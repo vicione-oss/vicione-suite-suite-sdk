@@ -11,133 +11,133 @@ public static class IServiceCollectionExtensions
     extension(IServiceCollection services)
     {
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="byte"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="byte"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldByteSpinEdit()
             => services.AddByteSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="byte"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="byte"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableByteSpinEdit()
             => services.AddNullableByteSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="sbyte"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="sbyte"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldSignedByteSpinEdit()
             => services.AddSignedByteSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="sbyte"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="sbyte"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableSignedByteSpinEdit()
             => services.AddNullableSignedByteSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="ushort"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="ushort"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldUnsignedShortSpinEdit()
             => services.AddUnsignedShortSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="ushort"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="ushort"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableUnsignedShortSpinEdit()
             => services.AddNullableUnsignedShortSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="uint"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="uint"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldUnsignedIntSpinEdit()
             => services.AddUnsignedIntSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="uint"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="uint"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableUnsignedIntSpinEdit()
             => services.AddNullableUnsignedIntSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="ulong"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="ulong"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldUnsignedLongSpinEdit()
             => services.AddUnsignedLongSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="ulong"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="ulong"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableUnsignedLongSpinEdit()
             => services.AddNullableUnsignedLongSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="short"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="short"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldShortSpinEdit()
             => services.AddShortSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="short"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="short"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableShortSpinEdit()
             => services.AddNullableShortSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="int"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="int"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldIntSpinEdit()
             => services.AddIntSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="int"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="int"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableIntSpinEdit()
             => services.AddNullableIntSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="long"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="long"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldLongSpinEdit()
             => services.AddLongSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="long"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="long"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableLongSpinEdit()
             => services.AddNullableLongSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="decimal"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="decimal"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldDecimalSpinEdit()
             => services.AddDecimalSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="decimal"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="decimal"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableDecimalSpinEdit()
             => services.AddNullableDecimalSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="double"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="double"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldDoubleSpinEdit()
             => services.AddDoubleSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="double"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="double"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableDoubleSpinEdit()
             => services.AddNullableDoubleSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="float"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for <see cref="float"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldFloatSpinEdit()
             => services.AddFloatSpinEdit();
 
         /// <summary>
-        /// Adds the necessary services for <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> for <see cref="Nullable{T}"/> of <see cref="float"/>.
+        /// Registers the <see cref="SettingsFieldSpinEdit{TValue, TInterval, TLimit}"/> services for nullable <see cref="float"/> values.
         /// </summary>
         public IServiceCollection AddSettingsFieldNullableFloatSpinEdit()
             => services.AddNullableFloatSpinEdit();

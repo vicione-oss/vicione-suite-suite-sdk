@@ -17,7 +17,7 @@ public sealed class Connection
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the unique identifier for this connection.
+    /// Gets or initializes the unique identifier for this connection.
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
 
@@ -43,7 +43,7 @@ public sealed class Connection
     public Dictionary<string, string?> Metadata { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets a value indicating whether this connection is managed.
+    /// Gets or sets whether this connection is managed.
     /// </summary>
     /// <remarks>
     /// Managed connections cannot be deleted by the user.

@@ -6,6 +6,9 @@ using Sdk.Modules;
 
 namespace Sdk.Client.Samples.Shared.Services;
 
+// A minimal IJsInterop for the samples. The suite host ships the full implementation; here only IncludeModuleScript is
+// implemented, because it is the one member the sample pages reach. It imports an ES module and returns a reference
+// through which C# calls the module's exports; every other member throws to make a missing piece obvious.
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes
 internal sealed class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger) : IJsInterop

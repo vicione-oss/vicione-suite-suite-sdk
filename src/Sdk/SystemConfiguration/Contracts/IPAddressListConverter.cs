@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Sdk.SystemConfiguration.Contracts;
 
 /// <summary>
-/// Represents an <see cref="IPAddressListConverter"/>.
+/// Converts a list of <see cref="IPAddress"/> to and from a JSON array of strings; a malformed entry throws a <see cref="JsonException"/>.
 /// </summary>
 public class IPAddressListConverter : JsonConverter<IReadOnlyList<IPAddress>>
 {

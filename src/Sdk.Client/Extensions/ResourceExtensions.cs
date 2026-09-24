@@ -13,7 +13,7 @@ public static class ResourceExtensions
     extension(List<Resource> list)
     {
         /// <summary>
-        /// Adds a global script resource to the list. The URL will be formatted as '/js/{filename}'.
+        /// Adds the global script <c>/js/{filename}</c>; global resources stay loaded when the component is disposed.
         /// </summary>
         public List<Resource> AddGlobalScript(string? bundle, string filename)
         {
@@ -22,7 +22,7 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a global stylesheet resource to the list. The URL will be formatted as '/css/{filename}'.
+        /// Adds the global stylesheet <c>/css/{filename}</c>; global resources stay loaded when the component is disposed.
         /// </summary>
         public List<Resource> AddGlobalStylesheet(string? bundle, string filename)
         {
@@ -31,7 +31,7 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a module-specific script resource to the list. The URL will be formatted as '/[module]/wwwroot/js/{filename}'.
+        /// Adds the module script <c>/_content/{assembly of T}/js/{filename}</c>; <paramref name="forceGlobal"/> keeps it loaded.
         /// </summary>
         public List<Resource> AddModuleScript<T>(string? bundle, string filename, bool forceGlobal = false)
             where T : IModule
@@ -41,7 +41,7 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a module-specific stylesheet resource to the list. The URL will be formatted as '/[module]/wwwroot/css/{filename}'.
+        /// Adds the module stylesheet <c>/_content/{assembly of T}/css/{filename}</c>; <paramref name="forceGlobal"/> keeps it loaded.
         /// </summary>
         public List<Resource> AddModuleStylesheet<T>(string? bundle, string filename, bool forceGlobal = false)
             where T : IModule
@@ -51,12 +51,12 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a new script resource to the list using a URI.
+        /// Adds a script by the path of <paramref name="scriptUri"/>, which must be absolute.
         /// </summary>
         public List<Resource> AddScript(string? bundle, Uri scriptUri) => list.AddScript(bundle, scriptUri.AbsolutePath);
 
         /// <summary>
-        /// Adds a new script resource to the list using a URL string.
+        /// Adds a script by its relative URL.
         /// </summary>
         public List<Resource> AddScript(string? bundle, string scriptUrl)
         {
@@ -65,13 +65,13 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a new stylesheet resource to the list using a URI.
+        /// Adds a stylesheet by the path of <paramref name="stylesheetUri"/>, which must be absolute.
         /// </summary>
         public List<Resource> AddStylesheet(string? bundle, Uri stylesheetUri)
             => list.AddStylesheet(bundle, stylesheetUri.AbsolutePath);
 
         /// <summary>
-        /// Adds a new stylesheet resource to the list using a URL string.
+        /// Adds a stylesheet by its relative URL.
         /// </summary>
         public List<Resource> AddStylesheet(string? bundle, string stylesheetUrl)
         {
@@ -80,7 +80,7 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a script resource from a component's 'wwwroot' folder. The URL will be formatted as '/_content/[ComponentName]/[relativePath]'.
+        /// Adds a script from the <c>wwwroot</c> folder of <paramref name="assembly"/>: <c>/_content/{assembly}/{relativePath}</c>.
         /// </summary>
         public List<Resource> AddComponentScript(string? bundle,
             string relativePath,
@@ -91,7 +91,7 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a stylesheet resource from a component's 'wwwroot' folder. The URL will be formatted as '/_content/[ComponentName]/[relativePath]'.
+        /// Adds a stylesheet from the <c>wwwroot</c> folder of <paramref name="assembly"/>: <c>/_content/{assembly}/{relativePath}</c>.
         /// </summary>
         public List<Resource> AddComponentStylesheet(string? bundle,
             string relativePath,

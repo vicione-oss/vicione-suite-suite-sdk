@@ -62,7 +62,7 @@ public static class IServiceCollectionExtensions
                 }
             });
 
-            // additionally register base interface to allow resolving all registries into an IEnumerable<>
+            // The non-generic interface lets every module's registry resolve through one IEnumerable<INotificationElementRegistry>.
             services.AddScoped<INotificationElementRegistry>(
                 serviceProvider => serviceProvider.GetRequiredService<INotificationElementRegistry<TClientModule>>());
 
@@ -70,18 +70,14 @@ public static class IServiceCollectionExtensions
         }
 
         /// <summary>
-        /// Adds notification elements for a specific module.
-        ///
-        /// <para>
-        /// It searches for <see cref="NotificationElementBase{TState}">notification elements</see> which are annotated with
-        /// <see cref="InitialNotificationElementAttribute{TClientModule}"/>. For each class found, the class TState retrieved
-        /// from <see cref="NotificationElementBase{TState}"/> is registered in the DI container as
-        /// <see cref="NotificationElementServiceKey{TClientModule, TNotificationElement}">keyed service</see>.
-        /// </para>
-        ///
-        /// A <see cref="INotificationElementRegistry{TClientModule}">registry</see> is registered in the last step.
+        /// Registers every public <see cref="NotificationElementBase{TState}"/> in the assembly of <typeparamref name="TClientModule"/>
+        /// that carries <see cref="InitialNotificationElementAttribute{TClientModule}"/>, and the module's
+        /// <see cref="INotificationElementRegistry{TClientModule}"/>.
         /// </summary>
-        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+        /// <remarks>
+        /// Each element's state type is registered as a keyed service under
+        /// <see cref="NotificationElementServiceKey{TClientModule, TNotificationElement}"/>.
+        /// </remarks>
         public IServiceCollection AddNotificationElements<TClientModule>()
             where TClientModule : class, IClientModule
         {

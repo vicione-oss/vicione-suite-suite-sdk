@@ -12,7 +12,8 @@ using ViciOne.Ui.MonochromeIcons.Core.Extensions;
 namespace Sdk.Client.Components.Settings;
 
 /// <summary>
-/// A component that provides a file upload field with drag-and-drop support and progress tracking. T is used as a marker to identify the upload handler for this upload control.
+/// A settings field that uploads a picked or dropped file through an <see cref="IStreamUploadHandler{T}"/> and shows its progress;
+/// <typeparamref name="T"/> is the marker that selects the handler.
 /// </summary>
 public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDisposable
 {
@@ -45,12 +46,13 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     private bool _dropIncoming;
 
     /// <summary>
-    /// Gets or sets the CSS classes for the choose button icon. After a file has been chosen, during the upload it will be replaced with a cancel button icon. Default is a small folder icon.
+    /// Gets or sets the CSS classes of the choose button's icon, replaced by a cancel icon during an upload.
+    /// Defaults to a small folder icon.
     /// </summary>
     [Parameter] public string ChooseButtonIconCssClasses { get; set; } = MonochromeIconName.Folder.GetCssClasses(MonochromeIconSize.Small).ToSpaceSeparated();
 
     /// <summary>
-    /// Gets or sets the Text the choose button icon. After a file has been chosen, during the upload it will be replaced with a localized "cancel" text. Default is the localized word for "choose".
+    /// Gets or sets the choose button's text, replaced by a localized "Cancel" during an upload. Defaults to a localized "Choose".
     /// </summary>
     [Parameter] public string ChooseButtonText { get; set; } = CommonVocabulary.Choose;
 
@@ -65,19 +67,20 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     [Inject] private ILogger<FileDropZone.FileDropZone> Logger { get; set; } = default!;
 
     /// <summary>
-    /// Value rendered into <see href="https://html.spec.whatwg.org/#attr-input-accept">accept</see> attribute of internal input fields
+    /// Gets or sets the value of the inputs' <see href="https://html.spec.whatwg.org/#attr-input-accept">accept</see> attribute.
+    /// A dropped file is also checked against it, but only by exact, comma-separated file extensions such as <c>.png,.jpg</c>.
     /// </summary>
     [Parameter]
     public string? Accept { get; set; }
 
     /// <summary>
-    /// Maximum allowed size of the uploaded file in bytes. Default is 500 KB.
+    /// Gets or sets the maximum file size in bytes. Defaults to 500 KiB.
     /// </summary>
     [Parameter]
     public long MaximumAllowedSize { get; set; } = 500 * 1024;
 
     /// <summary>
-    /// Placeholder text displayed in the input field when no file is selected.
+    /// Gets or sets the text displayed while no file is selected.
     /// </summary>
     [Parameter]
     public string? Placeholder { get; set; }
@@ -96,7 +99,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
 
 
     /// <summary>
-    /// Gets or sets whether the filename should be displayed. Default is false.
+    /// Gets or sets whether the filename is hidden. Defaults to <see langword="false"/>.
     /// </summary>
     [Parameter]
     public bool HideFilename { get; set; }
@@ -126,25 +129,25 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Invoked when the upload process starts.
+    /// Gets or sets the callback invoked when an upload starts.
     /// </summary>
     [Parameter]
     public EventCallback<IUploadTicket> OnUploadStart { get; set; }
 
     /// <summary>
-    /// Invoked when the upload process completes successfully.
+    /// Gets or sets the callback invoked when an upload succeeds.
     /// </summary>
     [Parameter]
     public EventCallback<StreamUploadSuccessResult> OnUploadSuccess { get; set; }
 
     /// <summary>
-    /// Invoked when the upload process encounters an error.
+    /// Gets or sets the callback invoked when an upload fails, including when the handler throws.
     /// </summary>
     [Parameter]
     public EventCallback<StreamUploadErrorResult> OnUploadError { get; set; }
 
     /// <summary>
-    /// Invoked when the upload process is canceled.
+    /// Gets or sets the callback invoked when an upload is canceled.
     /// </summary>
     [Parameter]
     public EventCallback OnUploadCancel { get; set; }
@@ -163,9 +166,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     }
 
     /// <summary>
-    /// Called when the component's parameters are set.
+    /// Takes over changed parameters; a new filename, ticket, ticket factory or handler cancels the running upload.
     /// </summary>
-    /// <returns>Asyncronous Task</returns>
     protected override async Task OnParametersSetAsync()
     {
         var uploadTicket = _uploadTicket;
@@ -236,9 +238,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     }
 
     /// <summary>
-    /// Releases all resources used by the component
+    /// Cancels a running upload and releases the upload ticket and the JavaScript module.
     /// </summary>
-    /// <returns>async Task</returns>
     public async ValueTask DisposeAsync()
     {
         if (Interlocked.CompareExchange(ref _disposedAsync, true, false))
@@ -271,11 +272,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
         await _jsModule.TryDisposeAsync(Logger);
     }
 
-    /// <summary>
-    /// Called after the component has been rendered.
-    /// </summary>
-    /// <param name="firstRender"></param>
-    /// <returns>async Task</returns>
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (_attachJsTask is null)
@@ -289,9 +286,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     }
 
     /// <summary>
-    /// Determines whether the component should be rendered.
+    /// Renders only when the component's state changed since the last render.
     /// </summary>
-    /// <returns>True if the component should be rendered, otherwise false.</returns>
     protected override bool ShouldRender()
     {
         if (_shouldRender)
@@ -328,11 +324,11 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
         }
         catch (OperationCanceledException)
         {
-            // Nothing to do here, we return gracefully
+            // Canceled by DisposeAsync: the component is going away, so there is nothing to reset.
         }
         catch (ObjectDisposedException)
         {
-            // Semaphore or other object already disposed, nothing we can do, return gracefully
+            // Disposed concurrently: the component is going away, so there is nothing to reset.
         }
 
         if (FilenameChanged.HasDelegate)
@@ -352,6 +348,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
             }
             catch (JSDisconnectedException)
             {
+                // The circuit is gone, so there is no JavaScript side left to update:
                 // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
             }
             catch (Exception exception)
@@ -363,14 +360,13 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
 
     private async Task FileActionButtonClick()
     {
-        // handle cancel upload if in progress, otherwise show file picker
+        // The button cancels a running upload; otherwise it opens the file picker.
         if (_uploadTicket is not null && _uploadProgress is not null)
         {
             await ResetAsync();
             return;
         }
 
-        // show file picker dialog via JS interop
         if (_jsObjectReference is not null)
         {
             try
@@ -379,6 +375,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
             }
             catch (JSDisconnectedException)
             {
+                // The circuit is gone, so there is no JavaScript side left to update:
                 // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability#javascript-interop-calls-without-a-circuit
             }
             catch (Exception exception)
@@ -473,7 +470,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
         }
         catch (ObjectDisposedException)
         {
-            // CancellationTokenSource already disposed, return gracefully
+            // Disposed during the upload: the component is going away.
         }
         catch (Exception ex)
         {

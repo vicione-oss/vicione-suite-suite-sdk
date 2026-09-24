@@ -7,12 +7,12 @@
 public readonly record struct ModuleKey
 {
     /// <summary>
-    /// Gets the unique identifier of the module.
+    /// Gets or initializes the unique identifier of the module.
     /// </summary>
     public string ModuleId { get; init; }
 
     /// <summary>
-    /// Gets the type of the module.
+    /// Gets or initializes the type of the module.
     /// </summary>
     public ModuleType ModuleType { get; init; }
 

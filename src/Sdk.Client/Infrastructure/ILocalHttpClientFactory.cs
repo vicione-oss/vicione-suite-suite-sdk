@@ -1,13 +1,12 @@
 namespace Sdk.Client.Infrastructure;
 
 /// <summary>
-/// Interface to allow injection of a pre-configured HttpClient to bypass
-/// the proxy settings and use the loopback address for local communication with the server.
+/// Provides an <see cref="HttpClient"/> that bypasses the proxy settings and reaches the server over the loopback address.
 /// </summary>
 public interface ILocalHttpClient
 {
     /// <summary>
-    /// The pre-configured http client instance to use for requests
+    /// Gets the preconfigured client for requests to the local server.
     /// </summary>
     HttpClient Client { get; }
 }

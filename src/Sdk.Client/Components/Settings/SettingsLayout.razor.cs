@@ -6,8 +6,7 @@
 public sealed partial class SettingsLayout : ComponentBase
 {
     /// <summary>
-    /// <see cref="RenderFragment"/> to place one or multiple <see cref="SettingsGroup"/> components
-    /// to visually group individual settings.
+    /// Gets or sets the page's content: one or more <see cref="SettingsGroup"/> components.
     /// </summary>
     [Parameter, EditorRequired]
     public RenderFragment ChildContent { get; set; }

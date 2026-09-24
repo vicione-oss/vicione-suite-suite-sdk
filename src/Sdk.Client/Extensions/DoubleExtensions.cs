@@ -10,7 +10,8 @@ public static class DoubleExtensions
     extension(double number)
     {
         /// <summary>
-        /// Converts a double to a string formatted for use as an attribute value, using the invariant culture.
+        /// Formats the number with one decimal place and the invariant culture, followed by <paramref name="addition"/>,
+        /// e.g. <c>12.5deg</c> for a style attribute.
         /// </summary>
         public string ToAttributeValue(string addition = "")
         {
@@ -19,13 +20,13 @@ public static class DoubleExtensions
         }
 
         /// <summary>
-        /// Converts a double to a fixed-point string representation using the current culture, with optional precision.
+        /// Formats the number in fixed-point notation with the current culture; <paramref name="precision"/> sets the decimal places,
+        /// <see langword="null"/> uses the culture's default.
         /// </summary>
         public string ToFixedPointValue(int? precision = null)
         {
             var culture = CultureInfo.CurrentCulture;
 
-            // build format-string with a number of decimal places, for example {0:F2}
             var format = "{0:F";
             if (precision != null)
             {

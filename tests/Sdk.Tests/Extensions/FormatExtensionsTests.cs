@@ -5,6 +5,8 @@ namespace Sdk.Tests.Extensions;
 
 public sealed class FormatExtensionsTests
 {
+    // Covers the method until its removal in the next major version.
+#pragma warning disable CS0618 // Type or member is obsolete
     public sealed class CalculateBytesToMb
     {
         [Theory]
@@ -22,5 +24,6 @@ public sealed class FormatExtensionsTests
             result.Should().Be(expectedBytes);
         }
     }
+#pragma warning restore CS0618
 }
 

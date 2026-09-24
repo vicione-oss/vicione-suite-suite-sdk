@@ -5,32 +5,32 @@ using Sdk.Client.NavTiles.Enums;
 namespace Sdk.Client.NavTiles.Services;
 
 /// <summary>
-/// Item to register a navigation tile in a <see cref="INavTileRegistry{TClientModule}"/>
+/// A navigation tile registered in an <see cref="INavTileRegistry{TClientModule}"/>.
 /// </summary>
 public interface INavTileRegistryItem
 {
     /// <summary>
-    /// Identifier that uniquely identifies the navigation tile
+    /// Gets the tile's ID.
     /// </summary>
     string Id { get; }
 
     /// <summary>
-    /// Component type that implements the navigation tile
+    /// Gets the component type that renders the tile.
     /// </summary>
     Type ComponentType { get; }
 
     /// <summary>
-    /// State of the navigation tile
+    /// Gets the tile's state.
     /// </summary>
     NavTileState State { get; }
 
     /// <summary>
-    /// Group of the navigation tile
+    /// Gets the tile's group.
     /// </summary>
     NavTileGroup Group { get; }
 
     /// <summary>
-    /// Optional authorization requirement, otherwise <see langword="null" /> to skip authorization
+    /// Gets the requirement to see the tile; <see langword="null"/> if everyone may.
     /// </summary>
     IAuthorizationRequirement? AuthorizationRequirement { get; }
 }

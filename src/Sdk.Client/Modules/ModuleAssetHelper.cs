@@ -116,7 +116,7 @@ public static class ModuleAssetHelper
     }
 
     /// <summary>
-    /// Constructs a relative URI for a module-specific SVG icon file.
+    /// Returns <c>_content/{assembly of T}/svg/{iconName}</c>, relative to the current directory and without a leading <c>./</c>.
     /// </summary>
     /// <typeparam name="T">The module type implementing <see cref="IModule"/>.</typeparam>
     /// <param name="iconName">The name of the SVG icon file. Cannot be null or empty.</param>
@@ -143,11 +143,6 @@ public static class ModuleAssetHelper
     /// <returns>The appropriate prefix for constructing relative URIs.</returns>
     private static string GetPrefix(bool relative) => relative ? "" : ".";
 
-    /// <summary>
-    /// Validates that the provided filename is not null or empty.
-    /// </summary>
-    /// <param name="filename">The filename to validate.</param>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="filename"/> is null or empty.</exception>
     private static void ValidateFilename(string filename)
     {
         if (string.IsNullOrEmpty(filename))
@@ -178,7 +173,7 @@ public static class ModuleAssetHelper
     {
         try
         {
-            // Note: If assembly was loaded via zip this can fail. In such cases, we fallback to GetName().
+            // This can fail for an assembly loaded from a zip; GetName() below is the fallback.
             var calling = moduleAssembly.GetName().Name ?? moduleAssembly.ManifestModule.Name;
             if (string.IsNullOrEmpty(calling))
                 throw new InvalidDataException("Calling manifest not found!");
@@ -186,13 +181,11 @@ public static class ModuleAssetHelper
             if (!calling.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
                 return calling;
 
-            // Remove .dll extension
             return calling[..^4];
         }
         catch (InvalidDataException)
         {
-            // This happens on WASM assemblies that are not forced to create a manifest.
-            // We will fallback below.
+            // WebAssembly assemblies need not carry a manifest; GetName() below is the fallback.
         }
 
         var name = moduleAssembly.GetName();

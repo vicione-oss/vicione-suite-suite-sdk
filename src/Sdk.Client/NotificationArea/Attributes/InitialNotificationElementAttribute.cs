@@ -17,7 +17,8 @@ public sealed class InitialNotificationElementAttribute<TClientModule> : Attribu
     private Guid _id = Guid.NewGuid();
 
     /// <summary>
-    /// GUID string for uniquely identifying the notification element in <see cref="INotificationElementRegistry{TClientModule}"/> operations.
+    /// Gets or sets the GUID string identifying the element in <see cref="INotificationElementRegistry{TClientModule}"/> operations;
+    /// setting a value that is no GUID throws a <see cref="FormatException"/>.
     /// </summary>
     /// <remarks>
     /// The default value is a random <see cref="Guid"/> string.
@@ -29,12 +30,12 @@ public sealed class InitialNotificationElementAttribute<TClientModule> : Attribu
     }
 
     /// <summary>
-    /// Specifies the default value assigned to <see cref="INotificationElementState.Visible"/>.
+    /// Gets or sets the initial value of <see cref="INotificationElementState.Visible"/>.
     /// </summary>
     public bool Visible { get; set; } = Constants.NotificationElementVisibleDefault;
 
     /// <summary>
-    /// Specifies the default value assigned to <see cref="INotificationElementRegistryItem.Position"/>.
+    /// Gets or sets the initial value of <see cref="INotificationElementRegistryItem.Position"/>.
     /// </summary>
     public int Position { get; set; } = Constants.NotificationElementPositionDefault;
 }

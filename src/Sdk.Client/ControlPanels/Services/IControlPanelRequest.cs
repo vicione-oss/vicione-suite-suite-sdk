@@ -3,42 +3,39 @@
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Request for a control panel
+/// Asks the host to display a control panel, e.g. one hidden from navigation.
 /// </summary>
 public interface IControlPanelRequest
 {
     /// <summary>
-    /// Raised when <see cref="Send(IControlPanelRegistryItem,Action)"/> was called
+    /// Raised by every <c>Send</c> overload; a handler can cancel the request.
     /// </summary>
     event Func<ControlPanelRequestedEventArgs, Task>? ControlPanelRequested;
 
     /// <summary>
-    /// Raises event <see cref="ControlPanelRequested"/> to notify about the request to display
-    /// the control panel associated with the given <paramref name="controlPanelRegistryItem"/>
+    /// Requests the control panel of <paramref name="controlPanelRegistryItem"/> by raising <see cref="ControlPanelRequested"/>.
     /// </summary>
-    /// <param name="controlPanelRegistryItem"></param>
-    /// <param name="configureState">Optional action used to configure the control panel state</param>
+    /// <param name="controlPanelRegistryItem">The registry item of the control panel to display.</param>
+    /// <param name="configureState">Configures the state before the panel is shown; <see langword="null"/> leaves it unchanged.</param>
     /// <returns>
-    /// True if the request was canceled via <see cref="ControlPanelRequestedEventArgs.Cancel"/>, otherwise false.
+    /// <see langword="true"/> if a handler canceled the request via <see cref="ControlPanelRequestedEventArgs.Cancel"/>.
     /// </returns>
     Task<bool> Send(IControlPanelRegistryItem controlPanelRegistryItem, Action? configureState = null);
 
     /// <summary>
-    /// Raises event <see cref="ControlPanelRequested"/> to notify about the request to display
-    /// the control panel implemented by <typeparamref name="TComponent"/>.
+    /// Requests the control panel implemented by <typeparamref name="TComponent"/> by raising <see cref="ControlPanelRequested"/>.
     /// </summary>
     /// <returns>
-    /// True if the request was canceled via <see cref="ControlPanelRequestedEventArgs.Cancel"/>, otherwise false.
+    /// <see langword="true"/> if a handler canceled the request via <see cref="ControlPanelRequestedEventArgs.Cancel"/>.
     /// </returns>
     Task<bool> Send<TComponent>() where TComponent : ComponentBase, IControlPanel;
 
     /// <summary>
-    /// Raises event <see cref="ControlPanelRequested"/> to notify about the request to display
-    /// the control panel implemented by <typeparamref name="TComponent"/>.
+    /// Requests the control panel implemented by <typeparamref name="TComponent"/> by raising <see cref="ControlPanelRequested"/>.
     /// </summary>
-    /// <param name="configureState">Action used to configure the control panel state</param>
+    /// <param name="configureState">Configures the state before the panel is shown; <see langword="null"/> leaves it unchanged.</param>
     /// <returns>
-    /// True if the request was canceled via <see cref="ControlPanelRequestedEventArgs.Cancel"/>, otherwise false.
+    /// <see langword="true"/> if a handler canceled the request via <see cref="ControlPanelRequestedEventArgs.Cancel"/>.
     /// </returns>
     Task<bool> Send<TComponent, TState>(Action<TState>? configureState)
         where TComponent : ControlPanelBase<TState>, IControlPanel

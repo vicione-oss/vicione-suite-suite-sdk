@@ -35,7 +35,7 @@ public interface INotificationElementRegistryItem
 }
 
 /// <summary>
-/// Represents a registered notificaton element within a <see cref="INotificationElementRegistry{TClientModule}"/>.
+/// Represents a registered notification element within a <see cref="INotificationElementRegistry{TClientModule}"/>.
 /// </summary>
 public interface INotificationElementRegistryItem<TClientModule> : INotificationElementRegistryItem
     where TClientModule : class, IClientModule;

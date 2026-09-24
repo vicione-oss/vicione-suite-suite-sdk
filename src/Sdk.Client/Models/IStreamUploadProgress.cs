@@ -1,31 +1,32 @@
 namespace Sdk.Client.Models;
 
 /// <summary>
-/// Progress of a stream upload
+/// The progress of a stream upload.
 /// </summary>
 public interface IStreamUploadProgress
-{    /// <summary>
-     /// Path associated with the stream upload
-     /// </summary>
+{
+    /// <summary>
+    /// Gets the path the upload targets.
+    /// </summary>
     string Path { get; }
 
     /// <summary>
-    /// Filename associated with the stream upload
+    /// Gets the name of the uploaded file.
     /// </summary>
     string Filename { get; }
 
     /// <summary>
-    /// File resulting from the stream upload
+    /// Gets the path of the stored file; <see langword="null"/> until it is known.
     /// </summary>
     string? DestinationFile { get; }
 
     /// <summary>
-    /// Bytes in total being uploaded
+    /// Gets the total number of bytes to upload.
     /// </summary>
     long BytesTotal { get; }
 
     /// <summary>
-    /// Bytes already uploaded
+    /// Gets the number of bytes uploaded so far.
     /// </summary>
     long BytesUploaded { get; }
 }

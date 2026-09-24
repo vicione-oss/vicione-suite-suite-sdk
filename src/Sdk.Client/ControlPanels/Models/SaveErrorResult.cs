@@ -7,7 +7,7 @@ namespace Sdk.Client.ControlPanels.Models;
 public class SaveErrorResult(string message, int? errorCode = null) : ISaveResult
 {
     /// <summary>
-    /// The error message describing the reason for the failure.
+    /// Gets the message describing why the save failed.
     /// </summary>
     public string Message => message;
 

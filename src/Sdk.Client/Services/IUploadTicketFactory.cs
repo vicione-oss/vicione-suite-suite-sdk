@@ -10,6 +10,5 @@ public interface IUploadTicketFactory
     /// <summary>
     /// Creates a new instance of <see cref="IUploadTicket"/>.
     /// </summary>
-    /// <returns></returns>
     IUploadTicket CreateUploadTicket();
 }

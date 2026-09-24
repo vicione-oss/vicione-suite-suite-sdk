@@ -18,13 +18,15 @@ public class TestConfig
     private const string HostManagementMockClientKey = "HostManagement:UseMockClient";
 
     /// <summary>
-    /// Gets the dictionary holding the current in-memory configuration settings.
+    /// Gets the settings, keyed by colon-separated configuration path; later builds see changes made here.
     /// </summary>
     public Dictionary<string, string?> CurrentSettings { get; } = [];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TestConfig"/> class.
+    /// Creates a configuration, by default pre-filled for a standalone instance with an in-memory bus,
+    /// a mocked host-management client and <c>Error</c> log level.
     /// </summary>
+    /// <param name="addDefaults"><see langword="false"/> starts from an empty configuration.</param>
     public TestConfig(bool addDefaults = true)
     {
         if (addDefaults)
@@ -38,7 +40,7 @@ public class TestConfig
         => GetInMemoryConfigurationBuilder().Build();
 
     /// <summary>
-    /// Gets an <see cref="IConfigurationBuilder"/> with the current in-memory settings.
+    /// Returns a builder seeded with a snapshot of the current settings, for adding further sources.
     /// </summary>
     public IConfigurationBuilder GetInMemoryConfigurationBuilder()
         => new ConfigurationBuilder().AddInMemoryCollection(CurrentSettings);
@@ -53,7 +55,7 @@ public class TestConfig
     }
 
     /// <summary>
-    /// Sets the application's home directory path in the configuration.
+    /// Sets <c>Instance:HomeDirectory</c>, the application's home directory.
     /// </summary>
     public TestConfig SetAppDirectory(string? value)
     {
@@ -62,7 +64,7 @@ public class TestConfig
     }
 
     /// <summary>
-    /// Sets the application's cache directory path in the configuration.
+    /// Sets <c>Instance:CacheDirectory</c>, the application's cache directory.
     /// </summary>
     public TestConfig SetCacheDirectory(string? value)
     {
@@ -71,7 +73,7 @@ public class TestConfig
     }
 
     /// <summary>
-    /// Sets the application's backup directory path in the configuration.
+    /// Sets <c>Instance:BackupDirectory</c>, the application's backup directory.
     /// </summary>
     public TestConfig SetBackupDirectory(string? value)
     {

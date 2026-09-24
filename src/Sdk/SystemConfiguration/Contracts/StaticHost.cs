@@ -10,13 +10,13 @@ namespace Sdk.SystemConfiguration.Contracts;
 public sealed record StaticHost
 {
     /// <summary>
-    /// The IP address of the static host.
+    /// Gets or initializes the IP address of the static host.
     /// </summary>
     [JsonConverter(typeof(IPAddressConverter))]
     public required IPAddress IpAddress { get; init; }
 
     /// <summary>
-    /// The hostname of the static host.
+    /// Gets or initializes the hostname of the static host.
     /// </summary>
     public required string Hostname { get; init; }
 }

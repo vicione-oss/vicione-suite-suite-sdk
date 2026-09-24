@@ -131,12 +131,26 @@ public class ReflectionExtensionTests
         {
             // Arrange
             var assembly = typeof(ReflectionExtensionTests).Assembly;
+            var company = assembly.GetCustomAttribute<AssemblyCompanyAttribute>()!.Company;
 
             // Act
-            var attribute = assembly.GetAttributeValue<ForwardToUIAttribute>(_ => "test", "default");
+            var value = assembly.GetAttributeValue<AssemblyCompanyAttribute>(a => a.Company, "default");
 
-            // Assert - what should it do?
-            attribute.Should().NotBeNull();
+            // Assert
+            value.Should().Be(company).And.NotBe("default");
+        }
+
+        [Fact]
+        public void Should_return_default_when_attribute_is_missing()
+        {
+            // Arrange
+            var assembly = typeof(ReflectionExtensionTests).Assembly;
+
+            // Act
+            var value = assembly.GetAttributeValue<ForwardToUIAttribute>(_ => "resolved", "default");
+
+            // Assert
+            value.Should().Be("default");
         }
     }
 
@@ -184,7 +198,7 @@ public class ReflectionExtensionTests
 
             // Act
             // 3. Property - public List<Foo?> Lst3 { get; set; } = new();
-            // Typ der Liste (hier 'Foo') ist Nullable.
+            // The list's element type ('Foo') is nullable.
             var isNullable = properties[2].IsNullable();
 
             // Assert

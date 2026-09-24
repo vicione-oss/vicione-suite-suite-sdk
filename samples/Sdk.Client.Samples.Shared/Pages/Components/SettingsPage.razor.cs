@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Sdk.Client.Components.Settings;
 using Sdk.Client.Samples.Shared.Models;
+using Sdk.Client.Samples.Shared.Services;
 using ViciOne.Ui.Blazor.Components.ComboBox;
 namespace Sdk.Client.Samples.Shared.Pages.Components;
 
@@ -13,6 +14,12 @@ public sealed partial class SettingsPage : ComponentBase
     private static readonly CultureInfo[] s_cultureComboBoxItems = [new("en-US"), new("de-DE")];
 
     private SettingsFieldFileUpload<TestUploadTicket>? _fileUpload;
+
+    // The upload field cancels a running upload whenever its filename, ticket factory or handler parameter changes, and
+    // currently also whenever this page re-renders without passing an UploadTicket. So the factory and handler live in
+    // fields, and the filename is not bound: binding it would re-render this page the moment an upload starts.
+    private readonly TestUploadTicketFactory _uploadTicketFactory = new();
+    private readonly TestUploadHandler _uploadHandler = new();
 
     private bool _switchExpanderIsLoading;
     private bool _switchExpanderValue;
@@ -37,8 +44,6 @@ public sealed partial class SettingsPage : ComponentBase
 
     private bool SettingsFieldIsLoading => _selectedSettingsFieldLoadingIndication is not null;
     private SettingsFieldLoadingIndication SettingsFieldLoadingIndication => _selectedSettingsFieldLoadingIndication ?? default;
-    [Inject]
-    public static ILogger<SettingsPage> Logger { get; set; } = default!;
 
     public async Task ResetFileUpload()
     {
@@ -50,6 +55,8 @@ public sealed partial class SettingsPage : ComponentBase
         await _fileUpload.ResetAsync();
     }
 
+    // Shows the pattern for a setting that takes time to apply: set IsLoading while saving, so the switch blocks further
+    // input, and clear it afterwards. The delay stands in for a call to the backend.
     private async Task SwitchExpanderValueChanged(bool value)
     {
         _switchExpanderValue = value;

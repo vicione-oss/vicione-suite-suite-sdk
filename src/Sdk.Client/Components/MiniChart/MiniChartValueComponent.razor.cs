@@ -35,9 +35,9 @@ public partial class MiniChartValueComponent : ComponentBase
     [Parameter, EditorRequired] public string Label { get; set; }
 
     /// <summary>
-    /// Method invoked when the component is initialized. It ensures that the component
-    /// exists within a parent <see cref="MiniChartComponent"/>.
+    /// Verifies that the component is placed inside a <see cref="MiniChartComponent"/>.
     /// </summary>
+    /// <exception cref="ArgumentNullException">Thrown if there is no enclosing <see cref="MiniChartComponent"/>.</exception>
     protected override void OnInitialized()
     {
         if (MiniChart is null)

@@ -36,28 +36,26 @@ public static class BackendModuleExtensions
             module.ConfigureServices(services, config, mvcBuilder);
             module.ConfigureMessageBus(busRegistration, InstanceType.Standalone);
 
-            // todo
-            // var endpointBuilder = serviceProvider.GetRequiredService<IEndpointRouteBuilder>();
-            // module.MapEndpoints(endpointBuilder);
+            // todo: call module.MapEndpoints with the registered IEndpointRouteBuilder substitute.
 
             return services.BuildServiceProvider();
         }
 
         /// <summary>
-        /// Initializes a backend module for testing, setting up services and the application pipeline.
+        /// Runs the module's service, message-bus and pipeline configuration against test doubles and returns the resulting provider.
         /// </summary>
-        /// <param name="services">Modify application builder</param>
-        /// <param name="setup">Modify bus configuration</param>
+        /// <param name="services">Adjusts the service collection before the module configures it.</param>
+        /// <param name="setup">Configures the <see cref="IApplicationBuilder"/> substitute passed to <c>UseServices</c>.</param>
         public ServiceProvider TestModuleInitialization(Action<ServiceCollection>? services = null,
             Action<IApplicationBuilder>? setup = null) => module.TestSagaModuleInitialization(services, setup);
 
         /// <summary>
-        /// Initializes a backend module with saga support for testing, setting up services,
-        /// the application pipeline, and the message bus.
+        /// Like <see cref="TestModuleInitialization"/>, but also exposes the <see cref="IBusRegistrationConfigurator"/> substitute,
+        /// e.g. to register sagas.
         /// </summary>
-        /// <param name="services">Modify DI container</param>
-        /// <param name="setup">Modify application builder</param>
-        /// <param name="busSetup">Modify bus configuration</param>
+        /// <param name="services">Adjusts the service collection before the module configures it.</param>
+        /// <param name="setup">Configures the <see cref="IApplicationBuilder"/> substitute passed to <c>UseServices</c>.</param>
+        /// <param name="busSetup">Configures the <see cref="IBusRegistrationConfigurator"/> substitute before the module does.</param>
         public ServiceProvider TestSagaModuleInitialization(Action<ServiceCollection>? services = null,
             Action<IApplicationBuilder>? setup = null,
             Action<IBusRegistrationConfigurator>? busSetup = null)

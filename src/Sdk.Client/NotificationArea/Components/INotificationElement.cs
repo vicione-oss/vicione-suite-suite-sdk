@@ -1,6 +1,6 @@
 ﻿namespace Sdk.Client.NotificationArea.Components;
 
 /// <summary>
-/// Interface to create notification element constraints in other generic types.
+/// Marks a component as a notification element, for use in generic constraints.
 /// </summary>
 public interface INotificationElement : IComponent;

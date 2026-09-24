@@ -24,17 +24,17 @@ namespace Sdk.SystemConfiguration.Contracts;
 public sealed record DnsSettings
 {
     /// <summary>
-    /// The hostname of the system.
+    /// Gets or initializes the hostname of the system.
     /// </summary>
     public string Hostname { get; init; } = string.Empty;
 
     /// <summary>
-    /// Whether multicast DNS (mDNS) is enabled on the system.
+    /// Gets or initializes whether multicast DNS (mDNS) is enabled on the system.
     /// </summary>
     public bool MulticastDnsEnabled { get; init; }
 
     /// <summary>
-    /// The list of DNS name servers (IPv4 and IPv6 addresses).
+    /// Gets or initializes the list of DNS name servers (IPv4 and IPv6 addresses).
     /// </summary>
     /// <remarks>
     /// Only populated when name servers are enabled in the system configuration.
@@ -43,7 +43,7 @@ public sealed record DnsSettings
     public IReadOnlyList<IPAddress> NameServers { get; init; } = [];
 
     /// <summary>
-    /// The primary DNS suffix.
+    /// Gets or initializes the primary DNS suffix.
     /// </summary>
     /// <remarks>
     /// Only populated when the DNS suffix feature is enabled in the system configuration.
@@ -51,7 +51,7 @@ public sealed record DnsSettings
     public string DnsSuffix { get; init; } = string.Empty;
 
     /// <summary>
-    /// The list of DNS search domains, excluding the primary DNS suffix.
+    /// Gets or initializes the list of DNS search domains, excluding the primary DNS suffix.
     /// </summary>
     /// <remarks>
     /// Only populated when search domains are enabled in the system configuration.
@@ -59,7 +59,7 @@ public sealed record DnsSettings
     public IReadOnlyList<string> SearchDomains { get; init; } = [];
 
     /// <summary>
-    /// The list of static host entries.
+    /// Gets or initializes the list of static host entries.
     /// </summary>
     /// <remarks>
     /// Only populated when static hosts are enabled in the system configuration.

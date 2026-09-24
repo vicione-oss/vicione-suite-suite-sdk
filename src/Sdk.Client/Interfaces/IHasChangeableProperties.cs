@@ -3,12 +3,12 @@
 namespace Sdk.Client.Interfaces;
 
 /// <summary>
-/// Describes an instance with changeable properties
+/// An object that reports changes to its properties.
 /// </summary>
 public interface IHasChangeableProperties
 {
     /// <summary>
-    /// Raised when one or more properties have changed
+    /// Raised when one or more properties changed.
     /// </summary>
     event Action<PropertiesChangedEventArgs>? Changed;
 }

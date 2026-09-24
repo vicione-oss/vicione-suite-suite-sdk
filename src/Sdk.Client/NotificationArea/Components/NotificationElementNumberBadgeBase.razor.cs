@@ -1,13 +1,13 @@
 ﻿namespace Sdk.Client.NotificationArea.Components;
 
 /// <summary>
-/// Default implementation for a number badge
+/// Base class of a badge that shows a number.
 /// </summary>
 public abstract partial class NotificationElementNumberBadgeBase : ComponentBase, INotificationElementBadge
 {
     /// <summary>
-    /// Value displayed in the number badge
+    /// Returns the number to show.
     /// </summary>
-    /// <returns>Numeric value or null to hide the badge</returns>
+    /// <returns>The number, or <see langword="null"/> to hide the badge.</returns>
     protected abstract int? GetNumber();
 }

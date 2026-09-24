@@ -8,6 +8,12 @@
 - `Sdk.Backend.Messaging`
   - Added `MessagingHelper.FindAllMessageTypes`, returning every message type a consumer or activity handles, including the generic ones (`Fault<T>`) and the routing-slip contracts that `MessagingHelper.FindMessageTypes` filters out. `FindMessageTypes` answers "which message may name this receive endpoint" and is unchanged; `FindAllMessageTypes` is the set to use when classifying a consumer - which bus it belongs on, which retry ladder it gets. See ADR-002
 - `Sdk.Client`, `SettingsFieldButton` forwards `Busy` and `BusyIndication` to the underlying `Button`, so an action can show that it is running on the button itself instead of the field replacing the button with a spinner
+- `Sdk.Testing`, `TestWithDbContextSqlite` gets the standard async-dispose hook `DisposeAsyncCore`. `DisposeAsync` now calls it and then `Dispose(false)`, so a derived class can clean up on either path; before, `DisposeAsync` bypassed `Dispose(bool)` and an override never ran when the test framework disposed asynchronously. Both hooks run at most once
+
+### Deprecated
+
+- `Sdk`, `FormatExtensions.CalculateBytesToMb`, which is unused and whose name states the conversion backwards (it converts megabytes to bytes). It will be removed in the next major version; to display a file size, use `LongExtensions.LocalizeFileSizeHumanReadable` from `ViciOne.Ui.Localization`
+- `Sdk.Testing`, `IRenderedComponentExtensions.TriggerGridFirstRowSelectionChange` and `TriggerGridRowSelectionChange`. They will be removed in the next major version. There is no replacement; implement your own helper if needed
 
 ### Fixed
 
@@ -15,9 +21,21 @@
   - `MessagingHelper.ConsumesRequest` no longer reports non-request consumers as request consumers. It was an `All` over `FindMessageTypes`, which filters out generic message types, so a consumer with no remaining message types passed vacuously: every `IConsumer<Fault<T>>` and every `ConsumerDefinition<T>` answered `true`. It now requires at least one message type and evaluates all of them via `FindAllMessageTypes`. **Behaviour change:** `AddConsumers(MessagingHelper.ConsumesRequest, ...)` registers fewer consumers than before - fault consumers and consumer definitions are no longer registered by it, and any code that used the predicate to pick a bus or a retry policy will now classify those types differently. Classified as a behavioural defect fix under [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md), hence a minor rather than a major release
 - `Sdk.Testing`, SQLite contexts from `TestDbContextFactory` and `TestModuleDbContextRegistrar` now close their connection when disposed
 
+- `Sdk`
+  - `ModuleIdResolver.ResolveId` removes only the trailing `.Backend`, `.Client`, `.Internal` or `.Public` suffix. It used `string.Replace`, so a name that contained the suffix elsewhere lost that part too: `Acme.Backend.Tools.Backend` resolved to `Acme.Tools` instead of `Acme.Backend.Tools`
+- `Sdk.Backend`
+  - `ConfigurationExtensions.BindSection(key, defaultValue)` binds into `defaultValue` as documented, so values the section does not set keep their defaults. For an object section it returned a freshly bound instance and dropped every value of `defaultValue`; for a scalar section it ignored the configured value and returned `defaultValue`. **Behaviour change:** a partially configured section now yields the merged object
+- `Sdk.Backend.SourceGenerators`
+  - `ModuleDbContextGenerator` now generates the `DbSet<T>` properties of every interface deriving from `IModuleDbContext`. It used to read only the first such interface and only the members that interface declared itself, so the `DbSet`s of a layered module interface (`IMyDbContext : IBaseDbContext : IModuleDbContext`) or of a second module interface were not generated and had to be written by hand. Hand-written properties are still skipped, so existing modules compile unchanged
+
+- `Sdk.Testing`
+  - `MetadataValidator.ValidateMetadata` accepts `*.Public` dependency assemblies again. It compared the assembly name against a `.Public.dll` suffix, which an assembly name never carries, so every dependency passed in was rejected as "no public module library". Its "invalid version" errors now name the value that failed to parse instead of the module's own version
+  - `HttpMessageHandlerMock`, and so `HttpClientFactory.GetHttpClientWithResponse` and `AddHttpClient`, answer every request with the configured body. They returned the same `HttpContent` instance each time, so once the first response was disposed every later request failed with `ObjectDisposedException`
+
 ### Changed
 
 - `Sdk.Client`, `_overflow.scss`, `.overflow-area` allows mouse events to pass through to underlying elements
+- `Sdk`, `AddModuleFeature` rejects a feature name that contains `_` with an `ArgumentException`: the name-and-description overload when called, the factory overload when the feature is resolved. Policy names use `_` as separator, so `AccessLevelPolicyParser` cut such a name short and the policy never matched the feature. **Behaviour change:** a module that registered such a name now fails at startup instead of silently mis-authorizing
 
 ### Updated
 

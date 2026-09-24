@@ -10,7 +10,7 @@ namespace Sdk.SystemConfiguration;
 public record ControlServiceManagementResult(string ServiceName, ServiceState State, ErrorInfo? Error = null)
 {
     /// <summary>
-    /// Gets a value indicating whether the operation was successful.
+    /// Gets whether the operation was successful.
     /// </summary>
     public bool Success => Error is null;
 }

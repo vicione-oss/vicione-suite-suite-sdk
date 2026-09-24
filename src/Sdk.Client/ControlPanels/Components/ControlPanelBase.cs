@@ -46,7 +46,7 @@ public abstract partial class ControlPanelBase<TState> : ComponentBase, IAsyncDi
         => ValueTask.CompletedTask;
 
     /// <summary>
-    /// Call this to indicate that edit has begun.
+    /// Raises <see cref="OnBeginEdit"/>; call it when the panel enters edit mode.
     /// </summary>
     [MustCallBase]
     protected virtual async Task BeginEdit()
@@ -56,7 +56,7 @@ public abstract partial class ControlPanelBase<TState> : ComponentBase, IAsyncDi
     }
 
     /// <summary>
-    /// Call this to request cancellation of an already running edit.
+    /// Raises <see cref="OnCancelEdit"/>; call it to request that a running edit be canceled.
     /// </summary>
     [MustCallBase]
     protected virtual async Task CancelEdit()

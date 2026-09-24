@@ -9,9 +9,11 @@ internal static class IServiceCollectionExtensions
     {
         app.MapStaticAssets();
 
+        // The sample pages live in Sdk.Client.Samples.Shared, so its assembly must be added for their @page routes to be found.
         var endpointConventionBuilder = app.MapRazorComponents<App>()
             .AddAdditionalAssemblies([typeof(Routes).Assembly]);
 
+        // Only the render mode that Program.cs registered services for may be enabled here.
         if (useWebAssembly)
             endpointConventionBuilder.AddInteractiveWebAssemblyRenderMode();
         else

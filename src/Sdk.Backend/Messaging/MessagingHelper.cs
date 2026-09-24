@@ -7,12 +7,12 @@ using Sdk.Messaging;
 namespace Sdk.Backend.Messaging;
 
 /// <summary>
-/// Provides static helper methods for constructing MassTransit endpoint names and addresses.
+/// Derives MassTransit endpoint names and addresses from message types, and classifies consumers by the messages they handle.
 /// </summary>
 public static class MessagingHelper
 {
     /// <summary>
-    /// The standard prefix used for instance-specific queue names.
+    /// Prefix of the queue every instance-dependent message for one instance goes to: <c>Instance_{instanceId}</c>.
     /// </summary>
     public const string InstanceQueueNamePrefix = "Instance";
 
@@ -23,27 +23,27 @@ public static class MessagingHelper
     private static readonly char[] s_removeChars = ['.', '+'];
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified command type and optional instance ID.
+    /// Returns the <c>exchange:</c> address of <see cref="GetCommandEndpointName"/> for <paramref name="commandType"/>.
     /// </summary>
     public static Uri GetCommandEndpointAddress(Type commandType, Guid? instanceId)
         => new($"{ExchangePrefix}:{GetCommandEndpointName(null, commandType, instanceId)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified command.
+    /// Returns the <c>exchange:</c> address that <typeparamref name="TCommand"/> is sent to.
     /// </summary>
     public static Uri GetCommandEndpointAddress<TCommand>()
         where TCommand : class, ICommand
         => new($"{ExchangePrefix}:{GetCommandEndpointName(null, typeof(TCommand), null)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified instance-dependent command.
+    /// Returns the <c>exchange:</c> address of the queue of instance <paramref name="instanceId"/>.
     /// </summary>
     public static Uri GetCommandEndpointAddress<TCommand>(Guid instanceId)
         where TCommand : class, IInstanceDependentCommand
         => new($"{ExchangePrefix}:{GetCommandEndpointName(null, typeof(TCommand), instanceId)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified request-response message pair.
+    /// Returns the <c>exchange:</c> address that <typeparamref name="TRequest"/> is sent to.
     /// </summary>
     public static Uri GetRequestEndpointAddress<TRequest, TResponse>()
         where TRequest : class, IRequest<TResponse>
@@ -51,7 +51,7 @@ public static class MessagingHelper
         => new($"exchange:{GetRequestEndpointName(typeof(TRequest), null)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified instance-dependent request-response message pair.
+    /// Returns the <c>exchange:</c> address of the queue of instance <paramref name="instanceId"/>.
     /// </summary>
     public static Uri GetRequestEndpointAddress<TRequest, TResponse>(Guid? instanceId)
         where TRequest : class, IInstanceDependentRequest<TResponse>
@@ -59,20 +59,31 @@ public static class MessagingHelper
         => new($"exchange:{GetRequestEndpointName(typeof(TRequest), instanceId)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified activity argument type.
+    /// Returns the <c>exchange:</c> address of <see cref="GetActivityEndpointName"/> for <typeparamref name="TArgument"/>.
     /// </summary>
     public static Uri GetActivityEndpointAddress<TArgument>(Guid? instanceId) where TArgument : class, IActivityArgument
         => new($"{ExchangePrefix}:{GetActivityEndpointName(typeof(TArgument), instanceId)}");
 
     /// <summary>
-    /// Gets the MassTransit endpoint address for a specified instance-dependent activity argument type.
+    /// Returns the <c>exchange:</c> address of the activity endpoint of <typeparamref name="TArgument"/> on instance
+    /// <paramref name="instanceId"/>.
     /// </summary>
     public static Uri GetActivityEndpointAddress<TArgument>(Guid instanceId) where TArgument : class, IInstanceDependentActivityArgument
         => new($"{ExchangePrefix}:{GetActivityEndpointName(typeof(TArgument), instanceId)}");
 
     /// <summary>
-    /// Gets the endpoint name for a command message.
+    /// Returns the queue a command goes to: its <see cref="MessageEndpointAttribute"/> name or <c>Commands</c>, or
+    /// <c>Instance_{instanceId}</c> for an instance-dependent command.
     /// </summary>
+    /// <param name="consumerType">
+    /// The consuming type, checked for <see cref="ReadOnlyConsumerAttribute"/>; <see langword="null"/> skips the check.
+    /// </param>
+    /// <param name="messageType">An <see cref="ICommand"/> or <see cref="IInstanceDependentCommand"/> type.</param>
+    /// <param name="instanceId">The target instance; required for an instance-dependent command.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if <paramref name="messageType"/> is no command, or it is instance-dependent and <paramref name="instanceId"/> is
+    /// missing or <paramref name="consumerType"/> is not a read-only consumer.
+    /// </exception>
     public static string GetCommandEndpointName(MemberInfo? consumerType, Type messageType, Guid? instanceId)
     {
         if (!messageType.HasInterface<ICommand>() && !messageType.HasInterface<IInstanceDependentCommand>())
@@ -91,7 +102,8 @@ public static class MessagingHelper
     }
 
     /// <summary>
-    /// Gets the endpoint name for an event message.
+    /// Returns the queue an event is consumed from: <c>Instance_{instanceId}</c> for an instance-dependent event or a read-only
+    /// consumer, otherwise its <see cref="MessageEndpointAttribute"/> name or <c>Events</c>.
     /// </summary>
     public static string GetEventEndpointName(MemberInfo consumerType, Type messageType, Guid? instanceId)
         => messageType.HasInterface<IInstanceDependentMessage>() || consumerType.IsReadOnlyConsumer()
@@ -99,7 +111,8 @@ public static class MessagingHelper
             : messageType.GetEndpointName() ?? EventsQueueName;
 
     /// <summary>
-    /// Gets the endpoint name for a request message.
+    /// Returns the queue a request goes to: <c>Instance_{instanceId}</c> for an instance-dependent request, otherwise its
+    /// <see cref="MessageEndpointAttribute"/> name or <c>Requests</c>.
     /// </summary>
     public static string GetRequestEndpointName(Type messageType, Guid? instanceId)
         => messageType.IsInstanceDependent()
@@ -107,12 +120,8 @@ public static class MessagingHelper
             : messageType.GetEndpointName() ?? RequestsQueueName;
 
     /// <summary>
-    /// Checks if a consumer type handles any instance-dependent messages.
+    /// Returns whether any message type from <see cref="FindMessageTypes"/> is instance-dependent.
     /// </summary>
-    /// <returns>
-    /// <see langword="true"/> if the consumer handles at least one instance-dependent message,
-    /// otherwise <see langword="false"/>.
-    /// </returns>
     public static bool ConsumesInstanceDependentMessages(this Type consumerType)
         => consumerType.FindMessageTypes().Any(t => t.IsInstanceDependent());
 
@@ -179,21 +188,25 @@ public static class MessagingHelper
     }
 
     /// <summary>
-    /// Gets the custom endpoint name for a message type from its <see cref="MessageEndpointAttribute"/>
+    /// Returns the endpoint name declared by the type's <see cref="MessageEndpointAttribute"/>.
     /// </summary>
     /// <returns>The custom endpoint name if defined, otherwise <see langword="null"/>.</returns>
     public static string? GetEndpointName(this Type messageType)
         => messageType.GetAttribute<MessageEndpointAttribute>().FirstOrDefault()?.EndpointName;
 
     /// <summary>
-    /// Checks if a message type is instance-dependent by looking for <see cref="IInstanceDependentMessage"/>.
+    /// Returns whether the message type implements <see cref="IInstanceDependentMessage"/>.
     /// </summary>
     public static bool IsInstanceDependent(this Type messageType)
         => messageType.GetInterface<IInstanceDependentMessage>() is not null;
 
     /// <summary>
-    /// Gets the endpoint name for an activity argument type.
+    /// Returns the activity's <see cref="MessageEndpointAttribute"/> name, suffixed with <c>_{instanceId}</c> if the argument
+    /// type is instance-dependent.
     /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the argument type declares no endpoint, or it is instance-dependent and <paramref name="instanceId"/> is missing.
+    /// </exception>
     public static string GetActivityEndpointName(this Type argumentType, Guid? instanceId)
     {
         var endpointName = argumentType.GetEndpointName()
@@ -210,19 +223,19 @@ public static class MessagingHelper
     }
 
     /// <summary>
-    /// Checks if a consumer type is marked as read-only via the <see cref="ReadOnlyConsumerAttribute"/>.
+    /// Returns whether the type carries <see cref="ReadOnlyConsumerAttribute"/>.
     /// </summary>
     public static bool IsReadOnlyConsumer(this MemberInfo type)
         => type.GetCustomAttribute<ReadOnlyConsumerAttribute>() is not null;
 
     /// <summary>
-    /// Cleans a string by removing characters that are invalid in queue names.
+    /// Removes <c>.</c> and <c>+</c>, which are not valid in queue names.
     /// </summary>
     public static string CleanName(string name)
         => string.Concat(name.Split(s_removeChars));
 
     /// <summary>
-    /// Creates a clean, queue-name-friendly string from a <see cref="Type"/>.
+    /// Returns the type's short name, or its full name if <paramref name="fullname"/> is set, cleaned by <see cref="CleanName(string)"/>.
     /// </summary>
     public static string CleanName(Type type, bool fullname = false)
         => CleanName(fullname ? type.FullName! : TypeCache.GetShortName(type));

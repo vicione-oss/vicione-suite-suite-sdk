@@ -3,31 +3,44 @@
 namespace Sdk.Testing.Client;
 
 /// <summary>
-/// A mock implementation of <see cref="HttpMessageHandler"/> for testing purposes.
+/// Answers every request with 200 OK and a copy of <paramref name="responseContent"/>'s body and headers.
 /// </summary>
+/// <param name="responseContent">The response template; read once on the first request and disposed with the handler.</param>
 public class HttpMessageHandlerMock(HttpContent responseContent) : HttpMessageHandler
 {
     private readonly HttpContent _responseContent = responseContent;
 
-    /// <summary>
-    /// Sends an HTTP request as an asynchronous operation, returning a predefined response.
-    /// </summary>
+    // Each response gets its own content: disposing a response disposes its content, which broke every later request.
+    private readonly Lazy<byte[]> _body = new(() =>
+    {
+        using var stream = responseContent.ReadAsStream();
+        using var buffer = new MemoryStream();
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
+    });
+
+    /// <inheritdoc/>
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         => Task.FromResult(Send(request, cancellationToken));
 
-    /// <summary>
-    /// Sends an HTTP request, returning a predefined response.
-    /// </summary>
+    /// <inheritdoc/>
     protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
         => new()
         {
             StatusCode = HttpStatusCode.OK,
-            Content = _responseContent,
+            Content = CreateContent(),
         };
 
-    /// <summary>
-    /// Releases the unmanaged resources used by the <see cref="HttpMessageHandlerMock"/> and optionally disposes of the managed resources.
-    /// </summary>
+    private ByteArrayContent CreateContent()
+    {
+        var content = new ByteArrayContent(_body.Value);
+        foreach (var header in _responseContent.Headers)
+            content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+
+        return content;
+    }
+
+    /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         if (disposing)

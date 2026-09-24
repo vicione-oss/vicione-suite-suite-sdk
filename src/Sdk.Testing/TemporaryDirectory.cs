@@ -3,26 +3,27 @@
 namespace Sdk.Testing;
 
 /// <summary>
-/// Creates a temporary directory on the file system that is automatically deleted when disposed.
+/// Creates a directory that is deleted, with its contents, on dispose. A relative path resolves against the
+/// current directory, not the system temp directory.
 /// </summary>
 public sealed class TemporaryDirectory : IDisposable
 {
     private bool _disposedValue;
 
     /// <summary>
-    /// Gets the full path of the temporary directory.
+    /// Gets the directory path as passed to the constructor; relative unless an absolute path was given.
     /// </summary>
     public string Path { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TemporaryDirectory"/> class with a random directory name.
+    /// Creates a randomly named directory in the current directory.
     /// </summary>
     public TemporaryDirectory()
         : this(Framework.GetRandomFileName())
     { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TemporaryDirectory"/> class with a specific directory name.
+    /// Creates <paramref name="path"/>, or reuses it if it exists; it is deleted on dispose either way.
     /// </summary>
     public TemporaryDirectory(string path)
     {
@@ -31,7 +32,7 @@ public sealed class TemporaryDirectory : IDisposable
     }
 
     /// <summary>
-    /// Creates a new directory within this temporary directory.
+    /// Creates the nested directory <paramref name="pathParts"/> below <see cref="Path"/> and returns its path.
     /// </summary>
     public string CreateDirectory(params string[] pathParts)
     {
@@ -41,7 +42,8 @@ public sealed class TemporaryDirectory : IDisposable
     }
 
     /// <summary>
-    /// Creates a new, empty file within this temporary directory.
+    /// Creates an empty file below <see cref="Path"/>, creating missing parent directories, and returns its path.
+    /// The last element of <paramref name="pathParts"/> is the file name; an existing file is truncated.
     /// </summary>
     public string CreateFile(params string[] pathParts)
     {
@@ -65,7 +67,7 @@ public sealed class TemporaryDirectory : IDisposable
                 }
                 catch
                 {
-                    // Suppress exceptions during cleanup
+                    // Best effort: a file the test still holds open must not fail the test run.
                 }
             }
             _disposedValue = true;

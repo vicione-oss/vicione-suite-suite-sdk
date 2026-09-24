@@ -19,32 +19,32 @@
 public sealed record ProxySettings
 {
     /// <summary>
-    /// The HTTP proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the HTTP proxy configuration, or <see langword="null"/> if not enabled.
     /// </summary>
     public ProxyInfo? Http { get; init; }
 
     /// <summary>
-    /// The HTTPS proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the HTTPS proxy configuration, or <see langword="null"/> if not enabled.
     /// </summary>
     public ProxyInfo? Https { get; init; }
 
     /// <summary>
-    /// The FTP proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the FTP proxy configuration, or <see langword="null"/> if not enabled.
     /// </summary>
     public ProxyInfo? Ftp { get; init; }
 
     /// <summary>
-    /// The SFTP proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the SFTP proxy configuration, or <see langword="null"/> if not enabled.
     /// </summary>
     public ProxyInfo? Sftp { get; init; }
 
     /// <summary>
-    /// The SOCKS proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the SOCKS proxy configuration, or <see langword="null"/> if not enabled.
     /// </summary>
     public ProxyInfo? Socks { get; init; }
 
     /// <summary>
-    /// The list of IPv4/IPv6 addresses or domain names that should bypass the proxy.
+    /// Gets or initializes the list of IPv4/IPv6 addresses or domain names that should bypass the proxy.
     /// </summary>
     /// <remarks>
     /// Only populated when the do-not-proxy list is enabled in the system configuration.

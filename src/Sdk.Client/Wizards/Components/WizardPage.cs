@@ -12,22 +12,22 @@ public partial class WizardPage<TState> : ComponentBase, IWizardPage<TState>, IA
     private bool _disposedAsync;
 
     /// <summary>
-    /// State for the wizard page to hold values independently from the wizard page render cycle.
+    /// Gets or sets the page's state, which keeps its values across render cycles.
     /// </summary>
     [Parameter, EditorRequired] public TState State { get; set; }
 
     /// <summary>
-    /// Raised when <see cref="BeginEdit"/> is called.
+    /// Gets or sets the callback invoked by <see cref="BeginEdit"/>.
     /// </summary>
     [Parameter] public EventCallback OnBeginEdit { get; set; }
 
     /// <summary>
-    /// Raised when <see cref="CancelEdit"/> is called.
+    /// Gets or sets the callback invoked by <see cref="CancelEdit"/>.
     /// </summary>
     [Parameter] public EventCallback OnCancelEdit { get; set; }
 
     /// <summary>
-    /// Raised when <see cref="OnAfterRenderAsync"/> is called.
+    /// Gets or sets the callback invoked after every render of the page.
     /// </summary>
     [Parameter] public EventCallback<WizardPageAfterRenderCycleEventArgs> OnAfterRenderCycle { get; set; }
 

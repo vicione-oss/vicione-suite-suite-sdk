@@ -6,7 +6,7 @@ using Sdk.Client.Services;
 namespace Sdk.Client.ControlPanels.Services;
 
 /// <summary>
-/// Registry for control panels
+/// Holds a module's control panels; this non-generic view lets the host enumerate every module's registry.
 /// </summary>
 public interface IControlPanelRegistry : IRegistry<IControlPanelRegistryItem>;
 
@@ -17,11 +17,11 @@ public interface IControlPanelRegistry<TClientModule> : IControlPanelRegistry
     /// <summary>
     /// Registers a control panel in the registry.
     /// </summary>
-    /// <param name="descriptor">Descriptor for the control panel</param>
-    /// <param name="state">State for the control panel</param>
-    /// <param name="categoryDescriptor">Category descriptor for the control panel</param>
-    /// <param name="groupDescriptor">Optional group descriptor for the control panel, <see cref="IDefaultControlPanelGroupDescriptor"/> will be used when omitted</param>
-    /// <param name="authorizationRequirement">Optional authorization requirement, otherwise <see langword="null" /> to skip authorization</param>
+    /// <param name="descriptor">Describes how the control panel is presented.</param>
+    /// <param name="state">The control panel's state.</param>
+    /// <param name="categoryDescriptor">The category the control panel is listed under.</param>
+    /// <param name="groupDescriptor">The group; <see langword="null"/> means <see cref="IDefaultControlPanelGroupDescriptor"/>.</param>
+    /// <param name="authorizationRequirement">The access requirement; <see langword="null"/> skips authorization.</param>
     IControlPanelRegistryItem Add<TComponent, TState>(IControlPanelDescriptor descriptor, TState state,
         IControlPanelCategoryDescriptor categoryDescriptor, IControlPanelGroupDescriptor? groupDescriptor = null,
         IAuthorizationRequirement? authorizationRequirement = null)
@@ -31,7 +31,7 @@ public interface IControlPanelRegistry<TClientModule> : IControlPanelRegistry
     /// <summary>
     /// Removes all control panels of type <typeparamref name="TControlPanel"/> from the registry.
     /// </summary>
-    /// <returns>Number of control panels removed</returns>
+    /// <returns>The number of control panels removed.</returns>
     int Remove<TControlPanel>()
         where TControlPanel : IControlPanel;
 }
