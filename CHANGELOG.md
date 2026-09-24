@@ -9,6 +9,7 @@
   - `NotificationElementState.EndUpdate` passes `Changed` a stable copy of the property names and raises it outside its lock
   - `ControlPanelState` no longer delays a change made while the last update cycle ends
   - `ControlPanelState.BeginLoading` and `EndLoading` raise `Changed` outside the state's lock
+  - `ItemValidatorBase.Validate` returns a new dictionary on every call. **Behaviour change:** a result kept from an earlier call no longer changes when validating again
 
 ## 3.1.0 - 2026-09-24
 
