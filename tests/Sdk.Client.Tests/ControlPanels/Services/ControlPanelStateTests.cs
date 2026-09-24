@@ -122,6 +122,39 @@ public sealed class ControlPanelStateTests
     }
 
     [Fact]
+    public void Should_not_hold_the_lock_while_raising_changed_on_begin_loading()
+    {
+        // Arrange
+        var state = new ControlPanelState();
+
+        var otherThreadEnteredUpdate = false;
+        state.Changed += _ => otherThreadEnteredUpdate = Task.Run(state.BeginUpdate).Wait(TimeSpan.FromSeconds(5));
+
+        // Act
+        state.BeginLoading();
+
+        // Assert
+        otherThreadEnteredUpdate.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_not_hold_the_lock_while_raising_changed_on_end_loading()
+    {
+        // Arrange
+        var state = new ControlPanelState();
+        state.BeginLoading();
+
+        var otherThreadEnteredUpdate = false;
+        state.Changed += _ => otherThreadEnteredUpdate = Task.Run(state.BeginUpdate).Wait(TimeSpan.FromSeconds(5));
+
+        // Act
+        state.EndLoading();
+
+        // Assert
+        otherThreadEnteredUpdate.Should().BeTrue();
+    }
+
+    [Fact]
     public void Should_not_trigger_changed_event_after_begin_update()
     {
         // Arrange

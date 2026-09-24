@@ -127,6 +127,43 @@ public sealed class NotificationElementStateTests
     }
 
     [Fact]
+    public void Should_keep_the_property_names_of_end_update_args_after_end_update_returned()
+    {
+        // Arrange
+        var state = new NotificationElementState();
+
+        NotificationElementStateChangedEventArgs? changedArgs = null;
+        state.Changed += args => changedArgs = args;
+
+        // Act
+        state.BeginUpdate();
+        state.IsActive = true;
+        state.EndUpdate();
+
+        // Assert
+        changedArgs.Should().NotBeNull();
+        changedArgs.PropertyNames.Should().BeEquivalentTo([nameof(NotificationElementState.IsActive)]);
+    }
+
+    [Fact]
+    public void Should_not_hold_the_lock_while_raising_changed_on_end_update()
+    {
+        // Arrange
+        var state = new NotificationElementState();
+
+        var otherThreadEnteredUpdate = false;
+        state.Changed += _ => otherThreadEnteredUpdate = Task.Run(state.BeginUpdate).Wait(TimeSpan.FromSeconds(5));
+
+        // Act
+        state.BeginUpdate();
+        state.IsActive = true;
+        state.EndUpdate();
+
+        // Assert
+        otherThreadEnteredUpdate.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task Should_trigger_changed_event_on_outer_end_update()
     {
         // Arrange

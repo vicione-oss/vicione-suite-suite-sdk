@@ -63,10 +63,18 @@ public class NotificationElementState : INotificationElementState
         if (propertyName is null)
             return;
 
-        if (_updateLock == 0)
-            Changed?.Invoke(new NotificationElementStateChangedEventArgs(this, [propertyName]));
-        else
-            _changedProperties.Add(propertyName);
+        // Checked and buffered under one lock, so an EndUpdate running in between cannot strand the name in the buffer.
+        lock (_concurrentLock)
+        {
+            if (_updateLock > 0)
+            {
+                _changedProperties.Add(propertyName);
+
+                return;
+            }
+        }
+
+        Changed?.Invoke(new NotificationElementStateChangedEventArgs(this, [propertyName]));
     }
 
     /// <inheritdoc/>
@@ -81,21 +89,25 @@ public class NotificationElementState : INotificationElementState
     /// <inheritdoc/>
     public void EndUpdate()
     {
+        HashSet<string> changedProperties;
+
         lock (_concurrentLock)
         {
             _updateLock--;
 
-            if (_updateLock <= 0)
-            {
-                _updateLock = 0;
+            if (_updateLock > 0)
+                return;
 
-                if (_changedProperties.Count == 0)
-                    return;
+            _updateLock = 0;
 
-                Changed?.Invoke(new NotificationElementStateChangedEventArgs(this, _changedProperties));
+            if (_changedProperties.Count == 0)
+                return;
 
-                _changedProperties.Clear();
-            }
+            changedProperties = [.. _changedProperties];
+
+            _changedProperties.Clear();
         }
+
+        Changed?.Invoke(new NotificationElementStateChangedEventArgs(this, changedProperties));
     }
 }
