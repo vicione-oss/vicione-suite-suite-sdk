@@ -12,6 +12,7 @@
   - `ItemValidatorBase.Validate` returns a new dictionary on every call. **Behaviour change:** a result kept from an earlier call no longer changes when validating again
   - `SettingsFieldFileUpload` matches dropped files against `Accept` like the browser does, including MIME types and wildcards
   - `SettingsFieldFileUpload` no longer cancels a running upload when a parent that does not pass `UploadTicket` renders again
+  - Module stylesheet bundles no longer import the bundles the suite already loads, such as QuickGrid and TreeEditor
 
 ## 3.1.0 - 2026-09-24
 
