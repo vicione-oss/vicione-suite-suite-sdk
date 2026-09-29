@@ -54,7 +54,7 @@
             </SettingsField>
 
             <SettingsField IsLoading="@SettingsFieldIsLoading" Label="File" LoadingIndication="@SettingsFieldLoadingIndication">
-                <SettingsFieldFileUpload @ref="_fileUpload" Filename="@null" UploadTicketFactory="@_uploadTicketFactory" UploadHandler="@_uploadHandler" ChooseButtonText="Test file upload"/>
+                <SettingsFieldFileUpload @ref="_fileUpload" @bind-Filename="_uploadFilename" UploadTicketFactory="@_uploadTicketFactory" UploadHandler="@_uploadHandler" ChooseButtonText="Test file upload"/>
                 <SettingsFieldButton Text="Reset File Upload" OnClick="@ResetFileUpload" />
             </SettingsField>
         </ChildContent>
