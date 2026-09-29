@@ -39,6 +39,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
     private IStreamUploadResult? _uploadResult;
     private int? _uploadProgress;
     private IUploadTicket? _uploadTicket;
+    // The UploadTicket parameter as last passed; unlike _uploadTicket, it does not change when an upload starts.
+    private IUploadTicket? _passedUploadTicket;
     private IUploadTicketFactory? _uploadTicketFactory;
     private readonly SemaphoreSlim _uploadTicketSemaphore = new(1);
     private bool _shouldRender = true;
@@ -68,7 +70,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
 
     /// <summary>
     /// Gets or sets the value of the inputs' <see href="https://html.spec.whatwg.org/#attr-input-accept">accept</see> attribute.
-    /// A dropped file is also checked against it, but only by exact, comma-separated file extensions such as <c>.png,.jpg</c>.
+    /// A dropped file is checked against it as well: by file extension (<c>.png, .jpg</c>), MIME type (<c>image/png</c>) or wildcard
+    /// (<c>image/*</c>), ignoring case and whitespace; a file that matches no token is not uploaded.
     /// </summary>
     [Parameter]
     public string? Accept { get; set; }
@@ -199,16 +202,22 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
                 cancelUpload = true;
             }
 
-            if (UploadTicket != _uploadTicket)
+            // Only a ticket the parent changed counts: a parent that passes no ticket keeps passing null while an upload
+            // replaces _uploadTicket, and a parent that keeps the ticket from OnUploadStart passes the running one back.
+            if (UploadTicket != _passedUploadTicket)
             {
-                _uploadTicket = UploadTicket;
+                _passedUploadTicket = UploadTicket;
 
-                cancelUpload = true;
+                if (UploadTicket != _uploadTicket)
+                {
+                    _uploadTicket = UploadTicket;
+
+                    cancelUpload = true;
+                }
             }
             else if (updatedFactory)
             {
                 _uploadTicket = _uploadTicketFactory?.CreateUploadTicket();
-                UploadTicket = _uploadTicket;
             }
         }
         finally
@@ -393,15 +402,8 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
 
     private async Task FileDropped(InputFileChangeEventArgs args)
     {
-        if (!string.IsNullOrWhiteSpace(Accept))
-        {
-            var acceptTokens = Accept.Split(',');
-
-            var fileExtension = Path.GetExtension(args.File.Name);
-
-            if (!acceptTokens.Any(acceptToken => string.Equals(acceptToken, fileExtension, StringComparison.OrdinalIgnoreCase)))
-                return;
-        }
+        if (!AcceptFilter.Matches(Accept, args.File.Name, args.File.ContentType))
+            return;
 
         await UploadFile(args.File);
     }

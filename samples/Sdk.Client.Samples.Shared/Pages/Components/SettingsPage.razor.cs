@@ -15,11 +15,13 @@ public sealed partial class SettingsPage : ComponentBase
 
     private SettingsFieldFileUpload<TestUploadTicket>? _fileUpload;
 
-    // The upload field cancels a running upload whenever its filename, ticket factory or handler parameter changes, and
-    // currently also whenever this page re-renders without passing an UploadTicket. So the factory and handler live in
-    // fields, and the filename is not bound: binding it would re-render this page the moment an upload starts.
+    // The upload field cancels a running upload whenever its filename, ticket factory or handler parameter changes. So
+    // the factory and handler live in fields: created in the markup, every render of this page would pass new instances.
+    // The filename is bound: the field reports the picked file through FilenameChanged, and when the value comes back on
+    // the next render it matches the running upload, so that upload continues.
     private readonly TestUploadTicketFactory _uploadTicketFactory = new();
     private readonly TestUploadHandler _uploadHandler = new();
+    private string? _uploadFilename;
 
     private bool _switchExpanderIsLoading;
     private bool _switchExpanderValue;
