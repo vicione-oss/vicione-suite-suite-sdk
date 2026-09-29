@@ -23,7 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ViciOne.CodeAnalysis.MustCallBase.Attributes" />
-    <!-- if you add a ui library here ensure the resulting @import in modules .bundle.css will be handled within Sdk.Deployment and Directory.Package.Props -->
+    <!-- if you add a ui library here ensure the resulting @import in modules .bundle.css is removed in Targets/CssBundle.targets and Sdk.Deployment -->
     <PackageReference Include="ViciOne.Ui.Blazor.Components" />
     <PackageReference Include="ViciOne.Ui.Design">
       <PrivateAssets>all</PrivateAssets>

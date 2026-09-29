@@ -42,7 +42,7 @@ main() {
             exit
         fi
 
-        local replace_pattern="@import '_content\/ViciOne\.((Suite\.Sdk\.Client)|(Ui.Shared)|(Ui.Blazor)|(Ui.MonochromeIcons)).*?bundle.scp.css';"
+        local replace_pattern="@import '_content\/(ViciOne\.Suite\.Sdk\.Client|ViciOne\.Ui\.(Shared|Blazor|MonochromeIcons|TreeEditor)|Microsoft\.AspNetCore\.Components\.QuickGrid)[^']*\.bundle\.scp\.css';"
         local bundle_pattern='^[^@import[^\s].*]'
 
         for css_bundle in "$wwwroot_path"/*.styles.css; do
@@ -51,10 +51,8 @@ main() {
 
             # remove @import statements
 
-            # code is adopted from "DeleteCssImportTask" implemented in "Directory.Build.props".
-            # do not change without updating "Directory.Build.props" too !!!
-
-            # https://regex101.com/r/lpXZSf/1
+            # code is adopted from "DeleteCssImportTask" implemented in "src/Sdk.Client/Targets/CssBundle.targets".
+            # do not change without updating "CssBundle.targets" too !!!
             local css_sanitized
             css_sanitized=$(echo "$css" | sed --regexp-extended "s/$replace_pattern//g" | grep --only-matching '[^[:space:]].*[^[:space:]]')
 

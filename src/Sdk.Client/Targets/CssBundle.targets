@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="PostProcessCssBundle" AfterTargets="BundleScopedCssFiles" Condition="'@(_ScopedCss)' != ''">
+  <!-- A module without scoped CSS of its own still gets a bundle that imports the bundles of its libraries. -->
+  <Target Name="PostProcessCssBundle" AfterTargets="BundleScopedCssFiles" Condition="Exists('$(_ScopedCssOutputFullPath)')">
     <DeleteCssImportTask FilePath="$(_ScopedCssOutputFullPath)" />
   </Target>
 
@@ -24,8 +25,9 @@
         <![CDATA[
         var css = File.ReadAllText(FilePath);
 
-        // https://regex101.com/r/lpXZSf/1
-        var cssSanitized = Regex.Replace(css, "@import '_content\\/ViciOne\\.((Suite\\.Sdk\\.Client)|(Ui.Shared)|(Ui.Blazor)).*?bundle.scp.css';", "").Trim();
+        // The suite loads the bundles of these libraries itself; suite-libraries.txt removes most of them from a published module.
+        // https://regex101.com/r/aLiXsY/1
+        var cssSanitized = Regex.Replace(css, @"@import '_content/(ViciOne\.Suite\.Sdk\.Client|ViciOne\.Ui\.(Shared|Blazor|MonochromeIcons|TreeEditor)|Microsoft\.AspNetCore\.Components\.QuickGrid)[^']*\.bundle\.scp\.css';\s*", "").Trim();
 
         File.WriteAllText(FilePath, cssSanitized);
         ]]>
