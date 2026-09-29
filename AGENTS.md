@@ -6,7 +6,7 @@ The ViciOne Suite SDK provides the public API surface and extension points for b
 
 - **Version:** See `VERSION` file
 - **Solution:** `vicione-suite-sdk.slnx`
-- **Company:** ifm software
+- **Company:** ViciOne open automation gmbh
 - **License:** See LICENSE.txt
 - **Published as:** NuGet packages consumed by module repositories
 
