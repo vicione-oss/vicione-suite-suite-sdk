@@ -2,6 +2,10 @@
 
 ## 3.1.1 - unreleased
 
+### Changed
+
+- Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
+
 ### Fixed
 
 - `Sdk.Client`
