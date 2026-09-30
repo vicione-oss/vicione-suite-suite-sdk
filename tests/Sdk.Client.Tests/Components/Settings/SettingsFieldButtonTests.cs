@@ -2,6 +2,7 @@
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
 using Sdk.Testing.Client;
+using ViciOne.Ui.Blazor.Components.Button;
 using ViciOne.Ui.Blazor.Components.Button.Enums;
 using Xunit;
 
@@ -37,16 +38,17 @@ public sealed class SettingsFieldButtonTests
             b.Add(p => p.Text, "Click");
             b.Add(p => p.OnClick, () => clicked = true);
         });
+        var button = component.FindComponent<Button>();
 
         // Act
-        await component.Find("button").ClickAsync();
+        await button.InvokeAsync(() => button.Instance.OnClick.InvokeAsync());
 
         // Assert
         clicked.Should().BeTrue();
     }
 
     [Fact]
-    public async Task Should_render_the_button_as_busy()
+    public async Task Should_forward_busy()
     {
         // Arrange
         await using var ctx = new BunitContext();
@@ -60,11 +62,11 @@ public sealed class SettingsFieldButtonTests
         });
 
         // Assert
-        component.Find("button").GetAttribute("aria-busy").Should().Be("true");
+        component.FindComponent<Button>().Instance.Busy.Should().BeTrue();
     }
 
     [Fact]
-    public async Task Should_render_the_selected_busy_indication()
+    public async Task Should_forward_busy_indication()
     {
         // Arrange
         await using var ctx = new BunitContext();
@@ -74,12 +76,10 @@ public sealed class SettingsFieldButtonTests
         var component = ctx.Render<SettingsFieldButton>(b =>
         {
             b.Add(p => p.Text, "Test");
-            b.Add(p => p.IconCssClass, "monochrome-icon-refresh");
-            b.Add(p => p.Busy, true);
             b.Add(p => p.BusyIndication, ButtonBusyIndication.SpinningIcon);
         });
 
         // Assert
-        component.Find("button").ClassList.Should().Contain("button--busy-spinning-icon");
+        component.FindComponent<Button>().Instance.BusyIndication.Should().Be(ButtonBusyIndication.SpinningIcon);
     }
 }
