@@ -1,5 +1,6 @@
 ﻿using Bunit;
 using AwesomeAssertions;
+using Microsoft.AspNetCore.Components.Web;
 using Sdk.Client.Components.Cards.Contracts;
 using Sdk.Testing.Client;
 using Xunit;
@@ -83,10 +84,8 @@ public sealed class CardTests
                 b.Add(p => p.OnLinkClick, () => invoked = true);
             });
 
-            var divElementText = component.Find(".text");
-            var buttonElement = divElementText.NextElementSibling;   // next element is the 'LinkButton'
-            if (buttonElement is not null)
-                await buttonElement.ClickAsync();
+            var linkButton = component.FindComponent<Client.Components.LinkButton.LinkButton>();
+            await linkButton.InvokeAsync(() => linkButton.Instance.OnClick.InvokeAsync(new MouseEventArgs()));
 
             invoked.Should().BeTrue();
         }
