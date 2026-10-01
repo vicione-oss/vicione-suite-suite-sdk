@@ -1,6 +1,10 @@
 # Changelog
 
-## 3.1.1 - unreleased
+## 3.2.0 - unreleased
+
+### Added
+
+- `Sdk.Client`, `SettingsLayout.ContentPaddingRight` sets the free space right of settings contents, for use in narrow places such as dialogs
 
 ### Changed
 

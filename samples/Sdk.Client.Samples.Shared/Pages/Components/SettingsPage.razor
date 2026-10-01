@@ -72,3 +72,26 @@
         </ChildContent>
     </SettingsGroup>
 </SettingsLayout>
+
+<h2>Narrow container</h2>
+
+@* SettingsLayout keeps 138 px free right of the contents by default, sized for control panels and the settings dialog.
+   In a dialog or another narrow place, ContentPaddingRight reduces that space. SettingsLayout sets it as the CSS custom
+   property --settings-content-padding-right, which every settings component below the layout inherits and reads. *@
+<div class="narrow-container">
+    <SettingsLayout ContentPaddingRight="16">
+        <SettingsGroup Title="Reduced right padding" Expanded="true">
+            <SettingsField Label="First name">
+                <SettingsFieldTextBox Placeholder="Jane Doe" @bind-Value="_firstName" />
+            </SettingsField>
+
+            <SettingsField Label="Enabled">
+                <SettingsFieldSwitch @bind-Value="_enabled" />
+            </SettingsField>
+
+            <SettingsInformation>
+                Field contents, information texts, steppers and nested group expanders keep 16 px to the right edge.
+            </SettingsInformation>
+        </SettingsGroup>
+    </SettingsLayout>
+</div>
