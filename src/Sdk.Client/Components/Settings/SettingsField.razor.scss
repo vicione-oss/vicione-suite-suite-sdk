@@ -38,7 +38,7 @@
 
     .content-container {
         grid-column: 2 / 3;
-        padding-right: 122px + settings-group.$padding;
+        padding-right: settings-group.$content-padding-right;
         padding-top: $padding-top;
 
         @include mixins.bring-to-front();

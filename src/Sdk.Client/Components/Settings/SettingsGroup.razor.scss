@@ -147,11 +147,11 @@ $border-radius: 3px;
         padding-bottom: 4px;
 
         .expander-container {
-            margin-right: 122px + variables.$padding;
+            margin-right: variables.$content-padding-right;
         }
 
         .subline {
-            padding-right: 122px + variables.$padding;
+            padding-right: variables.$content-padding-right;
         }
     }
 }

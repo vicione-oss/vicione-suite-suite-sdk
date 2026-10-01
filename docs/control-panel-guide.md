@@ -221,6 +221,8 @@ For the following  file structure in `FooClientModule` is assumed:
   <SettingsLayout></SettingsLayout>
   ```
 
+  > By default, `SettingsLayout` keeps 138 px free right of field contents, information texts, steppers and nested group expanders. This fits control panels and the settings dialog. Where horizontal space is limited, e.g. in a dialog, set `ContentPaddingRight` (in px) to reduce it: `<SettingsLayout ContentPaddingRight="16">`.
+
 - Add settings group
 
   ``` html
