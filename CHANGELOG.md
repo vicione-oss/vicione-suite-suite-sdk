@@ -9,6 +9,7 @@
 ### Changed
 
 - Rename the company to `ViciOne open automation gmbh` in the license and the package metadata
+- `Sdk.Client`, `ImportScript(Uri)`, `AddScript(Uri)` and `AddStylesheet(Uri)` accept relative URIs, such as those of `ModuleAssetHelper`
 
 ### Fixed
 
