@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.0 - unreleased
+## 3.2.0 - 2026-10-01
 
 ### Added
 
@@ -22,6 +22,13 @@
   - `SettingsFieldFileUpload` matches dropped files against `Accept` like the browser does, including MIME types and wildcards
   - `SettingsFieldFileUpload` no longer cancels a running upload when a parent that does not pass `UploadTicket` renders again
   - Module stylesheet bundles no longer import the bundles the suite already loads, such as QuickGrid and TreeEditor
+
+### Updated
+
+- `AspNetCore.SassCompiler` package, update to version `1.105.1`
+- `MassTransit` packages, update to version `8.5.11`
+- `System.IO.Abstractions` packages, update to version `22.3.0`
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.2.0`
 
 ## 3.1.0 - 2026-09-24
 
