@@ -51,9 +51,9 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a script by the path of <paramref name="scriptUri"/>, which must be absolute.
+        /// Adds a script by <paramref name="scriptUri"/>; an absolute URI is reduced to its path, a relative one is used as written.
         /// </summary>
-        public List<Resource> AddScript(string? bundle, Uri scriptUri) => list.AddScript(bundle, scriptUri.AbsolutePath);
+        public List<Resource> AddScript(string? bundle, Uri scriptUri) => list.AddScript(bundle, scriptUri.RequestPath);
 
         /// <summary>
         /// Adds a script by its relative URL.
@@ -65,10 +65,11 @@ public static class ResourceExtensions
         }
 
         /// <summary>
-        /// Adds a stylesheet by the path of <paramref name="stylesheetUri"/>, which must be absolute.
+        /// Adds a stylesheet by <paramref name="stylesheetUri"/>; an absolute URI is reduced to its path,
+        /// a relative one is used as written.
         /// </summary>
         public List<Resource> AddStylesheet(string? bundle, Uri stylesheetUri)
-            => list.AddStylesheet(bundle, stylesheetUri.AbsolutePath);
+            => list.AddStylesheet(bundle, stylesheetUri.RequestPath);
 
         /// <summary>
         /// Adds a stylesheet by its relative URL.

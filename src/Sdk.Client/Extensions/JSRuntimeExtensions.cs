@@ -31,10 +31,16 @@ public static class JSRuntimeExtensions
         }
 
         /// <summary>
-        /// Imports the JavaScript module at the path of <paramref name="jsUrl"/>, which must be absolute.
+        /// Imports the JavaScript module at <paramref name="jsUrl"/>; an absolute URI is reduced to its path,
+        /// a relative one is used as written.
         /// </summary>
+        /// <remarks>
+        /// A relative URI must start with <c>./</c> or <c>/</c>, as <see cref="ModuleAssetHelper.GetModuleJsUrl{T}"/> does;
+        /// the browser rejects <c>_content/…</c> as a bare module specifier. <c>./</c> resolves against the document base.
+        /// </remarks>
+        /// <exception cref="JSException">The browser cannot load or evaluate the module.</exception>
         public async Task<IJSObjectReference> ImportScript(Uri jsUrl)
-            => await jsRuntime.InvokeAsync<IJSObjectReference>(JsImportCommand, jsUrl.AbsolutePath).AsTask();
+            => await jsRuntime.InvokeAsync<IJSObjectReference>(JsImportCommand, jsUrl.RequestPath).AsTask();
 
         /// <summary>
         /// Imports a JavaScript module from the application's global <c>js</c> folder.
