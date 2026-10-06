@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Strip;
-using Sdk.Testing.Client;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using Xunit;
 
@@ -14,7 +13,6 @@ public sealed class StripComponentTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<StripComponent>(b =>
@@ -34,7 +32,6 @@ public sealed class StripComponentTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<StripComponent>(b =>
@@ -55,7 +52,6 @@ public sealed class StripComponentTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<StripComponent>(b =>
@@ -74,7 +70,6 @@ public sealed class StripComponentTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<StripComponent>(b =>
@@ -94,7 +89,6 @@ public sealed class StripComponentTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
         var clicked = false;
 
         var component = ctx.Render<StripComponent>(b =>

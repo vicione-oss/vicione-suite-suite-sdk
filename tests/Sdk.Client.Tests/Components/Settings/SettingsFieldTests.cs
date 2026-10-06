@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
-using Sdk.Testing.Client;
 using Xunit;
 
 namespace Sdk.Client.Tests.Components.Settings;
@@ -13,7 +12,6 @@ public sealed class SettingsFieldTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsField>(b =>
@@ -29,7 +27,6 @@ public sealed class SettingsFieldTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsField>(b =>
@@ -47,7 +44,6 @@ public sealed class SettingsFieldTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsField>(b =>
@@ -62,7 +58,6 @@ public sealed class SettingsFieldTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsField>(b =>
@@ -80,7 +75,6 @@ public sealed class SettingsFieldTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsField>(b =>

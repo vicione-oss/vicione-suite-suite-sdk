@@ -2,7 +2,6 @@
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Components.Web;
 using Sdk.Client.Components.Cards.Contracts;
-using Sdk.Testing.Client;
 using Xunit;
 
 namespace Sdk.Client.Tests.Components.Cards;
@@ -22,7 +21,6 @@ public sealed class CardTests
                 TeaserText = "Teaser",
             };
             var invoked = false;
-            ctx.SetupSuiteServices();
 
             var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {
@@ -47,7 +45,6 @@ public sealed class CardTests
                 TeaserImageUrl = new Uri("https://example.com/image.jpg")
             };
             var invoked = false;
-            ctx.SetupSuiteServices();
 
             var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {
@@ -76,7 +73,6 @@ public sealed class CardTests
             };
             var invoked = false;
 
-            ctx.SetupSuiteServices();
 
             var component = ctx.Render<Client.Components.Cards.Components.Card>(b =>
             {

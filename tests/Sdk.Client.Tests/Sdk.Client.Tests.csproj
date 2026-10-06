@@ -9,4 +9,8 @@
     <ProjectReference Include="..\TestModule.Client\TestModule.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ViciOne.Ui.Blazor.Components.TestingHelpers" />
+  </ItemGroup>
+
 </Project>

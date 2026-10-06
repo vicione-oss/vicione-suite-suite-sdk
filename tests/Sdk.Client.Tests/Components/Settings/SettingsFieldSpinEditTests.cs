@@ -1,9 +1,9 @@
 using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
-using Sdk.Testing.Client;
 using ViciOne.Ui.Blazor.Components.SpinEdit;
 using ViciOne.Ui.Blazor.Components.SpinEdit.Extensions;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.TextBox.Extensions;
 using Xunit;
 
 namespace Sdk.Client.Tests.Components.Settings;
@@ -15,7 +15,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -35,7 +35,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -57,7 +57,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -78,7 +78,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -99,7 +99,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -120,7 +120,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -142,7 +142,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -164,7 +164,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -186,7 +186,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -208,7 +208,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         // Act
@@ -230,7 +230,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
         var changedValue = 0;
 
@@ -256,7 +256,7 @@ public sealed class SettingsFieldSpinEditTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
         ctx.Services.AddIntSpinEdit();
 
         var component = ctx.Render<SettingsFieldSpinEdit<int, int, int>>(b =>
