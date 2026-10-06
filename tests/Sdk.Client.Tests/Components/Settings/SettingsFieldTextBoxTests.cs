@@ -1,7 +1,7 @@
 ﻿using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
-using Sdk.Testing.Client;
+using ViciOne.Ui.Blazor.Components.TestingHelpers.TextBox.Extensions;
 using ViciOne.Ui.Blazor.Components.TextBox;
 using Xunit;
 
@@ -14,7 +14,7 @@ public sealed class SettingsFieldTextBoxTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
 
         // Act
         var component = ctx.Render<SettingsFieldTextBox>();
@@ -28,7 +28,7 @@ public sealed class SettingsFieldTextBoxTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
 
         // Act
         var component = ctx.Render<SettingsFieldTextBox>(b =>
@@ -43,7 +43,7 @@ public sealed class SettingsFieldTextBoxTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
 
         // Act
         var component = ctx.Render<SettingsFieldTextBox>();
@@ -57,7 +57,7 @@ public sealed class SettingsFieldTextBoxTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
+        ctx.JSInterop.SetupForTextBox();
 
         var component = ctx.Render<SettingsFieldTextBox>(b =>
             b.Add(p => p.ValueChanged, (string _) => Task.FromException(new InvalidOperationException("Handler failed."))));

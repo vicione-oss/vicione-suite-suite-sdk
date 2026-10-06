@@ -1,6 +1,5 @@
 ﻿using Bunit;
 using AwesomeAssertions;
-using Sdk.Testing.Client;
 using ViciOne.Ui.MonochromeIcons.Core.Enums;
 using Xunit;
 
@@ -13,7 +12,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -29,7 +27,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -47,7 +44,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -62,7 +58,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -80,7 +75,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -98,7 +92,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -116,7 +109,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>
@@ -134,7 +126,6 @@ public sealed class LinkButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
         var clicked = false;
 
         var component = ctx.Render<Client.Components.LinkButton.LinkButton>(b =>

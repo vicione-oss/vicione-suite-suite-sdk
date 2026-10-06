@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
-using Sdk.Testing.Client;
 using ViciOne.Ui.Blazor.Components.Button;
 using ViciOne.Ui.Blazor.Components.Button.Enums;
 using Xunit;
@@ -15,7 +14,6 @@ public sealed class SettingsFieldButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsFieldButton>(b =>
@@ -30,7 +28,6 @@ public sealed class SettingsFieldButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
         var clicked = false;
 
         var component = ctx.Render<SettingsFieldButton>(b =>
@@ -52,7 +49,6 @@ public sealed class SettingsFieldButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsFieldButton>(b =>
@@ -70,7 +66,6 @@ public sealed class SettingsFieldButtonTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsFieldButton>(b =>

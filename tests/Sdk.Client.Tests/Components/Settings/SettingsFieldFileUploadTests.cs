@@ -6,7 +6,6 @@ using Sdk.Client.Components.Settings;
 using Sdk.Client.Contracts;
 using Sdk.Client.Models;
 using Sdk.Client.Services;
-using Sdk.Testing.Client;
 using Xunit;
 
 namespace Sdk.Client.Tests.Components.Settings;
@@ -126,7 +125,6 @@ public sealed class SettingsFieldFileUploadTests
     private static BunitContext CreateContext()
     {
         var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
         ctx.JSInterop.Mode = JSRuntimeMode.Loose;
 
         return ctx;

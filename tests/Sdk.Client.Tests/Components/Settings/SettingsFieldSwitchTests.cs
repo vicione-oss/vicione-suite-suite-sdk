@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using AwesomeAssertions;
 using Sdk.Client.Components.Settings;
-using Sdk.Testing.Client;
 using ViciOne.Ui.Blazor.Components.Switch;
 using Xunit;
 
@@ -14,7 +13,6 @@ public sealed class SettingsFieldSwitchTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         // Act
         var component = ctx.Render<SettingsFieldSwitch>(b =>
@@ -29,7 +27,6 @@ public sealed class SettingsFieldSwitchTests
     {
         // Arrange
         await using var ctx = new BunitContext();
-        ctx.SetupSuiteServices();
 
         var component = ctx.Render<SettingsFieldSwitch>(b =>
             b.Add(p => p.ValueChanged, (bool _) => Task.FromException(new InvalidOperationException("Handler failed."))));
