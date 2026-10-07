@@ -2,7 +2,6 @@
 
 namespace TestModule.Backend.Contracts;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class Employees
 {
     public enum Gender
@@ -17,16 +16,15 @@ public class Employees
     public DateTimeOffset birth_date { get; init; }
 
     [MaxLength(14)]
-    public string first_name { get; set; }
+    public required string first_name { get; set; }
 
     [MaxLength(16)]
-    public string last_name { get; set; }
+    public required string last_name { get; set; }
 
     public Gender gender { get; init; }
     public DateTimeOffset hire_date { get; init; }
-    public IList<DepartmentManager> dept_manager { get; init; }
-    public IList<DepartmentEmployees> dept_empl { get; init; }
-    public IList<Titles> titles { get; init; }
-    public IList<Salaries> salaries { get; init; }
+    public IList<DepartmentManager> dept_manager { get; init; } = [];
+    public IList<DepartmentEmployees> dept_empl { get; init; } = [];
+    public IList<Titles> titles { get; init; } = [];
+    public IList<Salaries> salaries { get; init; } = [];
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

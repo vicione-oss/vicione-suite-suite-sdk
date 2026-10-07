@@ -2,7 +2,6 @@
 
 namespace TestModule.Backend.Contracts;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class Salaries
 {
     [Key]
@@ -14,6 +13,5 @@ public class Salaries
     public DateTimeOffset from_date { get; set; }
 
     public DateTimeOffset to_date { get; set; }
-    public Employees employee { get; set; }
+    public Employees employee { get; set; } = null!;
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
