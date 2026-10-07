@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.0 - Unreleased
+
+### Fixed
+
+- `npm`, vulnerabilities fixed
+
 ## 3.3.0 - 2026-10-06
 
 ### Updated
