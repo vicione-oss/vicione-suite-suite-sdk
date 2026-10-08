@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Sdk.Testing.Tests.Logging;
 
-public sealed class TestLoggerTests
+public sealed partial class TestLoggerTests
 {
     [Fact]
     public void Log_should_capture_entry()
@@ -14,7 +14,7 @@ public sealed class TestLoggerTests
         using var logger = new TestLogger<TestLoggerTests>();
 
         // Act
-        logger.LogInformation("Test message");
+        LogMessage(logger, LogLevel.Information, "Test message");
 
         // Assert
         logger.Calls.Should().Be(1);
@@ -30,7 +30,7 @@ public sealed class TestLoggerTests
         var exception = new InvalidOperationException("test error");
 
         // Act
-        logger.LogError(exception, "Error occurred");
+        LogException(logger, LogLevel.Error, exception, "Error occurred");
 
         // Assert
         logger.Exception.Should().BeSameAs(exception);
@@ -44,8 +44,8 @@ public sealed class TestLoggerTests
         using var logger = new TestLogger<TestLoggerTests>(LogLevel.Warning);
 
         // Act
-        logger.LogDebug("Debug message");
-        logger.LogInformation("Info message");
+        LogMessage(logger, LogLevel.Debug, "Debug message");
+        LogMessage(logger, LogLevel.Information, "Info message");
 
         // Assert
         logger.Calls.Should().Be(0);
@@ -58,7 +58,7 @@ public sealed class TestLoggerTests
         using var logger = new TestLogger<TestLoggerTests>(LogLevel.Warning);
 
         // Act
-        logger.LogWarning("Warning message");
+        LogMessage(logger, LogLevel.Warning, "Warning message");
 
         // Assert
         logger.Calls.Should().Be(1);
@@ -84,8 +84,8 @@ public sealed class TestLoggerTests
     {
         // Arrange
         using var logger = new TestLogger<TestLoggerTests>();
-        logger.LogInformation("Message 1");
-        logger.LogInformation("Message 2");
+        LogMessage(logger, LogLevel.Information, "Message 1");
+        LogMessage(logger, LogLevel.Information, "Message 2");
         logger.Calls.Should().Be(2);
 
         // Act
@@ -117,9 +117,9 @@ public sealed class TestLoggerTests
         using var logger = new TestLogger<TestLoggerTests>();
 
         // Act
-        logger.LogInformation("First");
-        logger.LogWarning("Second");
-        logger.LogError("Third");
+        LogMessage(logger, LogLevel.Information, "First");
+        LogMessage(logger, LogLevel.Warning, "Second");
+        LogMessage(logger, LogLevel.Error, "Third");
 
         // Assert
         logger.Entries.Should().HaveCount(3);
@@ -139,5 +139,12 @@ public sealed class TestLoggerTests
         // Assert
         logger.EventId.Should().Be(eventId);
     }
+
+    // SkipEnabledCheck hands every entry to TestLogger.Log, so the tests exercise its own minimum level filter.
+    [LoggerMessage(Message = "{Message}", SkipEnabledCheck = true)]
+    private static partial void LogMessage(ILogger logger, LogLevel level, string message);
+
+    [LoggerMessage(Message = "{Message}", SkipEnabledCheck = true)]
+    private static partial void LogException(ILogger logger, LogLevel level, Exception exception, string message);
 }
 

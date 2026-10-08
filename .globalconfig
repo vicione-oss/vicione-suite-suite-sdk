@@ -16,6 +16,7 @@ dotnet_diagnostic.ROS0003.severity = error # Report missing options leading to n
 dotnet_diagnostic.RCS0061.severity = warning # Add / remove blank line between switch sections
 roslynator_blank_line_between_switch_sections = include
 
+dotnet_diagnostic.RCS1001.severity = warning # Add braces (when expression spans over multiple lines)
 dotnet_diagnostic.RCS1021.severity = warning # Convert lambda expression body to expression body
 dotnet_diagnostic.RCS1037.severity = warning # Remove trailing white-space
 dotnet_diagnostic.RCS1085.severity = warning # Use auto-implemented property
@@ -26,6 +27,7 @@ dotnet_diagnostic.RCS1158.severity = warning # Static member in generic type sho
 dotnet_diagnostic.RCS1261.severity = warning # Resource can be disposed asynchronously
 dotnet_diagnostic.RCS1163.severity = warning # Unused parameter, in addition to sometimes not working CA1801 and IDE0060
 dotnet_diagnostic.RCS1170.severity = warning # Use read-only auto-implemented property
+dotnet_diagnostic.RCS1173.severity = warning # Use coalesce expression instead of 'if'
 dotnet_diagnostic.RCS1205.severity = warning # Order named arguments according to the order of parameters
 dotnet_diagnostic.RCS1226.severity = warning # Add paragraph to documentation comment
 dotnet_diagnostic.RCS1246.severity = warning # Use element access

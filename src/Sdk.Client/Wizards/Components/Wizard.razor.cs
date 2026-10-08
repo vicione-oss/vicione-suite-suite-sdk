@@ -55,20 +55,20 @@ public sealed partial class Wizard<TContext> : ComponentBase
         {
             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
                 "Component type returned by {0} does not implement {1}",
-                nameof(IWizardContentComponentTypeProvider), nameof(IWizardContent<TContext>)));
+                nameof(IWizardContentComponentTypeProvider), nameof(IWizardContent<>)));
         }
 
-        _contentComponentParameters.Add(nameof(IWizardContent<TContext>.VisibleChanged),
+        _contentComponentParameters.Add(nameof(IWizardContent<>.VisibleChanged),
             EventCallback.Factory.Create<bool>(this, OnVisibleChanged));
     }
 
     /// <inheritdoc/>
     protected override void OnParametersSet()
     {
-        _contentComponentParameters[nameof(IWizardContent<TContext>.Title)] = Title;
-        _contentComponentParameters[nameof(IWizardContent<TContext>.Context)] = Context!;
-        _contentComponentParameters[nameof(IWizardContent<TContext>.Visible)] = Visible;
-        _contentComponentParameters[nameof(IWizardContent<TContext>.AllowExit)] = AllowExit;
+        _contentComponentParameters[nameof(IWizardContent<>.Title)] = Title;
+        _contentComponentParameters[nameof(IWizardContent<>.Context)] = Context!;
+        _contentComponentParameters[nameof(IWizardContent<>.Visible)] = Visible;
+        _contentComponentParameters[nameof(IWizardContent<>.AllowExit)] = AllowExit;
     }
 
     private async Task OnVisibleChanged(bool value)

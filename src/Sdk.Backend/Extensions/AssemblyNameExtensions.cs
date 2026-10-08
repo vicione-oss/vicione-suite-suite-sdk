@@ -27,12 +27,7 @@ public static class AssemblyNameExtensions
         var moduleContext = AssemblyLoadContext.All.FirstOrDefault(k => k.Name == moduleContextName) ??
             throw new InvalidOperationException($"Context {moduleContextName} is not initialized");
 
-        var sharedAssembly = moduleContext.Assemblies.FirstOrDefault(a => Equals(a.GetName().Name, assemblyName.Name));
-        if (sharedAssembly is not null)
-        {
-            return sharedAssembly;
-        }
-
-        return moduleContext.LoadFromAssemblyName(assemblyName);
+        return moduleContext.Assemblies.FirstOrDefault(a => Equals(a.GetName().Name, assemblyName.Name)) ??
+            moduleContext.LoadFromAssemblyName(assemblyName);
     }
 }

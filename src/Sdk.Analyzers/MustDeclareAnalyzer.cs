@@ -90,7 +90,9 @@ public sealed class MustDeclareAnalyzer : DiagnosticAnalyzer
 
                 if (attribute.ConstructorArguments.Length == 0
                     || attribute.ConstructorArguments[0].Value is not INamedTypeSymbol requiredAttributeType)
+                {
                     continue;
+                }
 
                 if (seen.Add(requiredAttributeType))
                     yield return (requiredAttributeType, constraintType);

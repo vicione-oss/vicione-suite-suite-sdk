@@ -90,7 +90,9 @@ public static class MetadataValidator
             var assemblyName = dependency.GetName();
             if (string.IsNullOrEmpty(assemblyName.Name)
                 || !assemblyName.Name.EndsWith(ModuleIdResolver.ModuleSuffixPublic, StringComparison.OrdinalIgnoreCase))
+            {
                 throw new InvalidOperationException($"Referenced dependency '{assemblyName.Name}' is no public module library.");
+            }
 
             if (metadata.Dependencies is null)
                 throw new InvalidOperationException($"Referenced module assembly '{assemblyName.Name}' is missing in metadata dependencies.");

@@ -23,7 +23,7 @@ public sealed class SettingsFieldFileUploadTests
 
         var component = ctx.Render<SettingsFieldFileUpload<UploadMarker>>(b => b
             .Add(p => p.Filename, boundFilename)
-            .Add(p => p.FilenameChanged, (string? filename) => boundFilename = filename)
+            .Add(p => p.FilenameChanged, filename => boundFilename = filename)
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 
@@ -77,9 +77,9 @@ public sealed class SettingsFieldFileUploadTests
         // Like the callers in suite, cluster-mgmt and dx: the ticket from OnUploadStart is kept and passed back.
         var component = ctx.Render<SettingsFieldFileUpload<UploadMarker>>(b => b
             .Add(p => p.Filename, boundFilename)
-            .Add(p => p.FilenameChanged, (string? filename) => boundFilename = filename)
+            .Add(p => p.FilenameChanged, filename => boundFilename = filename)
             .Add(p => p.UploadTicket, keptUploadTicket)
-            .Add(p => p.OnUploadStart, (IUploadTicket uploadTicket) => keptUploadTicket = uploadTicket)
+            .Add(p => p.OnUploadStart, uploadTicket => keptUploadTicket = uploadTicket)
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 

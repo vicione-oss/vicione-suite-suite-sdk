@@ -145,7 +145,9 @@ public sealed class ModuleDbContextGenerator : IIncrementalGenerator
 
                 if (propertyType.ConstructedFrom.Name != "DbSet" ||
                     propertyType.ConstructedFrom.ContainingNamespace.ToDisplayString() != "Microsoft.EntityFrameworkCore")
+                {
                     continue;
+                }
 
                 if (!skippedNames.Add(property.Name))
                     continue;

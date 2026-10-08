@@ -60,7 +60,7 @@ public sealed class SettingsFieldTextBoxTests
         ctx.JSInterop.SetupForTextBox();
 
         var component = ctx.Render<SettingsFieldTextBox>(b =>
-            b.Add(p => p.ValueChanged, (string _) => Task.FromException(new InvalidOperationException("Handler failed."))));
+            b.Add(p => p.ValueChanged, _ => Task.FromException(new InvalidOperationException("Handler failed."))));
 
         var textBox = component.FindComponent<TextBox>();
 

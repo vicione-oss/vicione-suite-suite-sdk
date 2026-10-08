@@ -29,7 +29,7 @@ internal static class AcceptFilter
                 if (fileName.EndsWith(token, StringComparison.OrdinalIgnoreCase))
                     return true;
             }
-            else if (token.IndexOf('/') is > 0 and var slash && slash < token.Length - 1)
+            else if (token.IndexOf('/', StringComparison.Ordinal) is > 0 and var slash && slash < token.Length - 1)
             {
                 hasValidToken = true;
 
@@ -39,7 +39,9 @@ internal static class AcceptFilter
                 if (token.EndsWith("/*", StringComparison.Ordinal)
                     ? contentType.AsSpan().StartsWith(token.AsSpan(0, slash + 1), StringComparison.OrdinalIgnoreCase)
                     : string.Equals(token, contentType, StringComparison.OrdinalIgnoreCase))
+                {
                     return true;
+                }
             }
         }
 

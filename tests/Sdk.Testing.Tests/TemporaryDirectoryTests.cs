@@ -52,7 +52,7 @@ public sealed class TemporaryDirectoryTests
 
         // Act
         tempDir.Dispose();
-        var act = () => tempDir.Dispose();
+        var act = tempDir.Dispose;
 
         // Assert
         act.Should().NotThrow();

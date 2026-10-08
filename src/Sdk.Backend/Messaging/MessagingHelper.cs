@@ -216,8 +216,10 @@ public static class MessagingHelper
             return CleanName(endpointName);
 
         if (instanceId is null)
+        {
             throw new InvalidOperationException(
                 $"{argumentType.Name} is instance-dependent but no instance id was provided when resolving its activity endpoint");
+        }
 
         return CleanName($"{endpointName}_{instanceId}");
     }

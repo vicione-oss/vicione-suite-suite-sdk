@@ -100,7 +100,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
         {
             await JsInterop.IncludeScripts(scripts);
 
-            LogIncludeScripts(Logger, GetType().Name, declaration, string.Join(", ", scripts));
+            LogIncludeScripts(Logger, GetType().Name, declaration, scripts);
         }
     }
 
@@ -174,7 +174,7 @@ public abstract partial class ModuleComponentBase<TComponent> : ComponentBase, I
     private static partial void LogIncludeLink(ILogger<TComponent> logger, string className, Resource resource);
 
     [LoggerMessage(EventId = 3, Level = LogLevel.Debug, Message = "{className} - included scripts [{declaration}]: {scripts}")]
-    private static partial void LogIncludeScripts(ILogger<TComponent> logger, string className, ResourceDeclaration declaration, string scripts);
+    private static partial void LogIncludeScripts(ILogger<TComponent> logger, string className, ResourceDeclaration declaration, object[] scripts);
 
     [LoggerMessage(EventId = 4, Level = LogLevel.Debug, Message = "{className} - RemoveElementsById {resource}")]
     private static partial void LogUnloadComponentResourceRemoveElementsById(ILogger<TComponent> logger, string className, Resource resource);
