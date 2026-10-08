@@ -2,14 +2,14 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <ViciOneCodeAnalysisVersion>1.6.0</ViciOneCodeAnalysisVersion>
-    <ViciOneUiBlazorComponentsVersion>6.4.0</ViciOneUiBlazorComponentsVersion>
+    <ViciOneUiBlazorComponentsVersion>6.5.0</ViciOneUiBlazorComponentsVersion>
     <ViciOneUiMonochromeIconsVersion>4.18.0</ViciOneUiMonochromeIconsVersion>
     <MassTransitVersion>8.5.11</MassTransitVersion>
     <DotNetVersion>10.0.12</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="5.0.0" />
-    <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="5.0.0" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="5.0.1" />
+    <GlobalPackageReference Include="Roslynator.Formatting.Analyzers" Version="5.0.1" />
     <PackageVersion Include="AspNetCore.SassCompiler" Version="1.105.1" />
     <PackageVersion Include="MassTransit.Abstractions" Version="$(MassTransitVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="$(DotNetVersion)" />
@@ -44,8 +44,8 @@
     <PackageVersion Include="MassTransit.TestFramework" Version="$(MassTransitVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(DotNetVersion)" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(DotNetVersion)" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.2" />
-    <PackageVersion Include="Microsoft.Testing.Platform" Version="2.4.1" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
+    <PackageVersion Include="Microsoft.Testing.Platform" Version="2.5.1" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="22.3.0" />
