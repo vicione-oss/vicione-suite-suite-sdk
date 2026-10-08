@@ -785,7 +785,7 @@ dotnet_code_quality_unused_parameters = all # Flag methods with any accessibilit
 # suppression preferences
 dotnet_remove_unnecessary_suppression_exclusions = none # Enables the rule for all rules (no exclusions)
 tab_width = 4
-end_of_line = crlf
+end_of_line = lf
 
 [tests/**{Facts,Tests}*.cs]
 dotnet_diagnostic.CA1034.severity = none # Nested types should not be visible

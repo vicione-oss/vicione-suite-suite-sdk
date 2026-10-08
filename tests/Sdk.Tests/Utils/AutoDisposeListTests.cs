@@ -32,7 +32,7 @@ public sealed class AutoDisposeListTests
         using var list = new AutoDisposeList<IDisposable>();
 
         // Act & Assert - should not throw
-        var act = () => list.Dispose();
+        var act = list.Dispose;
         act.Should().NotThrow();
     }
 

@@ -38,7 +38,7 @@ public sealed class SettingsFieldButtonTests
         var button = component.FindComponent<Button>();
 
         // Act
-        await button.InvokeAsync(() => button.Instance.OnClick.InvokeAsync());
+        await button.InvokeAsync(button.Instance.OnClick.InvokeAsync);
 
         // Assert
         clicked.Should().BeTrue();

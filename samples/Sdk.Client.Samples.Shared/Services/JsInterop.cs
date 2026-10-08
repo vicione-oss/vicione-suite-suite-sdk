@@ -11,7 +11,7 @@ namespace Sdk.Client.Samples.Shared.Services;
 // through which C# calls the module's exports; every other member throws to make a missing piece obvious.
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes
-internal sealed class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger) : IJsInterop
+internal sealed partial class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger) : IJsInterop
 {
     public Task DownloadAs(string content, string name, CancellationToken token = default) => throw new NotImplementedException();
     public Task DownloadAs(Stream content, string name, CancellationToken token = default) => throw new NotImplementedException();
@@ -33,7 +33,7 @@ internal sealed class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger)
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, nameof(IncludeModuleScript));
+            LogIncludeModuleScriptFailed(logger, ex, location);
 
             return null;
         }
@@ -50,6 +50,11 @@ internal sealed class JsInterop(IJSRuntime jsRuntime, ILogger<JsInterop> logger)
     public Task SubmitForm(string path, object fields, CancellationToken token = default) => throw new NotImplementedException();
     public Task UpdateTitle(string title, CancellationToken token = default) => throw new NotImplementedException();
     public Task UploadFiles(string posturl, string folder, string id, CancellationToken token = default) => throw new NotImplementedException();
+
+    // The logging source generator implements this partial method. Unlike logger.LogError(...), it parses the message
+    // template once at compile time and skips formatting entirely when the log level is disabled (CA1848).
+    [LoggerMessage(Level = LogLevel.Error, Message = "Importing the JavaScript module {Location} failed")]
+    private static partial void LogIncludeModuleScriptFailed(ILogger logger, Exception exception, Uri location);
 }
 #pragma warning restore CA1812 // Avoid uninstantiated internal classes
 #pragma warning restore IDE0079 // Remove unnecessary suppression

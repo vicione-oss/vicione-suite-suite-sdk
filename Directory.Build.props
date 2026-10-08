@@ -42,9 +42,11 @@
     <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
+  <!-- Performance optimization for CI pipelines -->
   <PropertyGroup Condition="'$(CI)' != ''">
-    <RunAnalyzers>false</RunAnalyzers>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzers>true</RunAnalyzers>
   </PropertyGroup>
 
   <!-- Update packages.lock.json with the correct version in local development environment -->

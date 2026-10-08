@@ -1,5 +1,7 @@
 [*.cs]
 dotnet_diagnostic.IDE0001.severity = warning # Simplify name
+dotnet_diagnostic.IDE0011.severity = warning # Add braces
+csharp_prefer_braces = when_multiline:warning # Overrides the silent severity in the root .editorconfig, which keeps IDE0011 out of the build
 dotnet_diagnostic.IDE0021.severity = warning # Use expression body for constructors
 dotnet_diagnostic.IDE0022.severity = warning # Use expression body for methods
 dotnet_diagnostic.IDE0025.severity = warning # Use expression body for properties
@@ -11,17 +13,25 @@ dotnet_diagnostic.IDE0055.severity = warning # Fix formatting
 dotnet_diagnostic.IDE0078.severity = warning # Use pattern matching
 dotnet_diagnostic.IDE0120.severity = warning # Simplify LINQ expression
 dotnet_diagnostic.IDE0161.severity = warning # Use file-scoped namespace
+dotnet_diagnostic.IDE0200.severity = warning # Remove unnecessary lambda expression
+csharp_style_prefer_method_group_conversion = true:warning # Overrides the silent severity in the root .editorconfig, which keeps IDE0200 out of the build
 dotnet_diagnostic.IDE0270.severity = warning # Null check can be simplified (if null check)
 dotnet_diagnostic.IDE0290.severity = warning # Use primary constructor
 dotnet_diagnostic.IDE0305.severity = warning # Use collection expression for fluent
+dotnet_diagnostic.IDE0340.severity = warning # Use unbound generic type
+dotnet_diagnostic.IDE0350.severity = warning # Use implicitly typed lambda
 
 dotnet_diagnostic.CA1812.severity = none # Avoid uninstantiated internal classes
 dotnet_code_quality.CA1812.ignore_internalsvisibleto = true # Ensures CA1812 actually comes up when severity is changed from none to something else in the future as we apply InternalsVisibleTo in Directory.Build.props and in certain projects
 
+dotnet_diagnostic.CA1307.severity = warning # Specify StringComparison for clarity
 dotnet_diagnostic.CA1822.severity = warning # Mark members as static
+dotnet_diagnostic.CA1848.severity = warning # Use the LoggerMessage delegates
 dotnet_diagnostic.CA1849.severity = warning # Call async methods when in an async method
 dotnet_diagnostic.CA1852.severity = warning # Seal internal types
 dotnet_diagnostic.CA1859.severity = warning # Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1873.severity = warning # Avoid potentially expensive logging
+dotnet_diagnostic.CA2251.severity = warning # Use `String.Equals` over `String.Compare`
 
 dotnet_diagnostic.CS1591.severity = none # Missing XML comment for publicly visible type or member
 

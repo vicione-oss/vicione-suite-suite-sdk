@@ -237,7 +237,7 @@ public sealed class SettingsFieldSpinEditTests
         var component = ctx.Render<SettingsFieldSpinEdit<int, int, int>>(b =>
         {
             b.Add(p => p.Value, 10);
-            b.Add(p => p.ValueChanged, (int v) => changedValue = v);
+            b.Add(p => p.ValueChanged, v => changedValue = v);
             b.Add(p => p.Interval, 1);
             b.Add(p => p.Minimum, 0);
             b.Add(p => p.Maximum, 100);
@@ -261,7 +261,7 @@ public sealed class SettingsFieldSpinEditTests
 
         var component = ctx.Render<SettingsFieldSpinEdit<int, int, int>>(b =>
         {
-            b.Add(p => p.ValueChanged, (int _) => Task.FromException(new InvalidOperationException("Handler failed.")));
+            b.Add(p => p.ValueChanged, _ => Task.FromException(new InvalidOperationException("Handler failed.")));
             b.Add(p => p.Interval, 1);
             b.Add(p => p.Minimum, 0);
             b.Add(p => p.Maximum, 100);

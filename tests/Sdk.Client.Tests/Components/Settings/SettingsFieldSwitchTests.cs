@@ -29,7 +29,7 @@ public sealed class SettingsFieldSwitchTests
         await using var ctx = new BunitContext();
 
         var component = ctx.Render<SettingsFieldSwitch>(b =>
-            b.Add(p => p.ValueChanged, (bool _) => Task.FromException(new InvalidOperationException("Handler failed."))));
+            b.Add(p => p.ValueChanged, _ => Task.FromException(new InvalidOperationException("Handler failed."))));
 
         var switchComponent = component.FindComponent<Switch>();
 

@@ -57,7 +57,7 @@ public sealed partial class NavTileStandardContent : ComponentBase, IAsyncDispos
     /// <inheritdoc/>
     protected override async Task OnParametersSetAsync()
     {
-        if (HasSubline() && string.CompareOrdinal(_previousSubline, Subline) != 0)
+        if (HasSubline() && !string.Equals(_previousSubline, Subline, StringComparison.Ordinal))
         {
             _previousSubline = Subline;
 

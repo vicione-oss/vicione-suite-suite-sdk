@@ -179,7 +179,7 @@ public sealed class SettingsGroupTests
             b.Add(p => p.Title, "Title");
             b.Add(p => p.Subline, null);
             b.Add(p => p.Expanded, true);
-            b.Add(p => p.ExpandedChanged, (bool val) => newExpandedValue = val);
+            b.Add(p => p.ExpandedChanged, val => newExpandedValue = val);
         });
 
         // Act
