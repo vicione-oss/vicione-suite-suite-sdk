@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.4.0 - Unreleased
+## 3.4.0 - 2026-10-08
 
 ### Deprecated
 
@@ -10,6 +10,10 @@
 
 - `npm`, vulnerabilities fixed
 - `Sdk.SystemConfiguration`, `SystemConfiguration.Version` documents that it is the SDK contract's schema version, independent of HostManagement
+
+### Updated
+
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.5.0`
 
 ## 3.3.0 - 2026-10-06
 
