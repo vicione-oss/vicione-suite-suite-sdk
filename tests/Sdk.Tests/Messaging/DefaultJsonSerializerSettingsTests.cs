@@ -77,9 +77,11 @@ public sealed class DefaultJsonSerializerSettingsTests
     public sealed class DefaultOptionsTests
     {
         [Fact]
-        public void Should_be_case_insensitive() =>
+        public void Should_be_case_insensitive()
+        {
             // Assert
             DefaultJsonSerializerSettings.Default.PropertyNameCaseInsensitive.Should().BeTrue();
+        }
 
         [Fact]
         public void Should_ignore_null_when_writing()

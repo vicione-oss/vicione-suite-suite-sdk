@@ -39,8 +39,10 @@ public sealed record ProxySettings
     public ProxyInfo? Sftp { get; init; }
 
     /// <summary>
-    /// Gets or initializes the SOCKS proxy configuration, or <see langword="null"/> if not enabled.
+    /// Gets or initializes the SOCKS proxy configuration; always <see langword="null"/>,
+    /// because HostManagement 2.0 no longer supports a SOCKS proxy.
     /// </summary>
+    [Obsolete("HostManagement 2.0 no longer supports a SOCKS proxy, so the value is always null. No replacement; this property will be removed in the next major version.")]
     public ProxyInfo? Socks { get; init; }
 
     /// <summary>
