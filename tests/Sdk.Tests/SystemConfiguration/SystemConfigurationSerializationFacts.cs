@@ -182,7 +182,10 @@ public sealed class SystemConfigurationSerializationFacts
         deserialized.Proxy.Https.Should().BeNull();
         deserialized.Proxy.Ftp.Should().BeNull();
         deserialized.Proxy.Sftp.Should().BeNull();
+        // Covers the property until its removal in the next major version.
+#pragma warning disable CS0618 // Type or member is obsolete
         deserialized.Proxy.Socks.Should().BeNull();
+#pragma warning restore CS0618
     }
 
     [Fact]

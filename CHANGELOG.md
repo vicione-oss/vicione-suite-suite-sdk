@@ -2,9 +2,14 @@
 
 ## 3.4.0 - Unreleased
 
+### Deprecated
+
+- `Sdk.SystemConfiguration`, `ProxySettings.Socks` is always `null` and will be removed in the next major version; there is no replacement
+
 ### Fixed
 
 - `npm`, vulnerabilities fixed
+- `Sdk.SystemConfiguration`, `SystemConfiguration.Version` documents that it is the SDK contract's schema version, independent of HostManagement
 
 ## 3.3.0 - 2026-10-06
 

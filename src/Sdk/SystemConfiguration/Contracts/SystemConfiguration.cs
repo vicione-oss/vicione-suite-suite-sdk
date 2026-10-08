@@ -12,7 +12,7 @@ namespace Sdk.SystemConfiguration.Contracts;
 public sealed record SystemConfiguration
 {
     /// <summary>
-    /// Gets or initializes the version of the system configuration schema.
+    /// Gets or initializes the schema version of this SDK contract, which is independent of the HostManagement configuration version.
     /// </summary>
     [JsonRequired]
     public int Version { get; init; } = 1;
