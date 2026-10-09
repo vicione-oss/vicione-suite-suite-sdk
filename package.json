@@ -7,7 +7,7 @@
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^10.0.2",
-    "eslint-config-xo": "^0.50.0",
+    "eslint-config-xo": "^0.58.0",
     "eslint-config-xo-typescript": "^9.0.0",
     "three-dots": "^0.3.2",
     "typescript": "^6.0.3"
