@@ -84,6 +84,91 @@ public static class CompletionSourceHandlerBaseTests
         }
     }
 
+    public class SendAndWaitForCompletion_Cancellation
+    {
+        private const int LongTimeoutMs = 60_000;
+
+        [Fact]
+        public async Task Throws_OperationCanceledException_when_token_is_cancelled_during_the_wait()
+        {
+            // Arrange
+            var command = new TestCommand();
+            var mediator = Substitute.For<IUiMediator>();
+            mediator.CommandTimeoutMs.Returns(LongTimeoutMs);
+            using var sut = new TestableHandler(mediator);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+
+            mediator.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>())
+                .Returns(async _ => await cts.CancelAsync());
+
+            // Act
+            var act = () => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
+
+            // Assert
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(act);
+        }
+
+        [Fact]
+        public async Task Throws_OperationCanceledException_when_token_is_cancelled_during_the_send()
+        {
+            // Arrange
+            var command = new TestCommand();
+            var mediator = Substitute.For<IUiMediator>();
+            mediator.CommandTimeoutMs.Returns(LongTimeoutMs);
+            using var sut = new TestableHandler(mediator);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+
+            mediator.Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>())
+                .Returns(async _ =>
+                {
+                    await cts.CancelAsync();
+                    throw new OperationCanceledException(cts.Token);
+                });
+
+            // Act
+            var act = () => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
+
+            // Assert
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(act);
+        }
+
+        [Fact]
+        public async Task Returns_SaveErrorResult_when_handler_is_disposed_during_the_wait()
+        {
+            // Arrange
+            var command = new TestCommand();
+            var mediator = Substitute.For<IUiMediator>();
+            mediator.CommandTimeoutMs.Returns(LongTimeoutMs);
+            var sut = new TestableHandler(mediator);
+            var pending = sut.InvokeSendAndWaitForCompletion(command, TestContext.Current.CancellationToken);
+
+            // Act
+            sut.Dispose();
+            var result = await pending;
+
+            // Assert
+            Assert.IsType<SaveErrorResult>(result);
+        }
+
+        [Fact]
+        public async Task Returns_SaveErrorResult_without_sending_when_handler_is_already_disposed()
+        {
+            // Arrange
+            var command = new TestCommand();
+            var mediator = Substitute.For<IUiMediator>();
+            mediator.CommandTimeoutMs.Returns(LongTimeoutMs);
+            var sut = new TestableHandler(mediator);
+            sut.Dispose();
+
+            // Act
+            var result = await sut.InvokeSendAndWaitForCompletion(command, TestContext.Current.CancellationToken);
+
+            // Assert
+            await mediator.DidNotReceive().Send(Arg.Any<TestCommand>(), Arg.Any<CancellationToken>());
+            Assert.IsType<SaveErrorResult>(result);
+        }
+    }
+
     public class SendAndWaitForCompletion_WithCustomErrorHandler
     {
         [Fact]

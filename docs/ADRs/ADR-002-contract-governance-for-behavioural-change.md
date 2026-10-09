@@ -101,7 +101,9 @@ The deeper cause is addressed rather than papered over. `FindMessageTypes` filte
 
 ### Risks
 
-- **The category is abusable.** "The documentation was right, the code was wrong" can be told about almost any behaviour change after the fact. Mitigation: the direction test must cite the documentation *as it stood before the change*; if the documentation has to be edited to make the new behaviour correct, the change is BREAKING, not BEHAVIOURAL
+- **The category is abusable.** "The documentation was right, the code was wrong" can be told about almost any behaviour change after the fact. Mitigation: the direction test must cite the documentation *as it stood before the change*. Editing documentation that states the old behaviour makes the change BREAKING, with two exceptions, both named in the MR description:
+  - The documentation conflicts with a contract the API is also bound by, such as an interface it implements, and the change moves toward that contract.
+  - The documentation was written after the defect had been reported and only records it.
 - **Silent adoption.** A module pinning 3.1.0 for an unrelated feature also gets this fix. That is intended, and is why the changelog obligation is part of the rule rather than a courtesy
 - **Under-detection.** `check-api-compat` compares public surface, which by definition cannot see a BEHAVIOURAL change. It has to be caught by a human reading the diff
 

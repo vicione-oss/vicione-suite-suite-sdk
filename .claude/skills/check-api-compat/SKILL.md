@@ -34,7 +34,7 @@ Analyze the proposed changes for semantic versioning compliance:
    - Apply the direction test from `docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md`:
      - **Toward the documented contract** (the implementation was wrong, the XML documentation was right) → defect fix, minor or patch
      - **Away from it, or the documented contract itself changes** → breaking, major
-   - Cite the XML documentation *as it stood before the change*. If the documentation has to be edited to make the new behaviour correct, the change is BREAKING
+   - Cite the XML documentation *as it stood before the change*. Editing documentation that states the old behaviour makes the change BREAKING, unless one of the two exceptions in the ADR's *Risks* › *The category is abusable* applies and the MR description names it
    - Requires a `### Fixed` changelog entry naming the API, the observable difference, and the call pattern most likely to notice - one line plus a `**Behaviour change:**` sentence, per the *Changelog* rules in `AGENTS.md`
 
 Compare against the current public API surface in the `src/` projects, and read the body of every changed public method - a behavioural change is invisible to a signature-level diff. Flag any change that would require a major or minor version bump.

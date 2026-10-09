@@ -79,8 +79,8 @@ return await SendAndWaitForCompletion(command, instanceId, cancellationToken);
 The class implements the full dispose pattern. On disposal:
 
 - All event subscriptions are unregistered.
-- All in-flight operations are **cancelled** immediately.
-- Any `SendAndWaitForCompletion` call racing against disposal returns gracefully via `OperationCanceledException` (mapped to `CreateSuccessResult` internally — no exception escapes to the caller).
+- All in-flight operations are **cancelled** immediately and return `CreateErrorResult` — the backend outcome is unknown, so they never report success.
+- A `SendAndWaitForCompletion` call on a disposed handler sends nothing and returns `CreateErrorResult`.
 
 Concrete classes that hold their own disposable resources must override `Dispose(bool)`:
 
@@ -99,6 +99,6 @@ protected override void Dispose(bool disposing)
 | Backend fires success event within timeout | `CreateSuccessResult()` |
 | Backend fires error event within timeout | `CreateErrorResult(message, code)` or custom factory |
 | Timeout expires (10 s) | `CreateErrorResult(TheOperationHasTimedOut)` |
-| `CancellationToken` cancelled | `CreateSuccessResult()` (silent cancel) |
+| `CancellationToken` cancelled | `OperationCanceledException` is thrown; if the command was already sent, the backend may still apply it |
 | Command dispatch or `afterSend` throws | `CreateErrorResult(exception.Message)` |
-| Disposed before or during the call | Operation cancelled, no exception to caller |
+| Disposed before or during the call | `CreateErrorResult(AnUnexpectedErrorOccurred)`, nothing sent if disposed before |

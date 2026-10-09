@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.5.0 - unreleased
+
+### Fixed
+
+- `Sdk.Client`
+  - `CompletionSourceHandlerBase` no longer reports a cancelled or disposed wait as success. **Behaviour change:** a cancelled token throws `OperationCanceledException`, and disposal returns an error result
+
 ## 3.4.0 - 2026-10-08
 
 ### Deprecated
