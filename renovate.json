@@ -58,7 +58,14 @@
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "typescript" ],
       "groupName": "typescript",
-      "groupSlug": "typescript"
+      "groupSlug": "typescript",
+      "addLabels": [ "TypeScript" ]
+    },
+    {
+      "description": "npm: version ceiling for TypeScript, the parser engine of ESLint only, which does not support version 7 yet. The compiler comes with Microsoft.TypeScript.MSBuild",
+      "matchManagers": [ "npm" ],
+      "matchPackageNames": [ "typescript" ],
+      "allowedVersions": "<7"
     },
     {
       "matchManagers": [ "npm" ],

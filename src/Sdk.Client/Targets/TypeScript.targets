@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="GetAbsolutePathsOfGeneratedJavaScriptFiles" AfterTargets="CompileTypeScriptWithTSConfig">
+  <!--
+    A project chooses its version of Microsoft.TypeScript.MSBuild itself, so both generations of that package are supported:
+
+    - up to 6.x: compiles in 'CompileTypeScriptWithTSConfig' and reports its output as 'GeneratedJavascript' items
+    - from 7.0:  compiles in 'RunTscCompile' and reports its output as 'TypeScriptGeneratedFiles' items, sets 'UseTypeScript7'
+  -->
+
+  <PropertyGroup Condition="'$(UseTypeScript7)' == 'true'">
     <!--
-      Get the absolute path of the generated JavaScript files from target 'CompileTypeScriptWithTSConfig'.
+      Up to 6.x the compile was skipped in design-time builds, 'RunTscCompile' carries no such guard anymore.
+      Without it Visual Studio compiles on its own, which for example re-creates the output right after a 'Clean'.
+    -->
+    <TypeScriptCompileBlocked Condition="'$(DesignTimeBuild)' == 'true'">true</TypeScriptCompileBlocked>
+  </PropertyGroup>
+
+  <!--
+    Up to 6.x the compiler options of the project file were ignored as soon as a tsconfig.json existed. From 7.0 they
+    become command line flags of tsc, which take precedence over tsconfig.json. The two below are cleared so that
+    tsconfig.json stays the only place for compiler options.
+
+    This only works while this file is imported before 'Microsoft.TypeScript.MSBuild.targets', which composes the flags
+    during evaluation.
+  -->
+  <PropertyGroup Condition="'$(UseTypeScript7)' == 'true'">
+    <!-- Enabled by default and then passed to tsc, which rejects it (TS5053) if tsconfig.json sets "inlineSourceMap". -->
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+
+    <!-- Defaults to 'ES2020' and is then passed to tsc, where it overrides the "target" of tsconfig.json. -->
+    <TypeScriptTarget />
+  </PropertyGroup>
+
+  <Target Name="GetAbsolutePathsOfGeneratedJavaScriptFiles" AfterTargets="CompileTypeScriptWithTSConfig;RunTscCompile">
+    <!--
+      Get the absolute path of the generated JavaScript files from the TypeScript compile.
 
       This also ensures that the include and exclude fields of the tsconfig file are handled
     -->
-    <ConvertToAbsolutePath Paths="@(GeneratedJavascript -> '%(DestinationRelativePath)')">
+    <ItemGroup>
+      <_GeneratedJavaScriptFile Include="@(GeneratedJavascript -> '%(DestinationRelativePath)')" />
+      <!-- Lists everything the compile emitted, such as declaration files. -->
+      <_GeneratedJavaScriptFile Include="@(TypeScriptGeneratedFiles)" Condition="'%(Extension)' == '.js'" />
+    </ItemGroup>
+
+    <ConvertToAbsolutePath Paths="@(_GeneratedJavaScriptFile)">
       <Output TaskParameter="AbsolutePaths" ItemName="GeneratedJavascriptAbsolutePath"/>
     </ConvertToAbsolutePath>
 
@@ -30,6 +67,25 @@
       does not exist anymore after the operation.
     -->
     <Move SourceFiles="%(FileToMove.Identity)" DestinationFiles="%(FileToMove.DestinationPath)" />
+  </Target>
+
+  <!--
+    Microsoft.TypeScript.MSBuild 7 has no 'GetTypeScriptOutputForPublishing', so the move follows the compile directly.
+
+    A generated file that an interrupted or a design-time build left next to its source is part of 'Content' by the time
+    the compile overwrites it. It has to leave 'Content' with the move, otherwise the static web assets look for it at
+    its old place and fail the build.
+  -->
+  <Target Name="MoveGeneratedJavaScriptFilesAfterTscCompile" AfterTargets="GetAbsolutePathsOfGeneratedJavaScriptFiles" DependsOnTargets="MoveGeneratedJavaScriptFiles" Condition="'$(UseTypeScript7)' == 'true'">
+    <!-- Without the condition the metadata below is evaluated for no file at all, which 'MakeRelative' rejects. -->
+    <ItemGroup Condition="'@(FileToMove)' != ''">
+      <_MovedJavaScriptFile Include="@(FileToMove)">
+        <ProjectRelativePath>$([MSBuild]::MakeRelative($(MSBuildProjectDirectory), %(FullPath)))</ProjectRelativePath>
+      </_MovedJavaScriptFile>
+
+      <Content Remove="@(_MovedJavaScriptFile -> '%(ProjectRelativePath)');@(_MovedJavaScriptFile -> '%(FullPath)')" />
+      <None Remove="@(_MovedJavaScriptFile -> '%(ProjectRelativePath)');@(_MovedJavaScriptFile -> '%(FullPath)')" />
+    </ItemGroup>
   </Target>
 
   <PropertyGroup>

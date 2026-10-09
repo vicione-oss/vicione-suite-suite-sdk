@@ -1,3 +1,8 @@
-﻿﻿{
-    "extends": "../../tsconfig.json"
+﻿{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "paths": {
+            "/_content/ViciOne.Suite.Sdk.Client/js/event-target-mixins.js": [ "./Components/FileDropZone/Scripts/EventTargetMixins.ts" ]
+        }
+    }
 }
