@@ -6,6 +6,11 @@
 
 - `Sdk.Client`
   - `CompletionSourceHandlerBase` no longer reports a cancelled or disposed wait as success. **Behaviour change:** a cancelled token throws `OperationCanceledException`, and disposal returns an error result
+  - TypeScript files of a module also compile with `Microsoft.TypeScript.MSBuild` 7, earlier versions keep working
+
+### Updated
+
+- `Microsoft.TypeScript.MSBuild` package, update to version `7.0.1`
 
 ## 3.4.0 - 2026-10-08
 

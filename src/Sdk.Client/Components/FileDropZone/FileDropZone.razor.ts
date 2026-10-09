@@ -1,4 +1,4 @@
-import './event-target-mixins.js';
+import '/_content/ViciOne.Suite.Sdk.Client/js/event-target-mixins.js';
 
 export class FileDropZone {
     #inputFile: HTMLInputElement | undefined = undefined;
