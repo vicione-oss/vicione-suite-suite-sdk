@@ -6,40 +6,6 @@ export class NavTileStandardContent {
         readonly contentElement: HTMLElement, readonly iconElement: HTMLElement,
         readonly dotNetHelper: DotNet.DotNetObject) {}
 
-    public async initSubline() {
-        if (this.#isDisposed)
-            return;
-
-        if (!(this.headlineElement instanceof Element)) {
-            try {
-                await this.dotNetHelper.invokeMethodAsync('SublineInitialized');
-            } catch (e) {
-                console.error('Could not invoke SublineInitialized, component likely disposed:', e);
-            }
-
-            return;
-        }
-
-        this.#headlineResizeObserver = new ResizeObserver(this.#observerCallback.bind(this));
-        this.#headlineResizeObserver.observe(this.headlineElement);
-    }
-
-    public setSublineVerticalOffsetToIcon(sublineElement: HTMLElement, iconElement: HTMLElement) {
-        const sublineY = sublineElement.offsetTop;
-        const iconY = iconElement.offsetTop;
-
-        sublineElement.style.setProperty('--vertical-offset-to-icon', `${iconY - sublineY}px`);
-    }
-
-    public dispose() {
-        this.#isDisposed = true;
-
-        if (this.#headlineResizeObserver !== undefined) {
-            this.#headlineResizeObserver.disconnect();
-            this.#headlineResizeObserver = undefined;
-        }
-    }
-
     async #observerCallback() {
         if (this.#isDisposed) {
             await this.dotNetHelper.invokeMethodAsync('SublineInitialized');
@@ -51,8 +17,8 @@ export class NavTileStandardContent {
 
         try {
             await this.dotNetHelper.invokeMethodAsync('SublineInitialized');
-        } catch (e) {
-            console.error('Could not invoke SublineInitialized in observerCallback:', e);
+        } catch (error) {
+            console.error('Could not invoke SublineInitialized in observerCallback:', error);
         }
     }
 
@@ -70,9 +36,9 @@ export class NavTileStandardContent {
         const headlineElementClone = headlineElement.cloneNode(true);
 
         if (!(headlineElementClone instanceof HTMLElement))
-            throw new Error('Expected cloned node to be an HTMLElement');
+            throw new TypeError('Expected cloned node to be an HTMLElement');
 
-        headlineElementClone.innerText = 'Ag';
+        headlineElementClone.textContent = 'Ag';
         headlineElementClone.style.setProperty('position', 'absolute'); // Absolute positioning to avoid realignment of grid elements which would trigger the resize observer
 
         contentElement.insertBefore(headlineElementClone, headlineElement.nextSibling);
@@ -82,5 +48,41 @@ export class NavTileStandardContent {
         headlineElementClone.remove();
 
         return result;
+    }
+
+    public async initSubline() {
+        if (this.#isDisposed)
+            return;
+
+        if (!(this.headlineElement instanceof Element)) {
+            try {
+                await this.dotNetHelper.invokeMethodAsync('SublineInitialized');
+            } catch (error) {
+                console.error('Could not invoke SublineInitialized, component likely disposed:', error);
+            }
+
+            return;
+        }
+
+        this.#headlineResizeObserver = new ResizeObserver(() => {
+            void this.#observerCallback();
+        });
+        this.#headlineResizeObserver.observe(this.headlineElement);
+    }
+
+    public setSublineVerticalOffsetToIcon(sublineElement: HTMLElement, iconElement: HTMLElement) {
+        const sublineY = sublineElement.offsetTop;
+        const iconY = iconElement.offsetTop;
+
+        sublineElement.style.setProperty('--vertical-offset-to-icon', `${iconY - sublineY}px`);
+    }
+
+    public dispose() {
+        this.#isDisposed = true;
+
+        if (this.#headlineResizeObserver !== undefined) {
+            this.#headlineResizeObserver.disconnect();
+            this.#headlineResizeObserver = undefined;
+        }
     }
 }

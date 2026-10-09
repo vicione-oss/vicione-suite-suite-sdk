@@ -47,7 +47,6 @@
       "matchPackageNames": [
         "eslint",
         "eslint-config-xo",
-        "eslint-config-xo-typescript",
         "/^@typescript-eslint//",
         "/^eslint-/"
       ],
