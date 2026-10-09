@@ -25,8 +25,9 @@ namespace Sdk.Client.ControlPanels.Services;
 /// <see cref="Register{TEvent}"/> and are automatically cleaned up on disposal.
 /// </para>
 /// <para>
-/// A wait that ends by cancellation, through the token or by disposing the handler, yields
-/// <see cref="CreateSuccessResult"/>, not an error.
+/// Cancelling the token throws <see cref="OperationCanceledException"/>. A call on a disposed handler, or a
+/// wait that disposing the handler ends, yields <see cref="CreateErrorResult(string, int?)"/>; neither reports success.
+/// Once the command is sent, both leave the backend outcome unknown: the backend may still apply it.
 /// </para>
 /// </remarks>
 /// <typeparam name="TServiceResult">
@@ -157,8 +158,11 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="cancellationToken">Cancels both the send and the wait.</param>
     /// <returns>
     /// <see cref="CreateSuccessResult()"/> on success, or <see cref="CreateErrorResult(string, int?)"/>
-    /// on backend error or timeout.
+    /// on backend error, timeout or disposal of the handler.
     /// </returns>
+    /// <exception cref="OperationCanceledException">
+    /// <paramref name="cancellationToken"/> was cancelled; a command already sent may still be applied by the backend.
+    /// </exception>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, CreateErrorResult, null, cancellationToken);
@@ -171,6 +175,9 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="command">The command to dispatch.</param>
     /// <param name="errorOccured">Factory invoked with the backend <see cref="ErrorInfo"/> when the operation fails.</param>
     /// <param name="cancellationToken">Cancels both the send and the wait.</param>
+    /// <exception cref="OperationCanceledException">
+    /// <paramref name="cancellationToken"/> was cancelled; a command already sent may still be applied by the backend.
+    /// </exception>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Func<ErrorInfo, TServiceResult> errorOccured, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, errorOccured, null, cancellationToken);
@@ -183,6 +190,9 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="command">The command to dispatch.</param>
     /// <param name="afterSend">Optional async continuation to run immediately after the command is sent.</param>
     /// <param name="cancellationToken">Cancels both the send and the wait.</param>
+    /// <exception cref="OperationCanceledException">
+    /// <paramref name="cancellationToken"/> was cancelled; a command already sent may still be applied by the backend.
+    /// </exception>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Func<CancellationToken, Task>? afterSend = null, CancellationToken cancellationToken = default)
         where TCommand : class, ICommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, CreateErrorResult, afterSend, cancellationToken);
@@ -205,6 +215,9 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="command">The command to dispatch.</param>
     /// <param name="instanceId">The target instance ID forwarded to <see cref="IUiMediator"/>.</param>
     /// <param name="cancellationToken">Cancels both the send and the wait.</param>
+    /// <exception cref="OperationCanceledException">
+    /// <paramref name="cancellationToken"/> was cancelled; a command already sent may still be applied by the backend.
+    /// </exception>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Guid instanceId, CancellationToken cancellationToken = default)
         where TCommand : class, IInstanceDependentCommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, instanceId, CreateErrorResult, null, cancellationToken);
@@ -218,6 +231,9 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     /// <param name="instanceId">The target instance ID forwarded to <see cref="IUiMediator"/>.</param>
     /// <param name="errorOccured">Factory invoked with the backend <see cref="ErrorInfo"/> when the operation fails.</param>
     /// <param name="cancellationToken">Cancels both the send and the wait.</param>
+    /// <exception cref="OperationCanceledException">
+    /// <paramref name="cancellationToken"/> was cancelled; a command already sent may still be applied by the backend.
+    /// </exception>
     protected async Task<TServiceResult> SendAndWaitForCompletion<TCommand>(TCommand command, Guid instanceId, Func<ErrorInfo, TServiceResult> errorOccured, CancellationToken cancellationToken = default)
         where TCommand : class, IInstanceDependentCommand, CorrelatedBy<Guid>
         => await SendAndWaitForCompletion(command, instanceId, errorOccured, null, cancellationToken);
@@ -235,29 +251,26 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
     private async Task<TServiceResult> SendAndWaitForCompletionInternal(Guid correlationId, Func<ErrorInfo, TServiceResult> errorOccured, Func<CancellationToken, Task> processCall,
         CancellationToken cancellationToken = default)
     {
+        if (_disposed)
+            return CreateErrorResult(CommonPhrases.AnUnexpectedErrorOccurred);
+
         var taskCompletionSource = new TaskCompletionSource<ErrorInfo?>();
         _taskCompletionSourceMap[correlationId] = taskCompletionSource;
 
-        // Dispose may have drained the map before this entry was added; cancel it here so it cannot wait forever.
-        if (_disposed)
-        {
-            _taskCompletionSourceMap.TryRemove(correlationId, out _);
-            taskCompletionSource.TrySetCanceled(cancellationToken);
-        }
-
         try
         {
-            if (!_disposed)
+            // Dispose may have drained the map before this entry was added, so nothing would ever complete it.
+            if (_disposed)
+                return CreateErrorResult(CommonPhrases.AnUnexpectedErrorOccurred);
+
+            try
             {
-                try
-                {
-                    await processCall(cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    // A failed send becomes an error result, like a backend error, rather than an exception.
-                    return CreateErrorResult(new ErrorInfo(0, ex.Message));
-                }
+                await processCall(cancellationToken);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+            {
+                // A failed send becomes an error result, like a backend error, rather than an exception.
+                return CreateErrorResult(new ErrorInfo(0, ex.Message));
             }
 
             return await WaitForCommandCompletion(taskCompletionSource, errorOccured, cancellationToken);
@@ -279,10 +292,10 @@ public abstract class CompletionSourceHandlerBase<TServiceResult>(IUiMediator ui
 
             return CreateSuccessResult();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            // WaitAsync throws OperationCanceledException/TaskCanceledException when a task is cancelled
-            return CreateSuccessResult();
+            // Dispose cancelled the pending operation; the backend outcome is unknown, so it must not read as success.
+            return CreateErrorResult(CommonPhrases.AnUnexpectedErrorOccurred);
         }
         catch (TimeoutException)
         {
