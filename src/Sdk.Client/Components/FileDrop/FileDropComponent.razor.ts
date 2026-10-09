@@ -1,6 +1,10 @@
 export class FileDrop {
 
     readonly #descriptionWidth: number;
+    readonly #dragHoverEventListenerBinding = this.#onDragHover.bind(this);
+    readonly #dragLeaveEventListenerBinding = this.#onDragLeave.bind(this);
+    readonly #dropEventListenerBinding = this.#onDrop.bind(this);
+    readonly #changeEventListenerBinding = this.#onChange.bind(this);
 
     constructor(readonly dropZoneElement: HTMLElement,
         readonly inputLabel: HTMLElement,
@@ -9,42 +13,31 @@ export class FileDrop {
         readonly inputFile: HTMLInputElement) {
         this.#descriptionWidth = descriptionLabel.clientWidth;
 
-        this.dropZoneElement.addEventListener('dragenter', this.#onDragHover.bind(this));
-        this.dropZoneElement.addEventListener('dragover', this.#onDragHover.bind(this));
-        this.dropZoneElement.addEventListener('dragleave', this.#onDragLeave.bind(this));
-        this.dropZoneElement.addEventListener('drop', this.#onDrop.bind(this));
+        this.dropZoneElement.addEventListener('dragenter', this.#dragHoverEventListenerBinding);
+        this.dropZoneElement.addEventListener('dragover', this.#dragHoverEventListenerBinding);
+        this.dropZoneElement.addEventListener('dragleave', this.#dragLeaveEventListenerBinding);
+        this.dropZoneElement.addEventListener('drop', this.#dropEventListenerBinding);
 
-        this.inputFile.addEventListener('change', this.#onChange.bind(this));
-        this.inputFile.addEventListener('input', this.#onChange.bind(this));
-        this.inputFile.addEventListener('cancel', this.#onChange.bind(this));
+        this.inputFile.addEventListener('change', this.#changeEventListenerBinding);
+        this.inputFile.addEventListener('input', this.#changeEventListenerBinding);
+        this.inputFile.addEventListener('cancel', this.#changeEventListenerBinding);
     }
 
-    public dispose() {
-        this.dropZoneElement.removeEventListener('dragenter', this.#onDragHover);
-        this.dropZoneElement.removeEventListener('dragover', this.#onDragHover);
-        this.dropZoneElement.removeEventListener('dragleave', this.#onDragLeave);
-        this.dropZoneElement.removeEventListener('drop', this.#onDrop);
-
-        this.inputFile.removeEventListener('change', this.#onChange.bind(this));
-        this.inputFile.removeEventListener('input', this.#onChange.bind(this));
-        this.inputFile.removeEventListener('cancel', this.#onChange.bind(this));
-    }
-
-    #onDragHover(e: DragEvent) {
-        e.preventDefault();
+    #onDragHover(event: DragEvent) {
+        event.preventDefault();
         this.dropZoneElement.classList.add('hover');
     }
 
-    #onDragLeave(e: DragEvent) {
-        e.preventDefault();
+    #onDragLeave(event: DragEvent) {
+        event.preventDefault();
         this.dropZoneElement.classList.remove('hover');
     }
 
-    #onDrop(e: DragEvent) {
-        e.preventDefault();
+    #onDrop(event: DragEvent) {
+        event.preventDefault();
         this.dropZoneElement.classList.remove('hover');
 
-        this.inputFile.files = e.dataTransfer!.files;
+        this.inputFile.files = event.dataTransfer!.files;
         this.inputFile.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
@@ -61,5 +54,16 @@ export class FileDrop {
         this.descriptionLabel.title = this.inputFile.files[0].name;
         this.descriptionLabel.textContent = this.inputFile.files[0].name;
         this.inputLabel.title = this.inputFile.files[0].name;
+    }
+
+    public dispose() {
+        this.dropZoneElement.removeEventListener('dragenter', this.#dragHoverEventListenerBinding);
+        this.dropZoneElement.removeEventListener('dragover', this.#dragHoverEventListenerBinding);
+        this.dropZoneElement.removeEventListener('dragleave', this.#dragLeaveEventListenerBinding);
+        this.dropZoneElement.removeEventListener('drop', this.#dropEventListenerBinding);
+
+        this.inputFile.removeEventListener('change', this.#changeEventListenerBinding);
+        this.inputFile.removeEventListener('input', this.#changeEventListenerBinding);
+        this.inputFile.removeEventListener('cancel', this.#changeEventListenerBinding);
     }
 }
