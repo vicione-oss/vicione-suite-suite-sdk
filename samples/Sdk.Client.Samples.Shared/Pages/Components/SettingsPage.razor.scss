@@ -9,3 +9,21 @@
 .narrow-container {
     max-width: 480px;
 }
+
+// LimitedHeightLayout limits its content to the height of its parent, so the parent needs a definite height.
+.limited-height-container {
+    height: 320px;
+}
+
+// Wallpaper positions its image absolutely, so the container gets no height from it. A height above the available one
+// lets LimitedHeightLayout shrink the container to the room the settings leave.
+.wallpaper-container {
+    position: relative;
+    height: 640px;
+
+    // Shows the whole image as it shrinks, instead of cropping it like the default cover.
+    ::deep .wallpaper {
+        object-fit: contain;
+        object-position: left;
+    }
+}

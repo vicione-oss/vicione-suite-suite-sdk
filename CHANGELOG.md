@@ -1,6 +1,12 @@
 # Changelog
 
-## 3.5.0 - unreleased
+## 3.5.0 - 2026-10-12
+
+### Added
+
+- `Sdk.Client`
+  - `LimitedHeightLayout` limits its content to the available height
+  - `NonShrinkingContent` keeps its content at full height inside a `LimitedHeightLayout`
 
 ### Changed
 
@@ -17,6 +23,7 @@
 ### Updated
 
 - `Microsoft.TypeScript.MSBuild` package, update to version `7.0.1`
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.6.0`
 
 ## 3.4.0 - 2026-10-08
 
