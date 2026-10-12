@@ -1,4 +1,5 @@
 ﻿$padding: 16px;
+$spacing: 16px;
 
 // SettingsLayout.ContentPaddingRight sets the custom property; the fallback is its documented default of 138 px.
 $content-padding-right: var(--settings-content-padding-right, #{122px + $padding});

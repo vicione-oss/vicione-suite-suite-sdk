@@ -27,6 +27,7 @@ public sealed partial class SettingsPage : ComponentBase
     private bool _switchExpanderValue;
     private int _width = 320;
     private bool _settingsFieldLoadingIndicationExamplesExpanded = true;
+    private bool _limitedHeightGroupExpanded = true;
     private readonly List<ComboBoxItem<SettingsFieldLoadingIndication?, string>> _settingsFieldLoadingIndications =
         [
             new () {Text = "<None>", Value = null},

@@ -134,7 +134,11 @@ flowchart LR
         SettingsFieldSeparator
         SettingsInformation
         SettingsStepper
+        LimitedHeightLayout
+        NonShrinkingContent
 
+        LimitedHeightLayout-. "may contain" .->NonShrinkingContent
+        NonShrinkingContent-. "may contain" .->SettingsLayout
         SettingsLayout-. "may contain" .->SettingsGroup
         SettingsGroup-. "may contain" .->SettingsGroup
         SettingsGroup-. "may contain" .->SettingsField
@@ -154,6 +158,7 @@ flowchart LR
 
         BarControlPanel-. "describes settings via" .->DescriptionBanner
         BarControlPanel-. "wraps settings in" .->SettingsLayout
+        BarControlPanel-. "limits content to the available height via" .->LimitedHeightLayout
     end
 
     classDef cluster fill:#ffffff10
@@ -213,7 +218,7 @@ For the following  file structure in `FooClientModule` is assumed:
   ```
 ### 4.1 Add control panel content
 
-> It is recommended to use component [`SettingsLayout`](../src/Sdk.Client/Components/Settings/SettingsLayout.razor.cs), [`SettingsGroup`](../src/Sdk.Client/Components/Settings/SettingsGroup.razor.cs), [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs), [`SettingsFieldTextBox`](../src/Sdk.Client/Components/Settings/SettingsFieldTextBox.razor.cs), [`SettingsFieldButton`](../src/Sdk.Client/Components/Settings/SettingsFieldButton.razor.cs), [`SettingsFieldComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldComboBox.razor.cs), [`SettingsFieldCultureComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldCultureComboBox.razor.cs), [`SettingsFieldSpinEdit`](../src/Sdk.Client/Components/Settings/SettingsFieldSpinEdit.razor.cs), [`SettingsFieldSwitch`](../src/Sdk.Client/Components/Settings/SettingsFieldSwitch.razor.cs), [`SettingsFieldSeparator`](../src/Sdk.Client/Components/Settings/SettingsFieldSeparator.razor.cs), [`SettingsStepper`](../src/Sdk.Client/Components/Settings/SettingsStepper.razor.cs) and [`SettingsInformation`](../src/Sdk.Client/Components/Settings/SettingsInformation.razor.cs) to implement content in a unified way holding on to a unified user experience. See [architecture diagram](#settings-components) to understand how it all fits together.
+> It is recommended to use component [`SettingsLayout`](../src/Sdk.Client/Components/Settings/SettingsLayout.razor.cs), [`SettingsGroup`](../src/Sdk.Client/Components/Settings/SettingsGroup.razor.cs), [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs), [`SettingsFieldTextBox`](../src/Sdk.Client/Components/Settings/SettingsFieldTextBox.razor.cs), [`SettingsFieldButton`](../src/Sdk.Client/Components/Settings/SettingsFieldButton.razor.cs), [`SettingsFieldComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldComboBox.razor.cs), [`SettingsFieldCultureComboBox`](../src/Sdk.Client/Components/Settings/SettingsFieldCultureComboBox.razor.cs), [`SettingsFieldSpinEdit`](../src/Sdk.Client/Components/Settings/SettingsFieldSpinEdit.razor.cs), [`SettingsFieldSwitch`](../src/Sdk.Client/Components/Settings/SettingsFieldSwitch.razor.cs), [`SettingsFieldSeparator`](../src/Sdk.Client/Components/Settings/SettingsFieldSeparator.razor.cs), [`SettingsStepper`](../src/Sdk.Client/Components/Settings/SettingsStepper.razor.cs), [`SettingsInformation`](../src/Sdk.Client/Components/Settings/SettingsInformation.razor.cs), [`LimitedHeightLayout`](../src/Sdk.Client/Components/Settings/LimitedHeightLayout.razor.cs) and [`NonShrinkingContent`](../src/Sdk.Client/Components/Settings/NonShrinkingContent.razor.cs) to implement content in a unified way holding on to a unified user experience. See [architecture diagram](#settings-components) to understand how it all fits together.
 
 - Add layout
 
@@ -265,6 +270,32 @@ For the following  file structure in `FooClientModule` is assumed:
   > You can use [`SettingsFieldSeparator`](../src/Sdk.Client/Components/Settings/SettingsFieldSeparator.razor.cs) between a set of [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs) or other components to have a visual separation between the sets.
 
   > You can use [`SettingsStepper`](../src/Sdk.Client/Components/Settings/SettingsStepper.razor.cs) below a [`SettingsField`](../src/Sdk.Client/Components/Settings/SettingsField.razor.cs) to render a component with plus / minus buttons.
+
+- Optional, wrap all content in [`LimitedHeightLayout`](../src/Sdk.Client/Components/Settings/LimitedHeightLayout.razor.cs) to keep it within the available height
+
+  ``` html
+  <LimitedHeightLayout>
+      <div>
+          Content that shrinks to fit the available height
+      </div>
+  </LimitedHeightLayout>
+  ```
+
+- Optional, wrap content that should not shrink in [`NonShrinkingContent`](../src/Sdk.Client/Components/Settings/NonShrinkingContent.razor.cs)
+
+  ``` html
+  <LimitedHeightLayout>
+      <div>
+          Content that shrinks to fit the available height
+      </div>
+
+      <NonShrinkingContent>
+          <div>
+              Content that does not shrink, keeps its full height
+          </div>
+      </NonShrinkingContent>
+  </LimitedHeightLayout>
+  ```
 
 - Optional, wrap content in [`ControlPanelPage`](../src/Sdk.Client/ControlPanels/Components/ControlPanelPage.razor.cs)
 

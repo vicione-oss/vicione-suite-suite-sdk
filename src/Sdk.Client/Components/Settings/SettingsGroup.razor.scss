@@ -93,7 +93,7 @@ $border-radius: 3px;
 .settings-group:not(.settings-group--nested) {
     &:not(:first-child) {
         &::before {
-            margin-top: 16px;
+            margin-top: variables.$spacing;
         }
     }
 

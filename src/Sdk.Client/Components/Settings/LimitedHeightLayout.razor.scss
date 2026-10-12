@@ -1,0 +1,23 @@
+@use "../../Styles/settings/settings-group/variables" as settings-group;
+
+.limited-height-layout {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+
+    row-gap: settings-group.$spacing;
+
+    // Clip instead of hidden, which would turn overflow-y into auto and add a second scrollbar.
+    overflow-x: clip;
+
+    // Lets the content shrink below its natural height, so it scrolls itself instead of overflowing the layout.
+    ::deep > * {
+        min-height: 0;
+    }
+
+    // Tweak the bottom spacing of possibly used components to avoid adding visually to the bottom spacing of the outer container.
+    ::deep > :last-child {
+        --vo-ui-bc-grid-footer-padding-bottom: 0;
+        --vo-ui-bc-tables-footer-padding-bottom: 0;
+    }
+}

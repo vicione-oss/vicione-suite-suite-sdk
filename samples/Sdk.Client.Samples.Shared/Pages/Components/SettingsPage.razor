@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Sdk.Client.Components.Settings
 @using Sdk.Client.Components.Settings.Expanders
+@using Sdk.Client.Components.Wallpaper
+@using Sdk.Client.Components.Wallpaper.Enums
 @using ViciOne.Ui.Blazor.Components.ComboBox
 @using Sdk.Client.Samples.Shared.Services;
 
@@ -94,4 +96,32 @@
             </SettingsInformation>
         </SettingsGroup>
     </SettingsLayout>
+</div>
+
+<h2>Limited height</h2>
+
+@* LimitedHeightLayout takes at most the height of its parent, here the fixed height of the container, and stacks its
+   children 16 px apart. Children shrink to fit, so they need content that scales by itself: the wallpaper fills its
+   container, which shrinks to the room the settings leave. The settings would shrink and clip as well, so
+   NonShrinkingContent keeps them at their full height. Collapsing the group frees room, and the wallpaper grows. *@
+<div class="limited-height-container">
+    <LimitedHeightLayout>
+        <div class="wallpaper-container">
+            <Wallpaper Image="WallpaperImage.BlackAbstractTriangles" />
+        </div>
+
+        <NonShrinkingContent>
+            <SettingsLayout>
+                <SettingsGroup Title="Keeps its full height" @bind-Expanded="_limitedHeightGroupExpanded">
+                    <SettingsField Label="First name">
+                        <SettingsFieldTextBox Placeholder="Jane Doe" @bind-Value="_firstName" />
+                    </SettingsField>
+
+                    <SettingsField Label="Enabled">
+                        <SettingsFieldSwitch @bind-Value="_enabled" />
+                    </SettingsField>
+                </SettingsGroup>
+            </SettingsLayout>
+        </NonShrinkingContent>
+    </LimitedHeightLayout>
 </div>
