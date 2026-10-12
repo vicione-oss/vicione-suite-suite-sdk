@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using System.Diagnostics;
+using MassTransit;
 using MassTransit.Testing;
 using Sdk.Backend.Messaging;
 using Sdk.Messaging;
@@ -11,6 +12,9 @@ namespace Sdk.Testing.Backend;
 /// </summary>
 public sealed class MassTransitTester : IAsyncDisposable
 {
+    // Seconds a helper waits for the consumer before it gives up.
+    private const int TestTimeoutSeconds = 10;
+
     private readonly TestOutputHelperTextWriterAdapter? _testOutputHelperTextWriterAdapter;
 
     /// <summary>
@@ -26,6 +30,11 @@ public sealed class MassTransitTester : IAsyncDisposable
     /// <summary>
     /// Builds a service provider with the MassTransit test harness; bus output goes to <paramref name="testOutputHelper"/>.
     /// </summary>
+    /// <remarks>
+    /// A helper gives up after 10 s, or after MassTransit's 50 min while a debugger is attached, so a breakpoint in a consumer
+    /// does not end the test. Set <see cref="IBaseTestHarness.TestTimeout"/> on <see cref="Harness"/> before the first helper
+    /// call, or call <c>SetTestTimeouts</c> in <paramref name="servicesConfig"/>, for a consumer that takes longer.
+    /// </remarks>
     /// <param name="servicesConfig">Registers consumers, activities and sagas under test.</param>
     /// <param name="testOutputHelper">Receives the harness log; <see langword="null"/> discards it.</param>
     public MassTransitTester(Action<IBusRegistrationConfigurator>? servicesConfig = null, ITestOutputHelper? testOutputHelper = null)
@@ -35,7 +44,14 @@ public sealed class MassTransitTester : IAsyncDisposable
             : _testOutputHelperTextWriterAdapter = new(testOutputHelper);
 
         Services = new ServiceCollection()
-            .AddMassTransitTestHarness(textWriter, servicesConfig)
+            .AddMassTransitTestHarness(textWriter, cfg =>
+            {
+                // Registered first, so SetTestTimeouts in servicesConfig wins. Under a debugger, MassTransit's default allows 50 min.
+                if (!Debugger.IsAttached)
+                    cfg.SetTestTimeouts(TimeSpan.FromSeconds(TestTimeoutSeconds));
+
+                servicesConfig?.Invoke(cfg);
+            })
             .BuildServiceProvider(true);
         Harness = Services.GetRequiredService<ITestHarness>();
     }
