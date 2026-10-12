@@ -2,6 +2,12 @@
 
 ## 3.5.0 - unreleased
 
+### Changed
+
+- `Sdk.Testing`
+  - the `ITestHarness` helpers return once the consumers have handled the message. **Behaviour change:** afterwards, `Harness.Published`, `Sent` and `Consumed` no longer wait for later messages
+  - `MassTransitTester` gives up after 10 s instead of 30 s, unless a debugger is attached
+
 ### Fixed
 
 - `Sdk.Client`

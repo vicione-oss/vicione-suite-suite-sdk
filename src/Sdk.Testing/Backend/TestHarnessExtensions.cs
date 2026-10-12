@@ -12,46 +12,38 @@ namespace Sdk.Testing.Backend;
 /// <summary>
 /// Provides extension methods for <see cref="ITestHarness"/> to simplify common messaging test scenarios.
 /// </summary>
+/// <remarks>
+/// The helpers return once the consumers registered in the harness have handled the message and every message it caused,
+/// such as its <see cref="Fault{T}"/> and the events of a fault consumer. They wait at most <see cref="IBaseTestHarness.TestTimeout"/>.
+/// Afterwards the harness's <c>Published</c>, <c>Sent</c> and <c>Consumed</c> return what is recorded without waiting for more.
+/// </remarks>
 public static class TestHarnessExtensions
 {
-    // Seconds without bus activity after which the harness considers an operation complete.
-    private const int InactivityTimeout = 1;
-
-    // Seconds a single consume may take before the harness gives up.
-    private const int TestTimeout = 10;
-
-    // Milliseconds to wait after Start(); without it, ClusterManagement system tests failed when run as a batch.
-    private const int StartDelay = 500;
-
     extension(ITestHarness harness)
     {
         /// <summary>
         /// Sends a request and waits for a response, asserting that the request was consumed and the response was sent.
         /// </summary>
         /// <exception cref="RequestFaultException">Thrown by the request client if the consumer faulted, before any assertion.</exception>
-        /// <remarks>
-        /// Unlike the other helpers, this one shortens the timeouts only in Debug builds of this package, so a module's tests
-        /// run with MassTransit's defaults. Set <see cref="IBaseTestHarness.TestInactivityTimeout"/> and
-        /// <see cref="IBaseTestHarness.TestTimeout"/> before the call to control how long it waits.
-        /// </remarks>
+        /// <exception cref="RequestTimeoutException">Thrown if no response arrives within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
+        /// <exception cref="TimeoutException">Thrown if the request was not handled within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task<TResponse> TestRequest<TResponse, TRequest>(TRequest request)
             where TRequest : class, IRoutableMessage
             where TResponse : class, IResponse
         {
-#if DEBUG
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
-#endif
-
             await harness.Start();
-            await Task.Delay(StartDelay, harness.CancellationToken);
 
             var client = harness.Bus.CreateRequestClient<TRequest>();
-            var response = await client.GetResponse<TResponse>(request, harness.CancellationToken);
+            Response<TResponse>? response = null;
+
+            // The request client's own default of 30 s would end a debugging session at a breakpoint before TestTimeout does.
+            await harness.SendAndWait<TRequest>(async stamp => response = await client.GetResponse<TResponse>(request,
+                x => x.UseExecute(stamp),
+                harness.CancellationToken,
+                harness.TestTimeout));
 
             Assert.That(await harness.Consumed.Any<TRequest>(harness.CancellationToken));
 
-            await harness.InactivityTask;
             await harness.ThrowOnConsumeFault<TRequest>();
 
             // MassTransit records a consumer exception instead of propagating it, so it is rethrown here.
@@ -59,7 +51,7 @@ public static class TestHarnessExtensions
 
             Assert.That(await harness.Sent.Any<TResponse>(harness.CancellationToken));
 
-            return response.Message;
+            return response!.Message;
         }
 
         /// <summary>
@@ -77,32 +69,27 @@ public static class TestHarnessExtensions
         /// <exception cref="InvalidOperationException">
         /// Thrown if a fault was published and <paramref name="throwFirstFaultException"/> is set.
         /// </exception>
+        /// <exception cref="TimeoutException">Thrown if the command was not handled within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task TestCommand<TCommand, TConsumer>(TCommand command, Guid? correlationId = null, bool throwFirstFaultException = true)
             where TCommand : class, IRoutableMessage
             where TConsumer : class, IConsumer
         {
             // The DI container stops the harness on dispose, so there is no matching Stop().
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
             var endpoint = await harness.GetConsumerEndpoint<TConsumer>();
 
-            if (correlationId is null)
-            {
-                await endpoint.Send(command, harness.CancellationToken);
-            }
-            else
-            {
-                await endpoint.Send(command,
-                    command.GetType(),
-                    context => context.CorrelationId = correlationId,
-                    harness.CancellationToken);
-            }
-
-            await harness.InactivityTask;
+            await harness.SendAndWait<TCommand>(stamp => correlationId is null
+                    ? endpoint.Send(command, context => stamp(context), harness.CancellationToken)
+                    : endpoint.Send(command,
+                        command.GetType(),
+                        context =>
+                        {
+                            stamp(context);
+                            context.CorrelationId = correlationId;
+                        },
+                        harness.CancellationToken));
 
             if (throwFirstFaultException)
                 await harness.ThrowOnConsumeFault<TCommand>();
@@ -124,8 +111,6 @@ public static class TestHarnessExtensions
         {
             await harness.TestCommand<TCommand, TConsumer>(command);
 
-            await harness.InactivityTask;
-
             // Assert
             Assert.That(await harness.Published.Any<TResponseEvent>(harness.CancellationToken));
             return (await harness.Published.SelectAsync<TResponseEvent>(harness.CancellationToken).First()).Context.Message;
@@ -135,7 +120,7 @@ public static class TestHarnessExtensions
         /// Sends <paramref name="commands"/> in order, asserting each was consumed, and returns every
         /// <typeparamref name="TResponseEvent"/> the harness saw published.
         /// </summary>
-        /// <param name="commands">The commands to send, one after another.</param>
+        /// <param name="commands">The commands to send, one after another; each is handled before the next is sent.</param>
         /// <param name="throwFirstFaultException">
         /// <see langword="true"/> turns a published <see cref="Fault{T}"/> into an <see cref="InvalidOperationException"/>;
         /// <see langword="false"/> lets the consumer's original exception propagate instead.
@@ -143,16 +128,14 @@ public static class TestHarnessExtensions
         /// <exception cref="InvalidOperationException">
         /// Thrown if a fault was published and <paramref name="throwFirstFaultException"/> is set.
         /// </exception>
+        /// <exception cref="TimeoutException">Thrown if a command was not handled within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task<TResponseEvent[]> TestCommands<TCommand, TConsumer, TResponseEvent>(TCommand[] commands, bool throwFirstFaultException = true)
             where TCommand : class, IRoutableMessage
             where TConsumer : class, IConsumer
             where TResponseEvent : class
         {
             // The DI container stops the harness on dispose, so there is no matching Stop().
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay, harness.CancellationToken);
 
             var endpoint = await harness.GetConsumerEndpoint<TConsumer>();
             var consumerHarness = harness.GetConsumerHarness<TConsumer>();
@@ -160,7 +143,7 @@ public static class TestHarnessExtensions
             foreach (var command in commands)
             {
                 // Act
-                await endpoint.Send(command, harness.CancellationToken);
+                await harness.SendAndWait<TCommand>(stamp => endpoint.Send(command, context => stamp(context), harness.CancellationToken));
 
                 if (throwFirstFaultException)
                     await harness.ThrowOnConsumeFault<TCommand>();
@@ -170,8 +153,6 @@ public static class TestHarnessExtensions
                 await harness.ThrowOnConsumeError<TCommand>();
             }
 
-            await harness.InactivityTask;
-
             // Assert
             Assert.That(await harness.Published.Any<TResponseEvent>(harness.CancellationToken));
             return [.. (await harness.Published.SelectAsync<TResponseEvent>(harness.CancellationToken).ToListAsync()).Select(k => k.Context.Message)];
@@ -180,19 +161,17 @@ public static class TestHarnessExtensions
         /// <summary>
         /// Publishes an event and asserts that <typeparamref name="TConsumer"/> consumed it.
         /// </summary>
+        /// <exception cref="TimeoutException">Thrown if the event was not handled within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task TestEvent<TEvent, TConsumer>(TEvent @event)
             where TEvent : class, IRoutableMessage
             where TConsumer : class, IConsumer
         {
             // The DI container stops the harness on dispose, so there is no matching Stop().
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
-            await harness.Bus.Publish(@event, harness.CancellationToken);
-            await harness.InactivityTask;
+            await harness.SendAndWait<TEvent>(stamp => harness.Bus.Publish(@event, context => stamp(context), harness.CancellationToken));
+
             await harness.ThrowOnConsumeError<TEvent>();
 
             Assert.That(await harness.Published.Any<TEvent>(harness.CancellationToken));
@@ -245,33 +224,68 @@ public static class TestHarnessExtensions
         }
 
         /// <summary>
-        /// Runs <typeparamref name="T"/> as the only activity of a routing slip and waits for bus inactivity.
+        /// Runs <typeparamref name="T"/> as the only activity of a routing slip and waits until the activity has handled it.
         /// Nothing is asserted: the caller checks the outcome, e.g. via the harness's published messages.
         /// </summary>
+        /// <exception cref="TimeoutException">Thrown if the activity did not finish within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task TestExecuteActivity<T, TArguments>(TArguments arguments,
             IEnumerable<KeyValuePair<string, object>>? variables = null)
             where T : class, IExecuteActivity<TArguments>
             where TArguments : class, IActivityArgument
         {
             // The DI container stops the harness on dispose, so there is no matching Stop().
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
             await harness.Start();
-            await Task.Delay(StartDelay, harness.CancellationToken);
 
             // Act
-            var endpointName = harness.EndpointNameFormatter.ExecuteActivity<T, TArguments>();
+            var address = new Uri($"queue:{harness.EndpointNameFormatter.ExecuteActivity<T, TArguments>()}");
 
             // MassTransit runs an activity only as part of a routing slip, so a one-activity slip is built around it.
             var builder = new RoutingSlipBuilder(Guid.NewGuid());
             builder.AddSubscription(harness.Bus.Address, RoutingSlipEvents.All);
-            builder.AddActivity("Testo", new Uri($"queue:{endpointName}"), arguments);
+            builder.AddActivity("Testo", address, arguments);
 
             if (variables is not null)
                 builder.SetVariables(variables);
 
-            await harness.Bus.Execute(builder.Build());
-            await harness.InactivityTask;
+            // Sending the slip to its only activity is what Bus.Execute does; sending it here sets the MessageId to wait for.
+            var routingSlip = builder.Build();
+            var endpoint = await harness.Bus.GetSendEndpoint(address);
+            await harness.SendAndWait<RoutingSlip>(stamp => endpoint.Send(routingSlip, context => stamp(context), harness.CancellationToken),
+                address);
+        }
+
+        /// <summary>
+        /// Sends one message, which <paramref name="send"/> passes through the given callback, and waits until the harness's
+        /// consumers have handled it and the messages it caused; <paramref name="targetAddress"/> names an endpoint no consumer
+        /// registration covers.
+        /// </summary>
+        /// <exception cref="TimeoutException">Thrown if that takes longer than <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
+        private async Task SendAndWait<TMessage>(Func<Action<SendContext>, Task> send, Uri? targetAddress = null)
+            where TMessage : class
+        {
+            var observer = new ReceiveCompletionObserver(harness, targetAddress);
+
+            using (harness.Bus.ConnectReceiveObserver(observer))
+            using (harness.Bus.ConnectSendObserver(observer))
+            using (harness.Bus.ConnectPublishObserver(observer))
+            {
+                try
+                {
+                    await send(observer.Stamp);
+                    observer.SendCompleted();
+
+                    await observer.Completed.WaitAsync(harness.TestTimeout, harness.CancellationToken);
+                }
+                // The harness's token runs on TestTimeout from Start() on and may expire first, even during the send.
+                catch (Exception exception) when (exception is TimeoutException
+                    || (exception is OperationCanceledException && harness.CancellationToken.IsCancellationRequested))
+                {
+                    throw new TimeoutException($"{typeof(TMessage).Name} was not handled within {harness.TestTimeout}.", exception);
+                }
+            }
+
+            // Ends the harness's inactivity wait, so its message lists return what is recorded instead of waiting for more.
+            harness.ForceInactive();
         }
     }
 
@@ -286,9 +300,6 @@ public static class TestHarnessExtensions
             IEnumerable<KeyValuePair<string, object>>? variables = null)
             where TArguments : class
         {
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
-
             var completed = harness.SubscribeHandler<RoutingSlipCompleted>();
             var activityCompleted = harness.SubscribeHandler<RoutingSlipActivityCompleted>();
 
@@ -307,7 +318,9 @@ public static class TestHarnessExtensions
 
             await completed;
             var context = await activityCompleted!;
-            await harness.InactivityTask;
+
+            // The routing slip has completed, so the message lists need not wait for more.
+            harness.ForceInactive();
 
             if (!Equals(trackingNumber, context.Message.TrackingNumber))
                 throw new InvalidOperationException("Tracking number of the routing slip does not match");
@@ -330,9 +343,6 @@ public static class TestHarnessExtensions
             TArguments arguments)
             where TArguments : class, IActivityArgument
         {
-            harness.TestInactivityTimeout = TimeSpan.FromSeconds(InactivityTimeout);
-            harness.TestTimeout = TimeSpan.FromSeconds(TestTimeout);
-
             var faulted = harness.SubscribeHandler<RoutingSlipFaulted>();
             var activityFaulted = harness.SubscribeHandler<RoutingSlipActivityFaulted>();
 
@@ -345,7 +355,9 @@ public static class TestHarnessExtensions
 
             await faulted;
             var context = await activityFaulted!;
-            await harness.InactivityTask;
+
+            // The routing slip has faulted, so the message lists need not wait for more.
+            harness.ForceInactive();
 
             if (!Equals(trackingNumber, context.Message.TrackingNumber))
                 throw new InvalidOperationException("Tracking number of the routing slip does not match");

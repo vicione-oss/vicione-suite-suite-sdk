@@ -1,5 +1,7 @@
-﻿using AwesomeAssertions;
+﻿using System.Diagnostics;
+using AwesomeAssertions;
 using MassTransit;
+using MassTransit.Courier.Contracts;
 using NUnit.Framework;
 using Sdk.Testing.Backend;
 using TestModule.Backend.Consumer;
@@ -271,6 +273,206 @@ public class MassTransitTesterTests
             // Assert
             response.RequestError.Should().NotBeNull();
             response.RequestId.Should().Be(request.RequestId);
+        }
+
+        [Fact]
+        public async Task Should_return_without_waiting_for_bus_inactivity()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromSeconds(5);
+            var request = new TestConsumerRequest(Guid.NewGuid());
+            var stopwatch = Stopwatch.StartNew();
+
+            // Act
+            await tester.TestRequest<TestConsumerResponse, TestConsumerRequest>(request);
+
+            // Assert
+            stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(2));
+        }
+
+        [Fact]
+        public async Task Should_keep_timeouts_set_before_the_call()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromMilliseconds(300);
+            tester.Harness.TestTimeout = TimeSpan.FromSeconds(20);
+            var request = new TestConsumerRequest(Guid.NewGuid());
+
+            // Act
+            await tester.TestRequest<TestConsumerResponse, TestConsumerRequest>(request);
+
+            // Assert
+            tester.Harness.TestInactivityTimeout.Should().Be(TimeSpan.FromMilliseconds(300));
+            tester.Harness.TestTimeout.Should().Be(TimeSpan.FromSeconds(20));
+        }
+    }
+
+    public sealed class DelayedConsumer : MassTransitTesterTests
+    {
+        private readonly Action<IBusRegistrationConfigurator> _configureServices = cfg => cfg.AddConsumer<DelayedCommandConsumer>();
+
+        [Fact]
+        public async Task Should_return_without_waiting_for_bus_inactivity()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromSeconds(5);
+            var stopwatch = Stopwatch.StartNew();
+
+            // Act
+            await tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(new DelayedCommand());
+
+            // Assert
+            stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(2));
+        }
+
+        [Fact]
+        public async Task Should_wait_for_a_consumer_that_is_busy_longer_than_the_inactivity_timeout()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromMilliseconds(50);
+            var command = new DelayedCommand { DelayMilliseconds = 300 };
+
+            // Act
+            var handled = await tester.TestCommand<DelayedCommand, DelayedCommandConsumer, DelayedCommandHandled>(command);
+
+            // Assert
+            handled.CorrelationId.Should().Be(command.CorrelationId);
+        }
+
+        [Fact]
+        public async Task Should_throw_the_consumer_exception_of_a_second_call()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            await tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(new DelayedCommand());
+            var command = new DelayedCommand { DelayMilliseconds = 300, ThrowException = true };
+
+            // Act
+            var act = () => tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(command);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Delayed failure");
+        }
+
+        [Fact]
+        public async Task Should_wait_for_the_consumers_fault_handling()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            var command = new DelayedCommand { DelayMilliseconds = 200, ThrowException = true };
+
+            // Act
+            var act = () => tester.TestCommandFault<DelayedCommand, DelayedCommandConsumer>(command);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>();
+            (await tester.Harness.Published.Any<DelayedCommandFailed>(k => k.Context.Message.CorrelationId == command.CorrelationId,
+                tester.Harness.CancellationToken)).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Should_wait_for_another_consumer_of_a_published_event()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(cfg =>
+            {
+                cfg.AddConsumer<DelayedCommandConsumer>();
+                cfg.AddConsumer<DelayedCommandHandledConsumer>();
+            });
+            var command = new DelayedCommand();
+
+            // Act
+            await tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(command);
+
+            // Assert
+            var consumerHarness = tester.Harness.GetConsumerHarness<DelayedCommandHandledConsumer>();
+            (await consumerHarness.Consumed.Any<DelayedCommandHandled>(tester.Harness.CancellationToken)).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Should_throw_a_timeout_exception_if_the_consumer_takes_longer_than_the_test_timeout()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestTimeout = TimeSpan.FromMilliseconds(200);
+            var command = new DelayedCommand { DelayMilliseconds = 1_000 };
+
+            // Act
+            var act = () => tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(command);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeoutException>();
+        }
+
+        [Fact]
+        public async Task Should_not_wait_for_a_missing_message_after_the_call()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromSeconds(5);
+            await tester.TestCommand<DelayedCommand, DelayedCommandConsumer>(new DelayedCommand());
+            var stopwatch = Stopwatch.StartNew();
+
+            // Act
+            var failed = await tester.Harness.Published.Any<DelayedCommandFailed>(tester.Harness.CancellationToken);
+
+            // Assert
+            failed.Should().BeFalse();
+            stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(1));
+        }
+    }
+
+    public sealed class TestExecuteActivity : MassTransitTesterTests
+    {
+        private readonly Action<IBusRegistrationConfigurator> _configureServices =
+            cfg => cfg.AddExecuteActivity<DelayedActivity, DelayedActivityArguments>();
+
+        [Fact]
+        public async Task Should_return_without_waiting_for_bus_inactivity()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromSeconds(5);
+            var stopwatch = Stopwatch.StartNew();
+
+            // Act
+            await tester.TestExecuteActivity<DelayedActivity, DelayedActivityArguments>(new DelayedActivityArguments());
+
+            // Assert
+            stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(2));
+        }
+
+        [Fact]
+        public async Task Should_wait_for_an_activity_that_is_busy_longer_than_the_inactivity_timeout()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            tester.Harness.TestInactivityTimeout = TimeSpan.FromMilliseconds(50);
+            var arguments = new DelayedActivityArguments { DelayMilliseconds = 300 };
+
+            // Act
+            await tester.TestExecuteActivity<DelayedActivity, DelayedActivityArguments>(arguments);
+
+            // Assert
+            (await tester.Harness.Sent.Any<RoutingSlipCompleted>(tester.Harness.CancellationToken)).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Should_wait_until_the_routing_slip_of_a_failing_activity_has_faulted()
+        {
+            // Arrange
+            await using var tester = new MassTransitTester(_configureServices);
+            var arguments = new DelayedActivityArguments { DelayMilliseconds = 300, ThrowException = true };
+
+            // Act
+            await tester.TestExecuteActivity<DelayedActivity, DelayedActivityArguments>(arguments);
+
+            // Assert
+            (await tester.Harness.Sent.Any<RoutingSlipFaulted>(tester.Harness.CancellationToken)).Should().BeTrue();
         }
     }
 }
