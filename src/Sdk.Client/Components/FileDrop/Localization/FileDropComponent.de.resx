@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FilesSelected" xml:space="preserve">
+    <value>{0} Dateien ausgewählt</value>
+  </data>
   <data name="NoFileSelected" xml:space="preserve">
-    <value>Keine ausgewählt</value>
+    <value>Keine Datei ausgewählt</value>
+  </data>
+  <data name="OnlyOneFileCanBeDropped" xml:space="preserve">
+    <value>Es kann nur eine Datei abgelegt werden.</value>
   </data>
 </root>

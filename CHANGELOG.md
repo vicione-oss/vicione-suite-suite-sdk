@@ -5,6 +5,13 @@
 ### Added
 
 - `Sdk.Client`, `FileDropComponent.ClearAfterChange` shows "No file selected" again once `OnChange` has finished
+- `Sdk.Client`, `FileDropComponent.Multiple` lets the user select or drop several files at once
+
+### Fixed
+
+- `Sdk.Client`
+  - `FileDropComponent` rejects a drop of several files with a message and ignores a drop without files. **Behaviour change:** `OnChange` no longer receives several dropped files unless `Multiple` is set
+  - `FileDropComponent` reads "Keine Datei ausgewählt" in German when no file is selected
 
 ### Changed
 
