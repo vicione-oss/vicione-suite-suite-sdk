@@ -19,6 +19,6 @@
     </label>
 
     <InputFile id="item-upload"
-               @ref="_inputFile" 
-               OnChange="(async args => await OnChange.InvokeAsync(args))" />
+               @ref="_inputFile"
+               OnChange="ForwardChange" />
 </div>

@@ -56,6 +56,12 @@ export class FileDrop {
         this.inputLabel.title = this.inputFile.files[0].name;
     }
 
+    public clear() {
+        // Setting the value raises no change event, so OnChange is not invoked again.
+        this.inputFile.value = '';
+        this.#onChange();
+    }
+
     public dispose() {
         this.dropZoneElement.removeEventListener('dragenter', this.#dragHoverEventListenerBinding);
         this.dropZoneElement.removeEventListener('dragover', this.#dragHoverEventListenerBinding);
