@@ -28,6 +28,13 @@ public sealed partial class FileDropComponent
     [Parameter]
     public EventCallback<InputFileChangeEventArgs> OnChange { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the component shows "No file selected" again once <see cref="OnChange"/> has
+    /// finished, also when it throws; by default, the name of the last file stays.
+    /// </summary>
+    [Parameter]
+    public bool ClearAfterChange { get; set; }
+
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -58,5 +65,18 @@ public sealed partial class FileDropComponent
         await _fileDrop.TryDisposeAsync(Logger);
 
         _isInitialized = false;
+    }
+
+    private async Task ForwardChange(InputFileChangeEventArgs args)
+    {
+        try
+        {
+            await OnChange.InvokeAsync(args);
+        }
+        finally
+        {
+            if (ClearAfterChange)
+                await _fileDrop.TryInvokeVoidAsync("clear", Logger);
+        }
     }
 }

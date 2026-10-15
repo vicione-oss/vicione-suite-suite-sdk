@@ -2,6 +2,10 @@
 
 ## 3.6.0 - unreleased
 
+### Added
+
+- `Sdk.Client`, `FileDropComponent.ClearAfterChange` shows "No file selected" again once `OnChange` has finished
+
 ## 3.5.0 - 2026-10-12
 
 ### Added
