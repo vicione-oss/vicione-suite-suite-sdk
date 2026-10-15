@@ -1,20 +1,78 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using AwesomeAssertions;
+using Sdk.Messaging;
 using Sdk.SystemConfiguration.Contracts;
 using SysConfig = Sdk.SystemConfiguration.Contracts.SystemConfiguration;
 
 namespace Sdk.Tests.SystemConfiguration;
 
 /// <summary>
-/// Ensures that <see cref="SysConfig"/> can be serialized and
-/// deserialized using the source-generated <see cref="SystemConfigurationSourceGenerationContext"/>.
+/// Ensures that <see cref="SysConfig"/> can be serialized and deserialized using the source-generated
+/// <see cref="SystemConfigurationSourceGenerationContext"/>, and keeps its defaults without it.
 /// </summary>
 public sealed class SystemConfigurationSerializationFacts
 {
+    // Mirrors CreateFullyPopulatedConfiguration; a difference between the two is a change of the JSON format.
+    private const string FullyPopulatedJson =
+        """
+        {
+          "Version": 1,
+          "NetworkInterfaces": [
+            {
+              "Name": "lan1",
+              "PhysicalAddress": "00:11:22:33:44:55",
+              "Enabled": true,
+              "IPv4Address": "192.168.1.100",
+              "IPv4Netmask": "255.255.255.0",
+              "IPv4Gateway": "192.168.1.1",
+              "DhcpLease": {
+                "LeaseObtained": "2026-02-24T10:00:00+01:00",
+                "LeaseExpires": "2026-02-25T10:00:00+01:00"
+              },
+              "Vlan": { "Id": 42 },
+              "AdditionalAddresses": [
+                { "AddressFamily": "InterNetwork", "IpAddress": "10.0.0.5", "Netmask": "255.255.255.0" },
+                { "AddressFamily": "InterNetworkV6", "IpAddress": "2001:4860:4860::8888", "Netmask": "2001:db8:abcd::12" }
+              ]
+            }
+          ],
+          "Dns": {
+            "Hostname": "myhost",
+            "MulticastDnsEnabled": true,
+            "NameServers": ["8.8.8.8", "1.1.1.1"],
+            "DnsSuffix": "example.local",
+            "SearchDomains": ["search.local"],
+            "StaticHosts": [
+              { "IpAddress": "127.0.0.1", "Hostname": "localhost" }
+            ]
+          },
+          "Proxy": {
+            "Http": { "Server": "proxy.example.com", "Port": 8080, "Username": "user", "Password": "pass" },
+            "Https": { "Server": "proxy.example.com", "Port": 8443, "Username": null, "Password": null },
+            "Ftp": null,
+            "Sftp": null,
+            "Socks": null,
+            "DoNotProxyList": ["192.168.1.0/24", "internal.example.com"]
+          },
+          "Ntp": {
+            "Servers": ["0.pool.ntp.org", "1.pool.ntp.org"],
+            "FallbackServers": ["2.pool.ntp.org"]
+          },
+          "Services": [
+            { "Name": "nginx", "State": "Enabled" },
+            { "Name": "ssh", "State": "Disabled" }
+          ]
+        }
+        """;
+
     private static readonly JsonSerializerOptions s_jsonOptions =
         SystemConfigurationSourceGenerationContext.Default.Options;
+
+    // The SDK's shared options do not use the context, so they exercise the reflection-based serializer.
+    private static readonly JsonSerializerOptions s_reflectionOptions = DefaultJsonSerializerSettings.Default;
 
     [Fact]
     public void Default_SystemConfiguration_roundtrips_through_json()
@@ -42,24 +100,6 @@ public sealed class SystemConfigurationSerializationFacts
 
         // Assert
         deserialized.Should().BeEquivalentTo(config);
-    }
-
-    [Fact]
-    public void Serialized_json_contains_expected_property_names()
-    {
-        // Arrange
-        var config = CreateFullyPopulatedConfiguration();
-
-        // Act
-        var json = JsonSerializer.Serialize(config, s_jsonOptions);
-
-        // Assert
-        json.Should().Contain("\"Version\":");
-        json.Should().Contain("\"NetworkInterfaces\":");
-        json.Should().Contain("\"Dns\":");
-        json.Should().Contain("\"Proxy\":");
-        json.Should().Contain("\"Ntp\":");
-        json.Should().Contain("\"Services\":");
     }
 
     [Fact]
@@ -362,6 +402,235 @@ public sealed class SystemConfigurationSerializationFacts
         deserialized.Dns.NameServers[1].AddressFamily.Should().Be(AddressFamily.InterNetworkV6);
         deserialized.Dns.NameServers[2].AddressFamily.Should().Be(AddressFamily.InterNetwork);
         deserialized.Dns.NameServers[3].AddressFamily.Should().Be(AddressFamily.InterNetworkV6);
+    }
+
+    [Fact]
+    public void Fully_populated_SystemConfiguration_is_written_as_the_reference_document()
+    {
+        // Arrange
+        var config = CreateFullyPopulatedConfiguration();
+        var expected = JsonNode.Parse(FullyPopulatedJson);
+
+        // Act
+        var json = JsonSerializer.Serialize(config, s_jsonOptions);
+
+        // Assert
+        JsonNode.DeepEquals(JsonNode.Parse(json), expected).Should().BeTrue(json);
+    }
+
+    [Fact]
+    public void Fully_populated_SystemConfiguration_is_read_from_the_reference_document()
+    {
+        // Arrange
+        var expected = CreateFullyPopulatedConfiguration();
+
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(FullyPopulatedJson, s_jsonOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(expected);
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1"}]}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","IPv4Address":null,"IPv4Netmask":null,"IPv4Gateway":null}]}""")]
+    public void Missing_or_null_optional_address_is_read_as_null(string json)
+    {
+        // Arrange
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        var networkInterface = deserialized!.NetworkInterfaces.Should().ContainSingle().Subject;
+        networkInterface.IPv4Address.Should().BeNull();
+        networkInterface.IPv4Netmask.Should().BeNull();
+        networkInterface.IPv4Gateway.Should().BeNull();
+    }
+
+    [Fact]
+    public void Document_with_only_a_version_is_read_with_defaults()
+    {
+        // Arrange
+        var expected = new SysConfig();
+
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>("""{"Version":1}""", s_jsonOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void Nested_objects_without_optional_members_are_read_with_defaults()
+    {
+        // Arrange
+        var expected = new SysConfig
+        {
+            NetworkInterfaces = [new NetworkInterface { Name = "lan1" }],
+        };
+
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(
+            """{"Version":1,"NetworkInterfaces":[{"Name":"lan1"}],"Dns":{},"Proxy":{},"Ntp":{}}""", s_jsonOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(expected);
+    }
+
+    [Theory]
+    [InlineData("""{}""")]
+    [InlineData("""{"NetworkInterfaces":[]}""")]
+    public void Document_without_version_is_rejected(string json)
+    {
+        // Arrange
+        // Act
+        var act = () => JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        act.Should().Throw<JsonException>().WithMessage("*missing required properties*Version*");
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1,"Unknown":1}""", """{"Version":1}""")]
+    [InlineData("""{"Version":1,"version":2}""", """{"Version":1}""")]
+    [InlineData("""{"Version":1,"Dns":{"Hostname":"myhost","Unknown":1}}""", """{"Version":1,"Dns":{"Hostname":"myhost"}}""")]
+    [InlineData(
+        """{"Version":1,"NetworkInterfaces":[{"Name":"lan1","Unknown":{"Nested":[1]}}]}""",
+        """{"Version":1,"NetworkInterfaces":[{"Name":"lan1"}]}""")]
+    public void Unknown_member_is_ignored(string json, string jsonWithoutUnknownMember)
+    {
+        // Arrange
+        var expected = JsonSerializer.Deserialize<SysConfig>(jsonWithoutUnknownMember, s_jsonOptions);
+
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(expected);
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{}]}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","Vlan":{}}]}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","AdditionalAddresses":[{"AddressFamily":"InterNetwork","IpAddress":"10.0.0.2"}]}]}""")]
+    [InlineData("""{"Version":1,"Dns":{"StaticHosts":[{"Hostname":"localhost"}]}}""")]
+    [InlineData("""{"Version":1,"Proxy":{"Http":{"Server":"proxy.example.com"}}}""")]
+    [InlineData("""{"Version":1,"Services":[{"Name":"ssh"}]}""")]
+    public void Document_without_required_member_is_rejected(string json)
+    {
+        // Arrange
+        // Act
+        var act = () => JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        act.Should().Throw<JsonException>().WithMessage("*missing required properties*");
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1,"NetworkInterfaces":null}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":null}]}""")]
+    [InlineData("""{"Version":1,"Dns":null}""")]
+    [InlineData("""{"Version":1,"Dns":{"NameServers":null}}""")]
+    [InlineData("""{"Version":1,"Dns":{"StaticHosts":[{"IpAddress":null,"Hostname":"localhost"}]}}""")]
+    [InlineData("""{"Version":1,"Proxy":null}""")]
+    [InlineData("""{"Version":1,"Ntp":{"Servers":null}}""")]
+    public void Document_with_null_for_non_nullable_member_is_rejected(string json)
+    {
+        // Arrange
+        // Act
+        var act = () => JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        act.Should().Throw<JsonException>().WithMessage("*doesn't allow null values*");
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","IPv4Address":""}]}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","IPv4Address":"not-an-address"}]}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":[{"Name":"lan1","IPv4Address":5}]}""")]
+    [InlineData("""{"Version":1,"Dns":{"NameServers":"8.8.8.8"}}""")]
+    [InlineData("""{"Version":1,"Dns":{"NameServers":["not-an-address"]}}""")]
+    [InlineData("""{"Version":1,"Services":[{"Name":"ssh","State":"Bogus"}]}""")]
+    public void Document_with_malformed_value_is_rejected(string json)
+    {
+        // Arrange
+        // Act
+        var act = () => JsonSerializer.Deserialize<SysConfig>(json, s_jsonOptions);
+
+        // Assert
+        act.Should().Throw<JsonException>();
+    }
+
+    [Fact]
+    public void Null_assigned_to_a_defaulted_member_is_replaced_by_its_default()
+    {
+        // Arrange
+        var expected = new SysConfig
+        {
+            NetworkInterfaces = [new NetworkInterface { Name = "lan1" }],
+        };
+
+        // Act
+        var config = new SysConfig
+        {
+            NetworkInterfaces = [new NetworkInterface { Name = "lan1", PhysicalAddress = null!, AdditionalAddresses = null! }],
+            Dns = new DnsSettings
+            {
+                Hostname = null!,
+                NameServers = null!,
+                DnsSuffix = null!,
+                SearchDomains = null!,
+                StaticHosts = null!,
+            },
+            Proxy = new ProxySettings { DoNotProxyList = null! },
+            Ntp = new NtpSettings { Servers = null!, FallbackServers = null! },
+            Services = null!,
+        };
+
+        // Assert
+        config.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void Null_assigned_through_a_with_expression_is_replaced_by_its_default()
+    {
+        // Arrange
+        var config = CreateFullyPopulatedConfiguration();
+
+        // Act
+        var result = config with { NetworkInterfaces = null!, Dns = null!, Proxy = null!, Ntp = null!, Services = null! };
+
+        // Assert
+        result.Should().BeEquivalentTo(new SysConfig());
+    }
+
+    [Fact]
+    public void Fully_populated_SystemConfiguration_roundtrips_through_a_reflection_based_serializer()
+    {
+        // Arrange
+        var config = CreateFullyPopulatedConfiguration();
+
+        // Act
+        var json = JsonSerializer.Serialize(config, s_reflectionOptions);
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(json, s_reflectionOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(config);
+    }
+
+    [Theory]
+    [InlineData("""{"Version":1}""")]
+    [InlineData("""{"Version":1,"NetworkInterfaces":null,"Dns":null,"Proxy":null,"Ntp":null,"Services":null}""")]
+    public void Reflection_based_serializer_reads_missing_and_null_members_with_defaults(string json)
+    {
+        // Arrange
+        var expected = new SysConfig();
+
+        // Act
+        var deserialized = JsonSerializer.Deserialize<SysConfig>(json, s_reflectionOptions);
+
+        // Assert
+        deserialized.Should().BeEquivalentTo(expected);
     }
 
     private static SysConfig CreateFullyPopulatedConfiguration() => new()

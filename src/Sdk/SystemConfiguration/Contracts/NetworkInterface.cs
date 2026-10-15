@@ -21,7 +21,6 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// When VLAN is not active, <see cref="Vlan"/> is <see langword="null"/>.
 /// </para>
 /// </remarks>
-[ExcludeFromCodeCoverage]
 public sealed record NetworkInterface
 {
     /// <summary>
@@ -32,7 +31,7 @@ public sealed record NetworkInterface
     /// <summary>
     /// Gets or initializes the physical (MAC) address of the network interface.
     /// </summary>
-    public string PhysicalAddress { get; init; } = string.Empty;
+    public string PhysicalAddress { get; init => field = value ?? string.Empty; } = string.Empty;
 
     /// <summary>
     /// Gets or initializes whether the network interface is enabled.
@@ -87,6 +86,6 @@ public sealed record NetworkInterface
     /// <summary>
     /// Gets or initializes the additional IP addresses configured on this interface beyond the primary <see cref="IPv4Address"/>.
     /// </summary>
-    public IReadOnlyList<IpAddressInfo> AdditionalAddresses { get; init; } = [];
+    public IReadOnlyList<IpAddressInfo> AdditionalAddresses { get; init => field = value ?? []; } = [];
 }
 

@@ -20,13 +20,12 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// <see cref="MulticastDnsEnabled"/> reflects whether multicast DNS (mDNS) is enabled on the system.
 /// </para>
 /// </remarks>
-[ExcludeFromCodeCoverage]
 public sealed record DnsSettings
 {
     /// <summary>
     /// Gets or initializes the hostname of the system.
     /// </summary>
-    public string Hostname { get; init; } = string.Empty;
+    public string Hostname { get; init => field = value ?? string.Empty; } = string.Empty;
 
     /// <summary>
     /// Gets or initializes whether multicast DNS (mDNS) is enabled on the system.
@@ -40,7 +39,7 @@ public sealed record DnsSettings
     /// Only populated when name servers are enabled in the system configuration.
     /// </remarks>
     [JsonConverter(typeof(IPAddressListConverter))]
-    public IReadOnlyList<IPAddress> NameServers { get; init; } = [];
+    public IReadOnlyList<IPAddress> NameServers { get; init => field = value ?? []; } = [];
 
     /// <summary>
     /// Gets or initializes the primary DNS suffix.
@@ -48,7 +47,7 @@ public sealed record DnsSettings
     /// <remarks>
     /// Only populated when the DNS suffix feature is enabled in the system configuration.
     /// </remarks>
-    public string DnsSuffix { get; init; } = string.Empty;
+    public string DnsSuffix { get; init => field = value ?? string.Empty; } = string.Empty;
 
     /// <summary>
     /// Gets or initializes the list of DNS search domains, excluding the primary DNS suffix.
@@ -56,7 +55,7 @@ public sealed record DnsSettings
     /// <remarks>
     /// Only populated when search domains are enabled in the system configuration.
     /// </remarks>
-    public IReadOnlyList<string> SearchDomains { get; init; } = [];
+    public IReadOnlyList<string> SearchDomains { get; init => field = value ?? []; } = [];
 
     /// <summary>
     /// Gets or initializes the list of static host entries.
@@ -64,6 +63,6 @@ public sealed record DnsSettings
     /// <remarks>
     /// Only populated when static hosts are enabled in the system configuration.
     /// </remarks>
-    public IReadOnlyList<StaticHost> StaticHosts { get; init; } = [];
+    public IReadOnlyList<StaticHost> StaticHosts { get; init => field = value ?? []; } = [];
 }
 
