@@ -23,7 +23,8 @@ public sealed partial class FileDropComponent
     [Inject] private ILogger<FileDropComponent> Logger { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets a callback that is invoked when the user selects or drops files.
+    /// Gets or sets a callback that is invoked when the user selects or drops a file, or several files if <see cref="Multiple"/> is
+    /// set; it is not invoked for a drop without files.
     /// </summary>
     [Parameter]
     public EventCallback<InputFileChangeEventArgs> OnChange { get; set; }
@@ -34,6 +35,13 @@ public sealed partial class FileDropComponent
     /// </summary>
     [Parameter]
     public bool ClearAfterChange { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the user can select or drop several files at once; without it, a drop of several
+    /// files is rejected with a message and <see cref="OnChange"/> is not invoked.
+    /// </summary>
+    [Parameter]
+    public bool Multiple { get; set; }
 
     /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -51,7 +59,15 @@ public sealed partial class FileDropComponent
             {
                 _isInitialized = true;
 
-                _fileDrop = await jsObjectReference.InvokeConstructorAsync("FileDrop", _dropZoneElement, _inputLabel, _descriptionLabel, Localization.FileDropComponent.NoFileSelected, _inputFile.Element);
+                var texts = new
+                {
+                    Localization.FileDropComponent.NoFileSelected,
+                    Localization.FileDropComponent.OnlyOneFileCanBeDropped,
+                    Localization.FileDropComponent.FilesSelected
+                };
+
+                _fileDrop = await jsObjectReference.InvokeConstructorAsync("FileDrop", _dropZoneElement, _inputLabel, _descriptionLabel,
+                    _inputFile.Element, texts);
             }
         }
     }
@@ -69,6 +85,10 @@ public sealed partial class FileDropComponent
 
     private async Task ForwardChange(InputFileChangeEventArgs args)
     {
+        // The script already refuses such drops; this check keeps the documented promise of OnChange for any other change of the input.
+        if (args.FileCount == 0 || (args.FileCount > 1 && !Multiple))
+            return;
+
         try
         {
             await OnChange.InvokeAsync(args);

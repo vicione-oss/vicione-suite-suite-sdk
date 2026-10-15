@@ -13,6 +13,106 @@ namespace Sdk.Client.Tests.Components.FileDrop;
 public sealed class FileDropComponentTests
 {
     [Fact]
+    public async Task Should_invoke_on_change_with_one_file()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b.Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component, "a.txt");
+
+        // Assert
+        changes.Should().ContainSingle().Which.File.Name.Should().Be("a.txt");
+    }
+
+    [Fact]
+    public async Task Should_not_invoke_on_change_with_several_files()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b.Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component, "a.txt", "b.txt");
+
+        // Assert
+        changes.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Should_not_invoke_on_change_without_files()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b.Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component);
+
+        // Assert
+        changes.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Should_invoke_on_change_with_several_files_when_multiple_is_set()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b
+            .Add(p => p.Multiple, true)
+            .Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component, "a.txt", "b.txt");
+
+        // Assert
+        changes.Should().ContainSingle().Which.GetMultipleFiles().Select(file => file.Name).Should().Equal("a.txt", "b.txt");
+    }
+
+    [Fact]
+    public async Task Should_not_invoke_on_change_without_files_when_multiple_is_set()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b
+            .Add(p => p.Multiple, true)
+            .Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component);
+
+        // Assert
+        changes.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Should_let_the_file_picker_select_several_files_only_when_multiple_is_set(bool multiple)
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+
+        // Act
+        var component = ctx.Render<FileDropComponent>(b => b.Add(p => p.Multiple, multiple));
+
+        // Assert
+        component.Find("input[type=file]").HasAttribute("multiple").Should().Be(multiple);
+    }
+
+    [Fact]
     public async Task Should_clear_the_file_name_after_on_change_when_clear_after_change_is_set()
     {
         // Arrange
@@ -63,6 +163,25 @@ public sealed class FileDropComponentTests
 
         // Assert
         changes.Should().ContainSingle();
+        fileDrop.Invocations.Should().NotContain("clear");
+    }
+
+    [Fact]
+    public async Task Should_keep_the_rejection_message_of_several_files_when_clear_after_change_is_set()
+    {
+        // Arrange
+        await using var fileDrop = new FileDropScript();
+        await using var ctx = CreateContext(fileDrop);
+        var changes = new List<InputFileChangeEventArgs>();
+        var component = ctx.Render<FileDropComponent>(b => b
+            .Add(p => p.ClearAfterChange, true)
+            .Add(p => p.OnChange, changes.Add));
+
+        // Act
+        await ChangeFiles(component, "a.txt", "b.txt");
+
+        // Assert
+        changes.Should().BeEmpty();
         fileDrop.Invocations.Should().NotContain("clear");
     }
 

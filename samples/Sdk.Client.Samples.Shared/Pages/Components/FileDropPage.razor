@@ -1,0 +1,22 @@
+@page "/components/file-drop"
+
+@using Microsoft.AspNetCore.Components.Web
+@using Sdk.Client.Components.FileDrop
+@using ViciOne.Ui.Blazor.Components.Switch
+
+<PageTitle>Sdk.Client.Components.FileDrop samples</PageTitle>
+
+<h1>FileDrop</h1>
+
+<h3>Example</h3>
+
+<div class="option">
+    <Switch @bind-Value="_multiple" />
+    <span>Multiple</span>
+</div>
+
+<div class="example">
+    <FileDropComponent Multiple="@_multiple" OnChange="@ShowFiles" />
+</div>
+
+<p class="received-files">OnChange received: @ReceivedFiles</p>

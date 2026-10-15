@@ -1,3 +1,9 @@
+type FileDropTexts = {
+    noFileSelected: string;
+    onlyOneFileCanBeDropped: string;
+    filesSelected: string;
+};
+
 export class FileDrop {
 
     readonly #descriptionWidth: number;
@@ -9,8 +15,8 @@ export class FileDrop {
     constructor(readonly dropZoneElement: HTMLElement,
         readonly inputLabel: HTMLElement,
         readonly descriptionLabel: HTMLElement,
-        readonly noFileUploaded: string,
-        readonly inputFile: HTMLInputElement) {
+        readonly inputFile: HTMLInputElement,
+        readonly texts: FileDropTexts) {
         this.#descriptionWidth = descriptionLabel.clientWidth;
 
         this.dropZoneElement.addEventListener('dragenter', this.#dragHoverEventListenerBinding);
@@ -37,23 +43,41 @@ export class FileDrop {
         event.preventDefault();
         this.dropZoneElement.classList.remove('hover');
 
-        this.inputFile.files = event.dataTransfer!.files;
+        const files = event.dataTransfer?.files;
+
+        // Dragged text or a link carries no files; the current selection stays.
+        if (!files || files.length === 0)
+            return;
+
+        if (files.length > 1 && !this.inputFile.multiple) {
+            this.#showDescription(this.texts.onlyOneFileCanBeDropped);
+            return;
+        }
+
+        this.inputFile.files = files;
         this.inputFile.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     #onChange() {
+        const { files } = this.inputFile;
+
+        if (files === null || files.length === 0)
+            this.#showSelection(this.texts.noFileSelected);
+        else if (files.length === 1)
+            this.#showSelection(files[0].name);
+        else
+            this.#showSelection(this.texts.filesSelected.replace('{0}', () => files.length.toString()));
+    }
+
+    #showSelection(text: string) {
+        this.inputLabel.title = text;
+        this.#showDescription(text);
+    }
+
+    #showDescription(text: string) {
         this.descriptionLabel.style.width = this.#descriptionWidth + 'px';
-
-        if (this.inputFile.files === null || this.inputFile.files.length === 0) {
-            this.descriptionLabel.title = this.noFileUploaded;
-            this.descriptionLabel.textContent = this.noFileUploaded;
-            this.inputLabel.title = this.noFileUploaded;
-            return;
-        }
-
-        this.descriptionLabel.title = this.inputFile.files[0].name;
-        this.descriptionLabel.textContent = this.inputFile.files[0].name;
-        this.inputLabel.title = this.inputFile.files[0].name;
+        this.descriptionLabel.title = text;
+        this.descriptionLabel.textContent = text;
     }
 
     public clear() {

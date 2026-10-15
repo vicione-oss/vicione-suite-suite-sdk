@@ -61,11 +61,29 @@ namespace Sdk.Client.Components.FileDrop.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} files selected.
+        /// </summary>
+        internal static string FilesSelected {
+            get {
+                return ResourceManager.GetString("FilesSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to No file selected.
         /// </summary>
         internal static string NoFileSelected {
             get {
                 return ResourceManager.GetString("NoFileSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Only one file can be dropped..
+        /// </summary>
+        internal static string OnlyOneFileCanBeDropped {
+            get {
+                return ResourceManager.GetString("OnlyOneFileCanBeDropped", resourceCulture);
             }
         }
     }
