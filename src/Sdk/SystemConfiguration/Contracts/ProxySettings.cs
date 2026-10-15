@@ -15,7 +15,6 @@
 /// or has no entries configured.
 /// </para>
 /// </remarks>
-[ExcludeFromCodeCoverage]
 public sealed record ProxySettings
 {
     /// <summary>
@@ -60,6 +59,6 @@ public sealed record ProxySettings
     /// <c>%25</c> to satisfy RFC 6874.
     /// </para>
     /// </remarks>
-    public IReadOnlyList<string> DoNotProxyList { get; init; } = [];
+    public IReadOnlyList<string> DoNotProxyList { get; init => field = value ?? []; } = [];
 }
 

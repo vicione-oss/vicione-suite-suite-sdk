@@ -6,6 +6,16 @@
 
 - `Sdk.Client`, `FileDropComponent.ClearAfterChange` shows "No file selected" again once `OnChange` has finished
 
+### Changed
+
+- `Sdk.SystemConfiguration`, `SystemConfigurationSourceGenerationContext` ignores members it does not know. **Behaviour change:** a document with such a member, for example from a newer SDK, is read instead of rejected
+
+### Fixed
+
+- `Sdk.SystemConfiguration`
+  - `SystemConfiguration`, `DnsSettings`, `NetworkInterface`, `NtpSettings` and `ProxySettings` replace `null` in a defaulted member with its default. **Behaviour change:** these members are never `null`; `null`, assigned or read from JSON, gives the default
+  - `IPAddressConverter.CanConvert` accepts `IPAddress` and its subtypes only. **Behaviour change:** registered in `JsonSerializerOptions.Converters`, it no longer claims `object` or interface-typed values
+
 ## 3.5.0 - 2026-10-12
 
 ### Added

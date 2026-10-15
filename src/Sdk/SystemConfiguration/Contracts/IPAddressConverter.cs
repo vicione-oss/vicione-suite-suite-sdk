@@ -7,11 +7,14 @@ namespace Sdk.SystemConfiguration.Contracts;
 /// <summary>
 /// Converts an <see cref="IPAddress"/> to and from its JSON string; an empty or malformed string throws a <see cref="JsonException"/>.
 /// </summary>
+/// <remarks>
+/// Also converts subtypes of <see cref="IPAddress"/>, such as the runtime type of <see cref="IPAddress.Loopback"/>.
+/// </remarks>
 public class IPAddressConverter : JsonConverter<IPAddress>
 {
     /// <inheritdoc/>
     public override bool CanConvert(Type typeToConvert)
-        => typeToConvert.IsAssignableFrom(typeof(IPAddress));
+        => typeof(IPAddress).IsAssignableFrom(typeToConvert);
 
     /// <inheritdoc/>
     public override IPAddress Read(
