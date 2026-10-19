@@ -16,11 +16,13 @@ public sealed class ControlPanelStateTests
         // Arrange
         var changedTriggered = false;
 
+#pragma warning disable CS0618 // Type or member is obsolete
         var state = new ControlPanelState { ActivePageIndex = activeControlPanelPageIndexInitially };
         state.Changed += args => changedTriggered = args.PropertyNames.Contains(nameof(args.Sender.ActivePageIndex));
 
         // Act
         state.ActivePageIndex = activeControlPanelPageIndex;
+#pragma warning restore CS0618 // Type or member is obsolete
 
         // Assert
         changedTriggered.Should().Be(shouldTriggerChangedEvent);

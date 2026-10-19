@@ -49,13 +49,18 @@ public static class IServiceCollectionExtensions
             var descriptorInterfaceType = typeof(IControlPanelDescriptor<>).MakeGenericType(controlPanelInfo.ComponentType);
 
             if (descriptorInterfaceType.IsAssignableFrom(controlPanelInfo.DescriptorType))
-                services.AddKeyedScoped(descriptorInterfaceType, controlPanelInfo.KeyedServiceKey, controlPanelInfo.DescriptorType);
+                services.AddKeyedScoped(descriptorInterfaceType, controlPanelInfo.ServiceKey, controlPanelInfo.DescriptorType);
 
             return services;
         }
 
+        // Without replacing a state registered for the control panel already, e.g. the one it shares with another.
         internal IServiceCollection AddControlPanelState(ControlPanelInfo controlPanelInfo)
-            => services.AddKeyedScoped(controlPanelInfo.StateType, controlPanelInfo.KeyedServiceKey);
+        {
+            services.TryAddKeyedScoped(controlPanelInfo.StateType, controlPanelInfo.ServiceKey);
+
+            return services;
+        }
 
         internal IServiceCollection AddControlPanelCategoryDescriptor(ControlPanelInfo controlPanelInfo)
         {
@@ -77,6 +82,27 @@ public static class IServiceCollectionExtensions
             return services;
         }
 
+        // registers the parent descriptor types a control panel names - as a parent, as a child, or both - so
+        // that either side of a link can resolve the descriptor without the other having been registered at all
+        internal IServiceCollection AddControlPanelParentDescriptor(ControlPanelInfo controlPanelInfo)
+        {
+            AddParentDescriptorType(controlPanelInfo.ControlPanelParentAttribute?.ParentDescriptorType);
+            AddParentDescriptorType(controlPanelInfo.ControlPanelChildAttribute?.ParentDescriptorType);
+
+            return services;
+
+            void AddParentDescriptorType(Type? parentDescriptorType)
+            {
+                // as for the category descriptor, an interface is assumed to be registered by its implementor
+                if (parentDescriptorType is null or { IsInterface: true })
+                    return;
+
+                // registered under its own type even when it is also a control panel's descriptor, which is
+                // only registered as a keyed IControlPanelDescriptor<TControlPanel> the other side cannot ask for
+                services.TryAddScoped(parentDescriptorType);
+            }
+        }
+
         private IServiceCollection AddControlPanelRegistry<TClientModule>()
             where TClientModule : class, IClientModule
         {
@@ -87,7 +113,7 @@ public static class IServiceCollectionExtensions
                 var registryFactory = serviceProvider.GetRequiredService<IControlPanelRegistryFactory>();
                 var registry = registryFactory.CreateControlPanelRegistry<TClientModule>();
 
-                Func<IControlPanelDescriptor, IControlPanelState, IControlPanelCategoryDescriptor, IControlPanelGroupDescriptor?, IAuthorizationRequirement?, IControlPanelRegistryItem> addMethodDelegate =
+                Func<IControlPanelDescriptor, IControlPanelState, IControlPanelCategoryDescriptor, IControlPanelGroupDescriptor?, IAuthorizationRequirement?, IControlPanelParentDescriptor?, IControlPanelParentDescriptor?, IControlPanelRegistryItem> addMethodDelegate =
                     registry.Add<ControlPanelBase<IControlPanelState>, IControlPanelState>;
 
                 var addMethodInfo = addMethodDelegate.Method.GetGenericMethodDefinition();
@@ -97,10 +123,10 @@ public static class IServiceCollectionExtensions
                 {
                     var descriptorType = typeof(IControlPanelDescriptor<>).MakeGenericType(i.ComponentType);
 
-                    if (serviceProvider.GetKeyedServices(descriptorType, i.KeyedServiceKey).FirstOrDefault() is not IControlPanelDescriptor descriptor)
+                    if (serviceProvider.GetKeyedServices(descriptorType, i.ServiceKey).FirstOrDefault() is not IControlPanelDescriptor descriptor)
                         continue;
 
-                    var state = (IControlPanelState)serviceProvider.GetRequiredKeyedService(i.StateType, i.KeyedServiceKey);
+                    var state = (IControlPanelState)serviceProvider.GetRequiredKeyedService(i.StateType, i.ServiceKey);
 
                     IControlPanelCategoryDescriptor? categoryDescriptor = null;
                     if (i.CategoryDescriptorType is not null)
@@ -114,7 +140,10 @@ public static class IServiceCollectionExtensions
                     {
                         var authorizationRequirement = i.ModuleAuthorizeAttribute.GetAccessLevelAuthorizationRequirement();
 
-                        addMethodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [descriptor, state, categoryDescriptor, groupDescriptor, authorizationRequirement]);
+                        var childOf = i.ControlPanelChildAttribute?.ParentDescriptorType.Resolve<IControlPanelParentDescriptor>(serviceProvider);
+                        var asParent = i.ControlPanelParentAttribute?.ParentDescriptorType.Resolve<IControlPanelParentDescriptor>(serviceProvider);
+
+                        addMethodInfo.MakeGenericMethod(i.ComponentType, i.StateType).Invoke(registry, [descriptor, state, categoryDescriptor, groupDescriptor, authorizationRequirement, childOf, asParent]);
                     }
                 }
 

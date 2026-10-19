@@ -1,27 +1,48 @@
 # Changelog
 
-## 3.6.0 - unreleased
+## 3.6.0 - 2026-10-19
 
 ### Added
 
-- `Sdk.Client`, `FileDropComponent.ClearAfterChange` shows "No file selected" again once `OnChange` has finished
-- `Sdk.Client`, `FileDropComponent.Multiple` lets the user select or drop several files at once
-
-### Fixed
-
-- `Sdk.Client`
-  - `FileDropComponent` rejects a drop of several files with a message and ignores a drop without files. **Behaviour change:** `OnChange` no longer receives several dropped files unless `Multiple` is set
-  - `FileDropComponent` reads "Keine Datei ausgewählt" in German when no file is selected
+- `Sdk.Client.Components.FileDropComponent`
+  - `ClearAfterChange` shows "No file selected" again once `OnChange` has finished
+  - `Multiple` lets the user select or drop several files at once
+- `Sdk.Client.ControlPanels`
+  - Parent / child mechanism
+  - `IControlPanelDescriptor.HasContent` marks a parent control panel that only groups its children
+  - `IControlPanelBuilder`
+    - `WithSharedHandlers` lets control panels editing one entity, e.g. a parent and its tabs, share save, cancel and reset handlers that run once for all of them
+    - `WithSharedState` lets control panels, e.g. a parent and its tabs, share one state instance
 
 ### Changed
 
-- `Sdk.SystemConfiguration`, `SystemConfigurationSourceGenerationContext` ignores members it does not know. **Behaviour change:** a document with such a member, for example from a newer SDK, is read instead of rejected
+- `Sdk.Client.ControlPanels`
+  - `IControlPanelBuilder`
+    - `WithAutoDiscovery` keeps a state already registered for the control panel
+      > **Behaviour change:** a state registered keyed by `ControlPanelServiceKey<TControlPanel>` before `WithAutoDiscovery` is no longer replaced by a new one
+    - `WithSaveHandler`, `WithCancelHandler` and `WithResetHandler` register the handler keyed by `ControlPanelServiceKey<TControlPanel>` instead of by state type, so control panels sharing a state type can each have their own handlers
+      > **Behaviour change:** a control panel no longer uses the handlers configured for another control panel of the same state type, and a handler is no longer resolved without that key
+  - `ControlPanelCategoryAttribute<T>` and `ControlPanelGroupAttribute<T>` are no longer inherited
+    > **Behaviour change:** a control panel that inherited its category is no longer auto-discovered, and one that inherited its group moves to the default group
+- `Sdk.SystemConfiguration`
+  - `SystemConfigurationSourceGenerationContext` ignores members it does not know
+    > **Behaviour change:** a document with such a member, for example from a newer SDK, is read instead of rejected
+
+### Deprecated
+
+- `Sdk.Client.ControlPanels`, `ControlPanelPage`, `IControlPanelPage`, `IControlPanelPageRegistry`, `IControlPanelPageRegistryItem`, `IActiveControlPanelPageProvider` and `IControlPanelState.ActivePageIndex` are obsolete, superseded by the control panel parent/child mechanism. They remain fully functional; removal is deferred to a future major version
 
 ### Fixed
 
+- `Sdk.Client.Components.FileDropComponent`
+  - rejects a drop of several files with a message and ignores a drop without files
+    > **Behaviour change:** `OnChange` no longer receives several dropped files unless `Multiple` is set
+  - reads "Keine Datei ausgewählt" in German when no file is selected
 - `Sdk.SystemConfiguration`
-  - `SystemConfiguration`, `DnsSettings`, `NetworkInterface`, `NtpSettings` and `ProxySettings` replace `null` in a defaulted member with its default. **Behaviour change:** these members are never `null`; `null`, assigned or read from JSON, gives the default
-  - `IPAddressConverter.CanConvert` accepts `IPAddress` and its subtypes only. **Behaviour change:** registered in `JsonSerializerOptions.Converters`, it no longer claims `object` or interface-typed values
+  - `SystemConfiguration`, `DnsSettings`, `NetworkInterface`, `NtpSettings` and `ProxySettings` replace `null` in a defaulted member with its default
+    > **Behaviour change:** these members are never `null`; `null`, assigned or read from JSON, gives the default
+  - `IPAddressConverter.CanConvert` accepts `IPAddress` and its subtypes only
+    > **Behaviour change:** registered in `JsonSerializerOptions.Converters`, it no longer claims `object` or interface-typed values
 
 ## 3.5.0 - 2026-10-12
 
@@ -87,7 +108,8 @@
   - `NotificationElementState.EndUpdate` passes `Changed` a stable copy of the property names and raises it outside its lock
   - `ControlPanelState` no longer delays a change made while the last update cycle ends
   - `ControlPanelState.BeginLoading` and `EndLoading` raise `Changed` outside the state's lock
-  - `ItemValidatorBase.Validate` returns a new dictionary on every call. **Behaviour change:** a result kept from an earlier call no longer changes when validating again
+  - `ItemValidatorBase.Validate` returns a new dictionary on every call.
+    > **Behaviour change:** a result kept from an earlier call no longer changes when validating again
   - `SettingsFieldFileUpload` matches dropped files against `Accept` like the browser does, including MIME types and wildcards
   - `SettingsFieldFileUpload` no longer cancels a running upload when a parent that does not pass `UploadTicket` renders again
   - Module stylesheet bundles no longer import the bundles the suite already loads, such as QuickGrid and TreeEditor
@@ -117,13 +139,15 @@
 ### Fixed
 
 - `Sdk.Backend.Messaging`
-  - `MessagingHelper.ConsumesRequest` no longer reports non-request consumers as request consumers. It was an `All` over `FindMessageTypes`, which filters out generic message types, so a consumer with no remaining message types passed vacuously: every `IConsumer<Fault<T>>` and every `ConsumerDefinition<T>` answered `true`. It now requires at least one message type and evaluates all of them via `FindAllMessageTypes`. **Behaviour change:** `AddConsumers(MessagingHelper.ConsumesRequest, ...)` registers fewer consumers than before - fault consumers and consumer definitions are no longer registered by it, and any code that used the predicate to pick a bus or a retry policy will now classify those types differently. Classified as a behavioural defect fix under [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md), hence a minor rather than a major release
+  - `MessagingHelper.ConsumesRequest` no longer reports non-request consumers as request consumers. It was an `All` over `FindMessageTypes`, which filters out generic message types, so a consumer with no remaining message types passed vacuously: every `IConsumer<Fault<T>>` and every `ConsumerDefinition<T>` answered `true`. It now requires at least one message type and evaluates all of them via `FindAllMessageTypes`.
+    > **Behaviour change:** `AddConsumers(MessagingHelper.ConsumesRequest, ...)` registers fewer consumers than before - fault consumers and consumer definitions are no longer registered by it, and any code that used the predicate to pick a bus or a retry policy will now classify those types differently. Classified as a behavioural defect fix under [ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md), hence a minor rather than a major release
 - `Sdk.Testing`, SQLite contexts from `TestDbContextFactory` and `TestModuleDbContextRegistrar` now close their connection when disposed
 
 - `Sdk`
   - `ModuleIdResolver.ResolveId` removes only the trailing `.Backend`, `.Client`, `.Internal` or `.Public` suffix. It used `string.Replace`, so a name that contained the suffix elsewhere lost that part too: `Acme.Backend.Tools.Backend` resolved to `Acme.Tools` instead of `Acme.Backend.Tools`
 - `Sdk.Backend`
-  - `ConfigurationExtensions.BindSection(key, defaultValue)` binds into `defaultValue` as documented, so values the section does not set keep their defaults. For an object section it returned a freshly bound instance and dropped every value of `defaultValue`; for a scalar section it ignored the configured value and returned `defaultValue`. **Behaviour change:** a partially configured section now yields the merged object
+  - `ConfigurationExtensions.BindSection(key, defaultValue)` binds into `defaultValue` as documented, so values the section does not set keep their defaults. For an object section it returned a freshly bound instance and dropped every value of `defaultValue`; for a scalar section it ignored the configured value and returned `defaultValue`.
+    > **Behaviour change:** a partially configured section now yields the merged object
 - `Sdk.Backend.SourceGenerators`
   - `ModuleDbContextGenerator` now generates the `DbSet<T>` properties of every interface deriving from `IModuleDbContext`. It used to read only the first such interface and only the members that interface declared itself, so the `DbSet`s of a layered module interface (`IMyDbContext : IBaseDbContext : IModuleDbContext`) or of a second module interface were not generated and had to be written by hand. Hand-written properties are still skipped, so existing modules compile unchanged
 
@@ -134,7 +158,8 @@
 ### Changed
 
 - `Sdk.Client`, `_overflow.scss`, `.overflow-area` allows mouse events to pass through to underlying elements
-- `Sdk`, `AddModuleFeature` rejects a feature name that contains `_` with an `ArgumentException`: the name-and-description overload when called, the factory overload when the feature is resolved. Policy names use `_` as separator, so `AccessLevelPolicyParser` cut such a name short and the policy never matched the feature. **Behaviour change:** a module that registered such a name now fails at startup instead of silently mis-authorizing
+- `Sdk`, `AddModuleFeature` rejects a feature name that contains `_` with an `ArgumentException`: the name-and-description overload when called, the factory overload when the feature is resolved. Policy names use `_` as separator, so `AccessLevelPolicyParser` cut such a name short and the policy never matched the feature.
+  > **Behaviour change:** a module that registered such a name now fails at startup instead of silently mis-authorizing
 
 ### Updated
 

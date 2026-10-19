@@ -24,5 +24,11 @@ internal static class TypeExtensions
 
             return attributeType?.GenericTypeArguments[0];
         }
+
+        public IControlPanelParentAttribute? GetControlPanelParentAttribute()
+            => Attribute.GetCustomAttribute(controlPanelComponentType, typeof(ControlPanelParentAttribute<>)) as IControlPanelParentAttribute;
+
+        public IControlPanelChildAttribute? GetControlPanelChildAttribute()
+            => Attribute.GetCustomAttribute(controlPanelComponentType, typeof(ControlPanelChildAttribute<>)) as IControlPanelChildAttribute;
     }
 }
