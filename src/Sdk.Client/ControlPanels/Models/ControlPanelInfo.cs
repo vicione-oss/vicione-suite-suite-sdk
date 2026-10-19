@@ -1,4 +1,5 @@
 using Sdk.Authorization;
+using Sdk.Client.ControlPanels.Attributes;
 using Sdk.Client.ControlPanels.Services;
 
 namespace Sdk.Client.ControlPanels.Models;
@@ -15,6 +16,8 @@ internal sealed class ControlPanelInfo
     public Type? DescriptorType { get; set; }
     public Type? CategoryDescriptorType { get; set; }
     public Type? GroupDescriptorType { get; set; }
-    public required Type KeyedServiceKey { get; init; }
+    public required Type ServiceKey { get; init; }
+    public IControlPanelParentAttribute? ControlPanelParentAttribute { get; init; }
+    public IControlPanelChildAttribute? ControlPanelChildAttribute { get; init; }
     public ModuleAuthorizeAttribute? ModuleAuthorizeAttribute { get; init; }
 }

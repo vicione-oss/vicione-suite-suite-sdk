@@ -1,4 +1,4 @@
-﻿using Sdk.Client.Interfaces;
+using Sdk.Client.Interfaces;
 
 namespace Sdk.Client.ControlPanels.Services;
 
@@ -10,6 +10,8 @@ public interface IControlPanelState : IHasUpdateLock
     /// <summary>
     /// Gets or sets the index of the page to show; <see langword="null"/> when no specific page is requested or there are no pages.
     /// </summary>
+    [Obsolete("Nest control panels instead, via " + nameof(IControlPanelRegistryItem) + "." +
+        nameof(IControlPanelRegistryItem.ChildOf) + ". This member will be removed in a future major version.")]
     int? ActivePageIndex { get; set; }
 
     /// <summary>

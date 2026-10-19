@@ -22,9 +22,13 @@ public interface IControlPanelRegistry<TClientModule> : IControlPanelRegistry
     /// <param name="categoryDescriptor">The category the control panel is listed under.</param>
     /// <param name="groupDescriptor">The group; <see langword="null"/> means <see cref="IDefaultControlPanelGroupDescriptor"/>.</param>
     /// <param name="authorizationRequirement">The access requirement; <see langword="null"/> skips authorization.</param>
+    /// <param name="childOf">The descriptor of the parent to nest under; <see langword="null"/> registers a root control panel.</param>
+    /// <param name="asParent">The descriptor children reference to nest under this control panel;
+    /// <see langword="null"/> means it cannot act as a parent.</param>
     IControlPanelRegistryItem Add<TComponent, TState>(IControlPanelDescriptor descriptor, TState state,
         IControlPanelCategoryDescriptor categoryDescriptor, IControlPanelGroupDescriptor? groupDescriptor = null,
-        IAuthorizationRequirement? authorizationRequirement = null)
+        IAuthorizationRequirement? authorizationRequirement = null,
+        IControlPanelParentDescriptor? childOf = null, IControlPanelParentDescriptor? asParent = null)
             where TComponent : ControlPanelBase<TState>
             where TState : IControlPanelState;
 

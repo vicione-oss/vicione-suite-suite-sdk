@@ -32,6 +32,16 @@ public interface IControlPanelDescriptor
     /// </remarks>
     [ExcludeFromCodeCoverage]
     bool ShowInNavigation => true;
+
+    /// <summary>
+    /// Gets whether the control panel has content of its own. Defaults to <see langword="true"/>.
+    /// </summary>
+    /// <remarks>
+    /// A control panel without content is never rendered itself: opening it shows its first child control panel
+    /// instead. While it has no children, it is not listed in navigation.
+    /// </remarks>
+    [ExcludeFromCodeCoverage]
+    bool HasContent => true;
 }
 
 /// <summary>

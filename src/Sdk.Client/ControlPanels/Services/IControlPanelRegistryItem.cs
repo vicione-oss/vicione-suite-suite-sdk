@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Sdk.Client.Modules;
 
 namespace Sdk.Client.ControlPanels.Services;
@@ -37,6 +37,22 @@ public interface IControlPanelRegistryItem
     /// Gets the optional authorization requirement that must be met for the control panel to be accessible.
     /// </summary>
     IAuthorizationRequirement? AuthorizationRequirement { get; }
+
+    /// <summary>
+    /// Gets the descriptor of the parent control panel this control panel nests under, otherwise
+    /// <see langword="null"/> when this control panel is a root, top-level control panel.
+    /// </summary>
+    /// <remarks>
+    /// The registry stores this descriptor as given and never resolves it, so a control panel can be registered
+    /// before the parent it names. It is the <see cref="AsParent"/> of the parent control panel.
+    /// </remarks>
+    IControlPanelParentDescriptor? ChildOf => null;
+
+    /// <summary>
+    /// Gets the descriptor other control panels reference to nest under this control panel, otherwise
+    /// <see langword="null"/> when it cannot act as a parent.
+    /// </summary>
+    IControlPanelParentDescriptor? AsParent => null;
 }
 
 /// <summary>

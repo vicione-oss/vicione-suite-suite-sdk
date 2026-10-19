@@ -5,6 +5,9 @@ namespace Sdk.Client.ControlPanels.Services;
 /// <summary>
 /// Tells which page of a control panel is currently shown.
 /// </summary>
+[Obsolete("Nest control panels instead, via " + nameof(IControlPanelRegistryItem) + "." +
+    nameof(IControlPanelRegistryItem.ChildOf) + ". This type will be removed in a future major version.")]
+#pragma warning disable CS0618 // Type or member is obsolete
 public interface IActiveControlPanelPageProvider
 {
     /// <summary>
@@ -12,3 +15,4 @@ public interface IActiveControlPanelPageProvider
     /// </summary>
     IControlPanelPage? GetActiveControlPanelPage(IControlPanelRegistryItem controlPanelRegistryItem);
 }
+#pragma warning restore CS0618 // Type or member is obsolete
