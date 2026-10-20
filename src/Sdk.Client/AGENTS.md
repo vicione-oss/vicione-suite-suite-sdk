@@ -8,3 +8,4 @@ Client module abstractions — Blazor components, UI extension points, IUiMediat
 - Auto-discovery via attributes and builder pattern (`.WithAutoDiscovery()`, `.WithSaveHandler()`)
 - Depends on `ViciOne.Ui.Blazor.Components`
 - TypeScript/SCSS compiled inline; coordinate CSS bundle changes with Sdk.Deployment
+- `Targets/TypeScript.targets` ships to modules; keep `docs/typescript-guide.md` in sync with it, and `docs/js-interop-guide.md` with `IJsInterop`

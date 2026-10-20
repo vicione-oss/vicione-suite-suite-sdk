@@ -314,6 +314,8 @@ Both inherit from `ModuleDbContext` which enforces:
 | Notifications    | Notification area elements           | `docs/notification-element-guide.md`|
 | Module Resources | Static files deployed with module    | `docs/module-resources-guide.md`   |
 | Localization     | i18n via .resx and Sdk extensions    | `docs/localization-guide.md`       |
+| TypeScript       | Compile module scripts from .ts      | `docs/typescript-guide.md`         |
+| JS Interop       | Load and call module scripts from C# | `docs/js-interop-guide.md`         |
 
 ## Semantic Versioning
 
