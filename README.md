@@ -8,6 +8,8 @@ Welcome to the readme of ViciOne Suite. Questions and suggestions for improvemen
     * [`Package Manager Console` of Visual Studio](#package-manager-console-of-visual-studio)
     * [Entity Framework CLI](#entity-framework-cli)
 * [Code comments](./docs/code-style-guide.md)
+* [TypeScript in client modules](./docs/typescript-guide.md)
+* [JS interop in client modules](./docs/js-interop-guide.md)
 
 ## Configure local development experience
 

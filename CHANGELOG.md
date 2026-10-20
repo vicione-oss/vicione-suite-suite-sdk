@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0 - unreleased
+
+### Added
+
+- `Sdk.Client`
+  - `docs/typescript-guide.md` describes how a module writes its scripts in TypeScript
+  - `docs/js-interop-guide.md` describes how a module loads, calls and releases its scripts from C#
+
 ## 3.6.0 - 2026-10-19
 
 ### Added
