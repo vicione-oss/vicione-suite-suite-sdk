@@ -8,6 +8,11 @@
   - `docs/typescript-guide.md` describes how a module writes its scripts in TypeScript
   - `docs/js-interop-guide.md` describes how a module loads, calls and releases its scripts from C#
 
+### Updated
+
+- `.NET` packages, update to version `10.0.13`
+- `.NET SDK`, update to version `10.0.402`
+
 ## 3.6.0 - 2026-10-19
 
 ### Added
