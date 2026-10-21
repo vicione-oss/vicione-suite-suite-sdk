@@ -57,6 +57,7 @@ flowchart TD
             IControlPanelSaveHandler
             IControlPanelCancelHandler
             IControlPanelResetHandler
+            IControlPanelRequest
             AuthorizationRequirement
         end
 
@@ -104,6 +105,7 @@ flowchart TD
 
         ControlPanelRegistryItem-- "passed to" -->ControlPanelRegistry
         ControlPanelRegistry-- "implements" -->IControlPanelRegistry
+        IControlPanelRequest-. "requests display of" .->ControlPanelRegistryItem
     end
 
     subgraph FooClientModule
@@ -779,6 +781,51 @@ By default a parent is also the first page among its children, so its tab is lab
   ```
 
 Opening the parent shows its first child, ordered by `Position`, then `Title`. A control panel without content is not listed in navigation while it has no visible children.
+
+#### 9.6 Show a control panel from code
+
+[`IControlPanelRequest`](../src/Sdk.Client/ControlPanels/Services/IControlPanelRequest.cs) asks the host to show a control panel, e.g. from a navigation tile or from a button in another control panel. The host provides it as a scoped service, so inject it where it is needed.
+
+- Show a control panel
+
+  ``` csharp
+  using Microsoft.AspNetCore.Components;
+  using Sdk.Client.ControlPanels.Services;
+  using Sdk.Client.NavTiles.Components;
+
+  namespace Foo.Client;
+
+  public sealed partial class FooNavTile : NavTileBase
+  {
+      [Inject] private IControlPanelRequest ControlPanelRequest { get; set; } = default!;
+
+      public override void Click()
+          => ControlPanelRequest.Send<BarControlPanel>();
+  }
+  ```
+
+- Show a control panel and configure its state first, e.g. to open a detail control panel for the selected item
+
+  ``` csharp
+  namespace Foo.Client;
+
+  public sealed partial class BarControlPanel : ControlPanelBase<BarControlPanelState>
+  {
+      [Inject] private IControlPanelRequest ControlPanelRequest { get; set; } = default!;
+
+      private async Task AddItem()
+          => await ControlPanelRequest.Send<BarItemControlPanel, BarItemControlPanelState>(s => s.ItemId = null);
+
+      private async Task EditItem(Guid itemId)
+          => await ControlPanelRequest.Send<BarItemControlPanel, BarItemControlPanelState>(s => s.ItemId = itemId);
+  }
+  ```
+
+  > The state is configured right before the control panel is shown, so a [reset handler](#94-configure-save-cancel-and-reset-handlers) can load the item the state refers to.
+
+- A requested control panel must be known, either via [auto-discovery](#91-enable-auto-discovery) or via [`IControlPanelRegistry.Add<>()`](#92-configure-visibility-at-runtime). `Send<TComponent>()` and `Send<TComponent, TState>()` look it up in the registries by its component type; to show one of several registry items of the same type, pass the item to `Send(IControlPanelRegistryItem, Action?)`.
+- If the settings are closed, the host opens them with the requested control panel active.
+- If they are open, the host shows the requested control panel on top of the current one and offers a back button to return to it.
 
 ## FAQ
 

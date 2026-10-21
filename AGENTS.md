@@ -340,9 +340,11 @@ Both inherit from `ModuleDbContext` which enforces:
 - **Leave out** what the MR and the commit message carry: how the defect came about, how the fix works ("it compared …",
   "because …", "now copies …"), private members, tests, and reasoning about the issue or the version. A change module
   authors cannot notice gets no entry.
-- **Behaviour change** ([ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md)): append
-  `**Behaviour change:**` and one sentence naming what a caller that relied on the old answer notices. Together with the
-  API name and the new answer, that meets the ADR's changelog obligation.
+- **Behaviour change** ([ADR-002](docs/ADRs/ADR-002-contract-governance-for-behavioural-change.md)): below the entry, add
+  a quote `> **Behaviour change:**` indented to the entry's text, and one sentence naming what a caller that relied on the
+  old answer notices. Together with the API name and the new answer, that meets the ADR's changelog obligation. Put an
+  empty line before the quote, and after it when another entry follows; it keeps the raw markdown readable and separates
+  the quote from the entries in the preview.
 - Entries of older releases predate these rules; do not copy their length.
 
 | Too much | Enough |
