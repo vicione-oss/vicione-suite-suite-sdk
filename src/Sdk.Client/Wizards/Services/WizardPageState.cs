@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Sdk.Client.Models;
 using Sdk.Client.Wizards.Models;
+using ViciOne.SourceGenerators.NotifyChanged;
 
 namespace Sdk.Client.Wizards.Services;
 
@@ -8,26 +9,14 @@ namespace Sdk.Client.Wizards.Services;
 /// Provides a default implementation of <see cref="IWizardPageState"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class WizardPageState : IWizardPageState
+public partial class WizardPageState : IWizardPageState
 {
     private readonly Lock _concurrentLock = new();
     private int _operationCounter;
-    private IWizardOperation? _currentOperation;
 
     /// <inheritdoc/>
-    public IWizardOperation? CurrentOperation
-    {
-        get => _currentOperation;
-        private set
-        {
-            if (value != _currentOperation)
-            {
-                _currentOperation = value;
-
-                OnPropertyChanged();
-            }
-        }
-    }
+    [NotifyChanged(Comparer = typeof(ReferenceEqualityComparer))]
+    public partial IWizardOperation? CurrentOperation { get; private set; }
 
     /// <inheritdoc/>
     public event Action<PropertiesChangedEventArgs>? Changed;

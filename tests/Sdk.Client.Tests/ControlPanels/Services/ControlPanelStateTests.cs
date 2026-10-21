@@ -1,11 +1,12 @@
 ﻿using System.Security.Cryptography;
 using AwesomeAssertions;
 using Sdk.Client.ControlPanels.Services;
+using ViciOne.SourceGenerators.NotifyChanged;
 using Xunit;
 
 namespace Sdk.Client.Tests.ControlPanels.Services;
 
-public sealed class ControlPanelStateTests
+public sealed partial class ControlPanelStateTests
 {
     [Theory]
     [InlineData(null, null, false)]
@@ -100,6 +101,23 @@ public sealed class ControlPanelStateTests
 
         // Assert
         changedTriggered.Should().Be(true);
+    }
+
+    [Fact]
+    public void Should_name_is_loading_as_the_changed_property_on_begin_and_end_loading()
+    {
+        // Arrange
+        var changes = new List<string[]>();
+
+        var controlPanelState = new ControlPanelState();
+        controlPanelState.Changed += args => changes.Add([.. args.PropertyNames]);
+
+        // Act
+        controlPanelState.BeginLoading();
+        controlPanelState.EndLoading();
+
+        // Assert
+        changes.Should().HaveCount(2).And.AllSatisfy(names => names.Should().Equal(nameof(ControlPanelState.IsLoading)));
     }
 
     [Theory]
@@ -316,35 +334,12 @@ public sealed class ControlPanelStateTests
     }
 
 
-    public class TestControlPanelState : ControlPanelState
+    [NotifyChanged]
+    public partial class TestControlPanelState : ControlPanelState
     {
-        public bool Foo
-        {
-            get;
-            set
-            {
-                if (value != field)
-                {
-                    field = value;
+        public partial bool Foo { get; set; }
 
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public int? Bar
-        {
-            get;
-            set
-            {
-                if (value != field)
-                {
-                    field = value;
-
-                    OnPropertyChanged();
-                }
-            }
-        } = 0;
+        public partial int? Bar { get; set; } = 0;
     }
 
 }

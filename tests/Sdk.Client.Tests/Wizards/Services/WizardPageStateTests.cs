@@ -2,11 +2,12 @@
 using AwesomeAssertions;
 using Sdk.Client.Wizards.Models;
 using Sdk.Client.Wizards.Services;
+using ViciOne.SourceGenerators.NotifyChanged;
 using Xunit;
 
 namespace Sdk.Client.Tests.Wizards.Services;
 
-public sealed class WizardPageStateTests
+public sealed partial class WizardPageStateTests
 {
     [Fact]
     public void Should_indicate_current_operation_after_begin_operation()
@@ -87,7 +88,7 @@ public sealed class WizardPageStateTests
     }
 
     [Fact]
-    public void Should_not_trigger_changed_event_on_end_operation()
+    public void Should_trigger_changed_event_on_end_operation()
     {
         // Arrange
         var changedTriggered = false;
@@ -101,6 +102,39 @@ public sealed class WizardPageStateTests
 
         // Assert
         changedTriggered.Should().Be(true);
+    }
+
+    [Fact]
+    public void Should_name_current_operation_as_the_changed_property()
+    {
+        // Arrange
+        var changes = new List<string[]>();
+
+        var wizardPageState = new WizardPageState();
+        wizardPageState.Changed += args => changes.Add([.. args.PropertyNames]);
+
+        // Act
+        wizardPageState.BeginOperation(new WizardOperation());
+        wizardPageState.EndOperation();
+
+        // Assert
+        changes.Should().HaveCount(2).And.AllSatisfy(names => names.Should().Equal(nameof(WizardPageState.CurrentOperation)));
+    }
+
+    [Fact]
+    public void Should_not_trigger_changed_event_on_end_operation_without_running_operation()
+    {
+        // Arrange
+        var changedTriggered = false;
+
+        var wizardPageState = new WizardPageState();
+        wizardPageState.Changed += _ => changedTriggered = true;
+
+        // Act
+        wizardPageState.EndOperation();
+
+        // Assert
+        changedTriggered.Should().Be(false);
     }
 
     [Fact]
@@ -143,5 +177,27 @@ public sealed class WizardPageStateTests
 
         // Assert
         wizardPageStateChangedCounter.Should().Be(1);
+    }
+
+    [Fact]
+    public void Should_raise_changed_for_a_notify_changed_property_of_a_derived_state()
+    {
+        // Arrange
+        var changes = new List<string[]>();
+
+        var wizardPageState = new DerivedWizardPageState();
+        wizardPageState.Changed += args => changes.Add([.. args.PropertyNames]);
+
+        // Act
+        wizardPageState.Title = "Foo";
+
+        // Assert
+        changes.Should().ContainSingle().Which.Should().Equal(nameof(DerivedWizardPageState.Title));
+    }
+
+    private sealed partial class DerivedWizardPageState : WizardPageState
+    {
+        [NotifyChanged]
+        public partial string? Title { get; set; }
     }
 }

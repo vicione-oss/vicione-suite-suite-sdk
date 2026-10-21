@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using ViciOne.SourceGenerators.NotifyChanged;
 
 namespace Sdk.Client.ControlPanels.Services;
 
@@ -6,47 +7,23 @@ namespace Sdk.Client.ControlPanels.Services;
 /// Provides a default implementation of <see cref="IControlPanelState"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class ControlPanelState : IControlPanelState
+public partial class ControlPanelState : IControlPanelState
 {
     private readonly Lock _concurrentLock = new();
     private readonly HashSet<string> _changedProperties = [];
 
     private int _loadingCounter;
-    private bool _isLoading;
-    private int? _activeControlPanelPageIndex;
 
     /// <inheritdoc/>
     public int UpdateLock { get; private set; }
 
     /// <inheritdoc/>
-    public bool IsLoading
-    {
-        get => _isLoading;
-        private set
-        {
-            if (value != _isLoading)
-            {
-                _isLoading = value;
-
-                OnPropertyChanged();
-            }
-        }
-    }
+    [NotifyChanged]
+    public partial bool IsLoading { get; private set; }
 
     /// <inheritdoc/>
-    public int? ActivePageIndex
-    {
-        get => _activeControlPanelPageIndex;
-        set
-        {
-            if (value != _activeControlPanelPageIndex)
-            {
-                _activeControlPanelPageIndex = value;
-
-                OnPropertyChanged();
-            }
-        }
-    }
+    [NotifyChanged]
+    public partial int? ActivePageIndex { get; set; }
 
     /// <inheritdoc/>
     public event Action<ControlPanelStateChangedEventArgs>? Changed;

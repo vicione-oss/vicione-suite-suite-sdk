@@ -59,6 +59,21 @@ public sealed class NavTileStateTests
 
             changed.Should().BeFalse();
         }
+
+        [Fact]
+        public void Should_not_fire_changed_event_when_set_to_an_equal_string_instance()
+        {
+            // Arrange
+            var state = new NavTileState { LinkTarget = "/page" };
+            var changed = false;
+            state.Changed += () => changed = true;
+
+            // Act
+            state.LinkTarget = new string("/page".AsSpan());
+
+            // Assert
+            changed.Should().BeFalse();
+        }
     }
 
     public sealed class Loading
