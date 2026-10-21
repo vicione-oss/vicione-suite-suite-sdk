@@ -75,11 +75,11 @@ internal static class ResourceFactory
         Declaration = ResourceDeclaration.Local
     };
 
-    public static Resource CreateComponentScript(string? bundle, string relativeFilePath, Assembly assembly) =>
-        CreateComponentResource(bundle, relativeFilePath, ResourceType.Script, assembly);
+    public static Resource CreateComponentScript(string? bundle, string relativeFilePath, Assembly assembly)
+        => CreateComponentResource(bundle, relativeFilePath, ResourceType.Script, assembly);
 
-    public static Resource CreateComponentStylesheet(string? bundle, string relativeFilePath, Assembly assembly) =>
-        CreateComponentResource(bundle, relativeFilePath, ResourceType.Stylesheet, assembly);
+    public static Resource CreateComponentStylesheet(string? bundle, string relativeFilePath, Assembly assembly)
+        => CreateComponentResource(bundle, relativeFilePath, ResourceType.Stylesheet, assembly);
 
     private static Resource CreateComponentResource(string? bundle, string relativeFilePath, ResourceType resource,
         Assembly assembly)
@@ -94,13 +94,12 @@ internal static class ResourceFactory
         return new Resource { Id = GetUniqueId(relativeFilePath), ResourceType = resource, Bundle = bundle, Url = url };
     }
 
-    [SuppressMessage("Security", "CA5350:Do Not Use Weak Cryptographic Algorithms")]
     private static uint GetUInt32HashCode(string strText)
     {
         if (string.IsNullOrEmpty(strText)) return 0;
 
         var byteContents = Encoding.Unicode.GetBytes(strText);
-        var hashText = SHA1.HashData(byteContents);
+        var hashText = SHA256.HashData(byteContents);
         var hashCodeStart = BitConverter.ToUInt32(hashText, 0);
         var hashCodeMedium = BitConverter.ToUInt32(hashText, 8);
         var hashCodeEnd = BitConverter.ToUInt32(hashText, 16);
@@ -111,6 +110,6 @@ internal static class ResourceFactory
     /// <summary>
     /// Derives a stable element ID from the path, so a stylesheet link can be found and removed later.
     /// </summary>
-    private static string GetUniqueId(string filename) =>
-        string.Format(CultureInfo.InvariantCulture, "i{0}", GetUInt32HashCode(filename));
+    private static string GetUniqueId(string filename)
+        => string.Format(CultureInfo.InvariantCulture, "i{0}", GetUInt32HashCode(filename));
 }

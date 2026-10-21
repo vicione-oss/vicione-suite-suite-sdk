@@ -30,15 +30,15 @@ public interface ISuiteMediator
     /// Sends a request that is answered within this instance and awaits the response.
     /// </summary>
     Task<TResponse> Request<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
-        where TResponse : class, IResponse
-        where TRequest : class, IRequest<TResponse>;
+        where TRequest : class, IRequest<TResponse>
+        where TResponse : class, IResponse;
 
     /// <summary>
     /// Sends a request that is answered within this instance and awaits the response for at most <paramref name="timeout"/>.
     /// </summary>
     Task<TResponse> Request<TRequest, TResponse>(TRequest request, TimeSpan timeout, CancellationToken cancellationToken = default)
-        where TResponse : class, IResponse
-        where TRequest : class, IRequest<TResponse>;
+        where TRequest : class, IRequest<TResponse>
+        where TResponse : class, IResponse;
 
     /// <summary>
     /// Sends a request to the instance <paramref name="instanceId"/> and awaits its response.

@@ -3,5 +3,14 @@ dotnet_diagnostic.IDE0005.severity = none # Using directive is unnecessary
 dotnet_diagnostic.IDE0022.severity = none # Use expression body for method
 dotnet_diagnostic.IDE0161.severity = none # Use file-scoped namespace
 
+dotnet_diagnostic.CA1707.severity = none # Identifiers should not contain underscores
+dotnet_diagnostic.CA1861.severity = none # Avoid constant arrays as arguments
+dotnet_diagnostic.CA2326.severity = none # Do not use TypeNameHandling values other than None
+dotnet_diagnostic.CA2327.severity = none # Do not use insecure JsonSerializerSettings
+
 dotnet_diagnostic.RCS1021.severity = none # Convert lambda expression body to expression body
 dotnet_diagnostic.RCS1205.severity = none # Order named arguments according to the order of parameters
+
+[Contracts/**.cs]
+dotnet_diagnostic.CA1707.severity = none # Identifiers should not contain underscores (members mirror the column names of the reference database)
+dotnet_diagnostic.IDE1006.severity = none # Naming rule violation (members mirror the column names of the reference database)

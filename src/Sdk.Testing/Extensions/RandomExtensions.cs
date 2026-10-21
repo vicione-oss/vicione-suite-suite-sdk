@@ -13,6 +13,8 @@ public static class RandomExtensions
     {
         var values = Enum.GetValues<T>();
 
+#pragma warning disable CA5394 // Extends Random by design; the caller chooses the generator.
         return values[random.Next(values.Length)];
+#pragma warning restore CA5394
     }
 }

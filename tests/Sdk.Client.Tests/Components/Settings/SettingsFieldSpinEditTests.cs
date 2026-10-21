@@ -270,7 +270,9 @@ public sealed class SettingsFieldSpinEditTests
         var spinEdit = component.FindComponent<SpinEdit<int, int, int>>();
 
         // Act
+#pragma warning disable CA2025 // The delegate is awaited by ThrowAsync before the context is disposed.
         var act = () => spinEdit.InvokeAsync(() => spinEdit.Instance.ValueChanged.InvokeAsync(25));
+#pragma warning restore CA2025
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Handler failed.");

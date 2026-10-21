@@ -40,9 +40,7 @@ npm run lint
 
 ## Code Style & Conventions
 
-- See `docs/code-style-guide.md` for member ordering, test naming and comment rules
-- Test method names: `snake_case` (displayed as sentences in Test Explorer)
-- All tests are structured by arrange/act/assert with explicit `// Arrange`, `// Act`, `// Assert` comments
+- Follow `docs/code-style-guide.md`
 - XML documentation is **required** for all public APIs (`GenerateDocumentationFile=true`, `EnforceCodeStyleInBuild=true`) — see [Comment Rules](#comment-rules-cs-razor)
 - Warnings are errors in CI (`TREAT_WARNINGS_AS_ERRORS=true`)
 - Languages: en-US primary, de secondary

@@ -1,4 +1,5 @@
-﻿using AwesomeAssertions;
+﻿using System.Security.Cryptography;
+using AwesomeAssertions;
 using Sdk.Client.NotificationArea.Services;
 using Xunit;
 
@@ -172,15 +173,15 @@ public sealed class NotificationElementStateTests
         var state = new NotificationElementState();
         state.Changed += _ => ++stateChangedCounter;
 
-        static async Task RandomUpdateTask(Random random, NotificationElementState state)
+        static async Task RandomUpdateTask(NotificationElementState state)
         {
-            var delay = random.Next(0, 100);
+            var delay = RandomNumberGenerator.GetInt32(0, 100);
             await Task.Delay(delay);
 
             state.BeginUpdate();
             try
             {
-                var coinToss = random.Next(0, 2);
+                var coinToss = RandomNumberGenerator.GetInt32(0, 2);
 
                 if (coinToss == 0)
                     state.Visible = !state.Visible;
@@ -197,11 +198,9 @@ public sealed class NotificationElementStateTests
         state.BeginUpdate();
         try
         {
-            var random = new Random();
-
             var updateTasks = new List<Task>();
             for (var i = 0; i < 1000; i++)
-                updateTasks.Add(RandomUpdateTask(random, state));
+                updateTasks.Add(RandomUpdateTask(state));
 
             await Task.WhenAll(updateTasks);
         }

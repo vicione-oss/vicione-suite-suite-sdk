@@ -29,10 +29,9 @@ public static class TestDbContextFactory
     public static TDbContext CreateSqliteContext<TDbContext>(string? dataSource, bool init = true)
         where TDbContext : ModuleDbContext, ISqliteDbContext
     {
-#pragma warning disable CA2000 // Dispose objects before losing scope
-        // The returned context owns this connection and disposes it when the context is disposed
+#pragma warning disable CA2000 // The returned context owns this connection and disposes it when the context is disposed.
         var connection = new SqliteConnection($"Data Source={dataSource ?? DataSourceInMemory};");
-#pragma warning restore CA2000 // Dispose objects before losing scope
+#pragma warning restore CA2000
         try
         {
             connection.Open();

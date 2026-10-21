@@ -10,7 +10,7 @@ namespace Sdk.Testing;
 /// <param name="culture">Culture name for <see cref="CultureInfo.CurrentCulture"/>, e.g. <c>de-DE</c>.</param>
 /// <param name="uiCulture">Culture name for <see cref="CultureInfo.CurrentUICulture"/>.</param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-[method: SuppressMessage("Design", "CA1019:AvoidUncalledPrivateCode", Justification = "use of lazy")]
+[method: SuppressMessage("Design", "CA1019:Define accessors for attribute arguments", Justification = "Culture and UiCulture return the arguments as CultureInfo; their Name is the argument.")]
 public class UseCultureAttribute(string culture, string uiCulture) : BeforeAfterTestAttribute
 {
     private readonly Lazy<CultureInfo> _culture = new(() => new CultureInfo(culture, false));

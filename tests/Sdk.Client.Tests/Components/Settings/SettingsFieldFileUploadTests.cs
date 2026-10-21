@@ -27,7 +27,9 @@ public sealed class SettingsFieldFileUploadTests
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 
+#pragma warning disable CA2025 // The upload is awaited before the context is disposed.
         var upload = PickFile(component, "settings.json");
+#pragma warning restore CA2025
 
         // Act
         component.Render(b => b.Add(p => p.Filename, boundFilename));
@@ -53,7 +55,9 @@ public sealed class SettingsFieldFileUploadTests
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 
+#pragma warning disable CA2025 // The upload is awaited before the context is disposed.
         var upload = PickFile(component, "settings.json");
+#pragma warning restore CA2025
 
         // Act
         component.Render(b => b.Add(p => p.Filename, "other.json"));
@@ -83,7 +87,9 @@ public sealed class SettingsFieldFileUploadTests
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 
+#pragma warning disable CA2025 // The upload is awaited before the context is disposed.
         var upload = PickFile(component, "settings.json");
+#pragma warning restore CA2025
 
         // Act
         component.Render(b => b
@@ -111,7 +117,9 @@ public sealed class SettingsFieldFileUploadTests
             .Add(p => p.UploadTicketFactory, uploadTicketFactory)
             .Add(p => p.UploadHandler, uploadHandler));
 
+#pragma warning disable CA2025 // The upload is awaited before the context is disposed.
         var upload = PickFile(component, "settings.json");
+#pragma warning restore CA2025
 
         // Act
         component.Render(b => b.Add(p => p.UploadTicket, otherUploadTicket));

@@ -28,8 +28,8 @@ public static class TestHarnessExtensions
         /// <exception cref="RequestTimeoutException">Thrown if no response arrives within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         /// <exception cref="TimeoutException">Thrown if the request was not handled within <see cref="IBaseTestHarness.TestTimeout"/>.</exception>
         public async Task<TResponse> TestRequest<TResponse, TRequest>(TRequest request)
-            where TRequest : class, IRoutableMessage
             where TResponse : class, IResponse
+            where TRequest : class, IRoutableMessage
         {
             await harness.Start();
 
@@ -317,7 +317,7 @@ public static class TestHarnessExtensions
             await harness.Bus.Execute(builder.Build());
 
             await completed;
-            var context = await activityCompleted!;
+            var context = await activityCompleted;
 
             // The routing slip has completed, so the message lists need not wait for more.
             harness.ForceInactive();
@@ -354,7 +354,7 @@ public static class TestHarnessExtensions
             await harness.Bus.Execute(builder.Build());
 
             await faulted;
-            var context = await activityFaulted!;
+            var context = await activityFaulted;
 
             // The routing slip has faulted, so the message lists need not wait for more.
             harness.ForceInactive();

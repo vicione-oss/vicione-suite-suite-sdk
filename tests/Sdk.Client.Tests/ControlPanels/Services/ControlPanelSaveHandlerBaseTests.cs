@@ -20,9 +20,7 @@ public static class ControlPanelSaveHandlerBaseTests
         public bool IsLoading { get; private set; }
         public int UpdateLock { get; private set; }
 
-#pragma warning disable CS0067
-        public event Action<ControlPanelStateChangedEventArgs>? Changed;
-#pragma warning restore CS0067
+        public event Action<ControlPanelStateChangedEventArgs>? Changed { add { } remove { } }
 
         public void BeginLoading() => IsLoading = true;
 

@@ -1,4 +1,5 @@
-﻿using AwesomeAssertions;
+﻿using System.Security.Cryptography;
+using AwesomeAssertions;
 using Sdk.Client.Wizards.Models;
 using Sdk.Client.Wizards.Services;
 using Xunit;
@@ -112,12 +113,12 @@ public sealed class WizardPageStateTests
         wizardPageState.BeginOperation(new WizardOperation());
         wizardPageState.Changed += _ => ++wizardPageStateChangedCounter;
 
-        static async Task RandomUpdateTask(Random random, WizardPageState wizardPageState)
+        static async Task RandomUpdateTask(WizardPageState wizardPageState)
         {
             wizardPageState.BeginOperation(new WizardOperation());
             try
             {
-                var delay = random.Next(0, 100);
+                var delay = RandomNumberGenerator.GetInt32(0, 100);
                 await Task.Delay(delay);
             }
             finally
@@ -129,11 +130,9 @@ public sealed class WizardPageStateTests
         // Act
         try
         {
-            var random = new Random();
-
             var updateTasks = new List<Task>();
             for (var i = 0; i < 1000; i++)
-                updateTasks.Add(RandomUpdateTask(random, wizardPageState));
+                updateTasks.Add(RandomUpdateTask(wizardPageState));
 
             await Task.WhenAll(updateTasks);
         }

@@ -195,8 +195,7 @@ public sealed class TreeExtensionsTests
         };
 
     private static List<FlatItem> CreateFlatItems()
-        =>
-        [
+        => [
             new FlatItem(0, null),
             new FlatItem(1, 0),
             new FlatItem(2, 1),

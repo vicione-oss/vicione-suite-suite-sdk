@@ -102,10 +102,10 @@ public static class CompletionSourceHandlerBaseTests
                 .Returns(async _ => await cts.CancelAsync());
 
             // Act
-            var act = () => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
+            Task Act() => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
 
             // Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(act);
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(Act);
         }
 
         [Fact]
@@ -126,10 +126,10 @@ public static class CompletionSourceHandlerBaseTests
                 });
 
             // Act
-            var act = () => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
+            Task Act() => sut.InvokeSendAndWaitForCompletion(command, cts.Token);
 
             // Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(act);
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(Act);
         }
 
         [Fact]

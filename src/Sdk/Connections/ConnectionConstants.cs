@@ -5,7 +5,6 @@ namespace Sdk.Connections;
 /// <summary>
 /// Provides constants for connection management including predefined tags and metadata keys.
 /// </summary>
-[SuppressMessage("Design", "CA1034:Nested types should not be visible")]
 [ExcludeFromCodeCoverage]
 public static class ConnectionConstants
 {

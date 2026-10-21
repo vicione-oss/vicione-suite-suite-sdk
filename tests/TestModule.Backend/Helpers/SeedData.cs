@@ -5,8 +5,7 @@ namespace TestModule.Backend.Helpers;
 internal sealed class SeedData
 {
     public static List<SimpleDataTypes> DefaultSeedDataSimpleDataTypes()
-        =>
-        [
+        => [
                 new SimpleDataTypes()
                 {
                     Id = 1,
@@ -40,8 +39,7 @@ internal sealed class SeedData
         ];
 
     public static List<SimpleEmployees> DefaultDataSimpleEmployees()
-        =>
-        [
+        => [
             new SimpleEmployees()
             {
                 emp_no = 1,

@@ -49,20 +49,20 @@ public static class ReflectionExtensions
     /// Determines whether a property is nullable.
     /// </summary>
     // Based on https://stackoverflow.com/questions/58453972/how-to-use-net-reflection-to-check-for-nullable-reference-type
-    public static bool IsNullable(this PropertyInfo property) =>
-        IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);
+    public static bool IsNullable(this PropertyInfo property)
+        => IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);
 
     /// <summary>
     /// Determines whether a field is nullable.
     /// </summary>
-    public static bool IsNullable(this FieldInfo field) =>
-        IsNullableHelper(field.FieldType, field.DeclaringType, field.CustomAttributes);
+    public static bool IsNullable(this FieldInfo field)
+        => IsNullableHelper(field.FieldType, field.DeclaringType, field.CustomAttributes);
 
     /// <summary>
     /// Determines whether a parameter is nullable.
     /// </summary>
-    public static bool IsNullable(this ParameterInfo parameter) =>
-        IsNullableHelper(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
+    public static bool IsNullable(this ParameterInfo parameter)
+        => IsNullableHelper(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
 
     private static bool IsNullableHelper(Type memberType, MemberInfo? declaringType, IEnumerable<CustomAttributeData> customAttributes)
     {
