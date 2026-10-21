@@ -165,6 +165,8 @@ For the following  file structure in `FooClientModule` is assumed:
   ```
   > If you don't want to implement specific state then simply use [`NotificationElementState`](../src/Sdk.Client/NotificationArea/Services/NotificationElementState.cs) in the following steps instead of `FooNotificationElementState`.
 
+  > For properties that need to raise a changed event on value change, consider the package [`ViciOne.SourceGenerators.NotifyChanged`](https://gitlab.com/vicione-oss/vicione/libs/source-generators/-/blob/main/src/ViciOne.SourceGenerators.NotifyChanged/README.md).
+
 ### 4. Add notification element icon
 
 - Add `FooNotificationElementIcon.razor`

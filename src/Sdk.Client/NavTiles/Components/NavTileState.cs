@@ -1,15 +1,14 @@
 ﻿using Sdk.Client.NavTiles.Enums;
+using ViciOne.SourceGenerators.NotifyChanged;
 
 namespace Sdk.Client.NavTiles.Components;
 
 /// <summary>
 /// Implements the state for a navigation tile component.
 /// </summary>
-public class NavTileState
+public partial class NavTileState
 {
-    private bool _enabled;
     private int _loadingCounter;
-    private string? _linkTarget;
 
     /// <summary>
     /// Gets or initializes the horizontal span of the tile, which determines its width.
@@ -19,19 +18,8 @@ public class NavTileState
     /// <summary>
     /// Gets or sets whether the tile is enabled and interactive.
     /// </summary>
-    public bool Enabled
-    {
-        get => _enabled;
-        set
-        {
-            if (value != _enabled)
-            {
-                _enabled = value;
-
-                Changed?.Invoke();
-            }
-        }
-    }
+    [NotifyChanged]
+    public partial bool Enabled { get; set; }
 
     /// <summary>
     /// Gets whether the tile is currently in a loading state.
@@ -41,19 +29,8 @@ public class NavTileState
     /// <summary>
     /// Gets or sets the URL that the tile navigates to when clicked.
     /// </summary>
-    public string? LinkTarget
-    {
-        get => _linkTarget;
-        set
-        {
-            if (value != _linkTarget)
-            {
-                _linkTarget = value;
-
-                Changed?.Invoke();
-            }
-        }
-    }
+    [NotifyChanged]
+    public partial string? LinkTarget { get; set; }
 
     /// <summary>
     /// Occurs when a property value in the state has changed.
@@ -95,4 +72,10 @@ public class NavTileState
             Changed?.Invoke();
         }
     }
+
+    /// <summary>
+    /// Raises the <see cref="Changed"/> event; the setters generated for <see cref="NotifyChangedAttribute"/> call it.
+    /// </summary>
+    private void OnPropertyChanged()
+        => Changed?.Invoke();
 }

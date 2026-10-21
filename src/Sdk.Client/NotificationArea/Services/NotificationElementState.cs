@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using ViciOne.SourceGenerators.NotifyChanged;
 
 namespace Sdk.Client.NotificationArea.Services;
 
@@ -6,52 +7,33 @@ namespace Sdk.Client.NotificationArea.Services;
 /// Provides a default implementation of <see cref="INotificationElementState"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class NotificationElementState : INotificationElementState
+[NotifyChanged]
+public partial class NotificationElementState : INotificationElementState
 {
     private readonly Lock _concurrentLock = new();
     private readonly HashSet<string> _changedProperties = [];
     private int _updateLock;
-    private bool _isActive;
-    private bool _visible = Constants.NotificationElementVisibleDefault;
 
     /// <inheritdoc/>
-    public bool IsActive
-    {
-        get => _isActive;
-        set
-        {
-            if (value != _isActive)
-            {
-                if (value && !_visible)
-                    Visible = true;
-
-                _isActive = value;
-
-                OnPropertyChanged();
-            }
-        }
-    }
+    public partial bool IsActive { get; set; }
 
     /// <inheritdoc/>
-    public bool Visible
-    {
-        get => _visible;
-        set
-        {
-            if (value != _visible)
-            {
-                _visible = value;
-
-                if (!value && _isActive)
-                    IsActive = false;
-
-                OnPropertyChanged();
-            }
-        }
-    }
+    public partial bool Visible { get; set; } = Constants.NotificationElementVisibleDefault;
 
     /// <inheritdoc/>
     public event Action<NotificationElementStateChangedEventArgs>? Changed;
+
+    partial void OnIsActiveChanging(bool value)
+    {
+        if (value && !Visible)
+            Visible = true;
+    }
+
+    partial void OnVisibleChanged(bool value)
+    {
+        if (!value && IsActive)
+            IsActive = false;
+    }
 
     /// <summary>
     /// Raises the <see cref="Changed"/> event for a specific property.

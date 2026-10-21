@@ -1,11 +1,12 @@
 ﻿using System.Security.Cryptography;
 using AwesomeAssertions;
 using Sdk.Client.NotificationArea.Services;
+using ViciOne.SourceGenerators.NotifyChanged;
 using Xunit;
 
 namespace Sdk.Client.Tests.NotificationArea;
 
-public sealed class NotificationElementStateTests
+public sealed partial class NotificationElementStateTests
 {
     [Theory]
     [InlineData(false, false, false)]
@@ -59,6 +60,56 @@ public sealed class NotificationElementStateTests
 
         // Assert
         state.IsActive.Should().Be(false);
+    }
+
+    [Fact]
+    public void Should_be_visible_and_inactive_by_default()
+    {
+        // Arrange
+        NotificationElementState state;
+
+        // Act
+        state = new NotificationElementState();
+
+        // Assert
+        state.Visible.Should().Be(true);
+        state.IsActive.Should().Be(false);
+    }
+
+    [Fact]
+    public void Should_deactivate_first_and_notify_both_when_an_active_element_is_hidden()
+    {
+        // Arrange
+        var changes = new List<(string Name, bool IsActive, bool Visible)>();
+
+        var state = new NotificationElementState { IsActive = true };
+        state.Changed += args => changes.Add((args.PropertyNames.Single(), state.IsActive, state.Visible));
+
+        // Act
+        state.Visible = false;
+
+        // Assert
+        changes.Should().Equal(
+            (nameof(NotificationElementState.IsActive), false, false),
+            (nameof(NotificationElementState.Visible), false, false));
+    }
+
+    [Fact]
+    public void Should_show_first_and_notify_both_when_a_hidden_element_is_activated()
+    {
+        // Arrange
+        var changes = new List<(string Name, bool IsActive, bool Visible)>();
+
+        var state = new NotificationElementState { Visible = false };
+        state.Changed += args => changes.Add((args.PropertyNames.Single(), state.IsActive, state.Visible));
+
+        // Act
+        state.IsActive = true;
+
+        // Assert
+        changes.Should().Equal(
+            (nameof(NotificationElementState.Visible), false, true),
+            (nameof(NotificationElementState.IsActive), true, true));
     }
 
     [Fact]
@@ -211,5 +262,27 @@ public sealed class NotificationElementStateTests
 
         // Assert
         stateChangedCounter.Should().Be(1);
+    }
+
+    [Fact]
+    public void Should_raise_changed_for_a_notify_changed_property_of_a_derived_state()
+    {
+        // Arrange
+        var changes = new List<string[]>();
+
+        var state = new DerivedNotificationElementState();
+        state.Changed += args => changes.Add([.. args.PropertyNames]);
+
+        // Act
+        state.UnreadCount = 3;
+
+        // Assert
+        changes.Should().ContainSingle().Which.Should().Equal(nameof(DerivedNotificationElementState.UnreadCount));
+    }
+
+    private sealed partial class DerivedNotificationElementState : NotificationElementState
+    {
+        [NotifyChanged]
+        public partial int UnreadCount { get; set; }
     }
 }
