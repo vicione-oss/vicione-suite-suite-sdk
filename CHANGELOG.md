@@ -12,6 +12,7 @@
 
 - `.NET` packages, update to version `10.0.13`
 - `.NET SDK`, update to version `10.0.402`
+- `ViciOne.Ui.Blazor.Components` package, update to version `6.6.1`
 
 ## 3.6.0 - 2026-10-19
 
