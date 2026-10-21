@@ -5,60 +5,307 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
-  "enabledManagers": [ "nuget", "npm" ],
+  "configMigration": true,
+  "pruneStaleBranches": false,
+  "prTitleStrict": true,
+  "enabledManagers": [
+    "nuget",
+    "npm",
+    "gitlabci",
+    "custom.regex"
+  ],
   "vulnerabilityAlerts": {
     "enabled": true,
     "dependencyDashboardApproval": true
   },
   "osvVulnerabilityAlerts": true,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [ "/(^|/)mise\\.toml$/" ],
+      "matchStrings": [ "(?m)^\\s*dotnet\\s*=\\s*\"(?<currentValue>[^\"]+)\"" ],
+      "depNameTemplate": "dotnet",
+      "datasourceTemplate": "dotnet-version",
+      "packageNameTemplate": "dotnet-sdk",
+      "versioningTemplate": "semver-coerced"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [ "/(^|/)mise\\.toml$/" ],
+      "matchStrings": [ "(?m)^\\s*nodejs\\s*=\\s*\"(?<currentValue>[^\"]+)\"" ],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node-version",
+      "versioningTemplate": "node"
+    }
+  ],
   "packageRules": [
     {
+      "description": "MR configuration",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "addLabels": [ "Dependencies", "Modernization" ],
+      "rebaseWhen": "auto",
+      "separateMajorMinor": true,
+      "separateMultipleMajor": true,
+      "separateMultipleMinor": true,
+      "separateMinorPatch": true
+    },
+    {
+      "description": "MR label for the update type, as it is not part of the naming. version:: is a scoped label, so GitLab keeps only one per MR: the most significant update in the MR wins",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "matchUpdateTypes": [ "major", "minor", "patch" ],
+      "addLabels": [ "version::{{#if (includes (lookupArray upgrades 'updateType') 'major')}}major{{else}}{{#if (includes (lookupArray upgrades 'updateType') 'minor')}}minor{{else}}patch{{/if}}{{/if}}" ]
+    },
+    {
+      "description": "MR / commit naming",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "semanticCommits": "disabled",
+      "commitMessagePrefix": "",
+      "commitMessageAction": "Update"
+    },
+    {
+      "description": "MR / commit naming for ungrouped updates",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "commitMessageTopic": "{{{depName}}}",
+      "commitMessageExtra": "to {{{newVersion}}}"
+    },
+    {
+      "description": "MR / commit naming for grouped updates",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "groupSingleUpdates": true,
+      "recreateWhen": "never",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} ({{#each upgrades}}{{#if (or (equals @index 0) (equals @index 1) (equals @index 2) (equals @index 3) (equals @index 4))}}{{#unless @first}}, {{/unless}}{{{depName}}}@{{{newVersion}}}{{/if}}{{/each}}{{#if (lookup upgrades 5)}} and {{add upgrades.length -5}} more{{/if}})",
+        "commitMessageExtra": ""
+      }
+    },
+    {
+      "description": "Branch naming for ungrouped updates",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "branchTopic": "update-{{{lowercase (replace '\\.' '-' (replace '([a-z0-9])([A-Z])' '$1-$2' (replace '([A-Z]+)([A-Z][a-z])' '$1-$2' depNameSanitized)))}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}"
+    },
+    {
+      "description": "Branch naming for grouped updates",
+      "matchManagers": [ "nuget", "npm", "gitlabci", "custom.regex" ],
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}"
+      }
+    },
+    {
+      "description": "NuGet: opt out of everything, then opt back in below",
       "matchManagers": [ "nuget" ],
       "enabled": false
     },
     {
+      "description": "NuGet: .NET SDK pinned in global.json",
+      "matchManagers": [ "nuget" ],
+      "matchDepTypes": [ "dotnet-sdk" ],
+      "enabled": true,
+      "groupName": ".NET",
+      "groupSlug": "net"
+    },
+    {
+      "description": "NuGet: .NET packages pinned to $(DotNetVersion)",
       "matchManagers": [ "nuget" ],
       "matchFileNames": [ "Directory.Packages.props" ],
       "matchJsonata": [ "sharedVariableName = 'DotNetVersion'" ],
       "enabled": true,
-      "rebaseWhen": "never",
-      "groupName": ".NET packages",
-      "separateMajorMinor": true,
-      "semanticCommits": "disabled",
-      "commitMessagePrefix": "",
-      "commitMessageAction": "Update to",
-      "commitMessageTopic": ".NET",
-      "commitMessageExtra": "{{newVersion}}",
-      "branchTopic": "update-to-net-{{newMajor}}-{{newMinor}}-{{newPatch}}",
-      "addLabels": [ "Dependencies", "Modernization" ]
+      "groupName": ".NET",
+      "groupSlug": "net"
     },
     {
+      "description": "Mise: dotnet SDK, kept in step with global.json",
+      "matchManagers": [ "custom.regex" ],
+      "matchDepNames": [ "dotnet" ],
+      "enabled": true,
+      "groupName": ".NET",
+      "groupSlug": "net"
+    },
+    {
+      "description": "Mise: Node.js",
+      "matchManagers": [ "custom.regex" ],
+      "matchDepNames": [ "node" ],
+      "enabled": true,
+      "commitMessageExtra": "to {{{newValue}}}"
+    },
+    {
+      "description": "MR / commit naming for .NET updates",
+      "matchJsonata": [ "groupName = '.NET'" ],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} ({{#each upgrades}}{{#if (equals packageFile 'global.json')}}SDK {{{newVersion}}}{{/if}}{{/each}}{{#if (and (includes (lookupArray upgrades 'packageFile') 'global.json') (includes (lookupArray upgrades 'packageFile') 'Directory.Packages.props'))}}, {{/if}}{{#each upgrades}}{{#if (equals packageFile 'Directory.Packages.props')}}{{#unless (equals (lookup (lookup ../upgrades (add @index -1)) 'packageFile') 'Directory.Packages.props')}}runtime {{{newVersion}}}{{/unless}}{{/if}}{{/each}})"
+      }
+    },
+    {
+      "description": "NuGet: test tooling",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [
+        "AwesomeAssertions",
+        "Bogus",
+        "bunit",
+        "Extensions.Logging.NSubstitute",
+        "Microsoft.Testing.Extensions.CodeCoverage",
+        "Microsoft.Testing.Platform",
+        "NSubstitute",
+        "NSubstitute.Analyzers.CSharp",
+        "xunit.v3.extensibility.core",
+        "xunit.v3.mtp-v2"
+      ],
+      "enabled": true,
+      "groupName": "test tooling",
+      "groupSlug": "test-tooling",
+      "separateMajorMinor": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false,
+      "separateMinorPatch": false,
+      "addLabels": [ "Renovate::Frozen" ],
+      "stopUpdatingLabel": "Renovate::Frozen"
+    },
+    {
+      "description": "NuGet: MassTransit packages pinned to $(MassTransitVersion). Version ceiling, as MassTransit 9 and later are commercially licensed",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchJsonata": [ "sharedVariableName = 'MassTransitVersion'" ],
+      "enabled": true,
+      "allowedVersions": "<9",
+      "groupName": "MassTransit packages",
+      "groupSlug": "masstransit-packages",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: Roslynator ships its packages on the same version",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [
+        "Roslynator.Analyzers",
+        "Roslynator.Formatting.Analyzers"
+      ],
+      "enabled": true,
+      "groupName": "Roslynator packages",
+      "groupSlug": "roslynator-packages",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: System.IO.Abstractions ships its packages on the same version",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [
+        "System.IO.Abstractions",
+        "System.IO.Abstractions.TestingHelpers"
+      ],
+      "enabled": true,
+      "groupName": "System.IO.Abstractions packages",
+      "groupSlug": "system-io-abstractions-packages",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: ViciOne.CodeAnalysis packages pinned to $(ViciOneCodeAnalysisVersion)",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchJsonata": [ "sharedVariableName = 'ViciOneCodeAnalysisVersion'" ],
+      "enabled": true,
+      "groupName": "ViciOne.CodeAnalysis",
+      "groupSlug": "vicione-codeanalysis",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: ViciOne.Ui.Blazor.Components packages pinned to $(ViciOneUiBlazorComponentsVersion)",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchJsonata": [ "sharedVariableName = 'ViciOneUiBlazorComponentsVersion'" ],
+      "enabled": true,
+      "groupName": "ViciOne.Ui.Blazor.Components",
+      "groupSlug": "vicione-ui-blazor-components",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: ViciOne.Ui.MonochromeIcons packages pinned to $(ViciOneUiMonochromeIconsVersion)",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchJsonata": [ "sharedVariableName = 'ViciOneUiMonochromeIconsVersion'" ],
+      "enabled": true,
+      "groupName": "ViciOne.Ui.MonochromeIcons",
+      "groupSlug": "vicione-ui-monochromeicons",
+      "group": {
+        "branchTopic": "update-{{{replace '\\.' '-' (replace '^(major|minor|patch)-[0-9.]*-?' '' groupSlug)}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}",
+        "commitMessageTopic": "{{{groupName}}}",
+        "commitMessageExtra": "to {{{newVersion}}}"
+      }
+    },
+    {
+      "description": "NuGet: packages whose version is dictated by the compiler of the SDK consumers",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [ "Microsoft.CodeAnalysis.CSharp" ],
+      "enabled": false
+    },
+    {
+      "description": "NuGet: packages which can be updated individually",
+      "matchManagers": [ "nuget" ],
+      "matchFileNames": [ "Directory.Packages.props" ],
+      "matchPackageNames": [
+        "AspNetCore.SassCompiler",
+        "Microsoft.TypeScript.MSBuild",
+        "Npgsql.EntityFrameworkCore.PostgreSQL",
+        "ViciOne.Ui.Design",
+        "ViciOne.Ui.Localization"
+      ],
+      "enabled": true,
+      "branchTopic": "update-{{{lowercase (replace '\\.' '-' (replace '([a-z0-9])([A-Z])' '$1-$2' (replace '([A-Z]+)([A-Z][a-z])' '$1-$2' (replace 'ViciOne' 'vicione' depNameSanitized))))}}}-to-{{{newMajor}}}-{{{newMinor}}}-{{{newPatch}}}"
+    },
+    {
+      "description": "npm: bump the range in package.json instead of only moving package-lock.json, so both files always state the same version",
       "matchManagers": [ "npm" ],
-      "enabled": true
+      "rangeStrategy": "bump"
     },
     {
+      "description": "npm: opt out of everything, then opt back in below",
+      "matchManagers": [ "npm" ],
+      "enabled": false
+    },
+    {
+      "description": "npm: type definitions for the Blazor JavaScript interop",
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "@types/blazor__javascript-interop" ],
-      "groupName": "interop types",
-      "groupSlug": "interop-types"
+      "enabled": true,
+      "addLabels": [ "JS interop" ]
     },
     {
+      "description": "npm: eslint and the packages it depends on updated as one group",
       "matchManagers": [ "npm" ],
       "matchPackageNames": [
-        "eslint",
-        "eslint-config-xo",
+        "/^eslint/",
         "/^@typescript-eslint//",
-        "/^eslint-/"
+        "typescript"
       ],
+      "enabled": true,
       "groupName": "eslint",
-      "groupSlug": "eslint"
-    },
-    {
-      "matchManagers": [ "npm" ],
-      "matchPackageNames": [ "typescript" ],
-      "groupName": "typescript",
-      "groupSlug": "typescript",
-      "addLabels": [ "TypeScript" ]
+      "groupSlug": "eslint",
+      "separateMajorMinor": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false,
+      "separateMinorPatch": false,
+      "addLabels": [ "ESLint", "TypeScript", "Renovate::Frozen" ],
+      "stopUpdatingLabel": "Renovate::Frozen"
     },
     {
       "description": "npm: version ceiling for TypeScript, the parser engine of ESLint only, which does not support version 7 yet. The compiler comes with Microsoft.TypeScript.MSBuild",
@@ -67,10 +314,37 @@
       "allowedVersions": "<7"
     },
     {
+      "description": "npm: packages which can be updated individually",
       "matchManagers": [ "npm" ],
       "matchPackageNames": [ "three-dots" ],
-      "groupName": "three-dots",
-      "groupSlug": "three-dots"
+      "enabled": true
+    },
+    {
+      "description": "GitLab CI: opt out of everything, then opt back in below",
+      "matchManagers": [ "gitlabci" ],
+      "enabled": false
+    },
+    {
+      "description": "GitLab CI: track CI component versions",
+      "matchManagers": [ "gitlabci" ],
+      "matchDepTypes": [ "repository" ],
+      "enabled": true,
+      "groupName": "CI components",
+      "groupSlug": "ci-components",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} ({{#each upgrades}}{{#unless (equals depName (lookup (lookup ../upgrades (add @index -1)) 'depName'))}}{{#unless @first}}, {{/unless}}{{{replace '^vicione-oss/tooling/' '' depName}}}@{{{newVersion}}}{{/unless}}{{/each}})"
+      },
+      "addLabels": [ "Continuous Integration" ]
+    },
+    {
+      "description": "Shared settings for .NET and CI component updates",
+      "matchJsonata": [ "groupName = '.NET'", "groupName = 'CI components'" ],
+      "separateMajorMinor": false,
+      "separateMultipleMajor": false,
+      "separateMultipleMinor": false,
+      "separateMinorPatch": false,
+      "addLabels": [ "Renovate::Frozen" ],
+      "stopUpdatingLabel": "Renovate::Frozen"
     }
   ]
 }
