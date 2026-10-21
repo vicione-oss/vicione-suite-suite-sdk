@@ -65,7 +65,9 @@ public sealed class SettingsFieldTextBoxTests
         var textBox = component.FindComponent<TextBox>();
 
         // Act
+#pragma warning disable CA2025 // The delegate is awaited by ThrowAsync before the context is disposed.
         var act = () => textBox.InvokeAsync(() => textBox.Instance.ValueChanged.InvokeAsync("changed"));
+#pragma warning restore CA2025
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Handler failed.");

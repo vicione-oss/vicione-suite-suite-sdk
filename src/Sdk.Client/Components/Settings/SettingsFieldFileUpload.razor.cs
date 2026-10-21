@@ -165,7 +165,7 @@ public sealed partial class SettingsFieldFileUpload<T> : ComponentBase, IAsyncDi
 
         _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
-        _jsObjectReference = await _jsModule!.InvokeConstructorAsync("SettingsFieldFileUpload");
+        _jsObjectReference = await _jsModule.InvokeConstructorAsync("SettingsFieldFileUpload");
     }
 
     /// <summary>

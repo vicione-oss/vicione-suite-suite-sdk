@@ -37,7 +37,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
 
     protected override void OnModuleModelCreating(ModelBuilder modelBuilder)
     {
-#pragma warning disable CS0618 // Type or member is obsolete
         modelBuilder.Entity<Employees>()
             .Property(e => e.first_name).HasColumnType("TEXT");
         modelBuilder.Entity<Employees>()
@@ -47,8 +46,11 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
         modelBuilder.Entity<Employees>()
             .Property(e => e.hire_date).HasColumnType("DATE");
         modelBuilder.Entity<Employees>()
-            .HasCheckConstraint("employees_length_first_name", "Length(first_name) < 15 ")
-            .HasCheckConstraint("employees_length_last_name", "Length(last_name) < 17 ");
+            .ToTable(t =>
+            {
+                t.HasCheckConstraint("employees_length_first_name", "Length(first_name) < 15 ");
+                t.HasCheckConstraint("employees_length_last_name", "Length(last_name) < 17 ");
+            });
 
         modelBuilder.Entity<Departments>()
             .Property(d => d.dept_no).HasColumnType("TEXT");
@@ -57,8 +59,11 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
         modelBuilder.Entity<Departments>()
             .HasIndex(d => d.dept_name).IsUnique();
         modelBuilder.Entity<Departments>()
-            .HasCheckConstraint("departments_length_dept_no", "Length(dept_no) < 5 ")
-            .HasCheckConstraint("departments_length_dept_name", "Length(dept_name) < 41 ");
+            .ToTable(t =>
+            {
+                t.HasCheckConstraint("departments_length_dept_no", "Length(dept_no) < 5 ");
+                t.HasCheckConstraint("departments_length_dept_name", "Length(dept_name) < 41 ");
+            });
 
         modelBuilder.Entity<DepartmentManager>()
             .Property(dm => dm.dept_no).HasColumnType("TEXT");
@@ -67,7 +72,7 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
         modelBuilder.Entity<DepartmentManager>()
             .Property(dm => dm.to_date).HasColumnType("DATE");
         modelBuilder.Entity<DepartmentManager>()
-            .HasCheckConstraint("deptmanager_length_dept_no", "Length(dept_no) < 5 ");
+            .ToTable(t => t.HasCheckConstraint("deptmanager_length_dept_no", "Length(dept_no) < 5 "));
 
         modelBuilder.Entity<DepartmentManager>().HasKey(dm => new { dm.emp_no, dm.dept_no });
         modelBuilder.Entity<DepartmentManager>()
@@ -86,7 +91,7 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
         modelBuilder.Entity<DepartmentEmployees>()
             .Property(de => de.to_date).HasColumnType("DATE");
         modelBuilder.Entity<DepartmentEmployees>()
-            .HasCheckConstraint("deptempl_length_dept_no", "Length(dept_no) < 5 ");
+            .ToTable(t => t.HasCheckConstraint("deptempl_length_dept_no", "Length(dept_no) < 5 "));
 
         modelBuilder.Entity<DepartmentEmployees>().HasKey(de => new { de.emp_no, de.dept_no });
         modelBuilder.Entity<DepartmentEmployees>()
@@ -105,7 +110,7 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
         modelBuilder.Entity<Titles>()
             .Property(t => t.to_date).HasColumnType("DATE");
         modelBuilder.Entity<Titles>()
-            .HasCheckConstraint("titles_length_title", "Length(title) < 257 ");
+            .ToTable(t => t.HasCheckConstraint("titles_length_title", "Length(title) < 257 "));
 
         modelBuilder.Entity<Titles>().HasKey(t => new { t.emp_no, t.title, t.from_date });
         modelBuilder.Entity<Titles>()
@@ -123,7 +128,6 @@ public class ReferenceDbContext : ModuleDbContext, IReferenceDbContext
             .HasOne(s => s.employee)
             .WithMany(e => e.salaries)
             .HasForeignKey(s => s.emp_no);
-#pragma warning restore CS0618 // Type or member is obsolete
 
     }
 }

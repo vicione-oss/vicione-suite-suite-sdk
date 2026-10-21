@@ -1,4 +1,5 @@
-﻿using AwesomeAssertions;
+﻿using System.Security.Cryptography;
+using AwesomeAssertions;
 using Sdk.Client.ControlPanels.Services;
 using Xunit;
 
@@ -16,13 +17,13 @@ public sealed class ControlPanelStateTests
         // Arrange
         var changedTriggered = false;
 
-#pragma warning disable CS0618 // Type or member is obsolete
         var state = new ControlPanelState { ActivePageIndex = activeControlPanelPageIndexInitially };
+#pragma warning disable CS0618 // Covers the property until its removal in the next major version.
         state.Changed += args => changedTriggered = args.PropertyNames.Contains(nameof(args.Sender.ActivePageIndex));
+#pragma warning restore CS0618
 
         // Act
         state.ActivePageIndex = activeControlPanelPageIndex;
-#pragma warning restore CS0618 // Type or member is obsolete
 
         // Assert
         changedTriggered.Should().Be(shouldTriggerChangedEvent);
@@ -237,11 +238,9 @@ public sealed class ControlPanelStateTests
         state.BeginUpdate();
         try
         {
-            var random = new Random();
-
             var updateTasks = new List<Task>();
             for (var i = 0; i < 1000; i++)
-                updateTasks.Add(RandomUpdateTask(random, state));
+                updateTasks.Add(RandomUpdateTask(state));
 
             await Task.WhenAll(updateTasks);
         }
@@ -254,9 +253,9 @@ public sealed class ControlPanelStateTests
         stateChangedCounter.Should().Be(1);
         return;
 
-        static async Task RandomUpdateTask(Random random, TestControlPanelState state)
+        static async Task RandomUpdateTask(TestControlPanelState state)
         {
-            var delay = random.Next(0, 100);
+            var delay = RandomNumberGenerator.GetInt32(0, 100);
             await Task.Delay(delay, TestContext.Current.CancellationToken);
 
             state.BeginUpdate();
@@ -265,7 +264,7 @@ public sealed class ControlPanelStateTests
                 state.BeginLoading();
                 try
                 {
-                    var coinToss = random.Next(0, 2);
+                    var coinToss = RandomNumberGenerator.GetInt32(0, 2);
 
                     if (coinToss == 0)
                     {

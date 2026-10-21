@@ -272,24 +272,22 @@ public class ReflectionExtensionTests
             isNullable.Should().BeTrue();
         }
 
-#pragma warning disable CS0649 // Field will always have the default value
-
         private sealed class FooFieldInt
         {
             public int Value1 = 1;
-            public int? Value2;
+            public int? Value2 = null;
         }
 
         private sealed class FooFieldClass
         {
             public FooChild Child1 = new();
-            public FooChild? Child2;
+            public FooChild? Child2 = null;
         }
 
         private sealed class FooFieldList
         {
             public List<FooChild> Child3 = [];
-            public List<FooChild>? Child4;
+            public List<FooChild>? Child4 = null;
         }
 
         private sealed class FooPropertyInt
@@ -316,8 +314,6 @@ public class ReflectionExtensionTests
             public FooNode FooNode1 { get; set; } = new();
             public FooNode? FooNode2 { get; set; }
         }
-
-#pragma warning restore CS0649 // Field will always have the default value
 
         private static class FooParameterFunction
         {

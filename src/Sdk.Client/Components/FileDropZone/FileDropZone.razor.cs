@@ -120,7 +120,7 @@ public sealed partial class FileDropZone : ComponentBase, IFileDropZone, IAsyncD
 
         _dotNetObjectReference ??= DotNetObjectReference.Create(this);
 
-        _jsObjectReference = await _jsModule!.InvokeConstructorAsync("FileDropZone", _elementReference, _dotNetObjectReference,
+        _jsObjectReference = await _jsModule.InvokeConstructorAsync("FileDropZone", _elementReference, _dotNetObjectReference,
             _inputFileElementReference);
 
         _jsSetInputFile = false;

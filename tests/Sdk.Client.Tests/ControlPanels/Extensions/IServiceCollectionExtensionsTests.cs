@@ -264,9 +264,7 @@ public sealed class IServiceCollectionExtensionsTests
 
         public int UpdateLock => 0;
 
-#pragma warning disable CS0067
-        public event Action<RegistryChangedEventArgs<IControlPanelRegistryItem>>? Changed;
-#pragma warning restore CS0067
+        public event Action<RegistryChangedEventArgs<IControlPanelRegistryItem>>? Changed { add { } remove { } }
 
         public IControlPanelRegistryItem Add<TComponent, TState>(IControlPanelDescriptor descriptor, TState state,
             IControlPanelCategoryDescriptor categoryDescriptor, IControlPanelGroupDescriptor? groupDescriptor = null,

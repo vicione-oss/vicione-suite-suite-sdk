@@ -25,8 +25,8 @@ public static class ConnectionTypeRegistryExtensions
         /// </summary>
         public IConnectionTypeRegistry Register<TConnection, TConnectionSerializer, TConnectionTest>(string id)
             where TConnection : IConnection, new()
-            where TConnectionTest : IConnectionTest, new()
             where TConnectionSerializer : IConnectionSerializer, new()
+            where TConnectionTest : IConnectionTest, new()
             => connectionTypeRegistry.Register<TConnection, TConnectionSerializer>(id, new TConnectionSerializer(), new TConnectionTest());
     }
 }

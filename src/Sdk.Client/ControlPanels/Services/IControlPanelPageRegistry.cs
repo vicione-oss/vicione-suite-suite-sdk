@@ -9,7 +9,6 @@ namespace Sdk.Client.ControlPanels.Services;
 /// </summary>
 [Obsolete("Use " + nameof(ControlPanelChildAttribute<>) + " and " + nameof(ControlPanelParentAttribute<>) +
     " to register a control panel as a child of another control panel instead. This type will be removed in a future major version.")]
-#pragma warning disable CS0618 // Type or member is obsolete
 public interface IControlPanelPageRegistry : IRegistry<IControlPanelPageRegistryItem>
 {
     /// <summary>
@@ -25,4 +24,3 @@ public interface IControlPanelPageRegistry : IRegistry<IControlPanelPageRegistry
     /// <returns><see langword="true"/> when item was removed, otherwise <see langword="false"/>.</returns>
     bool Remove(IControlPanelPage controlPanelPage);
 }
-#pragma warning restore CS0618 // Type or member is obsolete

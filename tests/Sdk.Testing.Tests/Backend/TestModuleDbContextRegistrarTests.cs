@@ -200,7 +200,7 @@ public sealed class TestModuleDbContextRegistrarTests : IAsyncDisposable
         return count == 1;
     }
 
-    public async ValueTask DisposeAsync() =>
-        await _registrar.DisposeAsync();
+    public async ValueTask DisposeAsync()
+        => await _registrar.DisposeAsync();
 }
 

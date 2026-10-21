@@ -12,8 +12,8 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IsPackable>false</IsPackable>
 
-    <!-- Suppress netstandard2.0 nullable warnings and analyzer release tracking -->
-    <NoWarn>$(NoWarn);RS1035;RS1036;RS2008;nullable</NoWarn>
+    <!-- RS2008: the rules are versioned with the SDK, so analyzer release tracking (AnalyzerReleases.*.md) is not used. -->
+    <NoWarn>$(NoWarn);RS2008</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

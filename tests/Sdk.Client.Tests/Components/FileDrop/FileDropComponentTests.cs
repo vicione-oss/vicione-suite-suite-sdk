@@ -142,7 +142,9 @@ public sealed class FileDropComponentTests
             .Add(p => p.OnChange, _ => throw new InvalidOperationException("Not readable.")));
 
         // Act
+#pragma warning disable CA2025 // The delegate is awaited by ThrowAsync before the context is disposed.
         var change = () => ChangeFiles(component, "a.txt");
+#pragma warning restore CA2025
 
         // Assert
         await change.Should().ThrowAsync<InvalidOperationException>();

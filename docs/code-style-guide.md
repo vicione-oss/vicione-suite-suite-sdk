@@ -23,6 +23,31 @@ Groups are separated from each other by a line break.
 
   > The Test Explorer replaces underlines with spaces because of [`our configuration`](/vicione-oss/vicione/vo-suite/-/blob/6fc3db74e4f7627ead5d562436e588ef44089165/xunit.runner.json#L4) of [`methodDisplayOptions`](https://xunit.net/docs/runsettings#MethodDisplayOptions). As a result, test names like `Should_return_access_level_requirement` are displayed as formulated sentences like `Should return access level requirement`.
 
+### Suppressing diagnostics
+
+Fix the code first. Suppress a diagnostic only where it cannot be resolved, for example an analyzer false
+positive or an API that is unsafe by design.
+
+- Wrap only the affected lines in `#pragma warning disable` / `#pragma warning restore`, and state the reason
+  on the `disable` line. A suppression then covers exactly the lines where the diagnostic is not resolvable
+  and is visible right where it applies.
+- `[SuppressMessage]` with a `Justification` fits a diagnostic reported on a member declaration, such as
+  CA1063 on `Dispose()`: it covers no more than a pragma would and reads better. On a type it fits only when
+  the reason holds for every member, such as CA2227 on a serialization model, so that new members are covered
+  too. Avoid it elsewhere: it hides new occurrences next to the one that is meant.
+- Disable a rule for a whole scope only when it conflicts with a convention there (IDE0022 versus the mandatory
+  `// Assert` comment), reports mostly false positives (CA1812 for classes created by dependency injection) or
+  does not apply (RS2008 without analyzer release tracking). Use a scoped `.editorconfig`, or the project file
+  for a project-level rule, and give the reason in its comment.
+- Start `#pragma` lines at column 0; IDE0055 reports them otherwise.
+
+```csharp
+// Act
+#pragma warning disable CA2025 // The delegate is awaited by ThrowAsync before the context is disposed.
+var act = () => component.InvokeAsync(() => component.Instance.ValueChanged.InvokeAsync(true));
+#pragma warning restore CA2025
+```
+
 ## Code comments
 
 Comments are read far more often than they are written, and a redundant or stale comment costs more than no
